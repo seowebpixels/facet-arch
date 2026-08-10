@@ -1,0 +1,161 @@
+---
+/* Header.astro - Custom Hamburger Box & Overlay Navigation */
+---
+
+<header>
+  <!-- Menu Box Container (Fixed Middle Right) -->
+  <button 
+    id="menu-toggle" 
+    class="menu-box" 
+    aria-label="Toggle Navigation Menu" 
+    aria-expanded="false"
+  >
+    <div class="hamburger-lines">
+      <span class="line line-1"></span>
+      <span class="line line-2"></span>
+      <span class="line line-3"></span>
+    </div>
+  </button>
+
+  <!-- Fullscreen Navigation Drawer / Overlay -->
+  <div id="nav-overlay" class="nav-overlay">
+    <nav class="nav-content">
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="#work" class="nav-link">Work</a></li>
+        <li><a href="#studio" class="nav-link">Studio</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  /* ==========================================================================
+     Menu Box (#7c7a7a background, 3 black lines perfectly centered)
+     ========================================================================== */
+  .menu-box {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    width: 64px;
+    height: 72px;
+    background-color: #7c7a7a;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+  }
+
+  .hamburger-lines {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 28px;
+    height: 18px;
+  }
+
+  .line {
+    width: 100%;
+    height: 2px;
+    background-color: #000000;
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
+    transform-origin: center;
+  }
+
+  /* Animated "X" state when menu is open */
+  .menu-box[aria-expanded="true"] .line-1 {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  .menu-box[aria-expanded="true"] .line-2 {
+    opacity: 0;
+  }
+
+  .menu-box[aria-expanded="true"] .line-3 {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  /* Responsive positioning for mobile screens */
+  @media (max-width: 768px) {
+    .menu-box {
+      width: 52px;
+      height: 60px;
+    }
+
+    .hamburger-lines {
+      width: 24px;
+      height: 16px;
+    }
+
+    .menu-box[aria-expanded="true"] .line-1 {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    .menu-box[aria-expanded="true"] .line-3 {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+  }
+
+  /* ==========================================================================
+     Fullscreen Overlay Menu
+     ========================================================================== */
+  .nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    background-color: var(--bg-concrete, #BEBEBE);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+  }
+
+  .nav-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .nav-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding: 0;
+    margin: 0;
+  }
+
+  .nav-links li a {
+    font-size: 1.8rem;
+  }
+</style>
+
+<script>
+  function setupMenu() {
+    const toggleBtn = document.getElementById('menu-toggle');
+    const overlay = document.getElementById('nav-overlay');
+
+    if (!toggleBtn || !overlay) return;
+
+    toggleBtn.addEventListener('click', () => {
+      const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+      toggleBtn.setAttribute('aria-expanded', (!isExpanded).toString());
+      overlay.classList.toggle('is-open');
+
+      document.body.style.overflow = isExpanded ? '' : 'hidden';
+    });
+  }
+
+  setupMenu();
+  document.addEventListener('astro:page-load', setupMenu);
+</script>
