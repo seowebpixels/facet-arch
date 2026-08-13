@@ -1,0 +1,16 @@
+{
+  "category": "Interiors",
+  "items": [
+    { "id": "int-cabanossi", "title": "Cabanossi", "image": "../../assets/int-cabanossi.avif", "alt": "Cabanossi interior design" },
+    { "id": "int-chilisa", "title": "Chilisa", "image": "../../assets/int-chilisa.avif", "alt": "Chilisa interior design" },
+    { "id": "int-crestron", "title": "Crestron", "image": "../../assets/int-crestron.avif", "alt": "Crestron interior design" },
+    { "id": "int-david", "title": "David", "image": "../../assets/int-david.avif", "alt": "David interior design" },
+    { "id": "int-doorasamy", "title": "Doorasamy", "image": "../../assets/int-doorasamy.avif", "alt": "Doorasamy interior design" },
+    { "id": "int-khalpey", "title": "Khalpey", "image": "../../assets/int-khalpey.avif", "alt": "Khalpey interior design" },
+    { "id": "int-leopard-lodge", "title": "Leopard Lodge", "image": "../../assets/int-leopard-lodge.avif", "alt": "Leopard Lodge interior design" },
+    { "id": "int-ndlovu", "title": "Ndlovu", "image": "../../assets/int-ndlovu.avif", "alt": "Ndlovu interior design" },
+    { "id": "int-race-bespoke-spaces", "title": "Race Bespoke Spaces", "image": "../../assets/int-race-bespoke-spaces.avif", "alt": "Race Bespoke Spaces interior design" },
+    { "id": "int-starck", "title": "Starck", "image": "../../assets/int-starck.avif", "alt": "Starck interior design" },
+    { "id": "int-tsukuduv", "title": "Tsukuduv", "image": "../../assets/int-tsukuduv.avif", "alt": "Tsukuduv interior design" }
+  ]
+}

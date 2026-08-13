@@ -1,0 +1,19 @@
+{
+  "category": "Residential",
+  "items": [
+    { "id": "res-blann", "title": "Blann", "image": "../../assets/res-blann.avif", "alt": "Blann residential project" },
+    { "id": "res-copperleaf", "title": "Copperleaf", "image": "../../assets/res-copperleaf.avif", "alt": "Copperleaf residential project" },
+    { "id": "res-courtyards", "title": "Courtyards", "image": "../../assets/res-courtyards.avif", "alt": "Courtyards residential project" },
+    { "id": "res-david", "title": "David", "image": "../../assets/res-david.avif", "alt": "David residential project" },
+    { "id": "res-de-la-rey", "title": "De La Rey", "image": "../../assets/res-de-la-rey.avif", "alt": "De La Rey residential project" },
+    { "id": "res-eoa-1597", "title": "EOA 1597", "image": "../../assets/res-eoa-1597.avif", "alt": "EOA 1597 residential project" },
+    { "id": "res-karen", "title": "Karen", "image": "../../assets/res-karen.avif", "alt": "Karen residential project" },
+    { "id": "res-mboki", "title": "Mboki", "image": "../../assets/res-mboki.avif", "alt": "Mboki residential project" },
+    { "id": "res-osummit", "title": "O summit", "image": "../../assets/res-osummit.avif", "alt": "O summit residential project" },
+    { "id": "res-peloetletse", "title": "Peloetletse", "image": "../../assets/res-peloetletse.avif", "alt": "Peloetletse residential project" },
+    { "id": "res-somerton-estate", "title": "Somerton Estate", "image": "../../assets/res-somerton-estate.avif", "alt": "Somerton Estate residential project" },
+    { "id": "res-stone-and-steel", "title": "Stone and Steel", "image": "../../assets/res-stone-and-steel.avif", "alt": "Stone and Steel residential project" },
+    { "id": "res-thorn-valley", "title": "Thorn Valley", "image": "../../assets/res-thorn-valley.avif", "alt": "Thorn Valley residential project" },
+    { "id": "res-waterfall-1951", "title": "Waterfall 1951", "image": "../../assets/res-waterfall-1951.avif", "alt": "Waterfall 1951 residential project" }
+  ]
+}

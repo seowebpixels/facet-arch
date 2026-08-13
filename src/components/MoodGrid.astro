@@ -1,0 +1,132 @@
+---
+import { Image } from 'astro:assets';
+
+// Import AVIF assets
+import box1 from '../assets/box-one-rust-metal-surface.avif';
+import box3 from '../assets/box-three-home-on-foggy-hill.avif';
+import box4 from '../assets/box-four-intricate-wood-carving-of-floral-design.avif';
+import box5 from '../assets/box-five-rain-drops-on-dark-glass.avif';
+import box6 from '../assets/box-six-vast-desert-ridge-with-sharp-light-shadow-lines.avif';
+import box7 from '../assets/box-seven-close-up-of-woven-metallic-mesh.avif';
+import box8 from '../assets/box-eight-topographic-macro-view-of-cracked-dry-clay.avif';
+
+// Import video path
+import box2Video from '../assets/box-two-grey-paint-brush-strokes.mp4';
+
+const gridItems = [
+  { id: 1, type: 'image', word: "STRUCTURE", src: box1, alt: "Rust metal surface texture" },
+  { id: 2, type: 'video', word: "", src: box2Video, alt: "Moving brush stroke texture loop" },
+  { id: 3, type: 'image', word: "LIGHT", src: box3, alt: "Home on a foggy hill" },
+  { id: 4, type: 'image', word: "FORM", src: box4, alt: "Intricate wood carving floral design" },
+  { id: 5, type: 'image', word: "", src: box5, alt: "Raindrops on dark glass" },
+  { id: 6, type: 'image', word: "SPACE", src: box6, alt: "Desert ridge light and shadow lines" },
+  { id: 7, type: 'image', word: "", src: box7, alt: "Close-up of woven metallic mesh" },
+  { id: 8, type: 'image', word: "VISION", src: box8, alt: "Topographic view of cracked clay" },
+];
+---
+
+<section class="w-full bg-black py-0">
+  <div class="mood-grid-container">
+    {gridItems.map((item) => (
+      <div class="mood-grid-tile group">
+        
+        {item.type === 'video' ? (
+          <video
+            src={item.src}
+            autoplay
+            loop
+            muted
+            playsinline
+            class="tile-media"
+          />
+        ) : (
+          <Image
+            src={item.src}
+            alt={item.alt}
+            width={800}
+            height={800}
+            format="avif"
+            class="tile-media"
+          />
+        )}
+
+        <div class="tile-overlay"></div>
+
+        {item.word && (
+          <div class="tile-label-container">
+            <span class="tile-label">
+              {item.word}
+            </span>
+          </div>
+        )}
+
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  /* Explicit Grid Definition */
+  .mood-grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on Mobile */
+    gap: 2px;
+    background-color: #171717;
+    width: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .mood-grid-container {
+      grid-template-columns: repeat(4, 1fr); /* 4 columns on Desktop */
+    }
+  }
+
+  .mood-grid-tile {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background-color: #0a0a0a;
+  }
+
+  .tile-media {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    opacity: 0.85;
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s ease;
+  }
+
+  .mood-grid-tile:hover .tile-media {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+
+  .tile-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent, transparent);
+    pointer-events: none;
+  }
+
+  .tile-label-container {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    pointer-events: none;
+  }
+
+  .tile-label {
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 768px) {
+    .tile-label {
+      font-size: 1.125rem;
+    }
+  }
+</style>

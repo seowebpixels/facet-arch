@@ -1,0 +1,8 @@
+{
+  "category": "Sustainability",
+  "items": [
+    { "id": "sustainability-electricity", "title": "Electricity", "image": "../../assets/sustainability-electricity.avif", "alt": "Electricity sustainability project" },
+    { "id": "sustainability-thermal-comfort", "title": "Thermal Comfort", "image": "../../assets/sustainability-thermal-comfort.avif", "alt": "Thermal Comfort sustainability project" },
+    { "id": "sustainability-water", "title": "Water", "image": "../../assets/sustainability-water.avif", "alt": "Water sustainability project" }
+  ]
+}

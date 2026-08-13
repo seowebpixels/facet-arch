@@ -1,0 +1,25 @@
+{
+  "category": "Developments",
+  "items": [
+    { "id": "dev-ascot-manor", "title": "Ascot Manor", "image": "../../assets/dev-ascot-manor.avif", "alt": "Ascot Manor development" },
+    { "id": "dev-eco-city-entrance", "title": "Eco City Entrance", "image": "../../assets/dev-eco-city-entrance.avif", "alt": "Eco City Entrance development" },
+    { "id": "dev-elementum", "title": "Elementum", "image": "../../assets/dev-elementum.avif", "alt": "Elementum development" },
+    { "id": "dev-habitat-alpha", "title": "Habitat Alpha", "image": "../../assets/dev-habitat-alpha.avif", "alt": "Habitat Alpha development" },
+    { "id": "dev-habitat-beta", "title": "Habitat Beta", "image": "../../assets/dev-habitat-beta.avif", "alt": "Habitat Beta development" },
+    { "id": "dev-habitat-epsilon", "title": "Habitat Epsilon", "image": "../../assets/dev-habitat-epsilon.avif", "alt": "Habitat Epsilon development" },
+    { "id": "dev-habitat-kappa", "title": "Habitat Kappa", "image": "../../assets/dev-habitat-kappa.avif", "alt": "Habitat Kappa development" },
+    { "id": "dev-kengies", "title": "Kengies", "image": "../../assets/dev-kengies.avif", "alt": "Kengies development" },
+    { "id": "dev-kubu", "title": "Kubu", "image": "../../assets/dev-kubu.avif", "alt": "Kubu development" },
+    { "id": "dev-kwena", "title": "Kwena", "image": "../../assets/dev-kwena.avif", "alt": "Kwena development" },
+    { "id": "dev-la-terrace", "title": "La Terrace", "image": "../../assets/dev-la-terrace.avif", "alt": "La Terrace development" },
+    { "id": "dev-moditlo-lodge", "title": "Moditlo Lodge", "image": "../../assets/dev-moditlo-lodge.avif", "alt": "Moditlo Lodge development" },
+    { "id": "dev-ocean-views", "title": "Ocean Views", "image": "../../assets/dev-ocean-views.avif", "alt": "Ocean Views development" },
+    { "id": "dev-riviera-guard-house", "title": "Riviera Guard House", "image": "../../assets/dev-riviera-guard-house.avif", "alt": "Riviera Guard House development" },
+    { "id": "dev-riviera-townhouses", "title": "Riviera Townhouses", "image": "../../assets/dev-riviera-townhouses.avif", "alt": "Riviera Townhouses development" },
+    { "id": "dev-sarona-city-master-plan", "title": "Sarona City Master Plan", "image": "../../assets/dev-sarona-city-master-plan.avif", "alt": "Sarona City Master Plan development" },
+    { "id": "dev-simba", "title": "Simba", "image": "../../assets/dev-simba.avif", "alt": "Simba development" },
+    { "id": "dev-the-fig", "title": "The Fig", "image": "../../assets/dev-the-fig.avif", "alt": "The Fig development" },
+    { "id": "dev-tlou", "title": "Tlou", "image": "../../assets/dev-tlou.avif", "alt": "Tlou development" },
+    { "id": "dev-tribeca-hill", "title": "Tribeca Hill", "image": "../../assets/dev-tribeca-hill.avif", "alt": "Tribeca Hill development" }
+  ]
+}

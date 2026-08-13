@@ -1,0 +1,19 @@
+{
+  "category": "Commercial",
+  "items": [
+    { "id": "comm-agri-seta", "title": "Agri SETA", "image": "../../assets/comm-agri-seta.avif", "alt": "Agri SETA commercial project" },
+    { "id": "comm-beme", "title": "Beme", "image": "../../assets/comm-beme.avif", "alt": "Beme commercial project" },
+    { "id": "comm-cars-co-za", "title": "Cars.co.za", "image": "../../assets/comm-cars-co-za.avif", "alt": "Cars.co.za commercial project" },
+    { "id": "comm-crestron", "title": "Crestron", "image": "../../assets/comm-crestron.avif", "alt": "Crestron commercial project" },
+    { "id": "comm-eco-city-sudent-res", "title": "Eco City Student Res", "image": "../../assets/comm-eco-city-sudent-res.avif", "alt": "Eco City Student Residence commercial project" },
+    { "id": "comm-emerald-resort-hotel", "title": "Emerald Resort Hotel", "image": "../../assets/comm-emerald-resort-hotel.avif", "alt": "Emerald Resort Hotel commercial project" },
+    { "id": "comm-hibiscus-kindergarden", "title": "Hibiscus Kindergarten", "image": "../../assets/comm-hibiscus-kindergarden.avif", "alt": "Hibiscus Kindergarten commercial project" },
+    { "id": "comm-i-stores", "title": "iStores", "image": "../../assets/comm-i-stores.avif", "alt": "iStores commercial project" },
+    { "id": "comm-lee-cooper-fourways-mall", "title": "Lee Cooper Fourways Mall", "image": "../../assets/comm-lee-cooper-fourways-mall.avif", "alt": "Lee Cooper Fourways Mall commercial project" },
+    { "id": "comm-niche", "title": "Niche", "image": "../../assets/comm-niche.avif", "alt": "Niche commercial project" },
+    { "id": "comm-nintendo", "title": "Nintendo", "image": "../../assets/comm-nintendo.avif", "alt": "Nintendo commercial project" },
+    { "id": "comm-northcliff-primary", "title": "Northcliff Primary", "image": "../../assets/comm-northcliff-primary.avif", "alt": "Northcliff Primary commercial project" },
+    { "id": "comm-omega-center", "title": "Omega Center", "image": "../../assets/comm-omega-center.avif", "alt": "Omega Center commercial project" },
+    { "id": "comm-riviera-shopping-centre", "title": "Riviera Shopping Centre", "image": "../../assets/comm-riviera-shopping-centre.avif", "alt": "Riviera Shopping Centre commercial project" }
+  ]
+}

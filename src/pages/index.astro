@@ -2,9 +2,374 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Preloader from '../components/Preloader.astro';
+import MoodGrid from '../components/MoodGrid.astro';
+
+// Import featured assets
+import commImg from '../assets/comm-emerald-resort-hotel.avif';
+import devImg from '../assets/dev-ascot-manor.avif';
+import intImg from '../assets/int-ndlovu.avif';
+import resImg from '../assets/res-eoa-1597.avif';
+import sustImg from '../assets/sustainability-thermal-comfort.avif';
 ---
 
-<Layout title="Facet Architecture | Spatial Design Studio">
-  <Header />
+<Layout title="Facet Architecture | Selected Works">
   <Preloader />
+  <Header />
+
+  <main class="main-wrapper">
+    <!-- Left Column: Sticky Editorial Content -->
+    <section class="left-sticky-col">
+      <div class="brand-intro">
+        <p class="subtitle">SELECTED WORKS</p>
+        <h1 class="headline">Precision in Spatial & Structural Design</h1>
+        <p class="philosophy">
+          Facet Architecture transforms complex spatial challenges into minimalist, forward-thinking structural design. Rooted in material clarity and environmental context, our practice explores the interplay between light, shadow, and structural integrity.
+        </p>
+      </div>
+
+      <div class="index-legend">
+        <div class="legend-item" data-index="0"><span>01</span> Emerald Resort Hotel</div>
+        <div class="legend-item" data-index="1"><span>02</span> Ascot Manor</div>
+        <div class="legend-item" data-index="2"><span>03</span> Ndlovu Interior</div>
+        <div class="legend-item" data-index="3"><span>04</span> EOA Residence</div>
+        <div class="legend-item" data-index="4"><span>05</span> Thermal Comfort Study</div>
+      </div>
+    </section>
+
+    <!-- Right Column: Staggered Selected Works Grid -->
+    <section class="right-grid-col">
+      <!-- Tile 1 -->
+      <a href="/portfolio#commercial" class="tile-card tile-1" data-bg="#3A3F47" data-text-light="true">
+        <div class="image-container">
+          <img src={commImg.src} alt="Emerald Resort Hotel" loading="eager" />
+          <div class="tile-overlay">
+            <span class="tile-num">01</span>
+            <div class="tile-meta">
+              <h3>Emerald Resort Hotel</h3>
+              <p>Commercial Architecture</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Tile 2 -->
+      <a href="/portfolio#development" class="tile-card tile-2" data-bg="#5c5e5d" data-text-light="true">
+        <div class="image-container">
+          <img src={devImg.src} alt="Ascot Manor" loading="lazy" />
+          <div class="tile-overlay">
+            <span class="tile-num">02</span>
+            <div class="tile-meta">
+              <h3>Ascot Manor</h3>
+              <p>Development</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Tile 3 -->
+      <a href="/portfolio#interiors" class="tile-card tile-3" data-bg="#8C8275" data-text-light="true">
+        <div class="image-container">
+          <img src={intImg.src} alt="Ndlovu Interior Design" loading="lazy" />
+          <div class="tile-overlay">
+            <span class="tile-num">03</span>
+            <div class="tile-meta">
+              <h3>Ndlovu Residence</h3>
+              <p>Interior Architecture</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Tile 4 -->
+      <a href="/portfolio#residential" class="tile-card tile-4" data-bg="#8C8275" data-text-light="true">
+        <div class="image-container">
+          <img src={resImg.src} alt="EOA Residence" loading="lazy" />
+          <div class="tile-overlay">
+            <span class="tile-num">04</span>
+            <div class="tile-meta">
+              <h3>EOA 1597</h3>
+              <p>Residential Architecture</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Tile 5 -->
+      <a href="/portfolio#sustainability" class="tile-card tile-5" data-bg="#E3DFD5" data-text-light="false">
+        <div class="image-container">
+          <img src={sustImg.src} alt="Thermal Comfort Sustainability Project" loading="lazy" />
+          <div class="tile-overlay">
+            <span class="tile-num">05</span>
+            <div class="tile-meta">
+              <h3>Thermal Comfort</h3>
+              <p>Sustainable Architecture</p>
+            </div>
+          </div>
+        </div>
+      </a>
+    </section>
+  </main>
 </Layout>
+
+<style>
+  :global(body) {
+    background-color: #3A3F47;
+    color: #F5F5F5;
+    transition: background-color 0.8s cubic-bezier(0.25, 1, 0.5, 1), color 0.8s ease;
+    margin: 0;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+
+  :global(body.theme-dark-text) {
+    color: #1A1A1A;
+  }
+
+  .main-wrapper {
+    display: flex;
+    flex-direction: column;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 120px 24px 80px;
+    gap: 40px;
+  }
+
+  @media (min-width: 900px) {
+    .main-wrapper {
+      flex-direction: row;
+      gap: 60px;
+    }
+  }
+
+  /* Left Sticky Column */
+  .left-sticky-col {
+    width: 100%;
+  }
+
+  @media (min-width: 900px) {
+    .left-sticky-col {
+      width: 40%;
+      position: sticky;
+      top: 140px;
+      height: fit-content;
+    }
+  }
+
+  .subtitle {
+    font-family: 'BankGothic', sans-serif, system-ui;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    opacity: 0.7;
+    margin-bottom: 12px;
+  }
+
+  .headline {
+    font-family: 'BankGothic', sans-serif, system-ui;
+    font-size: 2.2rem;
+    line-height: 1.2;
+    margin-bottom: 24px;
+  }
+
+  .philosophy {
+    font-size: 1rem;
+    line-height: 1.6;
+    opacity: 0.85;
+    margin-bottom: 40px;
+  }
+
+  .index-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .legend-item {
+    font-family: 'BankGothic', sans-serif, system-ui;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    opacity: 0.4;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .legend-item span {
+    margin-right: 12px;
+    font-weight: bold;
+  }
+
+  .legend-item.active {
+    opacity: 1;
+    transform: translateX(6px);
+  }
+
+  /* Right Staggered Grid Column */
+  .right-grid-col {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  @media (min-width: 900px) {
+    .right-grid-col {
+      width: 60%;
+      position: relative;
+      display: block;
+      height: 1450px; /* Gives room for overlapping absolute grid tiles */
+    }
+  }
+
+  .tile-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .tile-card:hover {
+    transform: scale(1.02);
+    z-index: 10 !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  }
+
+  .image-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+  }
+
+  .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+  }
+
+  .tile-card:hover img {
+    transform: scale(1.05);
+  }
+
+  /* Option A Overlay Styling */
+  .tile-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.3) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    color: #FFFFFF;
+  }
+
+  .tile-num {
+    font-family: 'BankGothic', sans-serif, system-ui;
+    font-size: 1.1rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+
+  .tile-meta h3 {
+    font-family: 'BankGothic', sans-serif, system-ui;
+    font-size: 1.3rem;
+    margin: 0 0 4px 0;
+  }
+
+  .tile-meta p {
+    font-size: 0.85rem;
+    margin: 0;
+    opacity: 0.8;
+  }
+
+  /* Desktop Staggered Overlay Absolute Positions */
+  @media (min-width: 900px) {
+    .tile-card {
+      position: absolute;
+      width: 50%;
+    }
+
+    /* Tile 1: Top Left */
+    .tile-1 {
+      top: 0;
+      left: 10%;
+      z-index: 1;
+    }
+
+    /* Tile 2: Overlapping Top Right */
+    .tile-2 {
+      top: 220px;
+      left: 45%;
+      z-index: 2;
+    }
+
+    /* Tile 3: Center Bridge */
+    .tile-3 {
+      top: 500px;
+      left: 25%;
+      z-index: 3;
+    }
+
+    /* Tile 4: Bottom Left */
+    .tile-4 {
+      top: 760px;
+      left: 5%;
+      z-index: 4;
+    }
+
+    /* Tile 5: Bottom Right */
+    .tile-5 {
+      top: 980px;
+      left: 42%;
+      z-index: 5;
+    }
+  }
+</style>
+
+<MoodGrid />
+
+<script>
+  // Smooth Background Transition and Legend Highlight Observer
+  const tiles = document.querySelectorAll('.tile-card');
+  const legendItems = document.querySelectorAll('.legend-item');
+
+  const observerOptions = {
+    root: null,
+    rootMargin: '-30% 0px -30% 0px',
+    threshold: 0.2
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const target = entry.target as HTMLElement;
+        const bg = target.dataset.bg;
+        const isLightText = target.dataset.textLight === 'true';
+
+        if (bg) {
+          document.body.style.backgroundColor = bg;
+        }
+
+        if (isLightText) {
+          document.body.classList.remove('theme-dark-text');
+        } else {
+          document.body.classList.add('theme-dark-text');
+        }
+
+        // Highlight corresponding legend index
+        const tileIndex = Array.from(tiles).indexOf(target);
+        legendItems.forEach((item, idx) => {
+          if (idx === tileIndex) {
+            item.classList.add('active');
+          } else {
+            item.classList.remove('active');
+          }
+        });
+      }
+    });
+  }, observerOptions);
+
+  tiles.forEach((tile) => observer.observe(tile));
+</script>
