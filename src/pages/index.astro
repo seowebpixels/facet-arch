@@ -68,7 +68,7 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
       </a>
 
       <!-- Tile 3 -->
-      <a href="/portfolio#interiors" class="tile-card tile-3" data-bg="#8C8275" data-text-light="true">
+      <a href="/portfolio#interiors" class="tile-card tile-3" data-bg="#BF6363" data-text-light="true">
         <div class="image-container">
           <img src={intImg.src} alt="Ndlovu Interior Design" loading="lazy" />
           <div class="tile-overlay">
@@ -110,19 +110,25 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
       </a>
     </section>
   </main>
-</Layout>
 
-<!-- Bold Centered Architectural Quote Banner -->
-<section style="width: 100%; min-height: 400px; padding: 80px 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; clear: both; box-sizing: border-box;">
-  <div style="max-width: 1100px; margin: 0 auto;">
-    <blockquote style="font-size: 50px; font-weight: 700; text-transform: uppercase; line-height: 1.1; letter-spacing: -1px; color: #58111A; margin: 0 0 20px 0; font-family: inherit;">
+  <!-- Responsive Centered Architectural Quote Banner -->
+<section class="quote-container">
+  <div class="quote-inner">
+    <blockquote class="quote-text">
       “Architecture should speak of its time and place, but yearn for timelessness.”
     </blockquote>
-    <cite style="display: block; font-size: 16px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: #7F1734; font-style: normal;">
+    <cite class="quote-cite">
       — Frank Gehry
     </cite>
   </div>
 </section>
+
+  <!-- MoodGrid Component -->
+  <MoodGrid />
+
+  <!-- Home Footer Component -->
+  <HomeFooter />
+</Layout>
 
 <style>
   :global(body) {
@@ -226,7 +232,7 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
       width: 60%;
       position: relative;
       display: block;
-      height: 1450px; /* Gives room for overlapping absolute grid tiles */
+      height: 1450px;
     }
   }
 
@@ -266,7 +272,6 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     transform: scale(1.05);
   }
 
-  /* Option A Overlay Styling */
   .tile-overlay {
     position: absolute;
     inset: 0;
@@ -304,46 +309,89 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
       width: 50%;
     }
 
-    /* Tile 1: Top Left */
-    .tile-1 {
-      top: 0;
-      left: 10%;
-      z-index: 1;
+    .tile-1 { top: 0; left: 10%; z-index: 1; }
+    .tile-2 { top: 220px; left: 45%; z-index: 2; }
+    .tile-3 { top: 500px; left: 25%; z-index: 3; }
+    .tile-4 { top: 760px; left: 5%; z-index: 4; }
+    .tile-5 { top: 980px; left: 42%; z-index: 5; }
+  }
+
+  /* Base Quote Container Styles */
+  .quote-container {
+    width: 100%;
+    min-height: 350px;
+    padding: 80px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .quote-inner {
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .quote-text {
+    font-size: clamp(24px, 5vw, 50px);
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1.15;
+    letter-spacing: -1px;
+    color: #58111A;
+    margin: 0 0 20px 0;
+    font-family: inherit;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+
+  .quote-cite {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #7F1734;
+    font-style: normal;
+  }
+
+  /* Mobile-Specific Centering & Scale Adjustments */
+  @media screen and (max-width: 899px) {
+    .quote-container {
+      padding: 40px 16px !important;
+      overflow: hidden !important;
+    }
+    
+    .quote-inner {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 auto !important;
+      padding: 0 !important;
     }
 
-    /* Tile 2: Overlapping Top Right */
-    .tile-2 {
-      top: 220px;
-      left: 45%;
-      z-index: 2;
+    .quote-text {
+      font-size: clamp(1.15rem, 5.5vw, 1.4rem) !important; 
+      line-height: 1.35 !important;
+      letter-spacing: 0px !important;
+      text-align: center !important;
+      margin: 0 auto 16px auto !important;
+      width: 100% !important;
+      display: block !important;
     }
 
-    /* Tile 3: Center Bridge */
-    .tile-3 {
-      top: 500px;
-      left: 25%;
-      z-index: 3;
-    }
-
-    /* Tile 4: Bottom Left */
-    .tile-4 {
-      top: 760px;
-      left: 5%;
-      z-index: 4;
-    }
-
-    /* Tile 5: Bottom Right */
-    .tile-5 {
-      top: 980px;
-      left: 42%;
-      z-index: 5;
+    .quote-cite {
+      font-size: 0.75rem !important;
+      letter-spacing: 0.25em !important;
+      text-align: center !important;
+      margin: 0 auto !important;
+      width: 100% !important;
+      display: block !important;
     }
   }
 </style>
-
-<MoodGrid />
-
-<HomeFooter/>
 
 <script>
   // Smooth Background Transition and Legend Highlight Observer
@@ -373,7 +421,6 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
           document.body.classList.add('theme-dark-text');
         }
 
-        // Highlight corresponding legend index
         const tileIndex = Array.from(tiles).indexOf(target);
         legendItems.forEach((item, idx) => {
           if (idx === tileIndex) {
