@@ -68,17 +68,16 @@
 
     <!-- Copyright Base -->
     <div class="footer-base" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; font-size: 11px; color: #a3a3a3; font-family: monospace; letter-spacing: 0.2em; gap: 16px;">
-      <p class="copyright-text" style="margin: 0; white-space: nowrap;">© {new Date().getFullYear()} FACET ARCHITECTURE. ALL RIGHTS RESERVED.</p>
+      <p class="copyright-text" style="margin: 0;">
+        <span>© {new Date().getFullYear()} FACET ARCHITECTURE.</span><span class="rights-break"> ALL RIGHTS RESERVED.</span>
+      </p>
       <p style="margin: 0;">
-        DESIGNED BY 
-        <a 
+        DESIGNED BY&nbsp;<a 
           href="https://webdesignpros.co.za" 
           target="_blank" 
           rel="noopener noreferrer" 
-          style="color: #ffffff; text-decoration: underline; text-underline-offset: 4px; transition: color 0.3s;"
-        >
-          WEB DESIGN PROS
-        </a>
+          style="color: #a3a3a3; text-decoration: none; transition: color 0.3s;"
+        >WEB DESIGN PROS</a>
       </p>
     </div>
 
@@ -86,9 +85,10 @@
 </footer>
 
 <style>
-  @media (max-width: 480px) {
-    .copyright-text {
-      font-size: 9.5px !important; /* Slightly scales font size on small screens so the single line fits comfortably */
+  @media (max-width: 768px) {
+    .rights-break {
+      display: block;
+      margin-top: 4px;
     }
   }
 </style>
