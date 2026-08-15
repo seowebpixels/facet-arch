@@ -8,6 +8,12 @@ import heroImg from '../assets/res-eoa-1597.avif';
   <!-- Top Left Typography -->
   <h1 id="text-facet" class="title-text text-facet">FACET</h1>
 
+  <!-- Live Local Clock (Positioned near bottom left) -->
+  <div id="hero-clock" class="hero-clock">
+    <span id="live-time">00:00:00</span>
+    <span id="time-zone">SAST</span>
+  </div>
+
   <!-- Logo Mark Container -->
   <div id="logo-mark" class="logo-wrapper">
     <Image 
@@ -39,6 +45,22 @@ import heroImg from '../assets/res-eoa-1597.avif';
 <script>
   import { gsap } from 'gsap';
 
+  // Live Local Time Updater Function
+  function updateHeroClock() {
+    const clockEl = document.getElementById('live-time');
+    const zoneEl = document.getElementById('time-zone');
+    if (!clockEl) return;
+
+    const now = new Date();
+    clockEl.textContent = now.toTimeString().split(' ')[0];
+
+    if (zoneEl) {
+      const tzString = now.toLocaleDateString('en-US', { timeZoneName: 'short' });
+      const shortTz = tzString.split(' ').pop() || '';
+      zoneEl.textContent = shortTz;
+    }
+  }
+
   function initHeroAnimation() {
     const stage = document.getElementById('hero-stage');
     if (!stage) return;
@@ -46,11 +68,16 @@ import heroImg from '../assets/res-eoa-1597.avif';
     const logo = document.getElementById('logo-mark');
     const textFacet = document.getElementById('text-facet');
     const textArchitecture = document.getElementById('text-architecture');
+    const clock = document.getElementById('hero-clock');
     const heroFrame = document.getElementById('hero-frame');
 
-    if (!logo || !textFacet || !textArchitecture || !heroFrame) return;
+    if (!logo || !textFacet || !textArchitecture || !clock || !heroFrame) return;
 
-    gsap.killTweensOf([logo, textFacet, textArchitecture, heroFrame]);
+    // Start Live Clock Ticker
+    updateHeroClock();
+    setInterval(updateHeroClock, 1000);
+
+    gsap.killTweensOf([logo, textFacet, textArchitecture, clock, heroFrame]);
 
     const vw = window.innerWidth;
     const vh = window.innerHeight;
@@ -66,7 +93,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     const deltaY = -((vh / 2) - targetTop - (logoHeight / 2));
 
     gsap.set(logo, { x: 0, y: 0, scale: 3.2, opacity: 1 });
-    gsap.set(textFacet, { opacity: 0, y: -20 });
+    gsap.set([textFacet, clock], { opacity: 0, y: -20 });
     gsap.set(textArchitecture, { opacity: 0, y: 20 });
     gsap.set(heroFrame, { scaleY: 0, transformOrigin: 'center center' });
 
@@ -77,8 +104,8 @@ import heroImg from '../assets/res-eoa-1597.avif';
       .to(logo, {
         duration: 3
       })
-      // 2. Reveal FACET & ARCHITECTURE
-      .to([textFacet, textArchitecture], {
+      // 2. Reveal FACET, ARCHITECTURE & Live Clock
+      .to([textFacet, textArchitecture, clock], {
         opacity: 1,
         y: 0,
         duration: 0.8,
@@ -91,7 +118,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
         scale: 1,
         duration: 1.2
       }, '-=0.2')
-      // 4. Expand full-width hero image
+      // 4. Expand hero image
       .to(heroFrame, {
         scaleY: 1,
         duration: 1.2,
@@ -132,6 +159,20 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 20;
     text-transform: uppercase;
     white-space: nowrap;
+    opacity: 0;
+  }
+
+  /* Live Local Clock Styling */
+  .hero-clock {
+    position: absolute;
+    bottom: 25px;
+    left: 50px;
+    z-index: 20;
+    font-family: monospace, sans-serif;
+    font-size: clamp(0.85rem, 1.2vw, 1.1rem);
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--text-primary, #111111);
     opacity: 0;
   }
 
@@ -192,7 +233,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     display: block;
   }
 
-  /* Mobile Layout Adjustments matching fa-mobile.png */
+  /* Mobile Layout Adjustments */
   @media (max-width: 768px) {
     .text-facet {
       top: 15px;
@@ -200,10 +241,16 @@ import heroImg from '../assets/res-eoa-1597.avif';
       font-size: clamp(1.8rem, 6vw, 2.5rem);
     }
 
+    .hero-clock {
+      bottom: 15px;
+      left: 15px;
+      font-size: 0.8rem;
+    }
+
     .text-architecture {
       position: absolute;
       top: unset;
-      bottom: 22vh; /* Snugs text directly below full-width hero image */
+      bottom: 22vh;
       right: 15px;
       font-size: clamp(1.8rem, 6vw, 2.5rem);
     }
@@ -212,7 +259,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
       height: 85px; 
     }
 
-    /* Edge-to-edge container without horizontal cropping */
     .hero-frame {
       top: 80px;
       left: 0;
@@ -221,7 +267,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
       box-shadow: none;
     }
 
-    /* Displays full landscape photo without cutting off sides */
     .hero-img {
       object-fit: contain;
     }
