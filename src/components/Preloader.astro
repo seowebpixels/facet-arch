@@ -243,7 +243,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
   /* Mobile Layout Adjustments */
   @media (max-width: 768px) {
     .text-facet {
-      top: 15px;
+      top: 20px;
       left: 15px;
       font-size: clamp(1.8rem, 6vw, 2.5rem);
     }
@@ -261,7 +261,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     .text-architecture {
       position: absolute;
       top: unset;
-      bottom: 22vh;
+      bottom: 35vh;
       right: 15px;
       font-size: clamp(1.8rem, 6vw, 2.5rem);
     }
@@ -272,16 +272,16 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
     /* Expand frame height and allow subtle side crop */
     .hero-frame {
-      top: 50px;
+      top: 75px;
       left: 0;
       width: 100vw;
-      height: calc(60vh + 60px); /* Adds ~30px top and ~30px bottom over original */
+      height: 48vh; /* Reduces frame height so image isn't forced to zoom */
       box-shadow: none;
     }
 
-    /* Cover mode fills the frame larger while trimming sides */
+    /* Ensures the full house is visible with zero side clipping */
     .hero-img {
-      object-fit: cover;
+      object-fit: contain;
       object-position: center center;
     }
   }
