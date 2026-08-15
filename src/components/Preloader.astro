@@ -1,14 +1,14 @@
 ---
 import { Image } from 'astro:assets';
 import heroLogoImg from '../assets/facet-hero-logo.avif';
-import heroImg from '../assets/house-one.png';
+import heroImg from '../assets/res-eoa-1597.avif';
 ---
 
 <div id="hero-stage" class="stage-container">
   <!-- Top Left Typography -->
   <h1 id="text-facet" class="title-text text-facet">FACET</h1>
 
-  <!-- Logo Mark Container (Starts Centered via CSS) -->
+  <!-- Logo Mark Container -->
   <div id="logo-mark" class="logo-wrapper">
     <Image 
       src={heroLogoImg} 
@@ -52,7 +52,6 @@ import heroImg from '../assets/house-one.png';
 
     gsap.killTweensOf([logo, textFacet, textArchitecture, heroFrame]);
 
-    // Calculate exact viewport distance from center to top-right corner
     const vw = window.innerWidth;
     const vh = window.innerHeight;
     const isMobile = vw <= 768;
@@ -60,16 +59,12 @@ import heroImg from '../assets/house-one.png';
     const targetTop = isMobile ? -10 : -20;
     const targetRight = isMobile ? 15 : 30;
 
-    // Get exact logo dimensions
     const logoWidth = logo.offsetWidth || (isMobile ? 85 : 150);
     const logoHeight = logo.offsetHeight || (isMobile ? 85 : 150);
 
-    // Delta X: From dead center (vw/2) to top-right offset (vw - targetRight - logoWidth/2)
     const deltaX = (vw / 2) - targetRight - (logoWidth / 2);
-    // Delta Y: From dead center (vh/2) to top-right offset (targetTop + logoHeight/2)
     const deltaY = -((vh / 2) - targetTop - (logoHeight / 2));
 
-    // Reset initial states
     gsap.set(logo, { x: 0, y: 0, scale: 3.2, opacity: 1 });
     gsap.set(textFacet, { opacity: 0, y: -20 });
     gsap.set(textArchitecture, { opacity: 0, y: 20 });
@@ -82,21 +77,21 @@ import heroImg from '../assets/house-one.png';
       .to(logo, {
         duration: 3
       })
-      // 2. Reveal FACET (top left) & ARCHITECTURE (bottom right)
+      // 2. Reveal FACET & ARCHITECTURE
       .to([textFacet, textArchitecture], {
         opacity: 1,
         y: 0,
         duration: 0.8,
         stagger: 0
       })
-      // 3. Move logo to top-right corner
+      // 3. Move logo to top right corner
       .to(logo, {
         x: deltaX,
         y: deltaY,
         scale: 1,
         duration: 1.2
       }, '-=0.2')
-      // 4. Reveal hero image frame
+      // 4. Expand full-width hero image
       .to(heroFrame, {
         scaleY: 1,
         duration: 1.2,
@@ -158,7 +153,7 @@ import heroImg from '../assets/house-one.png';
     opacity: 0;
   }
 
-  /* LOGO: Absolutely centered in CSS by default */
+  /* LOGO: Center-aligned CSS base */
   .logo-wrapper {
     position: absolute;
     top: 50%;
@@ -176,7 +171,7 @@ import heroImg from '../assets/house-one.png';
     object-fit: contain;
   }
 
-  /* Central Frame */
+  /* Desktop Central Frame */
   .hero-frame {
     position: absolute;
     top: 14%;
@@ -197,25 +192,38 @@ import heroImg from '../assets/house-one.png';
     display: block;
   }
 
+  /* Mobile Layout Adjustments matching fa-mobile.png */
   @media (max-width: 768px) {
     .text-facet {
-      top: 25px;
-      left: 20px;
-      font-size: clamp(1.5rem, 5vw, 2.2rem);
+      top: 15px;
+      left: 15px;
+      font-size: clamp(1.8rem, 6vw, 2.5rem);
     }
+
     .text-architecture {
-      bottom: 25px;
-      right: 20px;
-      font-size: clamp(1.5rem, 5vw, 2.2rem);
+      position: absolute;
+      top: unset;
+      bottom: 22vh; /* Snugs text directly below full-width hero image */
+      right: 15px;
+      font-size: clamp(1.8rem, 6vw, 2.5rem);
     }
+
     .logo-img { 
       height: 85px; 
     }
+
+    /* Edge-to-edge container without horizontal cropping */
     .hero-frame {
-      top: 18%;
-      left: 5%;
-      width: 90vw;
-      height: 64vh;
+      top: 80px;
+      left: 0;
+      width: 100vw;
+      height: 60vh;
+      box-shadow: none;
+    }
+
+    /* Displays full landscape photo without cutting off sides */
+    .hero-img {
+      object-fit: contain;
     }
   }
 </style>
