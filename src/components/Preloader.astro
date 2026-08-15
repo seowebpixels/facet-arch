@@ -272,17 +272,17 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
     /* Expand frame height and allow subtle side crop */
     .hero-frame {
-      top: 70px;
+      top: 50px;
       left: 0;
       width: 100vw;
-      height: 68vh; /* Increased from 60vh to make the image larger */
+      height: calc(60vh + 60px); /* Adds ~30px top and ~30px bottom over original */
       box-shadow: none;
     }
 
     /* Cover mode fills the frame larger while trimming sides */
     .hero-img {
       object-fit: cover;
-      object-position: 55% center; /* Slightly shifts center focus so left/right crop evenly */
+      object-position: center center;
     }
   }
 </style>
