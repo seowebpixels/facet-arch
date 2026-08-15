@@ -52,21 +52,18 @@ import heroImg from '../assets/house-one.png';
 
     gsap.killTweensOf(['#logo-mark', '#text-facet', '#text-architecture', '#hero-frame']);
 
-    // Calculate viewport offsets to animate from absolute center to top-right corner
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     const isMobile = viewportWidth <= 768;
 
-    // Target top-right anchor position offsets
     const targetTop = isMobile ? -10 : -20;
     const targetRight = isMobile ? 15 : 30;
 
-    // Center offset calculations relative to top-right CSS placement
     const logoRect = logo.getBoundingClientRect();
     const targetX = -(viewportWidth / 2 - targetRight - logoRect.width / 2);
     const targetY = viewportHeight / 2 - targetTop - logoRect.height / 2;
 
-    // Set initial positions
+    // Instantly sync GSAP's internal transform tracking without jumping
     gsap.set(logo, { 
       x: targetX,
       y: targetY,
@@ -85,21 +82,21 @@ import heroImg from '../assets/house-one.png';
       .to(logo, {
         duration: 3
       })
-      // 2. Minimize & move logo to top-right
+      // 2. Minimize & move logo to top-right corner
       .to(logo, {
         x: 0,
         y: 0,
         scale: 1,
         duration: 1.2
       })
-      // 3. Simultaneously reveal FACET (top left) and ARCHITECTURE (bottom right)
+      // 3. Reveal FACET & ARCHITECTURE simultaneously
       .to([textFacet, textArchitecture], {
         opacity: 1,
         y: 0,
         duration: 1.0,
         stagger: 0
       }, '<')
-      // 4. Reveal hero image showcase
+      // 4. Reveal hero image
       .to(heroFrame, {
         scaleY: 1,
         duration: 1.2,
@@ -161,7 +158,7 @@ import heroImg from '../assets/house-one.png';
     opacity: 0;
   }
 
-  /* LOGO: Anchored top-right */
+  /* LOGO: Set initial CSS transform to land dead-center on screen before JS runs */
   .logo-wrapper {
     position: absolute;
     top: -20px;
@@ -169,6 +166,8 @@ import heroImg from '../assets/house-one.png';
     z-index: 30;
     transform-origin: center center;
     will-change: transform;
+    /* CSS centering overrides initial load flash */
+    transform: translate(calc(-50vw + 30px + 50%), calc(50vh - (-20px) - 50%)) scale(3.2);
   }
 
   .logo-img {
@@ -213,6 +212,7 @@ import heroImg from '../assets/house-one.png';
     .logo-wrapper {
       right: 15px;
       top: -10px;
+      transform: translate(calc(-50vw + 15px + 50%), calc(50vh - (-10px) - 50%)) scale(3.2);
     }
     .logo-img { 
       height: 85px; 
