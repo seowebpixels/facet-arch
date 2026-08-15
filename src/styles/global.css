@@ -1,7 +1,9 @@
 @font-face {
-  font-family:'Bank Gothic';
-  src: url('/fonts/BankGothic.woff2') format('woff2');
-  font-weight: 100 900;
+  font-family: 'Bank Gothic';
+  src: url('/fonts/BankGothic.woff2') format('woff2'),
+       url('/fonts/BankGothic.woff') format('woff'),
+       url('/fonts/BankGothic.ttf') format('truetype');
+  font-weight: 900;
   font-style: normal;
   font-display: swap;
 }
@@ -28,11 +30,12 @@ html, body {
   min-height: 100vh;
 }
 
-h1, h2, h3 {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  letter-spacing: 0.15em;
+/* Global Heading Rules */
+h1, h2, h3, .heading-bankgothic {
+  font-family: 'Bank Gothic', 'BankGothic', sans-serif !important;
+  font-weight: 900;
   text-transform: uppercase;
+  letter-spacing: 0.08em;
   color: var(--text-primary);
 }
 
