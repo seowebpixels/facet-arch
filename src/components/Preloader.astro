@@ -43,63 +43,68 @@ import heroImg from '../assets/house-one.png';
     const stage = document.getElementById('hero-stage');
     if (!stage) return;
 
+    const logo = document.getElementById('logo-mark');
+    const textFacet = document.getElementById('text-facet');
+    const textArchitecture = document.getElementById('text-architecture');
+    const heroFrame = document.getElementById('hero-frame');
+
+    if (!logo || !textFacet || !textArchitecture || !heroFrame) return;
+
     gsap.killTweensOf(['#logo-mark', '#text-facet', '#text-architecture', '#hero-frame']);
 
-    // Calculate viewport center offsets for clean transforms
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
+    // Calculate viewport offsets to animate from absolute center to top-right corner
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const isMobile = viewportWidth <= 768;
 
-    // 1. Initial Setup via pure Transforms (prevents top-left bunching)
-    gsap.set('#hero-frame', { scaleY: 0, transformOrigin: 'center center' });
-    
-    // Position FACET starting from center relative to its new 20px top anchor
-gsap.set('#text-facet', { 
-  x: () => centerX - 50 - (document.getElementById('text-facet')?.offsetWidth || 0) / 2,
-  y: () => centerY - 20 - (document.getElementById('text-facet')?.offsetHeight || 0) / 2,
-  opacity: 0 
-});
+    // Target top-right anchor position offsets
+    const targetTop = isMobile ? -10 : -20;
+    const targetRight = isMobile ? 15 : 30;
 
-// Position ARCHITECTURE starting from center relative to its new 20px bottom anchor
-gsap.set('#text-architecture', { 
-  x: () => -(centerX - 50 - (document.getElementById('text-architecture')?.offsetWidth || 0) / 2),
-  y: () => -(centerY - 20 - (document.getElementById('text-architecture')?.offsetHeight || 0) / 2),
-  opacity: 0 
-});
-    
-    // Position LOGO starting from screen center relative to its top-right anchor
-    gsap.set('#logo-mark', { 
-      x: () => -(centerX - 30 - (document.getElementById('logo-mark')?.offsetWidth || 0) / 2),
-      y: () => centerY - (-20) - (document.getElementById('logo-mark')?.offsetHeight || 0) / 2,
+    // Center offset calculations relative to top-right CSS placement
+    const logoRect = logo.getBoundingClientRect();
+    const targetX = -(viewportWidth / 2 - targetRight - logoRect.width / 2);
+    const targetY = viewportHeight / 2 - targetTop - logoRect.height / 2;
+
+    // Set initial positions
+    gsap.set(logo, { 
+      x: targetX,
+      y: targetY,
       scale: 3.2, 
       opacity: 1 
     });
 
+    gsap.set(textFacet, { opacity: 0, y: -20 });
+    gsap.set(textArchitecture, { opacity: 0, y: 20 });
+    gsap.set(heroFrame, { scaleY: 0, transformOrigin: 'center center' });
+
     const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
-    // 2. Animate transforms to 0 (snaps smoothly to exact CSS edge positions)
-    tl.to('#logo-mark', {
-      x: 0,
-      y: 0,
-      scale: 1,
-      duration: 1.0
-    }, 0.6)
-    .to('#text-facet', {
-      x: 0,
-      y: 0,
-      opacity: 1,
-      duration: 1.0
-    }, '<')
-    .to('#text-architecture', {
-      x: 0,
-      y: 0,
-      opacity: 1,
-      duration: 1.0
-    }, '<')
-    .to('#hero-frame', {
-      scaleY: 1,
-      duration: 1.2,
-      ease: 'power4.out'
-    }, '-=0.6');
+    tl
+      // 1. Hold in center at 3.2x scale for 3 seconds
+      .to(logo, {
+        duration: 3
+      })
+      // 2. Minimize & move logo to top-right
+      .to(logo, {
+        x: 0,
+        y: 0,
+        scale: 1,
+        duration: 1.2
+      })
+      // 3. Simultaneously reveal FACET (top left) and ARCHITECTURE (bottom right)
+      .to([textFacet, textArchitecture], {
+        opacity: 1,
+        y: 0,
+        duration: 1.0,
+        stagger: 0
+      }, '<')
+      // 4. Reveal hero image showcase
+      .to(heroFrame, {
+        scaleY: 1,
+        duration: 1.2,
+        ease: 'power4.out'
+      }, '-=0.4');
   }
 
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
@@ -120,13 +125,13 @@ gsap.set('#text-architecture', {
     box-sizing: border-box;
   }
 
-  /* FACET: Anchored 50px from top and left */
+  /* FACET: Anchored top and left */
   .text-facet {
     position: absolute;
     top: 20px;
     left: 50px;
     font-family: 'Bank Gothic', sans-serif !important;
-    font-weight: 900; /* Extra bold */
+    font-weight: 900;
     font-size: clamp(2.6rem, 4vw, 4.1rem);
     letter-spacing: 0.10em;
     color: var(--text-primary, #111111);
@@ -138,13 +143,13 @@ gsap.set('#text-architecture', {
     opacity: 0;
   }
 
-  /* ARCHITECTURE: Anchored 50px from bottom and right */
+  /* ARCHITECTURE: Anchored bottom and right */
   .text-architecture {
     position: absolute;
     bottom: 20px;
     right: 50px;
     font-family: 'Bank Gothic', sans-serif !important;
-    font-weight: 900; /* Extra bold */
+    font-weight: 900;
     font-size: clamp(2.6rem, 4vw, 4.1rem);
     letter-spacing: 0.10em;
     color: var(--text-primary, #111111);
@@ -156,13 +161,14 @@ gsap.set('#text-architecture', {
     opacity: 0;
   }
 
-  /* LOGO: Anchored top-right (30px from right, shifted 50px UP to -20px top) */
+  /* LOGO: Anchored top-right */
   .logo-wrapper {
     position: absolute;
     top: -20px;
     right: 30px;
     z-index: 30;
     transform-origin: center center;
+    will-change: transform;
   }
 
   .logo-img {
@@ -208,7 +214,9 @@ gsap.set('#text-architecture', {
       right: 15px;
       top: -10px;
     }
-    .logo-img { height: 85px; }
+    .logo-img { 
+      height: 85px; 
+    }
     .hero-frame {
       top: 18%;
       left: 5%;
