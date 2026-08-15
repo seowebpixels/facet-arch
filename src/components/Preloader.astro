@@ -8,10 +8,7 @@ import heroImg from '../assets/house-one.png';
   <!-- Top Left Typography -->
   <h1 id="text-facet" class="title-text text-facet">FACET</h1>
 
-  <!-- Target Anchor for Logo in Top Right (Invisible Target) -->
-  <div id="logo-target" class="logo-target-anchor"></div>
-
-  <!-- Logo Mark Container (Starts Dead Center in CSS) -->
+  <!-- Logo Mark Container (Starts Centered via CSS) -->
   <div id="logo-mark" class="logo-wrapper">
     <Image 
       src={heroLogoImg} 
@@ -47,29 +44,33 @@ import heroImg from '../assets/house-one.png';
     if (!stage) return;
 
     const logo = document.getElementById('logo-mark');
-    const target = document.getElementById('logo-target');
     const textFacet = document.getElementById('text-facet');
     const textArchitecture = document.getElementById('text-architecture');
     const heroFrame = document.getElementById('hero-frame');
 
-    if (!logo || !target || !textFacet || !textArchitecture || !heroFrame) return;
+    if (!logo || !textFacet || !textArchitecture || !heroFrame) return;
 
     gsap.killTweensOf([logo, textFacet, textArchitecture, heroFrame]);
 
-    // Calculate exact pixel offset from current dead center to target top-right anchor
-    const logoRect = logo.getBoundingClientRect();
-    const targetRect = target.getBoundingClientRect();
+    // Calculate exact viewport distance from center to top-right corner
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const isMobile = vw <= 768;
 
-    const deltaX = targetRect.left - logoRect.left;
-    const deltaY = targetRect.top - logoRect.top;
+    const targetTop = isMobile ? -10 : -20;
+    const targetRight = isMobile ? 15 : 30;
 
-    // Set initial GSAP states
-    gsap.set(logo, { 
-      x: 0, 
-      y: 0, 
-      scale: 3.2, 
-      opacity: 1 
-    });
+    // Get exact logo dimensions
+    const logoWidth = logo.offsetWidth || (isMobile ? 85 : 150);
+    const logoHeight = logo.offsetHeight || (isMobile ? 85 : 150);
+
+    // Delta X: From dead center (vw/2) to top-right offset (vw - targetRight - logoWidth/2)
+    const deltaX = (vw / 2) - targetRight - (logoWidth / 2);
+    // Delta Y: From dead center (vh/2) to top-right offset (targetTop + logoHeight/2)
+    const deltaY = -((vh / 2) - targetTop - (logoHeight / 2));
+
+    // Reset initial states
+    gsap.set(logo, { x: 0, y: 0, scale: 3.2, opacity: 1 });
     gsap.set(textFacet, { opacity: 0, y: -20 });
     gsap.set(textArchitecture, { opacity: 0, y: 20 });
     gsap.set(heroFrame, { scaleY: 0, transformOrigin: 'center center' });
@@ -77,24 +78,24 @@ import heroImg from '../assets/house-one.png';
     const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
     tl
-      // 1. Hold in dead center for 3 seconds
+      // 1. Hold logo in center for 3 seconds
       .to(logo, {
         duration: 3
       })
-      // 2. Animate directly to top-right target anchor
+      // 2. Reveal FACET (top left) & ARCHITECTURE (bottom right)
+      .to([textFacet, textArchitecture], {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0
+      })
+      // 3. Move logo to top-right corner
       .to(logo, {
         x: deltaX,
         y: deltaY,
         scale: 1,
         duration: 1.2
-      })
-      // 3. Reveal FACET & ARCHITECTURE simultaneously
-      .to([textFacet, textArchitecture], {
-        opacity: 1,
-        y: 0,
-        duration: 1.0,
-        stagger: 0
-      }, '<')
+      }, '-=0.2')
       // 4. Reveal hero image frame
       .to(heroFrame, {
         scaleY: 1,
@@ -157,18 +158,6 @@ import heroImg from '../assets/house-one.png';
     opacity: 0;
   }
 
-  /* Target slot in Top-Right Corner where logo lands */
-  .logo-target-anchor {
-    position: absolute;
-    top: -20px;
-    right: 30px;
-    width: 150px;
-    height: 150px;
-    pointer-events: none;
-    visibility: hidden;
-    z-index: 1;
-  }
-
   /* LOGO: Absolutely centered in CSS by default */
   .logo-wrapper {
     position: absolute;
@@ -218,12 +207,6 @@ import heroImg from '../assets/house-one.png';
       bottom: 25px;
       right: 20px;
       font-size: clamp(1.5rem, 5vw, 2.2rem);
-    }
-    .logo-target-anchor {
-      right: 15px;
-      top: -10px;
-      width: 85px;
-      height: 85px;
     }
     .logo-img { 
       height: 85px; 
