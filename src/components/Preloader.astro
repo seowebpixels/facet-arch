@@ -45,6 +45,40 @@ import heroImg from '../assets/res-eoa-1597.avif';
 <script>
   import { gsap } from 'gsap';
 
+  // Strict Event-Based Scroll Lock Functions
+  function preventScroll(e) {
+    e.preventDefault();
+  }
+
+  function lockPageScroll() {
+    document.documentElement.style.overflow = 'hidden';
+    document.documentElement.style.height = '100vh';
+    document.body.style.overflow = 'hidden';
+    document.body.style.height = '100vh';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+
+    // Intercept touch & wheel events directly on the window to block hardware swipe/scroll
+    window.addEventListener('touchmove', preventScroll, { passive: false });
+    window.addEventListener('wheel', preventScroll, { passive: false });
+  }
+
+  function unlockPageScroll() {
+    document.documentElement.style.overflow = '';
+    document.documentElement.style.height = '';
+    document.body.style.overflow = '';
+    document.body.style.height = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
+
+    window.removeEventListener('touchmove', preventScroll);
+    window.removeEventListener('wheel', preventScroll);
+
+    // Clean up helper classes from Layout
+    document.documentElement.classList.remove('loading-lock');
+    document.body.classList.remove('loading-lock');
+  }
+
   // Live Local Time Updater Function
   function updateHeroClock() {
     const clockEl = document.getElementById('live-time');
@@ -73,6 +107,9 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
     if (!logo || !textFacet || !textArchitecture || !clock || !heroFrame) return;
 
+    // Lock page interaction immediately before GSAP sequence starts
+    lockPageScroll();
+
     // Start Live Clock Ticker
     updateHeroClock();
     setInterval(updateHeroClock, 1000);
@@ -97,7 +134,10 @@ import heroImg from '../assets/res-eoa-1597.avif';
     gsap.set(textArchitecture, { opacity: 0, y: 20 });
     gsap.set(heroFrame, { scaleY: 0, transformOrigin: 'center center' });
 
-    const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
+    const tl = gsap.timeline({ 
+      defaults: { ease: 'power3.inOut' },
+      onComplete: unlockPageScroll // Unlock scroll strictly after the timeline finishes
+    });
 
     tl
       // 1. Hold logo in center for 3 seconds
