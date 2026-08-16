@@ -26,7 +26,6 @@
 <!-- 2. Studio Ethos / Practice Section -->
 <section style="width: 100%; background-color: #3A3F47; padding: 96px 24px; border-bottom: 1px solid #d1ccc4; box-sizing: border-box;">
   <div style="max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 48px; align-items: start;">
-    
     <div>
       <h2 style="font-size: 11px; font-family: monospace; color: #a3a3a3; letter-spacing: 0.3em; text-transform: uppercase; display: block;">THE PRACTICE</h2>
       <p style="font-size: 28px; font-weight: 300; color: #a3a3a3; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 16px; line-height: 1.3;">
@@ -42,7 +41,6 @@
         Our practice manages the full project lifecycle—from conceptual master planning and council submission through to detailed technical documentation and site administration.
       </p>
     </div>
-
   </div>
 </section>
 
@@ -51,19 +49,22 @@
   <div style="max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 64px;">
     
     <!-- Big CTA Row -->
-    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 32px; padding-bottom: 64px; border-bottom: 1px solid #d1ccc4;">
-      <div>
+    <div class="cta-content" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 32px; padding-bottom: 64px; border-bottom: 1px solid #d1ccc4;">
+      <div class="cta-text">
         <span style="font-size: 11px; font-family: monospace; color: #a3a3a3; letter-spacing: 0.3em; text-transform: uppercase; display: block;">NEXT STEPS</span>
-        <p style="font-size: 28px; font-weight: 300; color: #a3a3a3; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 16px; line-height: 1.3;">
-          Have a project in mind?
+        <p class="cta-heading" style="font-size: 28px; font-weight: 300; color: #a3a3a3; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 16px; line-height: 1.3;">
+          HAVE A PROJECT IN MIND?
         </p>
       </div>
-      <a 
-        href="mailto:info@facetarch.co.za" 
-        style="display: inline-block; padding: 16px 32px; border: 1px solid #ffffff; color: #ffffff; font-size: 12px; font-family: monospace; letter-spacing: 0.25em; text-transform: uppercase; text-decoration: none; transition: background-color 0.3s;"
-      >
-        Initiate Consultation →
-      </a>
+      <div class="cta-action">
+        <a 
+          href="mailto:info@facetarch.co.za" 
+          class="cta-btn"
+          style="display: inline-block; padding: 16px 32px; border: 1px solid #ffffff; color: #ffffff; font-size: 12px; font-family: monospace; letter-spacing: 0.25em; text-transform: uppercase; text-decoration: none; transition: background-color 0.3s;"
+        >
+          Initiate Consultation →
+        </a>
+      </div>
     </div>
 
     <!-- Copyright Base -->
@@ -115,37 +116,44 @@
   }
 
   @media (max-width: 899px) {
-  .cta-content {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 20px !important;
-  }
+    .cta-content {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 20px !important;
+    }
 
-  .cta-text {
-    width: 100% !important;
-  }
+    .cta-text {
+      width: 100% !important;
+    }
 
-  .cta-heading {
-    font-size: clamp(1rem, 4.8vw, 1.3rem) !important;
-    white-space: nowrap !important;
-    letter-spacing: 1.5px !important;
-    line-height: 1.2 !important;
-  }
+    .cta-heading {
+      font-size: clamp(1rem, 4.8vw, 1.3rem) !important;
+      white-space: nowrap !important;
+      letter-spacing: 1.5px !important;
+      line-height: 1.2 !important;
+    }
 
-  .cta-action {
-    width: 100% !important;
-  }
+    .cta-action {
+      width: 100% !important;
+    }
 
-  .cta-btn {
-    display: block !important;
-    width: 100% !important;
-    text-align: center !important;
-    box-sizing: border-box !important;
-    padding: 12px 16px !important;
-    font-size: 0.7rem !important;
-    letter-spacing: 2px !important;
-  }
-}
+    .cta-btn {
+      display: block !important;
+      width: 100% !important;
+      text-align: center !important;
+      box-sizing: border-box !important;
+      padding: 12px 16px !important;
+      font-size: 0.7rem !important;
+      letter-spacing: 2px !important;
+    }
+
+    .footer-base {
+      flex-direction: column !important;
+      align-items: center !important;
+      text-align: center !important;
+      gap: 0 !important;
+    }
+
     .footer-line {
       white-space: nowrap !important;
       line-height: 1.6 !important;
