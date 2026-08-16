@@ -1,0 +1,692 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+
+// Commercial Imports
+import commAgriSeta from '../assets/comm-agri-seta.avif';
+import commBeme from '../assets/comm-beme.avif';
+import commCarsCoZa from '../assets/comm-cars-co-za.avif';
+import commCrestron from '../assets/comm-crestron.avif';
+import commEcoCityStudRes from '../assets/comm-eco-city-sudent-res.avif';
+import commEmeraldResort from '../assets/comm-emerald-resort-hotel.avif';
+import commHibiscusKindergarten from '../assets/comm-hibiscus-kindergarden.avif';
+import commIStores from '../assets/comm-i-stores.avif';
+import commLeeCooper from '../assets/comm-lee-cooper-fourways-mall.avif';
+import commNiche from '../assets/comm-niche.avif';
+import commNintendo from '../assets/comm-nintendo.avif';
+import commNorthcliffPrimary from '../assets/comm-northcliff-primary.avif';
+import commOmegaCenter from '../assets/comm-omega-center.avif';
+import commRivieraShopping from '../assets/comm-riviera-shopping-centre.avif';
+
+// Development Imports
+import devAscotManor from '../assets/dev-ascot-manor.avif';
+import devEcoCityEntrance from '../assets/dev-eco-city-entrance.avif';
+import devElementum from '../assets/dev-elementum.avif';
+import devHabitatAlpha from '../assets/dev-habitat-alpha.avif';
+import devHabitatBeta from '../assets/dev-habitat-beta.avif';
+import devHabitatEpsilon from '../assets/dev-habitat-epsilon.avif';
+import devHabitatKappa from '../assets/dev-habitat-kappa.avif';
+import devKengies from '../assets/dev-kengies.avif';
+import devKubu from '../assets/dev-kubu.avif';
+import devKwena from '../assets/dev-kwena.avif';
+import devLaTerrace from '../assets/dev-la-terrace.avif';
+import devModitloLodge from '../assets/dev-moditlo-lodge.avif';
+import devOceanViews from '../assets/dev-ocean-views.avif';
+import devRivieraApartments from '../assets/dev-riviera-apartments.avif';
+import devRivieraGuardHouse from '../assets/dev-riviera-guard-house.avif';
+import devRivieraTownhouses from '../assets/dev-riviera-townhouses.avif';
+import devSaronaCityPlan from '../assets/dev-sarona-city-master-plan.avif';
+import devSimba from '../assets/dev-simba.avif';
+import devTheFig from '../assets/dev-the-fig.avif';
+import devTlou from '../assets/dev-tlou.avif';
+
+// Interior Imports
+import intCabanossi from '../assets/int-cabanossi.avif';
+import intChilisa from '../assets/int-chilisa.avif';
+import intCrestron from '../assets/int-crestron.avif';
+import intDavid from '../assets/int-david.avif';
+import intDoorasamy from '../assets/int-doorasamy.avif';
+import intKhalpey from '../assets/int-khalpey.avif';
+import intLeopardLodge from '../assets/int-leopard-lodge.avif';
+import intNdlovu from '../assets/int-ndlovu.avif';
+import intRaceBespoke from '../assets/int-race-bespoke-spaces.avif';
+import intStarck from '../assets/int-starck.avif';
+import intTsukuduv from '../assets/int-tsukuduv.avif';
+
+// Residential Imports
+import resBlann from '../assets/res-blann.avif';
+import resCopperleaf from '../assets/res-copperleaf.avif';
+import resCourtyards from '../assets/res-courtyards.avif';
+import resDavid from '../assets/res-david.avif';
+import resDeLaRey from '../assets/res-de-la-rey.avif';
+import resEoa1597 from '../assets/res-eoa-1597.avif';
+import resKaren from '../assets/res-karen.avif';
+import resMboki from '../assets/res-mboki.avif';
+import resOsummit from '../assets/res-osummit.avif';
+import resPeloetletse from '../assets/res-peloetletse.avif';
+import resSomertonEstate from '../assets/res-somerton-estate.avif';
+import resStoneSteel from '../assets/res-stone-and-steel.avif';
+import resThornValley from '../assets/res-thorn-valley.avif';
+import resWaterfall1951 from '../assets/res-waterfall-1951.avif';
+
+// Sustainability Imports
+import sustElectricity from '../assets/sustainability-electricity.avif';
+import sustThermalComfort from '../assets/sustainability-thermal-comfort.avif';
+import sustWater from '../assets/sustainability-water.avif';
+
+const portfolioData = [
+  {
+    id: 'commercial',
+    title: 'COMMERCIAL',
+    num: '01',
+    items: [
+      { name: 'EMERALD RESORT HOTEL', img: commEmeraldResort.src },
+      { name: 'AGRI SETA', img: commAgriSeta.src },
+      { name: 'BEME', img: commBeme.src },
+      { name: 'CARS.CO.ZA', img: commCarsCoZa.src },
+      { name: 'CRESTRON', img: commCrestron.src },
+      { name: 'ECO CITY STUDENT RES', img: commEcoCityStudRes.src },
+      { name: 'HIBISCUS KINDERGARTEN', img: commHibiscusKindergarten.src },
+      { name: 'ISTORES', img: commIStores.src },
+      { name: 'LEE COOPER FOURWAYS', img: commLeeCooper.src },
+      { name: 'NICHE', img: commNiche.src },
+      { name: 'NINTENDO', img: commNintendo.src },
+      { name: 'NORTHCLIFF PRIMARY', img: commNorthcliffPrimary.src },
+      { name: 'OMEGA CENTER', img: commOmegaCenter.src },
+      { name: 'RIVIERA SHOPPING CENTRE', img: commRivieraShopping.src }
+    ]
+  },
+  {
+    id: 'development',
+    title: 'DEVELOPMENTS',
+    num: '02',
+    items: [
+      { name: 'ASCOT MANOR', img: devAscotManor.src },
+      { name: 'ECO CITY ENTRANCE', img: devEcoCityEntrance.src },
+      { name: 'ELEMENTUM', img: devElementum.src },
+      { name: 'HABITAT ALPHA', img: devHabitatAlpha.src },
+      { name: 'HABITAT BETA', img: devHabitatBeta.src },
+      { name: 'HABITAT EPSILON', img: devHabitatEpsilon.src },
+      { name: 'HABITAT KAPPA', img: devHabitatKappa.src },
+      { name: 'KENGIES', img: devKengies.src },
+      { name: 'KUBU', img: devKubu.src },
+      { name: 'KWENA', img: devKwena.src },
+      { name: 'LA TERRACE', img: devLaTerrace.src },
+      { name: 'MODITLO LODGE', img: devModitloLodge.src },
+      { name: 'OCEAN VIEWS', img: devOceanViews.src },
+      { name: 'RIVIERA APARTMENTS', img: devRivieraApartments.src },
+      { name: 'RIVIERA GUARD HOUSE', img: devRivieraGuardHouse.src },
+      { name: 'RIVIERA TOWNHOUSES', img: devRivieraTownhouses.src },
+      { name: 'SARONA CITY MASTER PLAN', img: devSaronaCityPlan.src },
+      { name: 'SIMBA', img: devSimba.src },
+      { name: 'THE FIG', img: devTheFig.src },
+      { name: 'TLOU', img: devTlou.src }
+    ]
+  },
+  {
+    id: 'interiors',
+    title: 'INTERIORS',
+    num: '03',
+    items: [
+      { name: 'NDLOVU RESIDENCE', img: intNdlovu.src },
+      { name: 'CABANOSSI', img: intCabanossi.src },
+      { name: 'CHILISA', img: intChilisa.src },
+      { name: 'CRESTRON INTERIOR', img: intCrestron.src },
+      { name: 'DAVID SPACE', img: intDavid.src },
+      { name: 'DOORASAMY', img: intDoorasamy.src },
+      { name: 'KHALPEY', img: intKhalpey.src },
+      { name: 'LEOPARD LODGE', img: intLeopardLodge.src },
+      { name: 'RACE BESPOKE SPACES', img: intRaceBespoke.src },
+      { name: 'STARCK', img: intStarck.src },
+      { name: 'TSUKUDUV', img: intTsukuduv.src }
+    ]
+  },
+  {
+    id: 'residential',
+    title: 'RESIDENTIAL',
+    num: '04',
+    items: [
+      { name: 'EOA 1597', img: resEoa1597.src },
+      { name: 'BLANN RESIDENCE', img: resBlann.src },
+      { name: 'COPPERLEAF', img: resCopperleaf.src },
+      { name: 'COURTYARDS', img: resCourtyards.src },
+      { name: 'DAVID RESIDENCE', img: resDavid.src },
+      { name: 'DE LA REY', img: resDeLaRey.src },
+      { name: 'KAREN RESIDENCE', img: resKaren.src },
+      { name: 'MBOKI', img: resMboki.src },
+      { name: 'OSUMMIT', img: resOsummit.src },
+      { name: 'PELOETLETSE', img: resPeloetletse.src },
+      { name: 'SOMERTON ESTATE', img: resSomertonEstate.src },
+      { name: 'STONE & STEEL', img: resStoneSteel.src },
+      { name: 'THORN VALLEY', img: resThornValley.src },
+      { name: 'WATERFALL 1951', img: resWaterfall1951.src }
+    ]
+  },
+  {
+    id: 'sustainability',
+    title: 'SUSTAINABILITY',
+    num: '05',
+    items: [
+      { name: 'THERMAL COMFORT STUDY', img: sustThermalComfort.src },
+      { name: 'ELECTRICITY INTEGRATION', img: sustElectricity.src },
+      { name: 'WATER HARVESTING SYSTEM', img: sustWater.src }
+    ]
+  }
+];
+
+const currentYear = new Date().getFullYear();
+---
+
+<Layout title="Facet Architecture | Portfolio Matrix">
+  <Header />
+
+  <!-- Category Navigation Bar -->
+  <nav class="portfolio-nav">
+    <div class="nav-track">
+      {portfolioData.map((cat, idx) => (
+        <button class={`nav-btn ${idx === 0 ? 'active' : ''}`} data-category={cat.id}>
+          <span class="nav-num">{cat.num}</span>
+          <span class="nav-title">{cat.title}</span>
+        </button>
+      ))}
+    </div>
+  </nav>
+
+  <!-- Dynamic Category Rail Display -->
+  <main class="portfolio-stage">
+    {portfolioData.map((cat, idx) => (
+      <section class={`category-panel ${idx === 0 ? 'active' : ''}`} id={`panel-${cat.id}`}>
+        <div class="panel-header">
+          <span class="panel-num">{cat.num} // ARCHITECTURAL CATEGORY</span>
+          <h2 class="panel-title">{cat.title}</h2>
+        </div>
+
+        <!-- Horizontal Scroll Track -->
+        <div class="scroll-rail">
+          {cat.items.map((item) => (
+            <div class="portfolio-card cad-trigger" data-fullsrc={item.img} data-caption={item.name}>
+              <div class="card-frame">
+                <img src={item.img} alt={item.name} loading="lazy" />
+                <div class="cad-grid-layer"></div>
+              </div>
+              <div class="card-caption">
+                <h3>{item.name}</h3>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    ))}
+  </main>
+
+  <!-- Spacer Gap Below Scroll Bar -->
+  <div class="portfolio-spacer-gap"></div>
+
+  <!-- Footer Matching Home Page Structure -->
+  <footer class="home-matched-footer">
+    <!-- Next Steps CTA Section -->
+    <div class="cta-section">
+      <div class="cta-content">
+        <div class="cta-text">
+          <span class="cta-sub">NEXT STEPS</span>
+          <h2 class="cta-heading">HAVE A PROJECT IN MIND?</h2>
+        </div>
+        <div class="cta-action">
+          <a href="/contact" class="cta-btn">INITIATE CONSULTATION &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Divider Line -->
+    <div class="footer-divider"></div>
+
+    <!-- Copyright Bar -->
+    <div class="copyright-bar">
+      <div class="copyright-container">
+        <p class="copyright-text">&copy; {currentYear} FACET ARCHITECTURE. ALL RIGHTS RESERVED.</p>
+        <p class="designer-credit">DESIGNED BY <a href="https://webdesignpros.co.za" target="_blank" rel="noopener noreferrer">WEB DESIGN PROS</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Full-Screen Lightbox Modal -->
+  <div id="lightbox-modal" class="lightbox-modal">
+    <button class="lightbox-close" id="lightbox-close">&times; CLOSE</button>
+    <div class="lightbox-content">
+      <img id="lightbox-img" src="" alt="" />
+      <p id="lightbox-caption" class="lightbox-caption"></p>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  :global(body) {
+    background-color: #111111;
+    color: #ffffff;
+    margin: 0;
+  }
+
+  /* Portfolio Navigation Bar */
+  .portfolio-nav {
+    position: fixed;
+    top: 90px;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 16px 32px;
+    background: rgba(17, 17, 17, 0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .nav-track {
+    display: flex;
+    gap: 36px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .nav-btn {
+    position: relative;
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-family: 'BankGothic', sans-serif, system-ui;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.4s ease, color 0.4s ease;
+    padding: 8px 0 12px;
+    overflow: hidden;
+  }
+
+  .nav-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #00ffc8;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .nav-btn:hover, .nav-btn.active {
+    opacity: 1;
+    color: #00ffc8;
+  }
+
+  .nav-btn.active::after,
+  .nav-btn:hover::after {
+    transform: scaleX(1);
+  }
+
+  .nav-num {
+    font-size: 0.8rem;
+    color: #bf6363;
+    font-weight: bold;
+  }
+
+  .nav-title {
+    font-size: 0.9rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  /* Portfolio Stage Panels */
+  .portfolio-stage {
+    padding-top: 170px;
+  }
+
+  .category-panel {
+    display: none;
+    padding: 20px 40px 30px;
+  }
+
+  .category-panel.active {
+    display: block;
+  }
+
+  .panel-header {
+    margin-bottom: 20px;
+  }
+
+  .panel-num {
+    font-family: 'BankGothic', sans-serif, system-ui;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .panel-title {
+    font-family: 'BankGothic', sans-serif, system-ui;
+    font-size: 2.8rem;
+    text-transform: uppercase;
+    margin: 4px 0 0;
+    color: #ffffff;
+  }
+
+  /* Thin Custom Horizontal Scrollbar */
+  .scroll-rail {
+    display: flex;
+    gap: 28px;
+    overflow-x: auto;
+    padding-bottom: 18px;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.08);
+  }
+
+  .scroll-rail::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .scroll-rail::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+  }
+
+  .scroll-rail::-webkit-scrollbar-thumb {
+    background: #00ffc8;
+    border-radius: 3px;
+    box-shadow: 0 0 8px rgba(0, 255, 200, 0.4);
+  }
+
+  .scroll-rail::-webkit-scrollbar-thumb:hover {
+    background: #00cca0;
+  }
+
+  /* Portfolio Cards */
+  .portfolio-card {
+    flex: 0 0 auto;
+    width: 440px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    cursor: pointer;
+  }
+
+  .card-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    background-color: #000000;
+  }
+
+  .card-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    filter: grayscale(100%) contrast(110%);
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease;
+  }
+
+  .card-caption h3 {
+    font-family: 'BankGothic', sans-serif, system-ui;
+    font-size: 1.05rem;
+    color: #ffffff;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  .cad-grid-layer {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(0,255,200,0.08) 1px, transparent 1px);
+    background-size: 18px 18px;
+    opacity: 1;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    border: 1px solid rgba(0, 255, 200, 0.2);
+  }
+
+  .cad-trigger:hover img {
+    transform: scale(1.04);
+    filter: grayscale(0%) contrast(100%);
+  }
+
+  .cad-trigger:hover .cad-grid-layer {
+    opacity: 0;
+  }
+
+  /* Buffer Gap Section */
+  .portfolio-spacer-gap {
+    height: 40px;
+    background-color: #2a2f35;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Footer - Slate Theme Matching Home Page */
+  .home-matched-footer {
+    background-color: #2e343b;
+    color: #ffffff;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
+    padding: 50px 48px 32px;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .cta-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-bottom: 32px;
+  }
+
+  .cta-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .cta-sub {
+    display: block;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
+    font-size: 0.65rem;
+    color: #94a3b8;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-weight: 400;
+  }
+
+  .cta-heading {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
+    font-size: 1.45rem;
+    color: #e2e8f0;
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  /* White-bordered Consultation Button */
+  .cta-btn {
+    display: inline-block;
+    padding: 10px 22px;
+    border: 1px solid #ffffff !important;
+    background-color: transparent;
+    color: #ffffff;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .cta-btn:hover,
+  .cta-btn:active {
+    background-color: #ffffff;
+    color: #000000;
+    border-color: #ffffff !important;
+  }
+
+  .footer-divider {
+    max-width: 1400px;
+    margin: 0 auto 24px;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .copyright-bar {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .copyright-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.65rem;
+    color: #94a3b8;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+  }
+
+  .copyright-text,
+  .designer-credit {
+    margin: 0;
+    font-weight: 400;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
+  }
+
+  .designer-credit a {
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .designer-credit a:hover {
+    color: #ffffff;
+  }
+
+  /* Lightbox Modal */
+  .lightbox-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.94);
+    backdrop-filter: blur(12px);
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+  }
+
+  .lightbox-modal.active {
+    display: flex;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    background: none;
+    border: 1px solid #00ffc8;
+    color: #00ffc8;
+    font-family: 'BankGothic', sans-serif, system-ui;
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+
+  .lightbox-content {
+    max-width: 92vw;
+    max-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .lightbox-content img {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+  }
+
+  .lightbox-caption {
+    font-family: 'BankGothic', sans-serif, system-ui;
+    color: #ffffff;
+    font-size: 1.25rem;
+    margin-top: 16px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 768px) {
+    .cta-content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .copyright-container {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+  }
+</style>
+
+<script>
+  // Navigation Category Filtering
+  const navBtns = document.querySelectorAll('.nav-btn');
+  const panels = document.querySelectorAll('.category-panel');
+
+  navBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const targetCat = btn.getAttribute('data-category');
+
+      navBtns.forEach((b) => b.classList.remove('active'));
+      panels.forEach((p) => p.classList.remove('active'));
+
+      btn.classList.add('active');
+      const activePanel = document.getElementById(`panel-${targetCat}`);
+      if (activePanel) {
+        activePanel.classList.add('active');
+      }
+    });
+  });
+
+  // Lightbox Expansion
+  const modal = document.getElementById('lightbox-modal');
+  const modalImg = document.getElementById('lightbox-img') as HTMLImageElement;
+  const modalCaption = document.getElementById('lightbox-caption');
+  const modalClose = document.getElementById('lightbox-close');
+
+  const cards = document.querySelectorAll('.portfolio-card');
+  cards.forEach((card) => {
+    card.addEventListener('click', () => {
+      const fullSrc = card.getAttribute('data-fullsrc');
+      const caption = card.getAttribute('data-caption');
+
+      if (modal && modalImg && modalCaption && fullSrc) {
+        modalImg.src = fullSrc;
+        modalCaption.textContent = caption || '';
+        modal.classList.add('active');
+      }
+    });
+  });
+
+  if (modalClose && modal) {
+    modalClose.addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+      }
+    });
+  }
+</script>
