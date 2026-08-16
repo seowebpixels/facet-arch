@@ -270,22 +270,6 @@ const currentYear = new Date().getFullYear();
   </div>
 </Layout>
 
-<style is:global>
-  /* Forced Viewport Unlocking Rules */
-  html, 
-  body, 
-  html.loading-lock, 
-  body.loading-lock {
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    height: auto !important;
-    min-height: 100vh !important;
-    position: relative !important;
-    touch-action: auto !important;
-    -ms-touch-action: auto !important;
-  }
-</style>
-
 <style>
   :global(body) {
     background-color: #111111;
@@ -331,7 +315,7 @@ const currentYear = new Date().getFullYear();
     }
   }
 
-  /* Mobile Touch Device Styling: Custom Indicator Layer */
+  /* Mobile Touch Device Styling */
   @media (hover: none), (pointer: coarse) {
     .scroll-container {
       scrollbar-width: none !important;
@@ -487,7 +471,6 @@ const currentYear = new Date().getFullYear();
     }
   }
 
-  /* Custom Fixed Scrollbar Track (Mobile Touch UI Only) */
   .custom-scrollbar-track {
     width: 100%;
     max-width: 1400px;
@@ -571,6 +554,7 @@ const currentYear = new Date().getFullYear();
     border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
+  /* Fixed Footer Container Properties */
   .home-matched-footer {
     background-color: #2e343b;
     color: #ffffff;
@@ -580,7 +564,11 @@ const currentYear = new Date().getFullYear();
     width: 100%;
     position: relative;
     z-index: 10;
+    margin-top: auto;
     margin-bottom: 0 !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 
   .cta-section {
@@ -792,16 +780,6 @@ const currentYear = new Date().getFullYear();
 </style>
 
 <script>
-  // DOM Unlocking Cleanup Function
-  const forceScrollUnlock = () => {
-    document.documentElement.classList.remove('loading-lock');
-    document.body.classList.remove('loading-lock');
-  };
-
-  forceScrollUnlock();
-  window.addEventListener('DOMContentLoaded', forceScrollUnlock);
-  window.addEventListener('load', forceScrollUnlock);
-
   // Bind custom scrollbar sync logic ONLY for mobile touch engines
   const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
