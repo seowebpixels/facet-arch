@@ -263,10 +263,20 @@ const currentYear = new Date().getFullYear();
 </Layout>
 
 <style>
+  :global(html) {
+    overflow-x: hidden;
+    overflow-y: auto !important;
+    height: auto !important;
+  }
+
   :global(body) {
     background-color: #111111;
     color: #ffffff;
     margin: 0;
+    overflow-x: hidden;
+    overflow-y: auto !important;
+    height: auto !important;
+    position: relative !important;
     -webkit-touch-callout: none !important;
     -webkit-user-select: none !important;
     user-select: none !important;
@@ -292,7 +302,7 @@ const currentYear = new Date().getFullYear();
     gap: 28px;
     max-width: 1400px;
     margin: 0 auto;
-    padding-bottom: 4px;
+    padding-bottom: 8px;
     scrollbar-width: none;
   }
 
@@ -354,6 +364,7 @@ const currentYear = new Date().getFullYear();
 
   .portfolio-stage {
     padding-top: 160px;
+    min-height: auto;
   }
 
   .category-panel {
@@ -497,6 +508,8 @@ const currentYear = new Date().getFullYear();
     padding: 40px 24px 32px;
     box-sizing: border-box;
     width: 100%;
+    position: relative;
+    z-index: 10;
   }
 
   .cta-section {
@@ -589,56 +602,106 @@ const currentYear = new Date().getFullYear();
     text-shadow: 0 0 1px #ffffff;
   }
 
-  /* Mobile-Only CTA Layout Overrides (< 899px) */
-@media (max-width: 899px) {
-  .cta-content {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 20px !important;
-  }
+  /* MOBILE ONLY SPECIFIC OVERRIDES (< 899px) */
+  @media (max-width: 899px) {
+    .portfolio-stage {
+      padding-top: 155px;
+    }
 
-  .cta-text {
-    width: 100% !important;
-  }
+    /* 1. Header Menu Items Scrollbar (Expanded height +15px = 27px) */
+    .nav-track {
+      scrollbar-width: auto !important;
+      scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.12) !important;
+      padding-bottom: 12px !important;
+    }
 
-  .cta-heading {
-    /* Scale dynamically up to 1.3rem to match desktop size on mobile screens */
-    font-size: clamp(1rem, 4.8vw, 1.3rem) !important;
-    white-space: nowrap !important;
-    letter-spacing: 1.5px !important;
-    line-height: 1.2 !important;
-  }
+    .nav-track::-webkit-scrollbar {
+      height: 27px !important;
+      display: block !important;
+    }
 
-  .cta-action {
-    width: 100% !important;
-  }
+    .nav-track::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.12) !important;
+      border-radius: 6px !important;
+    }
 
-  .cta-btn {
-    display: block !important;
-    width: 100% !important;
-    text-align: center !important;
-    box-sizing: border-box !important;
-    padding: 12px 16px !important;
-    font-size: 0.7rem !important;
-    letter-spacing: 2px !important;
-  }
+    .nav-track::-webkit-scrollbar-thumb {
+      background: #00ffc8 !important;
+      border-radius: 6px !important;
+      box-shadow: 0 0 12px rgba(0, 255, 200, 0.6) !important;
+    }
 
-  .footer-base {
-    flex-direction: column !important;
-    align-items: center !important;
-    text-align: center !important;
-    gap: 0 !important;
-  }
+    /* 2. Portfolio Image Rail Scrollbar (Identical height 27px) */
+    .scroll-rail {
+      scrollbar-width: auto !important;
+      scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.12) !important;
+      padding-bottom: 28px !important;
+    }
 
-  .footer-line {
-    white-space: nowrap !important;
-    line-height: 1.6 !important;
-  }
+    .scroll-rail::-webkit-scrollbar {
+      height: 27px !important;
+      display: block !important;
+    }
 
-  .credits-line {
-    margin-top: 1rem !important;
+    .scroll-rail::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.12) !important;
+      border-radius: 6px !important;
+    }
+
+    .scroll-rail::-webkit-scrollbar-thumb {
+      background: #00ffc8 !important;
+      border-radius: 6px !important;
+      box-shadow: 0 0 12px rgba(0, 255, 200, 0.6) !important;
+    }
+
+    /* 3. CTA & Footer mobile layout fixes */
+    .cta-content {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 20px !important;
+    }
+
+    .cta-text {
+      width: 100% !important;
+    }
+
+    .cta-heading {
+      font-size: clamp(1rem, 4.8vw, 1.3rem) !important;
+      white-space: nowrap !important;
+      letter-spacing: 1.5px !important;
+      line-height: 1.2 !important;
+    }
+
+    .cta-action {
+      width: 100% !important;
+    }
+
+    .cta-btn {
+      display: block !important;
+      width: 100% !important;
+      text-align: center !important;
+      box-sizing: border-box !important;
+      padding: 12px 16px !important;
+      font-size: 0.7rem !important;
+      letter-spacing: 2px !important;
+    }
+
+    .footer-base {
+      flex-direction: column !important;
+      align-items: center !important;
+      text-align: center !important;
+      gap: 0 !important;
+    }
+
+    .footer-line {
+      white-space: nowrap !important;
+      line-height: 1.6 !important;
+    }
+
+    .credits-line {
+      margin-top: 1rem !important;
+    }
   }
-}
 
   /* Lightbox Styles Fixed */
   .lightbox-modal {
@@ -711,6 +774,13 @@ const currentYear = new Date().getFullYear();
 <script>
   const navBtns = document.querySelectorAll('.nav-btn');
   const panels = document.querySelectorAll('.category-panel');
+
+  // Clear potential leftover scroll lock classes on page load
+  document.documentElement.style.overflow = '';
+  document.documentElement.style.height = '';
+  document.body.style.overflow = '';
+  document.body.style.height = '';
+  document.body.style.position = '';
 
   // Function to switch active category panel
   function activateCategory(catId: string) {
