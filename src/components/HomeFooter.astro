@@ -67,16 +67,15 @@
     </div>
 
     <!-- Copyright Base -->
-    <div class="footer-base" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; font-size: 11px; color: #a3a3a3; font-family: monospace; letter-spacing: 0.2em; gap: 16px;">
-      <p class="copyright-text" style="margin: 0;">
-        <span>© {new Date().getFullYear()} FACET ARCHITECTURE.</span><span class="rights-break"> ALL RIGHTS RESERVED.</span>
-      </p>
-      <p style="margin: 0;">
+    <div class="footer-base">
+      <p class="footer-line copyright-line">© {new Date().getFullYear()} FACET ARCHITECTURE</p>
+      <p class="footer-line rights-line">ALL RIGHTS RESERVED</p>
+      <p class="footer-line credits-line">
         DESIGNED BY&nbsp;<a 
           href="https://webdesignpros.co.za" 
           target="_blank" 
           rel="noopener noreferrer" 
-          style="color: #a3a3a3; text-decoration: none; transition: color 0.3s;"
+          class="wdp-link"
         >WEB DESIGN PROS</a>
       </p>
     </div>
@@ -85,10 +84,51 @@
 </footer>
 
 <style>
-  @media (max-width: 768px) {
-    .rights-break {
-      display: block;
-      margin-top: 4px;
+  .footer-base {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: #a3a3a3;
+    font-family: monospace;
+    letter-spacing: 0.2em;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .footer-line {
+    margin: 0;
+  }
+
+  .wdp-link {
+    color: #a3a3a3;
+    font-weight: 400;
+    text-decoration: none;
+    transition: color 0.2s ease, font-weight 0.2s ease, text-shadow 0.2s ease;
+  }
+
+  .wdp-link:hover {
+    color: #ffffff;
+    font-weight: 700;
+    text-shadow: 0 0 1px #ffffff;
+  }
+
+  @media (max-width: 899px) {
+    .footer-base {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0;
+    }
+
+    .footer-line {
+      white-space: nowrap;
+      line-height: 1.6;
+    }
+
+    .credits-line {
+      margin-top: 1rem;
     }
   }
 </style>
