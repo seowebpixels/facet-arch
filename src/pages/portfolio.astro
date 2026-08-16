@@ -263,17 +263,26 @@ const currentYear = new Date().getFullYear();
 </Layout>
 
 <style is:global>
-  /* Forced WebKit and Standard Scrollbars */
+  /* Global Unlocking Rules */
+  html, body {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    position: relative !important;
+  }
+
+  /* Forced WebKit Scrollbars for Category and Image Rails */
   .nav-track::-webkit-scrollbar,
   .scroll-rail::-webkit-scrollbar {
-    height: 14px !important;
+    height: 10px !important;
     display: block !important;
     -webkit-appearance: none !important;
   }
 
   .nav-track::-webkit-scrollbar-track,
   .scroll-rail::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.15) !important;
+    background: rgba(255, 255, 255, 0.1) !important;
     border-radius: 4px !important;
   }
 
@@ -281,26 +290,16 @@ const currentYear = new Date().getFullYear();
   .scroll-rail::-webkit-scrollbar-thumb {
     background: #00ffc8 !important;
     border-radius: 4px !important;
-    box-shadow: 0 0 10px rgba(0, 255, 200, 0.6) !important;
+    box-shadow: 0 0 8px rgba(0, 255, 200, 0.5) !important;
     min-width: 40px !important;
   }
 </style>
 
 <style>
-  :global(html) {
-    overflow-x: hidden;
-    overflow-y: auto !important;
-    height: auto !important;
-  }
-
   :global(body) {
     background-color: #111111;
     color: #ffffff;
     margin: 0;
-    overflow-x: hidden;
-    overflow-y: auto !important;
-    height: auto !important;
-    position: relative !important;
     -webkit-touch-callout: none !important;
     -webkit-user-select: none !important;
     user-select: none !important;
@@ -326,7 +325,7 @@ const currentYear = new Date().getFullYear();
     gap: 28px;
     max-width: 1400px;
     margin: 0 auto;
-    padding-bottom: 14px !important;
+    padding-bottom: 10px !important;
     scrollbar-width: thin !important;
     scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.15) !important;
   }
@@ -425,7 +424,7 @@ const currentYear = new Date().getFullYear();
     gap: 24px;
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
-    padding-bottom: 24px !important;
+    padding-bottom: 20px !important;
     scroll-behavior: smooth;
     scrollbar-width: thin !important;
     scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.15) !important;
@@ -510,12 +509,12 @@ const currentYear = new Date().getFullYear();
     background-color: #2e343b;
     color: #ffffff;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
-    padding: 40px 24px 120px !important;
+    padding: 40px 24px 40px !important;
     box-sizing: border-box;
     width: 100%;
     position: relative;
     z-index: 10;
-    margin-bottom: 60px !important;
+    margin-bottom: 0 !important;
   }
 
   .cta-section {
@@ -646,7 +645,7 @@ const currentYear = new Date().getFullYear();
       flex-direction: column !important;
       align-items: center !important;
       text-align: center !important;
-      gap: 0 !important;
+      gap: 8px !important;
     }
 
     .footer-line {
@@ -655,7 +654,7 @@ const currentYear = new Date().getFullYear();
     }
 
     .credits-line {
-      margin-top: 1rem !important;
+      margin-top: 0.5rem !important;
     }
   }
 
@@ -730,12 +729,6 @@ const currentYear = new Date().getFullYear();
   const navBtns = document.querySelectorAll('.nav-btn');
   const panels = document.querySelectorAll('.category-panel');
 
-  document.documentElement.style.overflow = '';
-  document.documentElement.style.height = '';
-  document.body.style.overflow = '';
-  document.body.style.height = '';
-  document.body.style.position = '';
-
   function activateCategory(catId: string) {
     const targetBtn = document.querySelector(`.nav-btn[data-category="${catId}"]`);
     const targetPanel = document.getElementById(`panel-${catId}`);
@@ -794,14 +787,4 @@ const currentYear = new Date().getFullYear();
       }
     });
   }
-
-  document.addEventListener('keydown', (e) => {
-    if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) {
-      e.preventDefault();
-    }
-  });
-
-  document.addEventListener('contextmenu', (e) => {
-    e.preventDefault();
-  });
 </script>
