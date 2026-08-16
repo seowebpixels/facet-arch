@@ -131,6 +131,28 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
 </Layout>
 
 <style>
+  /* Global Scroll-Lock & Scrollbar Control During Preload */
+  :global(html.loading-lock),
+  :global(body.loading-lock) {
+    overflow: hidden !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    touch-action: none !important;
+    -ms-touch-action: none !important;
+  }
+
+  :global(html.loading-lock::-webkit-scrollbar),
+  :global(body.loading-lock::-webkit-scrollbar) {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  :global(html.loading-lock) {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
   .hero-heading {
     font-family: 'Bank Gothic', sans-serif;
     font-weight: 900;
@@ -401,30 +423,29 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
 </style>
 
 <script>
-  // Function to release scroll lock
-  function unlockScroll() {
-    document.documentElement.classList.remove('loading-lock');
-    document.body.classList.remove('loading-lock');
-  }
+  // Immediately lock viewport on script load
+  document.documentElement.classList.add('loading-lock');
+  document.body.classList.add('loading-lock');
 
-  // Prevent drag scrolling on touch mobile devices while loading
+  // Prevent swipe gesture scrolling on touch devices while loading
   const preventTouch = (e: TouchEvent) => e.preventDefault();
   document.addEventListener('touchmove', preventTouch, { passive: false });
 
   function completeUnlock() {
-    unlockScroll();
+    document.documentElement.classList.remove('loading-lock');
+    document.body.classList.remove('loading-lock');
     document.removeEventListener('touchmove', preventTouch);
   }
 
-  // Unlock when window fully completes loading
+  // Unlock only when window fully loads all resources
   if (document.readyState === 'complete') {
     completeUnlock();
   } else {
     window.addEventListener('load', completeUnlock, { once: true });
   }
 
-  // Fallback timeout to release scroll after 2.5s max
-  setTimeout(completeUnlock, 2500);
+  // Safety fallback: unlock after 3 seconds in case an asset stalls
+  setTimeout(completeUnlock, 3000);
 
   // Smooth Background Transition and Legend Highlight Observer
   const tiles = document.querySelectorAll('.tile-card');
