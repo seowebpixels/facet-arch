@@ -1,0 +1,330 @@
+---
+import featProjectImg from '../assets/res-eoa-1597.avif';
+import addressImg from '../assets/res-blann.avif';
+import sacapLogoImg from '../assets/sacap-logo.avif';
+
+interface Props {
+  isOpen?: boolean;
+}
+
+const { isOpen = false } = Astro.props;
+
+const menuItems = [
+  { name: 'HOME', href: '/' },
+  { name: 'PORTFOLIO', href: '/portfolio' },
+  { name: 'ABOUT', href: '/about' },
+  { name: 'CONTACT', href: '/contact' },
+];
+---
+
+<div id="menu-overlay" class={`menu-overlay ${isOpen ? 'active' : ''}`}>
+  <div class="menu-container">
+    
+    <!-- Left Section: 2x2 Grid -->
+    <div class="left-grid">
+      
+      <!-- Top-Left Tile: Featured Project -->
+      <a href="/portfolio#residential" class="grid-tile tile-featured">
+        <div class="tile-bg" style={`background-image: url('${featProjectImg.src}');`}></div>
+        <div class="tile-overlay"></div>
+        <div class="tile-content content-featured">
+          <span class="featured-label">FEATURED PROJECT</span>
+          <span class="project-name">EoA1597</span>
+        </div>
+      </a>
+
+      <!-- Top-Right Tile: Blank/Spacer for Grid Symmetry -->
+      <div class="grid-tile tile-spacer"></div>
+
+      <!-- Bottom-Left Tile: Address -->
+      <div class="grid-tile tile-address">
+        <div class="tile-bg" style={`background-image: url('${addressImg.src}');`}></div>
+        <div class="tile-overlay address-darken"></div>
+        <div class="tile-content content-address">
+          <p class="address-text">
+            118 Kastaiing Street Weltevredenpark, Johannesburg<br />
+            South Africa<br />
+            1709
+          </p>
+        </div>
+      </div>
+
+      <!-- Bottom-Right Tile: SACAP Logo -->
+      <div class="grid-tile tile-logo">
+        <img src={sacapLogoImg.src} alt="SACAP Logo" class="sacap-logo-img" />
+      </div>
+
+    </div>
+
+    <!-- Right Section: Navigation Links -->
+    <div class="right-nav">
+      <nav class="menu-nav-list">
+        {menuItems.map((item) => (
+          <a href={item.href} class="menu-link" data-link={item.name}>
+            <span class="menu-link-text">{item.name}</span>
+            <span class="menu-link-underline"></span>
+          </a>
+        ))}
+      </nav>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  :global(body.menu-open) {
+    overflow: hidden !important;
+  }
+
+  .menu-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 990;
+    background-color: #2e343b; /* Hero Section Grey */
+    display: opacity;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+    visibility: hidden;
+    overflow-y: auto;
+  }
+
+  .menu-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+  }
+
+  .menu-container {
+    width: 100%;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 900px) {
+    .menu-container {
+      grid-template-columns: 55% 45%;
+    }
+  }
+
+  /* Left Grid Layout */
+  .left-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    width: 100%;
+    min-height: 50vh;
+  }
+
+  @media (min-width: 900px) {
+    .left-grid {
+      min-height: 100vh;
+    }
+  }
+
+  .grid-tile {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    text-decoration: none;
+  }
+
+  .tile-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .tile-featured:hover .tile-bg {
+    transform: scale(1.05);
+  }
+
+  .tile-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.25);
+  }
+
+  .address-darken {
+    background: rgba(0, 0, 0, 0.55);
+  }
+
+  .tile-content {
+    position: relative;
+    z-index: 2;
+    padding: 24px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Featured Project Styles */
+  .content-featured {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .featured-label {
+    font-family: 'BankGothic', sans-serif, system-ui;
+    font-size: clamp(1.2rem, 2.5vw, 2.2rem);
+    color: #ffffff;
+    letter-spacing: 2px;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .project-name {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+    color: #ffffff;
+    margin-top: 4px;
+    font-weight: 400;
+  }
+
+  /* Spacer Tile */
+  .tile-spacer {
+    background-color: transparent;
+  }
+
+  /* Address Tile */
+  .content-address {
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .address-text {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: clamp(0.8rem, 1.2vw, 1rem);
+    color: #ffffff;
+    line-height: 1.4;
+    margin: 0;
+    font-weight: 400;
+  }
+
+  /* SACAP Logo Tile */
+  .tile-logo {
+    background-color: #f36c21; /* Matching orange canvas background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+
+  .sacap-logo-img {
+    max-width: 85%;
+    max-height: 85%;
+    object-fit: contain;
+    border-radius: 50%;
+  }
+
+  /* Right Navigation Area */
+  .right-nav {
+    display: flex;
+    align-items: center;
+    padding: 60px 40px 60px 10%;
+    background-color: #2e343b;
+  }
+
+  .menu-nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .menu-link {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    width: fit-content;
+    padding-bottom: 6px;
+  }
+
+  .menu-link-text {
+    font-family: 'BankGothic', sans-serif, system-ui;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    color: #ffffff;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+  }
+
+  /* Selected State Highlight */
+  .menu-link.selected .menu-link-text {
+    color: #00ffc8;
+  }
+
+  /* Reversible Smooth Flow Underline */
+  .menu-link-underline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #00ffc8;
+    transform-origin: right center;
+    transform: scaleX(0);
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  /* Flow Left-to-Right on Hover/Focus/Hold */
+  .menu-link:hover .menu-link-underline,
+  .menu-link:active .menu-link-underline,
+  .menu-link.holding .menu-link-underline {
+    transform-origin: left center;
+    transform: scaleX(1);
+  }
+
+  /* Reverse Flow Right-to-Left on Release */
+  .menu-link:not(:hover):not(:active):not(.holding) .menu-link-underline {
+    transform-origin: right center;
+    transform: scaleX(0);
+  }
+</style>
+
+<script>
+  const overlay = document.getElementById('menu-overlay');
+  const links = document.querySelectorAll<HTMLAnchorElement>('.menu-link');
+
+  // Load last selected item from localStorage on init
+  const savedItem = localStorage.getItem('facet_last_menu_item') || 'HOME';
+
+  function updateSelectedState(itemName: string) {
+    links.forEach((link) => {
+      const linkName = link.getAttribute('data-link');
+      if (linkName === itemName) {
+        link.classList.add('selected');
+      } else {
+        link.classList.remove('selected');
+      }
+    });
+  }
+
+  // Set initial selected item when script executes
+  updateSelectedState(savedItem);
+
+  links.forEach((link) => {
+    const linkName = link.getAttribute('data-link');
+
+    // Handle touch/mouse hold down
+    link.addEventListener('mousedown', () => link.classList.add('holding'));
+    link.addEventListener('touchstart', () => link.classList.add('holding'), { passive: true });
+
+    // Handle release
+    link.addEventListener('mouseup', () => link.classList.remove('holding'));
+    link.addEventListener('mouseleave', () => link.classList.remove('holding'));
+    link.addEventListener('touchend', () => link.classList.remove('holding'));
+
+    // Update selection & save state upon item click
+    link.addEventListener('click', () => {
+      if (linkName) {
+        localStorage.setItem('facet_last_menu_item', linkName);
+        updateSelectedState(linkName);
+      }
+    });
+  });
+</script>
