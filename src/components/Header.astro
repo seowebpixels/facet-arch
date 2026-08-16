@@ -1,5 +1,6 @@
 ---
-/* Header.astro - Custom Hamburger Box & Overlay Navigation */
+/* Header.astro - Custom Hamburger Box & Menu Overlay Integration */
+import MenuOverlay from './MenuOverlay.astro';
 ---
 
 <header>
@@ -17,17 +18,8 @@
     </div>
   </button>
 
-  <!-- Fullscreen Navigation Drawer / Overlay -->
-  <div id="nav-overlay" class="nav-overlay">
-    <nav class="nav-content">
-      <ul class="nav-links">
-        <li><a href="/" class="nav-link">Home</a></li>
-        <li><a href="#work" class="nav-link">Work</a></li>
-        <li><a href="#studio" class="nav-link">Studio</a></li>
-        <li><a href="#contact" class="nav-link">Contact</a></li>
-      </ul>
-    </nav>
-  </div>
+  <!-- Navigation Overlay Component -->
+  <MenuOverlay />
 </header>
 
 <style>
@@ -39,7 +31,7 @@
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 100;
+    z-index: 1000;
     width: 64px;
     height: 72px;
     background-color: #7c7a7a;
@@ -103,56 +95,22 @@
       transform: translateY(-7px) rotate(-45deg);
     }
   }
-
-  /* ==========================================================================
-     Fullscreen Overlay Menu
-     ========================================================================== */
-  .nav-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 90;
-    background-color: var(--bg-concrete, #BEBEBE);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.4s ease, visibility 0.4s ease;
-  }
-
-  .nav-overlay.is-open {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .nav-links {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-    padding: 0;
-    margin: 0;
-  }
-
-  .nav-links li a {
-    font-size: 1.8rem;
-  }
 </style>
 
 <script>
   function setupMenu() {
     const toggleBtn = document.getElementById('menu-toggle');
-    const overlay = document.getElementById('nav-overlay');
+    const overlay = document.getElementById('menu-overlay');
 
     if (!toggleBtn || !overlay) return;
 
     toggleBtn.addEventListener('click', () => {
       const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+      
       toggleBtn.setAttribute('aria-expanded', (!isExpanded).toString());
-      overlay.classList.toggle('is-open');
+      overlay.classList.toggle('active');
 
-      document.body.style.overflow = isExpanded ? '' : 'hidden';
+      document.body.classList.toggle('menu-open', !isExpanded);
     });
   }
 
