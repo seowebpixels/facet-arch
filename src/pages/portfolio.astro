@@ -262,6 +262,30 @@ const currentYear = new Date().getFullYear();
   </div>
 </Layout>
 
+<style is:global>
+  /* Global Un-hide Rules for WebKit Scrollbars */
+  .nav-track::-webkit-scrollbar,
+  .scroll-rail::-webkit-scrollbar {
+    height: 14px !important;
+    display: block !important;
+    -webkit-appearance: none !important;
+  }
+
+  .nav-track::-webkit-scrollbar-track,
+  .scroll-rail::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-radius: 4px !important;
+  }
+
+  .nav-track::-webkit-scrollbar-thumb,
+  .scroll-rail::-webkit-scrollbar-thumb {
+    background: #00ffc8 !important;
+    border-radius: 4px !important;
+    box-shadow: 0 0 10px rgba(0, 255, 200, 0.6) !important;
+    min-width: 40px !important;
+  }
+</style>
+
 <style>
   :global(html) {
     overflow-x: hidden;
@@ -294,33 +318,18 @@ const currentYear = new Date().getFullYear();
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   }
 
+  /* 1 & 3. Menu Row Track with Persistent 14px Scrollbar */
   .nav-track {
     display: flex;
     flex-wrap: nowrap;
-    overflow-x: auto;
+    overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
     gap: 28px;
     max-width: 1400px;
     margin: 0 auto;
-    padding-bottom: 8px;
-    scrollbar-width: auto;
-    scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.12);
-  }
-
-  .nav-track::-webkit-scrollbar {
-    height: 14px;
-    display: block !important;
-  }
-
-  .nav-track::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.12);
-    border-radius: 4px;
-  }
-
-  .nav-track::-webkit-scrollbar-thumb {
-    background: #00ffc8;
-    border-radius: 4px;
-    box-shadow: 0 0 10px rgba(0, 255, 200, 0.5);
+    padding-bottom: 14px !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.15) !important;
   }
 
   .nav-btn {
@@ -376,7 +385,7 @@ const currentYear = new Date().getFullYear();
   }
 
   .portfolio-stage {
-    padding-top: 160px;
+    padding-top: 170px;
     min-height: auto;
   }
 
@@ -412,31 +421,16 @@ const currentYear = new Date().getFullYear();
     overflow-wrap: break-word;
   }
 
+  /* 2 & 3. Image Scroll Rail Matched to 14px Persistent Height */
   .scroll-rail {
     display: flex;
     gap: 24px;
-    overflow-x: scroll;
+    overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
-    padding-bottom: 24px;
+    padding-bottom: 24px !important;
     scroll-behavior: smooth;
-    scrollbar-width: auto;
-    scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.12);
-  }
-
-  .scroll-rail::-webkit-scrollbar {
-    height: 14px;
-    display: block !important;
-  }
-
-  .scroll-rail::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.12);
-    border-radius: 4px;
-  }
-
-  .scroll-rail::-webkit-scrollbar-thumb {
-    background: #00ffc8;
-    border-radius: 4px;
-    box-shadow: 0 0 10px rgba(0, 255, 200, 0.5);
+    scrollbar-width: thin !important;
+    scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.15) !important;
   }
 
   .portfolio-card {
@@ -514,16 +508,17 @@ const currentYear = new Date().getFullYear();
     border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
+  /* 4. Complete Footer Visibility Clearance */
   .home-matched-footer {
     background-color: #2e343b;
     color: #ffffff;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
-    padding: 40px 24px 60px;
+    padding: 40px 24px 120px !important;
     box-sizing: border-box;
     width: 100%;
     position: relative;
     z-index: 10;
-    margin-bottom: 20px;
+    margin-bottom: 60px !important;
   }
 
   .cta-section {
@@ -614,68 +609,10 @@ const currentYear = new Date().getFullYear();
     text-shadow: 0 0 1px #ffffff;
   }
 
-  /* MOBILE SPECIFIC OVERRIDES (< 899px) */
+  /* MOBILE RESPONSIVE OVERRIDES (< 899px) */
   @media (max-width: 899px) {
     .portfolio-stage {
-      padding-top: 155px;
-    }
-
-    /* 1 & 3. Persistent 14px Scrollbar on Menu Row */
-    .nav-track {
-      scrollbar-width: thin !important;
-      scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.12) !important;
-      padding-bottom: 12px !important;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .nav-track::-webkit-scrollbar {
-      height: 14px !important;
-      display: block !important;
-      -webkit-appearance: none;
-    }
-
-    .nav-track::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.12) !important;
-      border-radius: 4px !important;
-    }
-
-    .nav-track::-webkit-scrollbar-thumb {
-      background: #00ffc8 !important;
-      border-radius: 4px !important;
-      box-shadow: 0 0 8px rgba(0, 255, 200, 0.6) !important;
-      min-width: 40px !important;
-    }
-
-    /* 2 & 3. Persistent Matched 14px Scrollbar on Image Rail */
-    .scroll-rail {
-      scrollbar-width: thin !important;
-      scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.12) !important;
-      padding-bottom: 20px !important;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .scroll-rail::-webkit-scrollbar {
-      height: 14px !important;
-      display: block !important;
-      -webkit-appearance: none;
-    }
-
-    .scroll-rail::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.12) !important;
-      border-radius: 4px !important;
-    }
-
-    .scroll-rail::-webkit-scrollbar-thumb {
-      background: #00ffc8 !important;
-      border-radius: 4px !important;
-      box-shadow: 0 0 8px rgba(0, 255, 200, 0.6) !important;
-      min-width: 40px !important;
-    }
-
-    /* 4. Complete Footer Visibility & Untruncated Layout */
-    .home-matched-footer {
-      padding: 40px 24px 80px !important;
-      margin-bottom: 40px !important;
+      padding-top: 165px;
     }
 
     .cta-content {
@@ -798,14 +735,12 @@ const currentYear = new Date().getFullYear();
   const navBtns = document.querySelectorAll('.nav-btn');
   const panels = document.querySelectorAll('.category-panel');
 
-  // Clear potential leftover scroll lock classes on page load
   document.documentElement.style.overflow = '';
   document.documentElement.style.height = '';
   document.body.style.overflow = '';
   document.body.style.height = '';
   document.body.style.position = '';
 
-  // Function to switch active category panel
   function activateCategory(catId: string) {
     const targetBtn = document.querySelector(`.nav-btn[data-category="${catId}"]`);
     const targetPanel = document.getElementById(`panel-${catId}`);
@@ -819,13 +754,11 @@ const currentYear = new Date().getFullYear();
     }
   }
 
-  // 1. Check URL Hash on Initial Page Load (e.g. /portfolio#interiors)
   const currentHash = window.location.hash.replace('#', '');
   if (currentHash) {
     activateCategory(currentHash);
   }
 
-  // 2. Navigation Button Click Handler
   navBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
       const targetCat = btn.getAttribute('data-category');
@@ -836,7 +769,6 @@ const currentYear = new Date().getFullYear();
     });
   });
 
-  // 3. Lightbox Expansion Logic
   const modal = document.getElementById('lightbox-modal');
   const modalImgLayer = document.getElementById('lightbox-img-layer') as HTMLElement;
   const modalCaption = document.getElementById('lightbox-caption');
@@ -868,14 +800,12 @@ const currentYear = new Date().getFullYear();
     });
   }
 
-  // Intercept Page Save Shortcuts (Ctrl+S / Cmd+S / Ctrl+U)
   document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) {
       e.preventDefault();
     }
   });
 
-  // Disable Right-Click Context Menu globally
   document.addEventListener('contextmenu', (e) => {
     e.preventDefault();
   });
