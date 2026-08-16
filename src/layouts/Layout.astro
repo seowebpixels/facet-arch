@@ -17,7 +17,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
 ---
 
 <!doctype html>
-<html lang="en" class="loading-lock">
+<html lang="en">
   <head>
     <!-- Basic Meta Tags -->
     <meta charset="UTF-8" />
@@ -33,7 +33,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
     <meta name="title" content={title} />
     <meta name="description" content={description} />
 
-    <!-- Strict Global Preload & Scrollbar Suppression -->
+    <!-- Dynamic Loading Lock Styles -->
     <style is:inline>
       html, 
       body {
@@ -42,28 +42,23 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
         position: relative;
       }
 
-      /* Strict Scroll Lock Override for Preloader Phase */
+      /* Strict temporary lock active ONLY during preloader playback */
       html.loading-lock, 
       body.loading-lock {
         overflow: hidden !important;
-        overflow-y: hidden !important;
         height: 100vh !important;
         max-height: 100vh !important;
-        position: fixed !important;
-        width: 100% !important;
         touch-action: none !important;
         -ms-touch-action: none !important;
         overscroll-behavior: none !important;
       }
 
-      /* Strip Webkit & Firefox Scrollbars entirely during lock */
+      /* Hide scrollbars strictly while loading-lock class is attached */
       html.loading-lock::-webkit-scrollbar,
-      body.loading-lock::-webkit-scrollbar,
-      html.loading-lock *::-webkit-scrollbar {
+      body.loading-lock::-webkit-scrollbar {
         display: none !important;
         width: 0px !important;
         height: 0px !important;
-        background: transparent !important;
       }
 
       html.loading-lock,
@@ -96,7 +91,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={new URL(image, Astro.url)} />
   </head>
-  <body class="loading-lock">
+  <body>
     <main>
       <slot />
     </main>
