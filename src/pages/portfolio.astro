@@ -477,11 +477,14 @@ const currentYear = new Date().getFullYear();
     width: 100%;
     max-width: 1400px;
     margin: 6px auto 0;
-    height: 5px;
+    height: 12px;
+    padding: 3px 0;
     background: rgba(255, 255, 255, 0.15);
-    border-radius: 2px;
+    border-radius: 3px;
     position: relative;
     overflow: hidden;
+    touch-action: none;
+    box-sizing: border-box;
   }
 
   .custom-scrollbar-thumb {
@@ -494,6 +497,12 @@ const currentYear = new Date().getFullYear();
     left: 0;
     top: 0;
     transition: transform 0.05s ease-out;
+    touch-action: none;
+    cursor: grab;
+  }
+
+  .custom-scrollbar-thumb:active {
+    cursor: grabbing;
   }
 
   .card-frame {
@@ -781,7 +790,6 @@ const currentYear = new Date().getFullYear();
 </style>
 
 <script>
-  // Bind custom scrollbar sync logic ONLY for mobile touch engines
   const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
   const initCustomScrollbars = () => {
@@ -793,25 +801,69 @@ const currentYear = new Date().getFullYear();
       const parent = container.parentElement;
       if (!parent) return;
 
-      const track = parent.querySelector('.custom-scrollbar-track');
+      const track = parent.querySelector('.custom-scrollbar-track') as HTMLElement;
       const thumb = parent.querySelector('.custom-scrollbar-thumb') as HTMLElement;
 
       if (!track || !thumb) return;
 
+      let isDragging = false;
+      let startX = 0;
+      let initialScrollLeft = 0;
+
       const updateThumb = () => {
+        if (isDragging) return;
         const scrollWidth = container.scrollWidth - container.clientWidth;
         if (scrollWidth <= 0) {
-          (track as HTMLElement).style.display = 'none';
+          track.style.display = 'none';
           return;
         }
 
-        (track as HTMLElement).style.display = 'block';
+        track.style.display = 'block';
         const scrollRatio = container.scrollLeft / scrollWidth;
         const availableWidth = track.clientWidth - thumb.clientWidth;
         const translateX = scrollRatio * availableWidth;
 
         thumb.style.transform = `translateX(${translateX}px)`;
       };
+
+      // Direct Touch-Dragging on the Custom Thumb
+      const onTouchStart = (e: TouchEvent) => {
+        isDragging = true;
+        startX = e.touches[0].clientX;
+        initialScrollLeft = container.scrollLeft;
+        thumb.style.transition = 'none';
+      };
+
+      const onTouchMove = (e: TouchEvent) => {
+        if (!isDragging) return;
+        e.preventDefault();
+
+        const currentX = e.touches[0].clientX;
+        const deltaX = currentX - startX;
+
+        const availableWidth = track.clientWidth - thumb.clientWidth;
+        const scrollableWidth = container.scrollWidth - container.clientWidth;
+
+        if (availableWidth <= 0 || scrollableWidth <= 0) return;
+
+        const scrollRatio = deltaX / availableWidth;
+        container.scrollLeft = initialScrollLeft + (scrollRatio * scrollableWidth);
+
+        const currentScrollRatio = container.scrollLeft / scrollableWidth;
+        const translateX = currentScrollRatio * availableWidth;
+        thumb.style.transform = `translateX(${translateX}px)`;
+      };
+
+      const onTouchEnd = () => {
+        if (!isDragging) return;
+        isDragging = false;
+        thumb.style.transition = 'transform 0.05s ease-out';
+      };
+
+      thumb.addEventListener('touchstart', onTouchStart, { passive: false });
+      window.addEventListener('touchmove', onTouchMove, { passive: false });
+      window.addEventListener('touchend', onTouchEnd);
+      window.addEventListener('touchcancel', onTouchEnd);
 
       container.addEventListener('scroll', updateThumb, { passive: true });
       window.addEventListener('resize', updateThumb);
