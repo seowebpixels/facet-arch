@@ -164,7 +164,7 @@ const menuItems = [
   .tile-content {
     position: relative;
     z-index: 2;
-    padding: clamp(16px, 3vw, 32px);
+    padding: clamp(12px, 3vw, 32px);
     width: 100%;
     height: 100%;
     box-sizing: border-box;
@@ -180,7 +180,7 @@ const menuItems = [
   }
 
   .featured-label {
-    font-family: 'BankGothic', sans-serif, system-ui;
+    font-family: 'Bank Gothic', 'BankGothic', sans-serif, system-ui;
     font-size: clamp(1.2rem, 2.2vw, 2.2rem);
     color: #ffffff;
     letter-spacing: 2px;
@@ -223,9 +223,9 @@ const menuItems = [
 
   .address-text {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: clamp(0.75rem, 1vw, 0.95rem);
+    font-size: clamp(0.7rem, 1vw, 0.95rem);
     color: #ffffff;
-    line-height: 1.35;
+    line-height: 1.3;
     margin: 0;
     font-weight: 400;
     text-align: left;
@@ -233,10 +233,10 @@ const menuItems = [
 
   .telephone-number {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: clamp(0.75rem, 1vw, 0.95rem);
+    font-size: clamp(0.7rem, 1vw, 0.95rem);
     color: #ffffff;
-    line-height: 1.35;
-    margin: 1rem 0 0 0;
+    line-height: 1.3;
+    margin: 0.6rem 0 0 0;
     padding: 0;
     font-weight: 400;
     text-align: left;
@@ -249,8 +249,9 @@ const menuItems = [
     background-color: #f36c21;
     padding: 0;
     margin: 0;
-    line-height: 0;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     height: 100%;
   }
@@ -258,10 +259,11 @@ const menuItems = [
   .sacap-logo-img {
     width: 100%;
     height: 100%;
-    object-fit: fill;
+    object-fit: contain;
+    padding: 8%;
+    box-sizing: border-box;
     display: block;
     margin: 0;
-    padding: 0;
     border: none;
   }
 
@@ -278,7 +280,7 @@ const menuItems = [
   .menu-nav-list {
     display: flex;
     flex-direction: column;
-    gap: clamp(20px, 3vh, 36px);
+    gap: clamp(16px, 3vh, 36px);
   }
 
   .menu-link {
@@ -290,7 +292,7 @@ const menuItems = [
   }
 
   .menu-link-text {
-    font-family: 'BankGothic', sans-serif, system-ui;
+    font-family: 'Bank Gothic', 'BankGothic', sans-serif, system-ui;
     font-size: clamp(1.8rem, 3.5vw, 3rem);
     color: #ffffff;
     letter-spacing: 3px;
@@ -326,7 +328,7 @@ const menuItems = [
     transform: scaleX(0);
   }
 
-  /* Responsive Fallback for smaller screen heights */
+  /* Mobile Specific Layout Adjustments */
   @media (max-width: 899px) {
     .menu-overlay {
       overflow-y: auto;
@@ -334,12 +336,19 @@ const menuItems = [
     .menu-container {
       height: auto;
       min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
     }
     .left-grid {
-      height: 60vh;
+      height: 42vh;
+      flex-shrink: 0;
     }
     .right-nav {
-      padding: 40px 24px;
+      padding: 32px 24px 48px 24px;
+      flex-grow: 1;
+    }
+    .menu-link-text {
+      font-size: clamp(2.2rem, 8vw, 3.2rem);
     }
   }
 </style>
