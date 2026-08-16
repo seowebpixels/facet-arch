@@ -277,7 +277,7 @@ const currentYear = new Date().getFullYear();
     -ms-touch-action: auto !important;
   }
 
-  /* Forced WebKit Scrollbars for Category and Image Rails */
+  /* Desktop WebKit Scrollbars */
   .nav-track::-webkit-scrollbar,
   .scroll-rail::-webkit-scrollbar {
     height: 10px !important;
@@ -297,6 +297,38 @@ const currentYear = new Date().getFullYear();
     border-radius: 4px !important;
     box-shadow: 0 0 8px rgba(0, 255, 200, 0.5) !important;
     min-width: 40px !important;
+  }
+
+  /* Mobile-Only Custom Scrollbar Sizing & Permanent Visibility */
+  @media (max-width: 767px) {
+    .nav-track,
+    .scroll-rail {
+      overflow-x: scroll !important;
+      -webkit-overflow-scrolling: touch !important;
+      scrollbar-width: thin !important;
+      scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.15) !important;
+    }
+
+    /* Half-size height (5px) for both Menu and Image tracks on mobile */
+    .nav-track::-webkit-scrollbar,
+    .scroll-rail::-webkit-scrollbar {
+      height: 5px !important;
+      display: block !important;
+      -webkit-appearance: none !important;
+    }
+
+    .nav-track::-webkit-scrollbar-track,
+    .scroll-rail::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.15) !important;
+      border-radius: 2px !important;
+    }
+
+    .nav-track::-webkit-scrollbar-thumb,
+    .scroll-rail::-webkit-scrollbar-thumb {
+      background: #00ffc8 !important;
+      border-radius: 2px !important;
+      box-shadow: 0 0 6px rgba(0, 255, 200, 0.6) !important;
+    }
   }
 </style>
 
