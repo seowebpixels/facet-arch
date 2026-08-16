@@ -45,50 +45,23 @@ import heroImg from '../assets/res-eoa-1597.avif';
 <script>
   import { gsap } from 'gsap';
 
-  // Prevent default scroll behaviors during loading phase
-  function preventScroll(e: Event) {
-    if (document.documentElement.classList.contains('loading-lock')) {
-      e.preventDefault();
-      e.stopPropagation();
-      return false;
-    }
+  function preventDefaultScroll(e: Event) {
+    e.preventDefault();
   }
 
-  function preventKeyScroll(e: KeyboardEvent) {
-    if (document.documentElement.classList.contains('loading-lock')) {
-      if (['ArrowUp', 'ArrowDown', 'Space', 'PageUp', 'PageDown', 'Home', 'End'].includes(e.code)) {
-        e.preventDefault();
-      }
-    }
-  }
-
-  function lockPageScroll() {
-    document.documentElement.classList.add('loading-lock');
-    document.body.classList.add('loading-lock');
-
-    window.addEventListener('touchmove', preventScroll, { passive: false });
-    window.addEventListener('wheel', preventScroll, { passive: false });
-    window.addEventListener('keydown', preventKeyScroll, { passive: false });
-  }
-
-  function unlockPageScroll() {
-    // 1. Remove tracking classes
-    document.documentElement.classList.remove('loading-lock');
-    document.body.classList.remove('loading-lock');
-
-    // 2. Clear inline layout restrictions completely
+  function enablePageScroll() {
+    // Release html lock
     document.documentElement.style.overflow = '';
     document.documentElement.style.height = '';
-    document.body.style.overflow = '';
-    document.body.style.height = '';
-    document.body.style.position = '';
-    document.body.style.width = '';
-
-    // 3. Detach listeners
-    window.removeEventListener('touchmove', preventScroll);
-    window.removeEventListener('wheel', preventScroll);
-    window.removeEventListener('keydown', preventKeyScroll);
+    
+    // Remove scroll-blocking listeners
+    window.removeEventListener('wheel', preventDefaultScroll);
+    window.removeEventListener('touchmove', preventDefaultScroll);
   }
+
+  // Intercept scroll/touch events immediately
+  window.addEventListener('wheel', preventDefaultScroll, { passive: false });
+  window.addEventListener('touchmove', preventDefaultScroll, { passive: false });
 
   // Live Local Time Updater
   function updateHeroClock() {
@@ -118,7 +91,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
     if (!logo || !textFacet || !textArchitecture || !clock || !heroFrame) return;
 
-    lockPageScroll();
+    window.scrollTo(0, 0);
 
     updateHeroClock();
     setInterval(updateHeroClock, 1000);
@@ -145,7 +118,9 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
     const tl = gsap.timeline({ 
       defaults: { ease: 'power3.inOut' },
-      onComplete: unlockPageScroll
+      onComplete: () => {
+        enablePageScroll();
+      }
     });
 
     tl
@@ -174,11 +149,10 @@ import heroImg from '../assets/res-eoa-1597.avif';
         ease: 'power4.out'
       }, '-=0.4');
 
-    // Safety fallback: unlock scroll after animation duration max limit
-    setTimeout(unlockPageScroll, 6500);
+    // Safety fallback release
+    setTimeout(enablePageScroll, 6500);
   }
 
-  // Initialize
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
     initHeroAnimation();
   } else {
@@ -189,12 +163,18 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
 <style>
   .stage-container {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     width: 100vw;
     height: 100vh;
     background-color: var(--bg-concrete, #BEBEBE);
     overflow: hidden;
     box-sizing: border-box;
+    z-index: 9999;
+    touch-action: none;
   }
 
   /* FACET: Anchored top and left */
@@ -294,7 +274,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
   /* Mobile Layout Adjustments */
   @media (max-width: 768px) {
-    /* Hero frame positioned with fixed top/height boundaries */
     .hero-frame {
       top: 180px;
       left: 0;
@@ -303,14 +282,12 @@ import heroImg from '../assets/res-eoa-1597.avif';
       box-shadow: none;
     }
 
-    /* FACET: Moved down 80px closer to top edge of hero frame */
     .text-facet {
       top: 190px;
       left: 15px;
       font-size: clamp(1.8rem, 6vw, 2.5rem);
     }
 
-    /* ARCHITECTURE: Moved up 80px closer to bottom edge of hero frame */
     .text-architecture {
       position: absolute;
       top: calc(180px + 44vh - 38px);
@@ -319,7 +296,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
       font-size: clamp(1.8rem, 6vw, 2.5rem);
     }
 
-    /* Live Clock: Kept as is */
     .hero-clock {
       bottom: 105px;
       left: 15px;

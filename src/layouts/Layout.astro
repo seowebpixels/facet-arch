@@ -33,40 +33,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
     <meta name="title" content={title} />
     <meta name="description" content={description} />
 
-    <!-- Dynamic Loading Lock Styles -->
-    <style is:inline>
-      html, 
-      body {
-        overflow-x: hidden;
-        min-height: 100vh;
-        position: relative;
-      }
-
-      /* Strict temporary lock active ONLY during preloader playback */
-      html.loading-lock, 
-      body.loading-lock {
-        overflow: hidden !important;
-        height: 100vh !important;
-        max-height: 100vh !important;
-        touch-action: none !important;
-        -ms-touch-action: none !important;
-        overscroll-behavior: none !important;
-      }
-
-      /* Hide scrollbars strictly while loading-lock class is attached */
-      html.loading-lock::-webkit-scrollbar,
-      body.loading-lock::-webkit-scrollbar {
-        display: none !important;
-        width: 0px !important;
-        height: 0px !important;
-      }
-
-      html.loading-lock,
-      body.loading-lock {
-        scrollbar-width: none !important;
-        -ms-overflow-style: none !important;
-      }
-    </style>
+    <!-- Instant Head Scroll Lock (Executes before layout paint) -->
+    <script is:inline>
+      (function() {
+        document.documentElement.style.overflow = 'hidden';
+        document.documentElement.style.height = '100vh';
+      })();
+    </script>
 
     <!-- Preload Custom Font (Bank Gothic) -->
     <link 
@@ -98,12 +71,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
 
     <!-- Global Anti-Copy Protection Script -->
     <script>
-      // 1. Disable Right-Click Context Menu Site-Wide
-      document.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-      });
+      document.addEventListener('contextmenu', (e) => e.preventDefault());
 
-      // 2. Intercept Keyboard Save & View Source Shortcuts (Ctrl+S, Cmd+S, Ctrl+U, Cmd+U)
       document.addEventListener('keydown', (e) => {
         if (
           (e.ctrlKey || e.metaKey) && 
@@ -113,7 +82,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
         }
       });
 
-      // 3. Block Image & Video Dragging
       document.addEventListener('dragstart', (e) => {
         if (e.target instanceof HTMLImageElement || e.target instanceof HTMLVideoElement) {
           e.preventDefault();
@@ -124,6 +92,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
 </html>
 
 <style is:global>
+  /* Base reset to ensure smooth lock transitions */
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+
   /* Disable Selection & Callouts Site-Wide */
   *, *::before, *::after {
     -webkit-touch-callout: none !important;
@@ -143,7 +118,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
     pointer-events: none;
   }
 
-  /* Restore interactive pointer events for links, buttons, interactive cards, and form controls */
+  /* Restore interactive pointer events */
   a, button, input, textarea, select, .portfolio-card, .cad-trigger {
     pointer-events: auto;
   }
