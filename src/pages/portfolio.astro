@@ -641,26 +641,41 @@ const currentYear = new Date().getFullYear();
 </style>
 
 <script>
-  // Navigation Category Filtering
   const navBtns = document.querySelectorAll('.nav-btn');
   const panels = document.querySelectorAll('.category-panel');
 
-  navBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const targetCat = btn.getAttribute('data-category');
+  // Function to switch active category panel
+  function activateCategory(catId: string) {
+    const targetBtn = document.querySelector(`.nav-btn[data-category="${catId}"]`);
+    const targetPanel = document.getElementById(`panel-${catId}`);
 
+    if (targetBtn && targetPanel) {
       navBtns.forEach((b) => b.classList.remove('active'));
       panels.forEach((p) => p.classList.remove('active'));
 
-      btn.classList.add('active');
-      const activePanel = document.getElementById(`panel-${targetCat}`);
-      if (activePanel) {
-        activePanel.classList.add('active');
+      targetBtn.classList.add('active');
+      targetPanel.classList.add('active');
+    }
+  }
+
+  // 1. Check URL Hash on Initial Page Load (e.g. /portfolio#interiors)
+  const currentHash = window.location.hash.replace('#', '');
+  if (currentHash) {
+    activateCategory(currentHash);
+  }
+
+  // 2. Navigation Button Click Handler
+  navBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const targetCat = btn.getAttribute('data-category');
+      if (targetCat) {
+        activateCategory(targetCat);
+        history.replaceState(null, '', `#${targetCat}`);
       }
     });
   });
 
-  // Lightbox Expansion
+  // 3. Lightbox Expansion Logic
   const modal = document.getElementById('lightbox-modal');
   const modalImgLayer = document.getElementById('lightbox-img-layer') as HTMLElement;
   const modalCaption = document.getElementById('lightbox-caption');
