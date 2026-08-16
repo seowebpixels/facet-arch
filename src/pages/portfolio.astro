@@ -237,11 +237,17 @@ const currentYear = new Date().getFullYear();
 
     <div class="footer-divider"></div>
 
-    <div class="copyright-bar">
-      <div class="copyright-container">
-        <p class="copyright-text">&copy; {currentYear} FACET ARCHITECTURE. ALL RIGHTS RESERVED.</p>
-        <p class="designer-credit">DESIGNED BY <a href="https://webdesignpros.co.za" target="_blank" rel="noopener noreferrer">WEB DESIGN PROS</a></p>
-      </div>
+    <div class="footer-base">
+      <p class="footer-line copyright-line">© {currentYear} FACET ARCHITECTURE</p>
+      <p class="footer-line rights-line">ALL RIGHTS RESERVED</p>
+      <p class="footer-line credits-line">
+        DESIGNED BY&nbsp;<a 
+          href="https://webdesignpros.co.za" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="wdp-link"
+        >WEB DESIGN PROS</a>
+      </p>
     </div>
   </footer>
 
@@ -552,12 +558,10 @@ const currentYear = new Date().getFullYear();
     background-color: rgba(255, 255, 255, 0.15);
   }
 
-  .copyright-bar {
+  /* Footer Base Styling */
+  .footer-base {
     max-width: 1400px;
     margin: 0 auto;
-  }
-
-  .copyright-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -567,9 +571,41 @@ const currentYear = new Date().getFullYear();
     text-transform: uppercase;
   }
 
-  .designer-credit a {
+  .footer-line {
+    margin: 0;
+  }
+
+  /* Hover Link State for Web Design Pros */
+  .wdp-link {
     color: #94a3b8;
+    font-weight: 400;
     text-decoration: none;
+    transition: color 0.2s ease, font-weight 0.2s ease, text-shadow 0.2s ease;
+  }
+
+  .wdp-link:hover {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 1px #ffffff;
+  }
+
+  /* Mobile-Only Layout (< 899px) */
+  @media (max-width: 899px) {
+    .footer-base {
+      flex-direction: column !important;
+      align-items: center !important;
+      text-align: center !important;
+      gap: 0 !important;
+    }
+
+    .footer-line {
+      white-space: nowrap !important;
+      line-height: 1.6 !important;
+    }
+
+    .credits-line {
+      margin-top: 1rem !important;
+    }
   }
 
   /* Lightbox Styles Fixed */
