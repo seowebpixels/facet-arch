@@ -206,9 +206,7 @@ const currentYear = new Date().getFullYear();
           {cat.items.map((item) => (
             <div class="portfolio-card cad-trigger" data-fullsrc={item.img} data-caption={item.name}>
               <div class="card-frame">
-                <!-- Background Layer (No HTML img tag) -->
                 <div class="card-image-layer" style={`background-image: url('${item.img}');`}></div>
-                <!-- Invisible Shield Overlay -->
                 <div class="card-shield"></div>
                 <div class="cad-grid-layer"></div>
               </div>
@@ -222,10 +220,8 @@ const currentYear = new Date().getFullYear();
     ))}
   </main>
 
-  <!-- Spacer Gap Below Scroll Bar -->
   <div class="portfolio-spacer-gap"></div>
 
-  <!-- Footer Matching Home Page Structure -->
   <footer class="home-matched-footer">
     <div class="cta-section">
       <div class="cta-content">
@@ -249,14 +245,14 @@ const currentYear = new Date().getFullYear();
     </div>
   </footer>
 
-  <!-- Full-Screen Lightbox Modal (Canvas/Layer rendered) -->
+  <!-- Fixed Lightbox Modal Structure -->
   <div id="lightbox-modal" class="lightbox-modal">
     <button class="lightbox-close" id="lightbox-close">&times; CLOSE</button>
     <div class="lightbox-content">
       <div id="lightbox-img-layer" class="lightbox-img-layer"></div>
       <div class="lightbox-shield"></div>
-      <p id="lightbox-caption" class="lightbox-caption"></p>
     </div>
+    <p id="lightbox-caption" class="lightbox-caption"></p>
   </div>
 </Layout>
 
@@ -270,7 +266,6 @@ const currentYear = new Date().getFullYear();
     user-select: none !important;
   }
 
-  /* Portfolio Navigation Bar */
   .portfolio-nav {
     position: fixed;
     top: 90px;
@@ -351,7 +346,6 @@ const currentYear = new Date().getFullYear();
     text-transform: uppercase;
   }
 
-  /* Portfolio Stage Panels */
   .portfolio-stage {
     padding-top: 160px;
   }
@@ -388,7 +382,6 @@ const currentYear = new Date().getFullYear();
     overflow-wrap: break-word;
   }
 
-  /* Custom Permanent Horizontal Scrollbar */
   .scroll-rail {
     display: flex;
     gap: 24px;
@@ -416,11 +409,6 @@ const currentYear = new Date().getFullYear();
     box-shadow: 0 0 10px rgba(0, 255, 200, 0.5);
   }
 
-  .scroll-rail::-webkit-scrollbar-thumb:hover {
-    background: #00cca0;
-  }
-
-  /* Portfolio Cards */
   .portfolio-card {
     flex: 0 0 auto;
     width: 320px;
@@ -445,17 +433,15 @@ const currentYear = new Date().getFullYear();
     background-color: #000000;
   }
 
-  /* Dynamic CSS Image Layer */
   .card-image-layer {
     width: 100%;
     height: 100%;
     background-size: cover;
-    background-position: top center;
+    background-position: center;
     filter: grayscale(100%) contrast(110%);
     transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease;
   }
 
-  /* Invisible Shield Layer on Top */
   .card-shield {
     position: absolute;
     inset: 0;
@@ -492,14 +478,12 @@ const currentYear = new Date().getFullYear();
     opacity: 0;
   }
 
-  /* Buffer Gap Section */
   .portfolio-spacer-gap {
     height: 40px;
     background-color: #2a2f35;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  /* Footer Structure */
   .home-matched-footer {
     background-color: #2e343b;
     color: #ffffff;
@@ -556,11 +540,9 @@ const currentYear = new Date().getFullYear();
     transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
   }
 
-  .cta-btn:hover,
-  .cta-btn:active {
+  .cta-btn:hover {
     background-color: #ffffff;
     color: #000000;
-    border-color: #ffffff !important;
   }
 
   .footer-divider {
@@ -585,24 +567,12 @@ const currentYear = new Date().getFullYear();
     text-transform: uppercase;
   }
 
-  .copyright-text,
-  .designer-credit {
-    margin: 0;
-    font-weight: 400;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
-  }
-
   .designer-credit a {
     color: #94a3b8;
     text-decoration: none;
-    transition: color 0.2s ease;
   }
 
-  .designer-credit a:hover {
-    color: #ffffff;
-  }
-
-  /* Lightbox Modal */
+  /* Lightbox Styles Fixed */
   .lightbox-modal {
     display: none;
     position: fixed;
@@ -610,6 +580,7 @@ const currentYear = new Date().getFullYear();
     z-index: 1000;
     background: rgba(0, 0, 0, 0.94);
     backdrop-filter: blur(12px);
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 24px;
@@ -637,11 +608,9 @@ const currentYear = new Date().getFullYear();
   .lightbox-content {
     position: relative;
     width: 85vw;
-    height: 75vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    height: 70vh;
+    display: block;
+    box-sizing: border-box;
   }
 
   .lightbox-img-layer {
@@ -664,24 +633,10 @@ const currentYear = new Date().getFullYear();
     font-family: 'BankGothic', sans-serif, system-ui;
     color: #ffffff;
     font-size: 1.1rem;
-    margin-top: 14px;
+    margin-top: 18px;
     letter-spacing: 1.5px;
     text-transform: uppercase;
     text-align: center;
-  }
-
-  @media (max-width: 768px) {
-    .cta-content {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 20px;
-    }
-
-    .copyright-container {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-    }
   }
 </style>
 
@@ -744,7 +699,7 @@ const currentYear = new Date().getFullYear();
     }
   });
 
-  // Disable Right-Click Context Menu globally across portfolio assets
+  // Disable Right-Click Context Menu globally
   document.addEventListener('contextmenu', (e) => {
     e.preventDefault();
   });
