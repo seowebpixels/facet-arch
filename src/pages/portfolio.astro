@@ -206,7 +206,7 @@ const currentYear = new Date().getFullYear();
           {cat.items.map((item) => (
             <div class="portfolio-card cad-trigger" data-fullsrc={item.img} data-caption={item.name}>
               <div class="card-frame">
-                <img src={item.img} alt={item.name} loading="lazy" />
+                <img src={item.img} alt={item.name} loading="lazy" oncontextmenu="return false;" draggable="false" />
                 <div class="cad-grid-layer"></div>
               </div>
               <div class="card-caption">
@@ -253,7 +253,7 @@ const currentYear = new Date().getFullYear();
   <div id="lightbox-modal" class="lightbox-modal">
     <button class="lightbox-close" id="lightbox-close">&times; CLOSE</button>
     <div class="lightbox-content">
-      <img id="lightbox-img" src="" alt="" />
+      <img id="lightbox-img" src="" alt="" oncontextmenu="return false;" draggable="false" />
       <p id="lightbox-caption" class="lightbox-caption"></p>
     </div>
   </div>
@@ -264,6 +264,18 @@ const currentYear = new Date().getFullYear();
     background-color: #111111;
     color: #ffffff;
     margin: 0;
+  }
+
+  /* Global Mobile & Desktop Image Lockdown */
+  img {
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    -webkit-user-drag: none !important;
+    user-drag: none !important;
+    pointer-events: none;
   }
 
   /* Portfolio Navigation Bar */
@@ -288,7 +300,7 @@ const currentYear = new Date().getFullYear();
     max-width: 1400px;
     margin: 0 auto;
     padding-bottom: 4px;
-    scrollbar-width: none; /* Hide scrollbar for category tabs */
+    scrollbar-width: none;
   }
 
   .nav-track::-webkit-scrollbar {
@@ -373,7 +385,6 @@ const currentYear = new Date().getFullYear();
     text-transform: uppercase;
   }
 
-  /* Responsive Title Clamping */
   .panel-title {
     font-family: 'BankGothic', sans-serif, system-ui;
     font-size: clamp(1.8rem, 6vw, 2.8rem);
@@ -385,7 +396,7 @@ const currentYear = new Date().getFullYear();
     overflow-wrap: break-word;
   }
 
-  /* Custom Permanent & Thicker Horizontal Scrollbar */
+  /* Custom Permanent Horizontal Scrollbar */
   .scroll-rail {
     display: flex;
     gap: 24px;
@@ -398,7 +409,7 @@ const currentYear = new Date().getFullYear();
   }
 
   .scroll-rail::-webkit-scrollbar {
-    height: 6px; /* ~1cm thicker scroll bar on mobile */
+    height: 12px;
     display: block !important;
   }
 
@@ -425,6 +436,7 @@ const currentYear = new Date().getFullYear();
     flex-direction: column;
     gap: 12px;
     cursor: pointer;
+    -webkit-touch-callout: none;
   }
 
   @media (min-width: 768px) {
@@ -486,7 +498,7 @@ const currentYear = new Date().getFullYear();
     border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  /* Footer - Slate Theme Matching Home Page */
+  /* Footer Structure */
   .home-matched-footer {
     background-color: #2e343b;
     color: #ffffff;
@@ -529,7 +541,6 @@ const currentYear = new Date().getFullYear();
     text-transform: uppercase;
   }
 
-  /* White-bordered Consultation Button */
   .cta-btn {
     display: inline-block;
     padding: 10px 22px;
@@ -712,4 +723,19 @@ const currentYear = new Date().getFullYear();
       }
     });
   }
+
+  // Prevent Right-Click Context Menu & Image Dragging
+  document.addEventListener('contextmenu', (e) => {
+    const target = e.target as HTMLElement;
+    if (target && (target.tagName === 'IMG' || target.closest('.portfolio-card'))) {
+      e.preventDefault();
+    }
+  });
+
+  document.addEventListener('dragstart', (e) => {
+    const target = e.target as HTMLElement;
+    if (target && target.tagName === 'IMG') {
+      e.preventDefault();
+    }
+  });
 </script>
