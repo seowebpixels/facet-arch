@@ -45,36 +45,41 @@ import heroImg from '../assets/res-eoa-1597.avif';
 <script>
   import { gsap } from 'gsap';
 
-  // Strict Event-Based Scroll Lock Functions
-  function preventScroll(e) {
-    e.preventDefault();
+  // Strict Event-Based & Key Scroll Lock Functions
+  function preventScroll(e: Event) {
+    if (document.documentElement.classList.contains('loading-lock')) {
+      e.preventDefault();
+      e.stopPropagation();
+      window.scrollTo(0, 0);
+      return false;
+    }
+  }
+
+  function preventKeyScroll(e: KeyboardEvent) {
+    if (document.documentElement.classList.contains('loading-lock')) {
+      if (['ArrowUp', 'ArrowDown', 'Space', 'PageUp', 'PageDown', 'Home', 'End'].includes(e.code)) {
+        e.preventDefault();
+      }
+    }
   }
 
   function lockPageScroll() {
-    document.documentElement.style.overflow = 'hidden';
-    document.documentElement.style.height = '100vh';
-    document.body.style.overflow = 'hidden';
-    document.body.style.height = '100vh';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
+    document.documentElement.classList.add('loading-lock');
+    document.body.classList.add('loading-lock');
+    window.scrollTo(0, 0);
 
     window.addEventListener('touchmove', preventScroll, { passive: false });
     window.addEventListener('wheel', preventScroll, { passive: false });
+    window.addEventListener('keydown', preventKeyScroll, { passive: false });
   }
 
   function unlockPageScroll() {
-    document.documentElement.style.overflow = '';
-    document.documentElement.style.height = '';
-    document.body.style.overflow = '';
-    document.body.style.height = '';
-    document.body.style.position = '';
-    document.body.style.width = '';
+    document.documentElement.classList.remove('loading-lock');
+    document.body.classList.remove('loading-lock');
 
     window.removeEventListener('touchmove', preventScroll);
     window.removeEventListener('wheel', preventScroll);
-
-    document.documentElement.classList.remove('loading-lock');
-    document.body.classList.remove('loading-lock');
+    window.removeEventListener('keydown', preventKeyScroll);
   }
 
   // Live Local Time Updater Function
@@ -162,6 +167,9 @@ import heroImg from '../assets/res-eoa-1597.avif';
       }, '-=0.4');
   }
 
+  // Immediate Lock Execution
+  lockPageScroll();
+
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
     initHeroAnimation();
   } else {
@@ -172,12 +180,17 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
 <style>
   .stage-container {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
     background-color: var(--bg-concrete, #BEBEBE);
     overflow: hidden;
     box-sizing: border-box;
+    z-index: 9999;
+    touch-action: none;
+    overscroll-behavior: none;
   }
 
   /* FACET: Anchored top and left */

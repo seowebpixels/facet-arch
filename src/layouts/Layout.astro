@@ -17,7 +17,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="loading-lock">
   <head>
     <!-- Basic Meta Tags -->
     <meta charset="UTF-8" />
@@ -33,19 +33,43 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
     <meta name="title" content={title} />
     <meta name="description" content={description} />
 
-    <!-- Global Base Layout Styles -->
+    <!-- Strict Global Preload & Scrollbar Suppression -->
     <style is:inline>
       html, 
-      body, 
+      body {
+        overflow-x: hidden;
+        min-height: 100vh;
+        position: relative;
+      }
+
+      /* Strict Scroll Lock Override for Preloader Phase */
       html.loading-lock, 
       body.loading-lock {
-        overflow-x: hidden !important;
-        overflow-y: auto !important;
-        height: auto !important;
-        min-height: 100vh !important;
-        position: relative !important;
-        touch-action: auto !important;
-        -ms-touch-action: auto !important;
+        overflow: hidden !important;
+        overflow-y: hidden !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        position: fixed !important;
+        width: 100% !important;
+        touch-action: none !important;
+        -ms-touch-action: none !important;
+        overscroll-behavior: none !important;
+      }
+
+      /* Strip Webkit & Firefox Scrollbars entirely during lock */
+      html.loading-lock::-webkit-scrollbar,
+      body.loading-lock::-webkit-scrollbar,
+      html.loading-lock *::-webkit-scrollbar {
+        display: none !important;
+        width: 0px !important;
+        height: 0px !important;
+        background: transparent !important;
+      }
+
+      html.loading-lock,
+      body.loading-lock {
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
       }
     </style>
 
@@ -72,7 +96,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={new URL(image, Astro.url)} />
   </head>
-  <body>
+  <body class="loading-lock">
     <main>
       <slot />
     </main>
