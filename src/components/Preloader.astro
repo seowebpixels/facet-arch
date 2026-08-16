@@ -45,23 +45,21 @@ import heroImg from '../assets/res-eoa-1597.avif';
 <script>
   import { gsap } from 'gsap';
 
-  function preventDefaultScroll(e: Event) {
-    e.preventDefault();
-  }
+  function releaseScrollLock() {
+    // 1. Remove lock classes completely from root and body
+    document.documentElement.classList.remove('is-loading');
+    document.body.classList.remove('is-loading');
 
-  function enablePageScroll() {
-    // Release html lock
-    document.documentElement.style.overflow = '';
-    document.documentElement.style.height = '';
-    
-    // Remove scroll-blocking listeners
-    window.removeEventListener('wheel', preventDefaultScroll);
-    window.removeEventListener('touchmove', preventDefaultScroll);
-  }
+    // 2. Clear all inline override styles applied during loading
+    document.documentElement.removeAttribute('style');
+    document.body.removeAttribute('style');
 
-  // Intercept scroll/touch events immediately
-  window.addEventListener('wheel', preventDefaultScroll, { passive: false });
-  window.addEventListener('touchmove', preventDefaultScroll, { passive: false });
+    // 3. Make stage pointer-events none so user can interact with the underlying content
+    const stage = document.getElementById('hero-stage');
+    if (stage) {
+      stage.style.pointerEvents = 'none';
+    }
+  }
 
   // Live Local Time Updater
   function updateHeroClock() {
@@ -91,6 +89,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
     if (!logo || !textFacet || !textArchitecture || !clock || !heroFrame) return;
 
+    // Reset window position to top on animation start
     window.scrollTo(0, 0);
 
     updateHeroClock();
@@ -118,9 +117,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
     const tl = gsap.timeline({ 
       defaults: { ease: 'power3.inOut' },
-      onComplete: () => {
-        enablePageScroll();
-      }
+      onComplete: releaseScrollLock
     });
 
     tl
@@ -148,11 +145,9 @@ import heroImg from '../assets/res-eoa-1597.avif';
         duration: 1.2,
         ease: 'power4.out'
       }, '-=0.4');
-
-    // Safety fallback release
-    setTimeout(enablePageScroll, 6500);
   }
 
+  // Execute initialization
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
     initHeroAnimation();
   } else {
@@ -163,18 +158,13 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
 <style>
   .stage-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    position: relative;
     width: 100vw;
     height: 100vh;
     background-color: var(--bg-concrete, #BEBEBE);
     overflow: hidden;
     box-sizing: border-box;
-    z-index: 9999;
-    touch-action: none;
+    z-index: 99;
   }
 
   /* FACET: Anchored top and left */
