@@ -138,6 +138,14 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     letter-spacing: 0.08em;
   }
 
+  /* Prevent scrolling while the page assets load */
+  html.loading-lock,
+  body.loading-lock {
+    overflow: hidden !important;
+    height: 100vh !important;
+    touch-action: none !important; /* Prevents touch dragging on mobile */
+  }
+
   :global(body) {
     background-color: #3A3F47;
     color: #F5F5F5;
@@ -371,7 +379,7 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
       padding: 40px 16px !important;
       overflow: hidden !important;
     }
-   
+    
     .quote-inner {
       width: 100% !important;
       max-width: 100% !important;
@@ -401,6 +409,25 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
 </style>
 
 <script>
+  // Page Load Scroll Lock Control
+  function unlockScroll() {
+    document.documentElement.classList.remove('loading-lock');
+    document.body.classList.remove('loading-lock');
+  }
+
+  // Set initial lock class on body load if preloader/assets are active
+  document.documentElement.classList.add('loading-lock');
+  document.body.classList.add('loading-lock');
+
+  if (document.readyState === 'complete') {
+    unlockScroll();
+  } else {
+    window.addEventListener('load', unlockScroll, { once: true });
+  }
+
+  // Fallback safeguard to release scroll after max 2.5s
+  setTimeout(unlockScroll, 2500);
+
   // Smooth Background Transition and Legend Highlight Observer
   const tiles = document.querySelectorAll('.tile-card');
   const legendItems = document.querySelectorAll('.legend-item');
