@@ -263,13 +263,18 @@ const currentYear = new Date().getFullYear();
 </Layout>
 
 <style is:global>
-  /* Global Unlocking Rules */
-  html, body {
+  /* Forced Viewport Unlocking Rules */
+  html, 
+  body, 
+  html.loading-lock, 
+  body.loading-lock {
     overflow-x: hidden !important;
     overflow-y: auto !important;
     height: auto !important;
     min-height: 100vh !important;
     position: relative !important;
+    touch-action: auto !important;
+    -ms-touch-action: auto !important;
   }
 
   /* Forced WebKit Scrollbars for Category and Image Rails */
@@ -726,6 +731,16 @@ const currentYear = new Date().getFullYear();
 </style>
 
 <script>
+  // DOM Unlocking Cleanup Function
+  const forceScrollUnlock = () => {
+    document.documentElement.classList.remove('loading-lock');
+    document.body.classList.remove('loading-lock');
+  };
+
+  forceScrollUnlock();
+  window.addEventListener('DOMContentLoaded', forceScrollUnlock);
+  window.addEventListener('load', forceScrollUnlock);
+
   const navBtns = document.querySelectorAll('.nav-btn');
   const panels = document.querySelectorAll('.category-panel');
 
