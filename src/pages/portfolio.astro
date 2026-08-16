@@ -206,7 +206,10 @@ const currentYear = new Date().getFullYear();
           {cat.items.map((item) => (
             <div class="portfolio-card cad-trigger" data-fullsrc={item.img} data-caption={item.name}>
               <div class="card-frame">
-                <img src={item.img} alt={item.name} loading="lazy" oncontextmenu="return false;" draggable="false" />
+                <!-- Background Layer (No HTML img tag) -->
+                <div class="card-image-layer" style={`background-image: url('${item.img}');`}></div>
+                <!-- Invisible Shield Overlay -->
+                <div class="card-shield"></div>
                 <div class="cad-grid-layer"></div>
               </div>
               <div class="card-caption">
@@ -224,7 +227,6 @@ const currentYear = new Date().getFullYear();
 
   <!-- Footer Matching Home Page Structure -->
   <footer class="home-matched-footer">
-    <!-- Next Steps CTA Section -->
     <div class="cta-section">
       <div class="cta-content">
         <div class="cta-text">
@@ -237,10 +239,8 @@ const currentYear = new Date().getFullYear();
       </div>
     </div>
 
-    <!-- Divider Line -->
     <div class="footer-divider"></div>
 
-    <!-- Copyright Bar -->
     <div class="copyright-bar">
       <div class="copyright-container">
         <p class="copyright-text">&copy; {currentYear} FACET ARCHITECTURE. ALL RIGHTS RESERVED.</p>
@@ -249,11 +249,12 @@ const currentYear = new Date().getFullYear();
     </div>
   </footer>
 
-  <!-- Full-Screen Lightbox Modal -->
+  <!-- Full-Screen Lightbox Modal (Canvas/Layer rendered) -->
   <div id="lightbox-modal" class="lightbox-modal">
     <button class="lightbox-close" id="lightbox-close">&times; CLOSE</button>
     <div class="lightbox-content">
-      <img id="lightbox-img" src="" alt="" oncontextmenu="return false;" draggable="false" />
+      <div id="lightbox-img-layer" class="lightbox-img-layer"></div>
+      <div class="lightbox-shield"></div>
       <p id="lightbox-caption" class="lightbox-caption"></p>
     </div>
   </div>
@@ -264,18 +265,9 @@ const currentYear = new Date().getFullYear();
     background-color: #111111;
     color: #ffffff;
     margin: 0;
-  }
-
-  /* Global Mobile & Desktop Image Lockdown */
-  img {
     -webkit-touch-callout: none !important;
     -webkit-user-select: none !important;
-    -moz-user-select: none !important;
-    -ms-user-select: none !important;
     user-select: none !important;
-    -webkit-user-drag: none !important;
-    user-drag: none !important;
-    pointer-events: none;
   }
 
   /* Portfolio Navigation Bar */
@@ -436,7 +428,6 @@ const currentYear = new Date().getFullYear();
     flex-direction: column;
     gap: 12px;
     cursor: pointer;
-    -webkit-touch-callout: none;
   }
 
   @media (min-width: 768px) {
@@ -454,13 +445,22 @@ const currentYear = new Date().getFullYear();
     background-color: #000000;
   }
 
-  .card-frame img {
+  /* Dynamic CSS Image Layer */
+  .card-image-layer {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: top;
+    background-size: cover;
+    background-position: top center;
     filter: grayscale(100%) contrast(110%);
     transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease;
+  }
+
+  /* Invisible Shield Layer on Top */
+  .card-shield {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    background: transparent;
   }
 
   .card-caption h3 {
@@ -474,6 +474,7 @@ const currentYear = new Date().getFullYear();
   .cad-grid-layer {
     position: absolute;
     inset: 0;
+    z-index: 4;
     background: radial-gradient(circle, rgba(0,255,200,0.08) 1px, transparent 1px);
     background-size: 18px 18px;
     opacity: 1;
@@ -482,7 +483,7 @@ const currentYear = new Date().getFullYear();
     border: 1px solid rgba(0, 255, 200, 0.2);
   }
 
-  .cad-trigger:hover img {
+  .cad-trigger:hover .card-image-layer {
     transform: scale(1.04);
     filter: grayscale(0%) contrast(100%);
   }
@@ -630,21 +631,33 @@ const currentYear = new Date().getFullYear();
     padding: 6px 14px;
     cursor: pointer;
     text-transform: uppercase;
+    z-index: 1010;
   }
 
   .lightbox-content {
-    max-width: 95vw;
-    max-height: 88vh;
+    position: relative;
+    width: 85vw;
+    height: 75vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
   }
 
-  .lightbox-content img {
-    max-width: 100%;
-    max-height: 75vh;
-    object-fit: contain;
+  .lightbox-img-layer {
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
     border: 1px solid rgba(255, 255, 255, 0.25);
+  }
+
+  .lightbox-shield {
+    position: absolute;
+    inset: 0;
+    z-index: 1005;
+    background: transparent;
   }
 
   .lightbox-caption {
@@ -694,7 +707,7 @@ const currentYear = new Date().getFullYear();
 
   // Lightbox Expansion
   const modal = document.getElementById('lightbox-modal');
-  const modalImg = document.getElementById('lightbox-img') as HTMLImageElement;
+  const modalImgLayer = document.getElementById('lightbox-img-layer') as HTMLElement;
   const modalCaption = document.getElementById('lightbox-caption');
   const modalClose = document.getElementById('lightbox-close');
 
@@ -704,8 +717,8 @@ const currentYear = new Date().getFullYear();
       const fullSrc = card.getAttribute('data-fullsrc');
       const caption = card.getAttribute('data-caption');
 
-      if (modal && modalImg && modalCaption && fullSrc) {
-        modalImg.src = fullSrc;
+      if (modal && modalImgLayer && modalCaption && fullSrc) {
+        modalImgLayer.style.backgroundImage = `url('${fullSrc}')`;
         modalCaption.textContent = caption || '';
         modal.classList.add('active');
       }
@@ -724,18 +737,15 @@ const currentYear = new Date().getFullYear();
     });
   }
 
-  // Prevent Right-Click Context Menu & Image Dragging
-  document.addEventListener('contextmenu', (e) => {
-    const target = e.target as HTMLElement;
-    if (target && (target.tagName === 'IMG' || target.closest('.portfolio-card'))) {
+  // Intercept Page Save Shortcuts (Ctrl+S / Cmd+S / Ctrl+U)
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) {
       e.preventDefault();
     }
   });
 
-  document.addEventListener('dragstart', (e) => {
-    const target = e.target as HTMLElement;
-    if (target && target.tagName === 'IMG') {
-      e.preventDefault();
-    }
+  // Disable Right-Click Context Menu globally across portfolio assets
+  document.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
   });
 </script>
