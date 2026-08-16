@@ -182,13 +182,16 @@ const currentYear = new Date().getFullYear();
 
   <!-- Category Navigation Bar -->
   <nav class="portfolio-nav">
-    <div class="nav-track">
+    <div class="nav-track scroll-container">
       {portfolioData.map((cat, idx) => (
         <button class={`nav-btn ${idx === 0 ? 'active' : ''}`} data-category={cat.id}>
           <span class="nav-num">{cat.num}</span>
           <span class="nav-title">{cat.title}</span>
         </button>
       ))}
+    </div>
+    <div class="custom-scrollbar-track">
+      <div class="custom-scrollbar-thumb"></div>
     </div>
   </nav>
 
@@ -202,19 +205,24 @@ const currentYear = new Date().getFullYear();
         </div>
 
         <!-- Horizontal Scroll Track -->
-        <div class="scroll-rail">
-          {cat.items.map((item) => (
-            <div class="portfolio-card cad-trigger" data-fullsrc={item.img} data-caption={item.name}>
-              <div class="card-frame">
-                <div class="card-image-layer" style={`background-image: url('${item.img}');`}></div>
-                <div class="card-shield"></div>
-                <div class="cad-grid-layer"></div>
+        <div class="scroll-rail-wrapper">
+          <div class="scroll-rail scroll-container">
+            {cat.items.map((item) => (
+              <div class="portfolio-card cad-trigger" data-fullsrc={item.img} data-caption={item.name}>
+                <div class="card-frame">
+                  <div class="card-image-layer" style={`background-image: url('${item.img}');`}></div>
+                  <div class="card-shield"></div>
+                  <div class="cad-grid-layer"></div>
+                </div>
+                <div class="card-caption">
+                  <h3>{item.name}</h3>
+                </div>
               </div>
-              <div class="card-caption">
-                <h3>{item.name}</h3>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <div class="custom-scrollbar-track">
+            <div class="custom-scrollbar-thumb"></div>
+          </div>
         </div>
       </section>
     ))}
@@ -276,60 +284,6 @@ const currentYear = new Date().getFullYear();
     touch-action: auto !important;
     -ms-touch-action: auto !important;
   }
-
-  /* Desktop WebKit Scrollbars */
-  .nav-track::-webkit-scrollbar,
-  .scroll-rail::-webkit-scrollbar {
-    height: 10px !important;
-    display: block !important;
-    -webkit-appearance: none !important;
-  }
-
-  .nav-track::-webkit-scrollbar-track,
-  .scroll-rail::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1) !important;
-    border-radius: 4px !important;
-  }
-
-  .nav-track::-webkit-scrollbar-thumb,
-  .scroll-rail::-webkit-scrollbar-thumb {
-    background: #00ffc8 !important;
-    border-radius: 4px !important;
-    box-shadow: 0 0 8px rgba(0, 255, 200, 0.5) !important;
-    min-width: 40px !important;
-  }
-
-  /* Mobile-Only Custom Scrollbar Sizing & Permanent Visibility */
-  @media (max-width: 767px) {
-    .nav-track,
-    .scroll-rail {
-      overflow-x: scroll !important;
-      -webkit-overflow-scrolling: touch !important;
-      scrollbar-width: thin !important;
-      scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.15) !important;
-    }
-
-    /* Half-size height (5px) for both Menu and Image tracks on mobile */
-    .nav-track::-webkit-scrollbar,
-    .scroll-rail::-webkit-scrollbar {
-      height: 5px !important;
-      display: block !important;
-      -webkit-appearance: none !important;
-    }
-
-    .nav-track::-webkit-scrollbar-track,
-    .scroll-rail::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.15) !important;
-      border-radius: 2px !important;
-    }
-
-    .nav-track::-webkit-scrollbar-thumb,
-    .scroll-rail::-webkit-scrollbar-thumb {
-      background: #00ffc8 !important;
-      border-radius: 2px !important;
-      box-shadow: 0 0 6px rgba(0, 255, 200, 0.6) !important;
-    }
-  }
 </style>
 
 <style>
@@ -342,6 +296,20 @@ const currentYear = new Date().getFullYear();
     user-select: none !important;
   }
 
+  /* Hide native scrollbars on containers completely */
+  .scroll-container {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none !important; /* Firefox */
+    -ms-overflow-style: none !important; /* IE/Edge */
+  }
+
+  .scroll-container::-webkit-scrollbar {
+    display: none !important; /* Chrome/Safari */
+    width: 0 !important;
+    height: 0 !important;
+  }
+
   .portfolio-nav {
     position: fixed;
     top: 90px;
@@ -352,19 +320,16 @@ const currentYear = new Date().getFullYear();
     background: rgba(17, 17, 17, 0.95);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    box-sizing: border-box;
   }
 
   .nav-track {
     display: flex;
     flex-wrap: nowrap;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
     gap: 28px;
     max-width: 1400px;
     margin: 0 auto;
-    padding-bottom: 10px !important;
-    scrollbar-width: thin !important;
-    scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.15) !important;
+    padding-bottom: 8px;
   }
 
   .nav-btn {
@@ -456,15 +421,16 @@ const currentYear = new Date().getFullYear();
     overflow-wrap: break-word;
   }
 
+  .scroll-rail-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
   .scroll-rail {
     display: flex;
     gap: 24px;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 20px !important;
+    padding-bottom: 12px;
     scroll-behavior: smooth;
-    scrollbar-width: thin !important;
-    scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.15) !important;
   }
 
   .portfolio-card {
@@ -479,6 +445,44 @@ const currentYear = new Date().getFullYear();
   @media (min-width: 768px) {
     .portfolio-card {
       width: 440px;
+    }
+  }
+
+  /* Custom Fixed Scrollbar Track (Overlay UI) */
+  .custom-scrollbar-track {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .custom-scrollbar-thumb {
+    height: 100%;
+    width: 25%;
+    background: #00ffc8;
+    border-radius: 4px;
+    box-shadow: 0 0 8px rgba(0, 255, 200, 0.5);
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: transform 0.05s ease-out;
+  }
+
+  /* Mobile-Only Modifications: Fixed 5px Scrollbar Height */
+  @media (max-width: 767px) {
+    .custom-scrollbar-track {
+      height: 5px !important;
+      border-radius: 2px !important;
+      background: rgba(255, 255, 255, 0.15) !important;
+    }
+
+    .custom-scrollbar-thumb {
+      border-radius: 2px !important;
+      box-shadow: 0 0 6px rgba(0, 255, 200, 0.6) !important;
     }
   }
 
@@ -773,6 +777,40 @@ const currentYear = new Date().getFullYear();
   window.addEventListener('DOMContentLoaded', forceScrollUnlock);
   window.addEventListener('load', forceScrollUnlock);
 
+  // Bind custom scrollbar sync logic
+  const initCustomScrollbars = () => {
+    const containers = document.querySelectorAll('.scroll-container');
+    
+    containers.forEach((container) => {
+      const parent = container.parentElement;
+      if (!parent) return;
+
+      const track = parent.querySelector('.custom-scrollbar-track');
+      const thumb = parent.querySelector('.custom-scrollbar-thumb') as HTMLElement;
+
+      if (!track || !thumb) return;
+
+      const updateThumb = () => {
+        const scrollWidth = container.scrollWidth - container.clientWidth;
+        if (scrollWidth <= 0) {
+          (track as HTMLElement).style.display = 'none';
+          return;
+        }
+
+        (track as HTMLElement).style.display = 'block';
+        const scrollRatio = container.scrollLeft / scrollWidth;
+        const availableWidth = track.clientWidth - thumb.clientWidth;
+        const translateX = scrollRatio * availableWidth;
+
+        thumb.style.transform = `translateX(${translateX}px)`;
+      };
+
+      container.addEventListener('scroll', updateThumb, { passive: true });
+      window.addEventListener('resize', updateThumb);
+      updateThumb();
+    });
+  };
+
   const navBtns = document.querySelectorAll('.nav-btn');
   const panels = document.querySelectorAll('.category-panel');
 
@@ -786,12 +824,16 @@ const currentYear = new Date().getFullYear();
 
       targetBtn.classList.add('active');
       targetPanel.classList.add('active');
+
+      setTimeout(initCustomScrollbars, 50);
     }
   }
 
   const currentHash = window.location.hash.replace('#', '');
   if (currentHash) {
     activateCategory(currentHash);
+  } else {
+    initCustomScrollbars();
   }
 
   navBtns.forEach((btn) => {
