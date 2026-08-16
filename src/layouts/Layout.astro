@@ -17,7 +17,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
 ---
 
 <!doctype html>
-<html lang="en" class="is-loading">
+<html lang="en">
   <head>
     <!-- Basic Meta Tags -->
     <meta charset="UTF-8" />
@@ -85,13 +85,19 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
       }
     </style>
   </head>
-  <body class="is-loading">
+  <body>
     <main>
       <slot />
     </main>
 
-    <!-- Global Anti-Copy Protection Script -->
+    <!-- Global Anti-Copy Protection & Loading Release Script -->
     <script>
+      // Automatically release loading state once DOM content is ready
+      document.addEventListener('DOMContentLoaded', () => {
+        document.documentElement.classList.remove('is-loading');
+        document.body.classList.remove('is-loading');
+      });
+
       document.addEventListener('contextmenu', (e) => e.preventDefault());
 
       document.addEventListener('keydown', (e) => {
@@ -117,7 +123,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
     margin: 0;
     padding: 0;
     width: 100%;
-    min-height: 100vh;
+    min-height: 100%;
+    height: auto !important;
+    overflow-x: hidden;
+    overflow-y: auto !important;
   }
 
   /* Disable Selection & Callouts Site-Wide */
