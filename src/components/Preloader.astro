@@ -58,7 +58,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     document.body.style.position = 'fixed';
     document.body.style.width = '100%';
 
-    // Intercept touch & wheel events directly on the window to block hardware swipe/scroll
     window.addEventListener('touchmove', preventScroll, { passive: false });
     window.addEventListener('wheel', preventScroll, { passive: false });
   }
@@ -74,7 +73,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     window.removeEventListener('touchmove', preventScroll);
     window.removeEventListener('wheel', preventScroll);
 
-    // Clean up helper classes from Layout
     document.documentElement.classList.remove('loading-lock');
     document.body.classList.remove('loading-lock');
   }
@@ -107,10 +105,8 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
     if (!logo || !textFacet || !textArchitecture || !clock || !heroFrame) return;
 
-    // Lock page interaction immediately before GSAP sequence starts
     lockPageScroll();
 
-    // Start Live Clock Ticker
     updateHeroClock();
     setInterval(updateHeroClock, 1000);
 
@@ -136,7 +132,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
     const tl = gsap.timeline({ 
       defaults: { ease: 'power3.inOut' },
-      onComplete: unlockPageScroll // Unlock scroll strictly after the timeline finishes
+      onComplete: unlockPageScroll
     });
 
     tl
@@ -218,7 +214,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     align-items: center;
   }
 
-  /* Shift timezone text to the right */
   .time-zone {
     margin-left: 1.25rem;
   }
@@ -282,44 +277,46 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
   /* Mobile Layout Adjustments */
   @media (max-width: 768px) {
+    /* Hero frame positioned with fixed top/height boundaries */
+    .hero-frame {
+      top: 180px;
+      left: 0;
+      width: 100vw;
+      height: 44vh;
+      box-shadow: none;
+    }
+
+    /* FACET: Moved down vertically to sit right above top frame edge */
     .text-facet {
-      top: 20px;
+      top: 140px;
       left: 15px;
       font-size: clamp(1.8rem, 6vw, 2.5rem);
     }
 
+    /* ARCHITECTURE: Moved up vertically to sit directly below bottom frame edge */
+    .text-architecture {
+      position: absolute;
+      top: calc(180px + 44vh + 12px);
+      bottom: auto;
+      right: 15px;
+      font-size: clamp(1.8rem, 6vw, 2.5rem);
+    }
+
+    /* Live Clock: Shifted into the visible bottom area */
     .hero-clock {
-      bottom: 15px;
+      bottom: 35px;
       left: 15px;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
     }
 
     .time-zone {
       margin-left: 0.85rem;
     }
 
-    .text-architecture {
-      position: absolute;
-      top: unset;
-      bottom: 35vh;
-      right: 15px;
-      font-size: clamp(1.8rem, 6vw, 2.5rem);
-    }
-
     .logo-img { 
       height: 85px; 
     }
 
-    /* Expand frame height and allow subtle side crop */
-    .hero-frame {
-      top: 75px;
-      left: 0;
-      width: 100vw;
-      height: 48vh; /* Reduces frame height so image isn't forced to zoom */
-      box-shadow: none;
-    }
-
-    /* Ensures the full house is visible with zero side clipping */
     .hero-img {
       object-fit: contain;
       object-position: center center;
