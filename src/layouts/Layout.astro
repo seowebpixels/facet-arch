@@ -60,5 +60,56 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
     <main>
       <slot />
     </main>
+
+    <!-- Global Anti-Copy Protection Script -->
+    <script>
+      // 1. Disable Right-Click Context Menu Site-Wide
+      document.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+      });
+
+      // 2. Intercept Keyboard Save & View Source Shortcuts (Ctrl+S, Cmd+S, Ctrl+U, Cmd+U)
+      document.addEventListener('keydown', (e) => {
+        if (
+          (e.ctrlKey || e.metaKey) && 
+          (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')
+        ) {
+          e.preventDefault();
+        }
+      });
+
+      // 3. Block Image & Video Dragging
+      document.addEventListener('dragstart', (e) => {
+        if (e.target instanceof HTMLImageElement || e.target instanceof HTMLVideoElement) {
+          e.preventDefault();
+        }
+      });
+    </script>
   </body>
 </html>
+
+<style is:global>
+  /* Disable Selection & Callouts Site-Wide */
+  *, *::before, *::after {
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+  }
+
+  /* Target all Images and Videos site-wide */
+  img, video {
+    -webkit-user-drag: none !important;
+    -khtml-user-drag: none !important;
+    -moz-user-drag: none !important;
+    -o-user-drag: none !important;
+    user-drag: none !important;
+    pointer-events: none; /* Mouse events pass through to parent containers, preventing direct image interaction */
+  }
+
+  /* Restore interactive pointer events for links, buttons, and form controls */
+  a, button, input, textarea, select {
+    pointer-events: auto;
+  }
+</style>
