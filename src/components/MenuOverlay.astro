@@ -34,24 +34,24 @@ const menuItems = [
       </a>
 
       <!-- Bottom-Left Tile: Address -->
-      <div class="grid-tile tile-address">
-        <div class="tile-bg" style={`background-image: url('${addressImg.src}');`}></div>
-        <div class="tile-overlay address-darken"></div>
-        <div class="tile-content content-address">
-          <div class="address-wrapper">
-            <p class="address-text">
-              118 Kastaiing Street<br />
-              Weltevredenpark<br />
-              Johannesburg<br />
-              South Africa<br />
-              1709
-            </p>
-            <p class="telephone-number">
-              Tel: +27 60 996 0690
-            </p>
-          </div>
-        </div>
-      </div>
+<div class="grid-tile tile-address">
+  <div class="tile-bg" style={`background-image: url('${addressImg.src}');`}></div>
+  <div class="tile-overlay address-darken"></div>
+  <div class="tile-content content-address">
+    <div class="address-wrapper">
+      <p class="address-text">
+        118 Kastaiing Street<br />
+        Weltevredenpark<br />
+        Johannesburg<br />
+        South Africa<br />
+        1709
+      </p>
+      <p class="telephone-number">
+        Tel: +27 60 996 0690
+      </p>
+    </div>
+  </div>
+</div>
 
       <!-- Bottom-Right Tile: SACAP Logo -->
       <div class="grid-tile tile-logo">
@@ -196,25 +196,47 @@ const menuItems = [
     font-weight: 400;
   }
 
-  /* Address Tile */
-  .tile-address {
-    grid-column: 1 / 2;
-    grid-row: 2 / 3;
-  }
+  /* Address Tile Layout */
+.tile-address {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+}
 
-  .content-address {
-    display: flex;
-    align-items: flex-end;
-  }
+.content-address {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  text-align: left;
+}
 
-  .address-text {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: clamp(0.75rem, 1vw, 0.95rem);
-    color: #ffffff;
-    line-height: 1.35;
-    margin: 0;
-    font-weight: 400;
-  }
+.address-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  width: 100%;
+}
+
+.address-text {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: clamp(0.75rem, 1vw, 0.95rem);
+  color: #ffffff;
+  line-height: 1.35;
+  margin: 0;
+  font-weight: 400;
+  text-align: left;
+}
+
+.telephone-number {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: clamp(0.75rem, 1vw, 0.95rem);
+  color: #ffffff;
+  line-height: 1.35;
+  margin: 1rem 0 0 0; /* Creates the distinct line space under 1709 */
+  padding: 0;
+  font-weight: 400;
+  text-align: left;
+}
 
   /* SACAP Logo Tile Fix */
   .tile-logo {
