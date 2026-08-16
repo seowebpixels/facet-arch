@@ -68,3 +68,15 @@ h1, h2, h3, .heading-bankgothic {
   transform: scaleX(1);
   transform-origin: left;
 }
+
+/* src/styles/global.css */
+
+@media (min-width: 900px) {
+  .right-grid-col .tile-overlay {
+    background: linear-gradient(to bottom, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.3) 100%) !important;
+  }
+
+  .right-grid-col .tile-meta {
+    order: -1 !important;
+  }
+}

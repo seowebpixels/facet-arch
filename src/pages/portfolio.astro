@@ -273,17 +273,26 @@ const currentYear = new Date().getFullYear();
     left: 0;
     width: 100%;
     z-index: 100;
-    padding: 16px 32px;
-    background: rgba(17, 17, 17, 0.9);
+    padding: 12px 24px;
+    background: rgba(17, 17, 17, 0.95);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   }
 
   .nav-track {
     display: flex;
-    gap: 36px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 28px;
     max-width: 1400px;
     margin: 0 auto;
+    padding-bottom: 4px;
+    scrollbar-width: none; /* Hide scrollbar for category tabs */
+  }
+
+  .nav-track::-webkit-scrollbar {
+    display: none;
   }
 
   .nav-btn {
@@ -294,12 +303,13 @@ const currentYear = new Date().getFullYear();
     font-family: 'BankGothic', sans-serif, system-ui;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     cursor: pointer;
     opacity: 0.5;
     transition: opacity 0.4s ease, color 0.4s ease;
-    padding: 8px 0 12px;
-    overflow: hidden;
+    padding: 6px 0 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .nav-btn::after {
@@ -332,19 +342,19 @@ const currentYear = new Date().getFullYear();
   }
 
   .nav-title {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     letter-spacing: 1.5px;
     text-transform: uppercase;
   }
 
   /* Portfolio Stage Panels */
   .portfolio-stage {
-    padding-top: 170px;
+    padding-top: 160px;
   }
 
   .category-panel {
     display: none;
-    padding: 20px 40px 30px;
+    padding: 20px 24px 30px;
   }
 
   .category-panel.active {
@@ -357,44 +367,50 @@ const currentYear = new Date().getFullYear();
 
   .panel-num {
     font-family: 'BankGothic', sans-serif, system-ui;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: rgba(255, 255, 255, 0.6);
     letter-spacing: 2px;
     text-transform: uppercase;
   }
 
+  /* Responsive Title Clamping */
   .panel-title {
     font-family: 'BankGothic', sans-serif, system-ui;
-    font-size: 2.8rem;
+    font-size: clamp(1.8rem, 6vw, 2.8rem);
     text-transform: uppercase;
     margin: 4px 0 0;
     color: #ffffff;
+    line-height: 1.1;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
-  /* Thin Custom Horizontal Scrollbar */
+  /* Custom Permanent & Thicker Horizontal Scrollbar */
   .scroll-rail {
     display: flex;
-    gap: 28px;
-    overflow-x: auto;
-    padding-bottom: 18px;
+    gap: 24px;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 24px;
     scroll-behavior: smooth;
-    scrollbar-width: thin;
-    scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.08);
+    scrollbar-width: auto;
+    scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.12);
   }
 
   .scroll-rail::-webkit-scrollbar {
-    height: 6px;
+    height: 6px; /* ~1cm thicker scroll bar on mobile */
+    display: block !important;
   }
 
   .scroll-rail::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
   }
 
   .scroll-rail::-webkit-scrollbar-thumb {
     background: #00ffc8;
-    border-radius: 3px;
-    box-shadow: 0 0 8px rgba(0, 255, 200, 0.4);
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 255, 200, 0.5);
   }
 
   .scroll-rail::-webkit-scrollbar-thumb:hover {
@@ -404,11 +420,17 @@ const currentYear = new Date().getFullYear();
   /* Portfolio Cards */
   .portfolio-card {
     flex: 0 0 auto;
-    width: 440px;
+    width: 320px;
     display: flex;
     flex-direction: column;
     gap: 12px;
     cursor: pointer;
+  }
+
+  @media (min-width: 768px) {
+    .portfolio-card {
+      width: 440px;
+    }
   }
 
   .card-frame {
@@ -431,7 +453,7 @@ const currentYear = new Date().getFullYear();
 
   .card-caption h3 {
     font-family: 'BankGothic', sans-serif, system-ui;
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     color: #ffffff;
     margin: 0;
     text-transform: uppercase;
@@ -469,7 +491,7 @@ const currentYear = new Date().getFullYear();
     background-color: #2e343b;
     color: #ffffff;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
-    padding: 50px 48px 32px;
+    padding: 40px 24px 32px;
     box-sizing: border-box;
     width: 100%;
   }
@@ -499,7 +521,7 @@ const currentYear = new Date().getFullYear();
 
   .cta-heading {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
-    font-size: 1.45rem;
+    font-size: 1.3rem;
     color: #e2e8f0;
     font-weight: 300;
     letter-spacing: 2px;
@@ -578,7 +600,7 @@ const currentYear = new Date().getFullYear();
     backdrop-filter: blur(12px);
     justify-content: center;
     align-items: center;
-    padding: 40px;
+    padding: 24px;
   }
 
   .lightbox-modal.active {
@@ -587,20 +609,20 @@ const currentYear = new Date().getFullYear();
 
   .lightbox-close {
     position: absolute;
-    top: 30px;
-    right: 40px;
+    top: 24px;
+    right: 24px;
     background: none;
     border: 1px solid #00ffc8;
     color: #00ffc8;
     font-family: 'BankGothic', sans-serif, system-ui;
-    font-size: 0.9rem;
-    padding: 8px 16px;
+    font-size: 0.85rem;
+    padding: 6px 14px;
     cursor: pointer;
     text-transform: uppercase;
   }
 
   .lightbox-content {
-    max-width: 92vw;
+    max-width: 95vw;
     max-height: 88vh;
     display: flex;
     flex-direction: column;
@@ -609,7 +631,7 @@ const currentYear = new Date().getFullYear();
 
   .lightbox-content img {
     max-width: 100%;
-    max-height: 80vh;
+    max-height: 75vh;
     object-fit: contain;
     border: 1px solid rgba(255, 255, 255, 0.25);
   }
@@ -617,10 +639,11 @@ const currentYear = new Date().getFullYear();
   .lightbox-caption {
     font-family: 'BankGothic', sans-serif, system-ui;
     color: #ffffff;
-    font-size: 1.25rem;
-    margin-top: 16px;
+    font-size: 1.1rem;
+    margin-top: 14px;
     letter-spacing: 1.5px;
     text-transform: uppercase;
+    text-align: center;
   }
 
   @media (max-width: 768px) {
