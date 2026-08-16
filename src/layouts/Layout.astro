@@ -17,7 +17,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="loading-lock">
   <head>
     <!-- Basic Meta Tags -->
     <meta charset="UTF-8" />
@@ -32,6 +32,19 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
+
+    <!-- Critical Preloader Lock CSS (Injected immediately before JS) -->
+    <style is:inline>
+      html.loading-lock,
+      body.loading-lock {
+        overflow: hidden !important;
+        height: 100vh !important;
+        position: fixed !important;
+        width: 100% !important;
+        touch-action: none !important;
+        -ms-touch-action: none !important;
+      }
+    </style>
 
     <!-- Preload Custom Font (Bank Gothic) -->
     <link 
@@ -56,7 +69,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={new URL(image, Astro.url)} />
   </head>
-  <body>
+  <body class="loading-lock">
     <main>
       <slot />
     </main>

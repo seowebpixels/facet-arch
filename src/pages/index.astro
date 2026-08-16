@@ -138,14 +138,6 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     letter-spacing: 0.08em;
   }
 
-  /* Prevent scrolling while the page assets load */
-  html.loading-lock,
-  body.loading-lock {
-    overflow: hidden !important;
-    height: 100vh !important;
-    touch-action: none !important; /* Prevents touch dragging on mobile */
-  }
-
   :global(body) {
     background-color: #3A3F47;
     color: #F5F5F5;
@@ -409,24 +401,30 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
 </style>
 
 <script>
-  // Page Load Scroll Lock Control
+  // Function to release scroll lock
   function unlockScroll() {
     document.documentElement.classList.remove('loading-lock');
     document.body.classList.remove('loading-lock');
   }
 
-  // Set initial lock class on body load if preloader/assets are active
-  document.documentElement.classList.add('loading-lock');
-  document.body.classList.add('loading-lock');
+  // Prevent drag scrolling on touch mobile devices while loading
+  const preventTouch = (e: TouchEvent) => e.preventDefault();
+  document.addEventListener('touchmove', preventTouch, { passive: false });
 
-  if (document.readyState === 'complete') {
+  function completeUnlock() {
     unlockScroll();
-  } else {
-    window.addEventListener('load', unlockScroll, { once: true });
+    document.removeEventListener('touchmove', preventTouch);
   }
 
-  // Fallback safeguard to release scroll after max 2.5s
-  setTimeout(unlockScroll, 2500);
+  // Unlock when window fully completes loading
+  if (document.readyState === 'complete') {
+    completeUnlock();
+  } else {
+    window.addEventListener('load', completeUnlock, { once: true });
+  }
+
+  // Fallback timeout to release scroll after 2.5s max
+  setTimeout(completeUnlock, 2500);
 
   // Smooth Background Transition and Legend Highlight Observer
   const tiles = document.querySelectorAll('.tile-card');
