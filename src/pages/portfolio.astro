@@ -271,13 +271,20 @@ const currentYear = new Date().getFullYear();
 </Layout>
 
 <style>
+  :global(html),
   :global(body) {
     background-color: #111111;
     color: #ffffff;
     margin: 0;
+    overflow: hidden !important; /* Lockdown vertical and global scrolling during load / static states */
+    height: 100%;
     -webkit-touch-callout: none !important;
     -webkit-user-select: none !important;
     user-select: none !important;
+  }
+
+  body.loaded {
+    overflow-y: auto !important; /* Restore normal vertical scrolling once loaded */
   }
 
   .scroll-container {
@@ -792,6 +799,18 @@ const currentYear = new Date().getFullYear();
 <script>
   const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
+  const unlockScroll = () => {
+    document.body.classList.add('loaded');
+  };
+
+  if (document.readyState === 'complete') {
+    unlockScroll();
+  } else {
+    window.addEventListener('load', unlockScroll);
+    // Fallback timer to guarantee scroll unlocks even if load event is delayed
+    setTimeout(unlockScroll, 1200);
+  }
+
   const initCustomScrollbars = () => {
     if (!isTouchDevice) return;
 
@@ -826,7 +845,6 @@ const currentYear = new Date().getFullYear();
         thumb.style.transform = `translateX(${translateX}px)`;
       };
 
-      // Direct Touch-Dragging on the Custom Thumb
       const onTouchStart = (e: TouchEvent) => {
         isDragging = true;
         startX = e.touches[0].clientX;
