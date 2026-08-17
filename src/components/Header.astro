@@ -5,22 +5,28 @@ import MenuOverlay from './MenuOverlay.astro';
 import logoImg from '../assets/facet-logo-white.avif';
 
 const { pathname } = Astro.url;
-const isDarkPage = ['/portfolio', '/about', '/contact'].some((path) => pathname.includes(path));
+
+// Check current page route
+const isHomePage = pathname === '/' || pathname === '';
+const showLogoPages = ['/portfolio', '/about', '/contact'].some((path) => pathname.includes(path));
+const shouldShowLogo = !isHomePage && showLogoPages;
 ---
 
 <header class="site-header">
-  <!-- Brand Logo -->
-  <a href="/" class="logo-link" aria-label="Facet Architecture Home">
-    <Image 
-      src={logoImg} 
-      alt="Facet Architecture Logo" 
-      class={`site-logo ${isDarkPage ? 'invert-dark' : ''}`}
-      loading="eager"
-      decoding="sync"
-    />
-  </a>
+  <!-- Brand Logo (Top Right - Excluded from Home Page) -->
+  {shouldShowLogo && (
+    <a href="/" class="logo-link" aria-label="Facet Architecture Home">
+      <Image 
+        src={logoImg} 
+        alt="Facet Architecture Logo" 
+        class="site-logo"
+        loading="eager"
+        decoding="sync"
+      />
+    </a>
+  )}
 
-  <!-- Menu Box Container -->
+  <!-- Menu Box Container (Far Top Right) -->
   <button 
     id="menu-toggle" 
     class="menu-box" 
@@ -46,33 +52,35 @@ const isDarkPage = ['/portfolio', '/about', '/contact'].some((path) => pathname.
     width: 100%;
     z-index: 1000;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     padding: 24px 32px;
     box-sizing: border-box;
     pointer-events: none;
   }
 
+  /* Position logo on the top right, positioned right beside the menu box */
   .logo-link {
     pointer-events: auto;
+    position: fixed;
+    top: 24px;
+    right: 100px;
+    z-index: 1001;
     display: flex;
     align-items: center;
     text-decoration: none;
   }
 
   .site-logo {
-    height: clamp(28px, 4vw, 40px);
+    height: clamp(45px, 6vw, 75px);
     width: auto;
     display: block;
-    transition: filter 0.3s ease, transform 0.3s ease;
+    filter: none; /* Preserves white image on dark/black backgrounds */
+    transition: transform 0.3s ease;
   }
 
   .site-logo:hover {
-    transform: scale(1.02);
-  }
-
-  .site-logo.invert-dark {
-    filter: brightness(0);
+    transform: scale(1.04);
   }
 
   .menu-box {
@@ -127,6 +135,15 @@ const isDarkPage = ['/portfolio', '/about', '/contact'].some((path) => pathname.
   @media (max-width: 768px) {
     .site-header {
       padding: 16px 20px;
+    }
+
+    .logo-link {
+      top: 16px;
+      right: 70px;
+    }
+
+    .site-logo {
+      height: clamp(35px, 8vw, 50px);
     }
 
     .menu-box {
