@@ -1,0 +1,128 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer style="width: 100%; background-color: #3A3F47; color: #ffffff; padding: 80px 24px; box-sizing: border-box;">
+  <div style="max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 64px;">
+    
+    <!-- Big CTA Row -->
+    <div class="cta-content" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 32px; padding-bottom: 64px; border-bottom: 1px solid #d1ccc4;">
+      <div class="cta-text">
+        <span style="font-size: 11px; font-family: monospace; color: #a3a3a3; letter-spacing: 0.3em; text-transform: uppercase; display: block;">NEXT STEPS</span>
+        <p class="cta-heading" style="font-size: 28px; font-weight: 300; color: #a3a3a3; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 16px; line-height: 1.3;">
+          HAVE A PROJECT IN MIND?
+        </p>
+      </div>
+      <div class="cta-action">
+        <a 
+          href="mailto:info@facetarch.co.za" 
+          class="cta-btn"
+          style="display: inline-block; padding: 16px 32px; border: 1px solid #ffffff; color: #ffffff; font-size: 12px; font-family: monospace; letter-spacing: 0.25em; text-transform: uppercase; text-decoration: none; transition: background-color 0.3s;"
+        >
+          Initiate Consultation &rarr;
+        </a>
+      </div>
+    </div>
+
+    <!-- Copyright Base -->
+    <div class="footer-base">
+      <p class="footer-line copyright-line">&copy; {currentYear} FACET ARCHITECTURE</p>
+      <p class="footer-line rights-line">ALL RIGHTS RESERVED</p>
+      <p class="footer-line credits-line">
+        DESIGNED BY&nbsp;<a 
+          href="https://webdesignpros.co.za" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="wdp-link"
+        >WEB DESIGN PROS</a>
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+<style>
+  .footer-base {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: #a3a3a3;
+    font-family: monospace;
+    letter-spacing: 0.2em;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .footer-line {
+    margin: 0;
+  }
+
+  /* Desktop & Shared Hover State */
+  .wdp-link {
+    color: #a3a3a3;
+    font-weight: 400;
+    text-decoration: none;
+    transition: color 0.2s ease, font-weight 0.2s ease, text-shadow 0.2s ease;
+  }
+
+  .wdp-link:hover {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 1px #ffffff;
+  }
+
+  .cta-btn:hover {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  @media (max-width: 899px) {
+    .cta-content {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 20px !important;
+    }
+
+    .cta-text {
+      width: 100% !important;
+    }
+
+    .cta-heading {
+      font-size: clamp(1rem, 4.8vw, 1.3rem) !important;
+      white-space: nowrap !important;
+      letter-spacing: 1.5px !important;
+      line-height: 1.2 !important;
+    }
+
+    .cta-action {
+      width: 100% !important;
+    }
+
+    .cta-btn {
+      display: block !important;
+      width: 100% !important;
+      text-align: center !important;
+      box-sizing: border-box !important;
+      padding: 12px 16px !important;
+      font-size: 0.7rem !important;
+      letter-spacing: 2px !important;
+    }
+
+    .footer-base {
+      flex-direction: column !important;
+      align-items: center !important;
+      text-align: center !important;
+      gap: 0 !important;
+    }
+
+    .footer-line {
+      white-space: nowrap !important;
+      line-height: 1.6 !important;
+    }
+
+    .credits-line {
+      margin-top: 1rem !important;
+    }
+  }
+</style>
