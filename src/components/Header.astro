@@ -1,25 +1,33 @@
 ---
-/* Header.astro - Custom Hamburger Box & Menu Overlay Integration */
+/* Header.astro - Dynamic Image Import */
+import { Image } from 'astro:assets';
 import MenuOverlay from './MenuOverlay.astro';
 
+// Dynamically import all images from src/assets/
+const images = import.meta.glob<{ default: ImageMetadata }>('../assets/*.{jpeg,jpg,png,gif,avif,webp}');
+
+const logoPath = '../assets/facet-logo-white.avif';
+if (!images[logoPath]) {
+  throw new Error(`"${logoPath}" does not exist in "src/assets/". Check path or filename.`);
+}
+
 const { pathname } = Astro.url;
-// Invert logo to white on dark pages
 const isDarkPage = ['/portfolio', '/about', '/contact'].some((path) => pathname.includes(path));
 ---
 
 <header class="site-header">
   <!-- Brand Logo -->
   <a href="/" class="logo-link" aria-label="Facet Architecture Home">
-    <img 
-      src="/images/facet-hero-logo.avif" 
+    <Image 
+      src={images[logoPath]()} 
       alt="Facet Architecture Logo" 
-      class={`site-logo ${isDarkPage ? 'invert-white' : ''}`}
+      class={`site-logo ${isDarkPage ? 'invert-dark' : ''}`}
       loading="eager"
-      decoding="async"
+      decoding="sync"
     />
   </a>
 
-  <!-- Menu Box Container (Fixed Middle Right) -->
+  <!-- Menu Box Container -->
   <button 
     id="menu-toggle" 
     class="menu-box" 
@@ -38,9 +46,6 @@ const isDarkPage = ['/portfolio', '/about', '/contact'].some((path) => pathname.
 </header>
 
 <style>
-  /* ==========================================================================
-     Header & Logo Styling
-     ========================================================================== */
   .site-header {
     position: fixed;
     top: 0;
@@ -73,14 +78,11 @@ const isDarkPage = ['/portfolio', '/about', '/contact'].some((path) => pathname.
     transform: scale(1.02);
   }
 
-  /* Filter turns dark logo pure white on dark backgrounds */
-  .site-logo.invert-white {
-    filter: brightness(0) invert(1);
+  /* Optional invert rule if you need to turn white logo dark on light pages */
+  .site-logo.invert-dark {
+    filter: brightness(0);
   }
 
-  /* ==========================================================================
-     Menu Box (#7c7a7a background, 3 black lines)
-     ========================================================================== */
   .menu-box {
     pointer-events: auto;
     position: fixed;
