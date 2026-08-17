@@ -291,6 +291,14 @@ const currentYear = new Date().getFullYear();
     user-select: none !important;
   }
 
+  /* Force document unfreeze once ScrollLock unlocks */
+  :global(html:not([style*="overflow: hidden"])),
+  :global(body:not([style*="overflow: hidden"])) {
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow-y: auto !important;
+  }
+
   .scroll-container {
     overflow-x: auto !important;
     overflow-y: hidden !important;
@@ -583,12 +591,13 @@ const currentYear = new Date().getFullYear();
     padding: 60px 24px 40px !important;
     box-sizing: border-box;
     width: 100%;
-    position: relative;
-    z-index: 10;
-    margin-top: 40px;
+    position: relative !important;
+    z-index: 10 !important;
+    margin-top: 40px !important;
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
+    clear: both !important;
   }
 
   .cta-section {
