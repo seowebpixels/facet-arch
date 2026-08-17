@@ -178,9 +178,9 @@ const currentYear = new Date().getFullYear();
 ---
 
 <Layout title="Facet Architecture | Portfolio Matrix">
-  <!-- Zero-delay Inline Root Class Tagging -->
+  <!-- Zero-delay Inline Root Class Tagging aligned with Layout.astro -->
   <script is:inline>
-    document.documentElement.classList.add('is-hero-loading');
+    document.documentElement.classList.add('is-loading');
   </script>
 
   <Header />
@@ -277,8 +277,8 @@ const currentYear = new Date().getFullYear();
 
 <style is:global>
   /* Declarative Lock Rules applied before layout parse */
-  html.is-hero-loading,
-  html.is-hero-loading body {
+  html.is-loading,
+  html.is-loading body {
     overflow: hidden !important;
     height: 100vh !important;
     max-height: 100vh !important;
@@ -290,8 +290,8 @@ const currentYear = new Date().getFullYear();
     scrollbar-width: none !important;
   }
 
-  html.is-hero-loading::-webkit-scrollbar,
-  html.is-hero-loading body::-webkit-scrollbar {
+  html.is-loading::-webkit-scrollbar,
+  html.is-loading body::-webkit-scrollbar {
     display: none !important;
     width: 0 !important;
     height: 0 !important;
@@ -819,13 +819,14 @@ const currentYear = new Date().getFullYear();
 
 <script>
   const unlock = () => {
-    document.documentElement.classList.remove('is-hero-loading');
+    document.documentElement.classList.remove('is-loading');
   };
 
   if (document.readyState === 'complete') {
     unlock();
   } else {
     window.addEventListener('load', unlock, { once: true });
+    setTimeout(unlock, 800);
   }
 
   const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;

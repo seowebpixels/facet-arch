@@ -130,39 +130,6 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
   <HomeFooter />
 </Layout>
 
-<style is:global>
-  /* Forced Root & Scrollbar Overrides for Preload Phase */
-  html.loading-lock,
-  body.loading-lock,
-  html.loading-lock body {
-    overflow: hidden !important;
-    overflow-y: hidden !important;
-    height: 100vh !important;
-    max-height: 100vh !important;
-    position: fixed !important;
-    width: 100% !important;
-    touch-action: none !important;
-    -ms-touch-action: none !important;
-    overscroll-behavior: none !important;
-  }
-
-  /* Completely strip scrollbar rendering from browser engine during lock */
-  html.loading-lock::-webkit-scrollbar,
-  body.loading-lock::-webkit-scrollbar,
-  html.loading-lock *::-webkit-scrollbar {
-    display: none !important;
-    width: 0px !important;
-    height: 0px !important;
-    background: transparent !important;
-  }
-
-  html.loading-lock,
-  body.loading-lock {
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-  }
-</style>
-
 <style>
   .hero-heading {
     font-family: 'Bank Gothic', sans-serif;
@@ -434,52 +401,6 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
 </style>
 
 <script>
-  // Immediate synchronous execution lock
-  const applyLock = () => {
-    document.documentElement.classList.add('loading-lock');
-    document.body.classList.add('loading-lock');
-    window.scrollTo(0, 0);
-  };
-
-  applyLock();
-
-  // Prevent wheel, keyboard, and touch scrolls explicitly
-  const preventScroll = (e: Event) => {
-    if (document.documentElement.classList.contains('loading-lock')) {
-      e.preventDefault();
-      e.stopPropagation();
-      window.scrollTo(0, 0);
-      return false;
-    }
-  };
-
-  window.addEventListener('wheel', preventScroll, { passive: false });
-  window.addEventListener('touchmove', preventScroll, { passive: false });
-  window.addEventListener('keydown', (e: KeyboardEvent) => {
-    if (document.documentElement.classList.contains('loading-lock')) {
-      if (['ArrowUp', 'ArrowDown', 'Space', 'PageUp', 'PageDown', 'Home', 'End'].includes(e.code)) {
-        e.preventDefault();
-      }
-    }
-  }, { passive: false });
-
-  function completeUnlock() {
-    document.documentElement.classList.remove('loading-lock');
-    document.body.classList.remove('loading-lock');
-    
-    window.removeEventListener('wheel', preventScroll);
-    window.removeEventListener('touchmove', preventScroll);
-  }
-
-  if (document.readyState === 'complete') {
-    completeUnlock();
-  } else {
-    window.addEventListener('load', completeUnlock, { once: true });
-  }
-
-  // Fallback release trigger
-  setTimeout(completeUnlock, 3000);
-
   // Smooth Background Transition and Legend Highlight Observer
   const tiles = document.querySelectorAll('.tile-card');
   const legendItems = document.querySelectorAll('.legend-item');

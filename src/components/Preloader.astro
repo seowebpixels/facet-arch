@@ -45,14 +45,32 @@ import heroImg from '../assets/res-eoa-1597.avif';
 <script>
   import { gsap } from 'gsap';
 
+  // Prevent keyboard scrolling actions during lock phase
+  const preventKeys = (e: KeyboardEvent) => {
+    if (document.documentElement.classList.contains('is-loading')) {
+      if (['ArrowUp', 'ArrowDown', 'Space', 'PageUp', 'PageDown', 'Home', 'End'].includes(e.code)) {
+        e.preventDefault();
+      }
+    }
+  };
+
+  const applyScrollLock = () => {
+    document.documentElement.classList.add('is-loading');
+    document.body.classList.add('is-loading');
+    window.scrollTo(0, 0);
+    window.addEventListener('keydown', preventKeys, { passive: false });
+  };
+
   function releaseScrollLock() {
-    // 1. Remove lock classes completely from root and body
+    // 1. Remove lock class completely from root and body
     document.documentElement.classList.remove('is-loading');
     document.body.classList.remove('is-loading');
 
     // 2. Clear all inline override styles applied during loading
     document.documentElement.removeAttribute('style');
     document.body.removeAttribute('style');
+
+    window.removeEventListener('keydown', preventKeys);
 
     // 3. Make stage pointer-events none so user can interact with the underlying content
     const stage = document.getElementById('hero-stage');
@@ -78,6 +96,8 @@ import heroImg from '../assets/res-eoa-1597.avif';
   }
 
   function initHeroAnimation() {
+    applyScrollLock();
+
     const stage = document.getElementById('hero-stage');
     if (!stage) return;
 
@@ -89,7 +109,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
     if (!logo || !textFacet || !textArchitecture || !clock || !heroFrame) return;
 
-    // Reset window position to top on animation start
     window.scrollTo(0, 0);
 
     updateHeroClock();
@@ -167,7 +186,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 99;
   }
 
-  /* FACET: Anchored top and left */
   .text-facet {
     position: absolute;
     top: 20px;
@@ -185,7 +203,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     opacity: 0;
   }
 
-  /* Live Local Clock Styling */
   .hero-clock {
     position: absolute;
     bottom: 25px;
@@ -205,7 +222,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     margin-left: 1.25rem;
   }
 
-  /* ARCHITECTURE: Anchored bottom and right */
   .text-architecture {
     position: absolute;
     bottom: 20px;
@@ -223,7 +239,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     opacity: 0;
   }
 
-  /* LOGO: Center-aligned CSS base */
   .logo-wrapper {
     position: absolute;
     top: 50%;
@@ -241,7 +256,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     object-fit: contain;
   }
 
-  /* Desktop Central Frame */
   .hero-frame {
     position: absolute;
     top: 14%;
@@ -262,7 +276,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     display: block;
   }
 
-  /* Mobile Layout Adjustments */
   @media (max-width: 768px) {
     .hero-frame {
       top: 180px;
