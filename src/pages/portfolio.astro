@@ -178,9 +178,14 @@ const currentYear = new Date().getFullYear();
 ---
 
 <Layout title="Facet Architecture | Portfolio Matrix">
-  <!-- Zero-delay Inline Root Class Tagging aligned with Layout.astro -->
+  <!-- Absolute inline freeze on html/body before first paint -->
   <script is:inline>
-    document.documentElement.classList.add('is-loading');
+    document.documentElement.style.setProperty('overflow', 'hidden', 'important');
+    document.documentElement.style.setProperty('height', '100vh', 'important');
+    document.documentElement.style.setProperty('touch-action', 'none', 'important');
+    document.body.style.setProperty('overflow', 'hidden', 'important');
+    document.body.style.setProperty('height', '100vh', 'important');
+    document.body.style.setProperty('touch-action', 'none', 'important');
   </script>
 
   <Header />
@@ -274,29 +279,6 @@ const currentYear = new Date().getFullYear();
     <p id="lightbox-caption" class="lightbox-caption"></p>
   </div>
 </Layout>
-
-<style is:global>
-  /* Declarative Lock Rules applied before layout parse */
-  html.is-loading,
-  html.is-loading body {
-    overflow: hidden !important;
-    height: 100vh !important;
-    max-height: 100vh !important;
-    position: fixed !important;
-    width: 100% !important;
-    touch-action: none !important;
-    overscroll-behavior: none !important;
-    -ms-overflow-style: none !important;
-    scrollbar-width: none !important;
-  }
-
-  html.is-loading::-webkit-scrollbar,
-  html.is-loading body::-webkit-scrollbar {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-  }
-</style>
 
 <style>
   :global(html),
@@ -818,16 +800,24 @@ const currentYear = new Date().getFullYear();
 </style>
 
 <script>
-  const unlock = () => {
-    document.documentElement.classList.remove('is-loading');
+  import { ScrollLock } from '../utils/scrollLock';
+
+  // Enforce global scroll lock immediately on script execution
+  ScrollLock.lock();
+
+  const handleUnlock = () => {
+    ScrollLock.unlock();
   };
 
   if (document.readyState === 'complete') {
-    unlock();
+    handleUnlock();
   } else {
-    window.addEventListener('load', unlock, { once: true });
-    setTimeout(unlock, 800);
+    window.addEventListener('load', handleUnlock, { once: true });
+    setTimeout(handleUnlock, 800); // Fail-safe fallback release
   }
+
+  // Handle Astro page transitions
+  document.addEventListener('astro:before-swap', () => ScrollLock.unlock());
 
   const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
@@ -835,7 +825,7 @@ const currentYear = new Date().getFullYear();
     if (!isTouchDevice) return;
 
     const containers = document.querySelectorAll('.scroll-container');
-    
+
     containers.forEach((container) => {
       const parent = container.parentElement;
       if (!parent) return;
@@ -885,7 +875,7 @@ const currentYear = new Date().getFullYear();
         if (availableWidth <= 0 || scrollableWidth <= 0) return;
 
         const scrollRatio = deltaX / availableWidth;
-        container.scrollLeft = initialScrollLeft + (scrollRatio * scrollableWidth);
+        container.scrollLeft = initialScrollLeft + scrollRatio * scrollableWidth;
 
         const currentScrollRatio = container.scrollLeft / scrollableWidth;
         const translateX = currentScrollRatio * availableWidth;
@@ -961,18 +951,24 @@ const currentYear = new Date().getFullYear();
         modalImgLayer.style.backgroundImage = `url('${fullSrc}')`;
         modalCaption.textContent = caption || '';
         modal.classList.add('active');
+        ScrollLock.lock(); // Prevent background scroll when lightbox is open
       }
     });
   });
 
-  if (modalClose && modal) {
-    modalClose.addEventListener('click', () => {
+  const closeModal = () => {
+    if (modal) {
       modal.classList.remove('active');
-    });
+      ScrollLock.unlock(); // Restore page state
+    }
+  };
+
+  if (modalClose && modal) {
+    modalClose.addEventListener('click', closeModal);
 
     modal.addEventListener('click', (e) => {
       if (e.target === modal) {
-        modal.classList.remove('active');
+        closeModal();
       }
     });
   }
