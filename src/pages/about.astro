@@ -1,0 +1,326 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import HomeFooter from '../components/HomeFooter.astro';
+
+// Import team member AVIF images (450x600)
+import warrenImg from '../assets/warren-green-founder-and-ceo-professional-architect.avif';
+import fredaImg from '../assets/freda-esterhuyse-professional-archictect.avif';
+import katlegoImg from '../assets/katlego-ramokoka-candidate-architect.avif';
+import jacquesImg from '../assets/jacques-de-beer-candidate-architect.avif';
+import wernerImg from '../assets/werner-de-klerk-candidate-architect.avif';
+
+const teamMembers = [
+  {
+    name: 'Warren Green',
+    role: 'Founder & CEO / Professional Architect',
+    image: warrenImg,
+    eager: true,
+  },
+  {
+    name: 'Freda Esterhuyse',
+    role: 'Professional Architect',
+    image: fredaImg,
+    eager: false,
+  },
+  {
+    name: 'Katlego Ramokoka',
+    role: 'Candidate Architect',
+    image: katlegoImg,
+    eager: false,
+  },
+  {
+    name: 'Jacques De Beer',
+    role: 'Candidate Architect',
+    image: jacquesImg,
+    eager: false,
+  },
+  {
+    name: 'Werner De Klerk',
+    role: 'Candidate Architect',
+    image: wernerImg,
+    eager: false,
+  },
+];
+---
+
+<Layout title="About | Facet Architecture">
+  <Header />
+
+  <main class="about-wrapper">
+    <!-- Hero / Intro Section -->
+    <section class="about-hero">
+      <p class="subtitle">ABOUT THE PRACTICE</p>
+      <h1 class="headline">Holistic Architecture Driven by Precision & Purpose</h1>
+      <p class="lead-text">
+        Facet Architecture provides a comprehensive scope of architectural services, approaching every commission—from bespoke alterations to large-scale commercial developments—with unwavering rigor, technical excellence, and dedication.
+      </p>
+    </section>
+
+    <!-- Core Capabilities / Practice Pillars Grid -->
+    <section class="pillars-section">
+      <div class="section-header">
+        <h2 class="section-title">Core Disciplines</h2>
+        <p class="section-desc">Four distinct capabilities bound by a unified design philosophy.</p>
+      </div>
+
+      <div class="pillars-grid">
+        <!-- Pillar 1 -->
+        <article class="pillar-card">
+          <span class="pillar-num">01</span>
+          <h3 class="pillar-title">Full Architectural Scope</h3>
+          <p class="pillar-text">
+            From initial design conceptualization through site constraints analysis and budget management to final construction administration. We coordinate consultants, manage procurement, and oversee site execution to turn visionary briefs into physical reality.
+          </p>
+        </article>
+
+        <!-- Pillar 2 -->
+        <article class="pillar-card">
+          <span class="pillar-num">02</span>
+          <h3 class="pillar-title">Interior Architecture</h3>
+          <p class="pillar-text">
+            Bridging the gap between external structure and internal flow. Our interior design practice hand-selects finishes and materials that resonate with individual identity while honoring the base architectural language of the space.
+          </p>
+        </article>
+
+        <!-- Pillar 3 -->
+        <article class="pillar-card">
+          <span class="pillar-num">03</span>
+          <h3 class="pillar-title">Sustainable & Passive Design</h3>
+          <p class="pillar-text">
+            Architectural responsibility grounded in climate-responsive design. We combine fundamental passive techniques—optimal orientation, natural illumination, cross-ventilation, and rainwater collection—with current green regulations and innovative techniques.
+          </p>
+        </article>
+
+        <!-- Pillar 4 -->
+        <article class="pillar-card">
+          <span class="pillar-num">04</span>
+          <h3 class="pillar-title">Infrastructure & Master Planning</h3>
+          <p class="pillar-text">
+            Designing resilient regional developments across South Africa and the African continent. We perform deep contextual research to build vibrant environments, specialized civil structures, substations, and community master plans.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Team Showcase Section -->
+    <section class="team-section">
+      <div class="section-header">
+        <h2 class="section-title">Leadership & Team</h2>
+        <p class="section-desc">The architects and designers guiding every facet of our built work.</p>
+      </div>
+
+      <div class="team-grid">
+        {teamMembers.map((member) => (
+          <article class="team-card">
+            <div class="image-wrapper">
+              <img
+                src={member.image.src}
+                alt={member.name}
+                width="450"
+                height="600"
+                loading={member.eager ? "eager" : "lazy"}
+                decoding="async"
+                class="team-img"
+              />
+            </div>
+            <div class="team-meta">
+              <h3 class="member-name">{member.name}</h3>
+              <p class="member-role">{member.role}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <HomeFooter />
+</Layout>
+
+<style>
+  :global(body) {
+    background-color: #3A3F47;
+    color: #F5F5F5;
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  .about-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 140px 24px 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 120px;
+  }
+
+  /* Hero Section */
+  .about-hero {
+    max-width: 900px;
+  }
+
+  .subtitle {
+    font-family: 'BankGothic', sans-serif, system-ui;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    opacity: 0.7;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .headline {
+    font-family: 'BankGothic', sans-serif, system-ui;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1.15;
+    margin: 0 0 24px 0;
+  }
+
+  .lead-text {
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    line-height: 1.6;
+    opacity: 0.88;
+    margin: 0;
+  }
+
+  /* Shared Section Headers */
+  .section-header {
+    margin-bottom: 48px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    padding-bottom: 20px;
+  }
+
+  .section-title {
+    font-family: 'BankGothic', sans-serif, system-ui;
+    font-size: 1.8rem;
+    margin: 0 0 8px 0;
+  }
+
+  .section-desc {
+    font-size: 0.95rem;
+    opacity: 0.7;
+    margin: 0;
+  }
+
+  /* Core Capabilities Grid */
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  @media (min-width: 768px) {
+    .pillars-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+    }
+  }
+
+  .pillar-card {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 36px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+
+  .pillar-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .pillar-num {
+    font-family: 'BankGothic', sans-serif, system-ui;
+    font-size: 1.1rem;
+    font-weight: bold;
+    opacity: 0.5;
+  }
+
+  .pillar-title {
+    font-family: 'BankGothic', sans-serif, system-ui;
+    font-size: 1.3rem;
+    margin: 0;
+  }
+
+  .pillar-text {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    opacity: 0.8;
+    margin: 0;
+  }
+
+  /* Team Showcase Grid */
+  .team-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  @media (min-width: 600px) {
+    .team-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .team-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+    }
+  }
+
+  .team-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .image-wrapper {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .team-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+
+  .team-card:hover .team-img {
+    transform: scale(1.04);
+  }
+
+  .team-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .member-name {
+    font-family: 'BankGothic', sans-serif, system-ui;
+    font-size: 1.15rem;
+    margin: 0;
+    letter-spacing: 0.5px;
+  }
+
+  .member-role {
+    font-size: 0.85rem;
+    opacity: 0.65;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 767px) {
+    .about-wrapper {
+      padding-top: 100px;
+      gap: 70px;
+    }
+  }
+</style>
