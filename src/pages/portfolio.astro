@@ -178,33 +178,26 @@ const currentYear = new Date().getFullYear();
 ---
 
 <Layout title="Facet Architecture | Portfolio Matrix">
-  <!-- Immediate inline lockdown before DOM hydration -->
+  <!-- Immediate inline hard lockdown -->
   <script is:inline>
     (function() {
-      document.documentElement.classList.add('is-hero-loading');
+      var lock = function() {
+        document.documentElement.style.overflow = 'hidden';
+        document.documentElement.style.height = '100vh';
+        document.documentElement.style.touchAction = 'none';
+        if (document.body) {
+          document.body.style.overflow = 'hidden';
+          document.body.style.height = '100vh';
+          document.body.style.position = 'fixed';
+          document.body.style.width = '100%';
+          document.body.style.touchAction = 'none';
+        }
+      };
+      lock();
+      if (!document.body) {
+        document.addEventListener('DOMContentLoaded', lock);
+      }
     })();
-
-    window.addEventListener(
-      'touchmove',
-      function (e) {
-        if (document.documentElement.classList.contains('is-hero-loading')) {
-          e.preventDefault();
-        }
-      },
-      { passive: false }
-    );
-
-    window.addEventListener(
-      'keydown',
-      function (e) {
-        if (document.documentElement.classList.contains('is-hero-loading')) {
-          if ([32, 33, 34, 35, 36, 38, 40].indexOf(e.keyCode) > -1) {
-            e.preventDefault();
-          }
-        }
-      },
-      { passive: false }
-    );
   </script>
 
   <Header />
@@ -298,25 +291,6 @@ const currentYear = new Date().getFullYear();
     <p id="lightbox-caption" class="lightbox-caption"></p>
   </div>
 </Layout>
-
-<style is:global>
-  /* Lock state: prevents vertical scrolling and suppresses native scrollbars completely across browsers */
-  html.is-hero-loading,
-  html.is-hero-loading body {
-    overflow: hidden !important;
-    height: 100vh !important;
-    touch-action: none !important;
-    -ms-overflow-style: none !important;  /* IE / Edge */
-    scrollbar-width: none !important;  /* Firefox */
-  }
-
-  html.is-hero-loading::-webkit-scrollbar,
-  html.is-hero-loading body::-webkit-scrollbar {
-    display: none !important;  /* Chrome, Safari, Opera */
-    width: 0 !important;
-    height: 0 !important;
-  }
-</style>
 
 <style>
   :global(html),
@@ -841,15 +815,24 @@ const currentYear = new Date().getFullYear();
   const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
   const unlockPageScroll = () => {
-    document.documentElement.classList.remove('is-hero-loading');
+    document.documentElement.style.overflow = '';
+    document.documentElement.style.height = '';
+    document.documentElement.style.touchAction = '';
+    
+    if (document.body) {
+      document.body.style.overflow = '';
+      document.body.style.height = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.touchAction = '';
+    }
   };
 
-  // Release scroll lock once document assets are fully loaded
   if (document.readyState === 'complete') {
     unlockPageScroll();
   } else {
     window.addEventListener('load', unlockPageScroll);
-    setTimeout(unlockPageScroll, 1200);
+    setTimeout(unlockPageScroll, 1000);
   }
 
   const initCustomScrollbars = () => {
