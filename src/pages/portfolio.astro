@@ -278,23 +278,20 @@ const currentYear = new Date().getFullYear();
 </Layout>
 
 <style>
-  :global(html) {
+  html {
     background-color: #111111;
     color: #ffffff;
     margin: 0;
     padding: 0;
     min-height: 100%;
-    overflow-y: auto;
   }
 
-  :global(body) {
+  body {
     background-color: #111111;
     color: #ffffff;
     margin: 0;
     padding: 0;
     min-height: 100vh;
-    overflow-y: auto;
-    overflow-x: hidden;
     -webkit-touch-callout: none !important;
     -webkit-user-select: none !important;
     user-select: none !important;
@@ -307,16 +304,16 @@ const currentYear = new Date().getFullYear();
     touch-action: pan-x;
   }
 
-  /* Explicit Desktop Horizontal Scrollbars */
+  /* Desktop Explicit Scrollbar Styling */
   .scroll-rail::-webkit-scrollbar,
   .nav-track::-webkit-scrollbar {
-    height: 8px !important;
+    height: 10px !important;
     display: block !important;
   }
 
   .scroll-rail::-webkit-scrollbar-track,
   .nav-track::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 4px;
   }
 
@@ -324,16 +321,16 @@ const currentYear = new Date().getFullYear();
   .nav-track::-webkit-scrollbar-thumb {
     background: #00ffc8;
     border-radius: 4px;
-    box-shadow: 0 0 6px rgba(0, 255, 200, 0.4);
+    box-shadow: 0 0 8px rgba(0, 255, 200, 0.5);
   }
 
   .scroll-rail,
   .nav-track {
     scrollbar-width: thin;
-    scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.08);
+    scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.1);
   }
 
-  /* Mobile Touch Devices Custom Scroll Indicator */
+  /* Mobile Custom Touch Indicator */
   @media (hover: none), (pointer: coarse) {
     .scroll-container {
       scrollbar-width: none !important;
@@ -435,7 +432,6 @@ const currentYear = new Date().getFullYear();
     padding-top: 170px;
     min-height: auto;
     height: auto;
-    overflow: visible;
     position: relative;
   }
 
@@ -479,7 +475,7 @@ const currentYear = new Date().getFullYear();
   .scroll-rail {
     display: flex;
     gap: 24px;
-    padding-bottom: 16px;
+    padding-bottom: 20px;
     scroll-behavior: smooth;
   }
 
@@ -603,7 +599,6 @@ const currentYear = new Date().getFullYear();
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
-    clear: both !important;
   }
 
   .cta-section {
@@ -817,11 +812,22 @@ const currentYear = new Date().getFullYear();
 <script>
   import { ScrollLock } from '../utils/scrollLock';
 
+  // Forcefully remove inline preloader locks
+  const clearInlinePreloaderLocks = () => {
+    document.documentElement.style.removeProperty('overflow');
+    document.documentElement.style.removeProperty('height');
+    document.documentElement.style.removeProperty('touch-action');
+    document.body.style.removeProperty('overflow');
+    document.body.style.removeProperty('height');
+    document.body.style.removeProperty('touch-action');
+  };
+
   // Enforce initial preloader lock
   ScrollLock.lock();
 
   const handleUnlock = () => {
     ScrollLock.unlock();
+    clearInlinePreloaderLocks();
   };
 
   if (document.readyState === 'complete') {
@@ -831,7 +837,10 @@ const currentYear = new Date().getFullYear();
     setTimeout(handleUnlock, 800);
   }
 
-  document.addEventListener('astro:before-swap', () => ScrollLock.unlock());
+  document.addEventListener('astro:before-swap', () => {
+    ScrollLock.unlock();
+    clearInlinePreloaderLocks();
+  });
 
   const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
@@ -974,6 +983,7 @@ const currentYear = new Date().getFullYear();
     if (modal) {
       modal.classList.remove('active');
       ScrollLock.unlock();
+      clearInlinePreloaderLocks();
     }
   };
 
