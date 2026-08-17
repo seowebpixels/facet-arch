@@ -19,21 +19,16 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Basic Meta Tags -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-
-    <!-- Canonical URL -->
     <link rel="canonical" href={canonicalURL} />
 
-    <!-- Primary Meta Tags -->
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
 
-    <!-- Preload Custom Font (Bank Gothic) -->
     <link 
       rel="preload" 
       href="/fonts/BankGothic.woff2" 
@@ -42,14 +37,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
       crossorigin="anonymous" 
     />
 
-    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(image, Astro.url)} />
 
-    <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={Astro.url} />
     <meta property="twitter:title" content={title} />
@@ -61,19 +54,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
       <slot />
     </main>
 
-    <!-- Global Anti-Copy Protection Script -->
     <script>
       document.addEventListener('contextmenu', (e) => e.preventDefault());
-
       document.addEventListener('keydown', (e) => {
-        if (
-          (e.ctrlKey || e.metaKey) && 
-          (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')
-        ) {
+        if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) {
           e.preventDefault();
         }
       });
-
       document.addEventListener('dragstart', (e) => {
         if (e.target instanceof HTMLImageElement || e.target instanceof HTMLVideoElement) {
           e.preventDefault();
@@ -94,7 +81,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
     overflow-y: auto !important;
   }
 
-  /* Disable Selection & Callouts Site-Wide */
   *, *::before, *::after {
     -webkit-touch-callout: none !important;
     -webkit-user-select: none !important;

@@ -14,6 +14,11 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
 ---
 
 <Layout title="Facet Architecture | Selected Works">
+  <!-- Immediate inline scroll lock strictly for index.astro -->
+  <script is:inline>
+    document.documentElement.classList.add('home-preloader-locked');
+  </script>
+
   <Preloader />
   <Header />
 
@@ -129,6 +134,26 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
   <!-- Home Footer Component -->
   <HomeFooter />
 </Layout>
+
+<!-- Isolated Global Lock Styles for Home Preloader -->
+<style is:global>
+  html.home-preloader-locked,
+  html.home-preloader-locked body {
+    overflow: hidden !important;
+    overflow-y: hidden !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    touch-action: none !important;
+    overscroll-behavior: none !important;
+  }
+
+  html.home-preloader-locked::-webkit-scrollbar,
+  html.home-preloader-locked body::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+</style>
 
 <style>
   .hero-heading {
@@ -401,6 +426,24 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
 </style>
 
 <script>
+  import { ScrollLock } from '../utils/scrollLock';
+
+  // Unlock function for Home preloader
+  const unlockHomePreloader = () => {
+    document.documentElement.classList.remove('home-preloader-locked');
+    ScrollLock.unlock();
+  };
+
+  // Listen for window load or custom preloader completion event
+  window.addEventListener('load', () => {
+    // If your Preloader component emits a custom completion event or GSAP callback,
+    // call unlockHomePreloader() there. Otherwise, fallback timeout unlocks after load:
+    setTimeout(unlockHomePreloader, 1200);
+  }, { once: true });
+
+  // Listen for explicit custom unlock event if emitted by Preloader.astro
+  window.addEventListener('preloader:complete', unlockHomePreloader, { once: true });
+
   // Smooth Background Transition and Legend Highlight Observer
   const tiles = document.querySelectorAll('.tile-card');
   const legendItems = document.querySelectorAll('.legend-item');
