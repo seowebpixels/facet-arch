@@ -56,12 +56,12 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     pointer-events: none;
   }
 
-  /* Position logo on top right, next to the menu box */
+  /* Position logo top right: 30px higher and 10px from the screen edge */
   .logo-link {
     pointer-events: auto;
     position: fixed;
-    top: 24px;
-    right: 110px;
+    top: -6px;
+    right: 10px;
     z-index: 1001;
     display: flex;
     align-items: center;
@@ -69,8 +69,8 @@ const shouldShowLogo = !isHomePage && showLogoPages;
   }
 
   .site-logo {
-    /* Increased base height by 30px */
-    height: clamp(75px, 9vw, 105px);
+    /* Increased height by another 30px */
+    height: clamp(105px, 12vw, 135px);
     width: auto;
     display: block;
     filter: none;
@@ -136,12 +136,12 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     }
 
     .logo-link {
-      top: 16px;
-      right: 80px;
+      top: -10px;
+      right: 10px;
     }
 
     .site-logo {
-      height: clamp(65px, 10vw, 80px);
+      height: clamp(95px, 14vw, 110px);
     }
 
     .menu-box {
