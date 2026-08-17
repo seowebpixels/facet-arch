@@ -200,9 +200,6 @@ const currentYear = new Date().getFullYear();
         </button>
       ))}
     </div>
-    <div class="custom-scrollbar-track mobile-only-indicator">
-      <div class="custom-scrollbar-thumb"></div>
-    </div>
   </nav>
 
   <!-- Dynamic Category Rail Display -->
@@ -281,22 +278,26 @@ const currentYear = new Date().getFullYear();
 </Layout>
 
 <style>
-  :global(html),
+  :global(html) {
+    background-color: #111111;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    overflow-y: auto;
+  }
+
   :global(body) {
     background-color: #111111;
     color: #ffffff;
     margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
     -webkit-touch-callout: none !important;
     -webkit-user-select: none !important;
     user-select: none !important;
-  }
-
-  /* Force document unfreeze once ScrollLock unlocks */
-  :global(html:not([style*="overflow: hidden"])),
-  :global(body:not([style*="overflow: hidden"])) {
-    height: auto !important;
-    min-height: 100vh !important;
-    overflow-y: auto !important;
   }
 
   .scroll-container {
@@ -306,35 +307,33 @@ const currentYear = new Date().getFullYear();
     touch-action: pan-x;
   }
 
-  /* Desktop Styling: Native Interactive Webkit Scrollbar */
-  @media (hover: hover) and (pointer: fine) {
-    .scroll-container {
-      scrollbar-width: thin;
-      scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.1);
-    }
-
-    .scroll-container::-webkit-scrollbar {
-      display: block !important;
-      height: 8px !important;
-    }
-
-    .scroll-container::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 4px;
-    }
-
-    .scroll-container::-webkit-scrollbar-thumb {
-      background: #00ffc8;
-      border-radius: 4px;
-      box-shadow: 0 0 6px rgba(0, 255, 200, 0.4);
-    }
-
-    .mobile-only-indicator {
-      display: none !important;
-    }
+  /* Explicit Desktop Horizontal Scrollbars */
+  .scroll-rail::-webkit-scrollbar,
+  .nav-track::-webkit-scrollbar {
+    height: 8px !important;
+    display: block !important;
   }
 
-  /* Mobile Touch Device Styling */
+  .scroll-rail::-webkit-scrollbar-track,
+  .nav-track::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+  }
+
+  .scroll-rail::-webkit-scrollbar-thumb,
+  .nav-track::-webkit-scrollbar-thumb {
+    background: #00ffc8;
+    border-radius: 4px;
+    box-shadow: 0 0 6px rgba(0, 255, 200, 0.4);
+  }
+
+  .scroll-rail,
+  .nav-track {
+    scrollbar-width: thin;
+    scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.08);
+  }
+
+  /* Mobile Touch Devices Custom Scroll Indicator */
   @media (hover: none), (pointer: coarse) {
     .scroll-container {
       scrollbar-width: none !important;
@@ -349,6 +348,12 @@ const currentYear = new Date().getFullYear();
 
     .mobile-only-indicator {
       display: block;
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .mobile-only-indicator {
+      display: none !important;
     }
   }
 
@@ -429,8 +434,9 @@ const currentYear = new Date().getFullYear();
   .portfolio-stage {
     padding-top: 170px;
     min-height: auto;
-    height: auto !important;
-    overflow: visible !important;
+    height: auto;
+    overflow: visible;
+    position: relative;
   }
 
   .category-panel {
@@ -473,7 +479,7 @@ const currentYear = new Date().getFullYear();
   .scroll-rail {
     display: flex;
     gap: 24px;
-    padding-bottom: 12px;
+    padding-bottom: 16px;
     scroll-behavior: smooth;
   }
 
@@ -811,7 +817,7 @@ const currentYear = new Date().getFullYear();
 <script>
   import { ScrollLock } from '../utils/scrollLock';
 
-  // Enforce global scroll lock immediately on script execution
+  // Enforce initial preloader lock
   ScrollLock.lock();
 
   const handleUnlock = () => {
@@ -822,10 +828,9 @@ const currentYear = new Date().getFullYear();
     handleUnlock();
   } else {
     window.addEventListener('load', handleUnlock, { once: true });
-    setTimeout(handleUnlock, 800); // Fail-safe fallback release
+    setTimeout(handleUnlock, 800);
   }
 
-  // Handle Astro page transitions
   document.addEventListener('astro:before-swap', () => ScrollLock.unlock());
 
   const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
@@ -960,7 +965,7 @@ const currentYear = new Date().getFullYear();
         modalImgLayer.style.backgroundImage = `url('${fullSrc}')`;
         modalCaption.textContent = caption || '';
         modal.classList.add('active');
-        ScrollLock.lock(); // Prevent background scroll when lightbox is open
+        ScrollLock.lock();
       }
     });
   });
@@ -968,7 +973,7 @@ const currentYear = new Date().getFullYear();
   const closeModal = () => {
     if (modal) {
       modal.classList.remove('active');
-      ScrollLock.unlock(); // Restore page state
+      ScrollLock.unlock();
     }
   };
 
