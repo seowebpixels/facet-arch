@@ -1,179 +1,309 @@
 ---
-/* Header.astro - Dynamic Image Import */
+/* Preloader.astro */
 import { Image } from 'astro:assets';
-import MenuOverlay from './MenuOverlay.astro';
-
-// Dynamically import all images from src/assets/
-const images = import.meta.glob<{ default: ImageMetadata }>('../assets/*.{jpeg,jpg,png,gif,avif,webp}');
-
-const logoPath = '../assets/facet-logo-white.avif';
-if (!images[logoPath]) {
-  throw new Error(`"${logoPath}" does not exist in "src/assets/". Check path or filename.`);
-}
-
-const { pathname } = Astro.url;
-const isDarkPage = ['/portfolio', '/about', '/contact'].some((path) => pathname.includes(path));
+import heroLogoImg from '../assets/facet-hero-logo.avif';
+import heroImg from '../assets/res-eoa-1597.avif';
 ---
 
-<header class="site-header">
-  <!-- Brand Logo -->
-  <a href="/" class="logo-link" aria-label="Facet Architecture Home">
+<div id="hero-stage" class="stage-container">
+  <!-- Top Left Typography -->
+  <h1 id="text-facet" class="title-text text-facet">FACET</h1>
+
+  <!-- Live Local Clock (Positioned near bottom left) -->
+  <div id="hero-clock" class="hero-clock">
+    <span id="live-time">00:00:00</span>
+    <span id="time-zone" class="time-zone">SAST</span>
+  </div>
+
+  <!-- Logo Mark Container -->
+  <div id="logo-mark" class="logo-wrapper">
     <Image 
-      src={images[logoPath]()} 
+      src={heroLogoImg} 
       alt="Facet Architecture Logo" 
-      class={`site-logo ${isDarkPage ? 'invert-dark' : ''}`}
+      class="logo-img"
       loading="eager"
+      fetchpriority="high"
       decoding="sync"
     />
-  </a>
+  </div>
 
-  <!-- Menu Box Container -->
-  <button 
-    id="menu-toggle" 
-    class="menu-box" 
-    aria-label="Toggle Navigation Menu" 
-    aria-expanded="false"
-  >
-    <div class="hamburger-lines">
-      <span class="line line-1"></span>
-      <span class="line line-2"></span>
-      <span class="line line-3"></span>
-    </div>
-  </button>
+  <!-- Bottom Right Typography -->
+  <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
 
-  <!-- Navigation Overlay Component -->
-  <MenuOverlay />
-</header>
+  <!-- Center Expandable Hero Showcase -->
+  <div id="hero-frame" class="hero-frame">
+    <Image 
+      src={heroImg} 
+      alt="Facet Architecture Project Showcase" 
+      class="hero-img"
+      loading="eager"
+      fetchpriority="high"
+      decoding="sync"
+    />
+  </div>
+</div>
+
+<script>
+  import { gsap } from 'gsap';
+
+  function releaseScrollLock() {
+    // 1. Remove lock classes completely from root and body
+    document.documentElement.classList.remove('is-loading');
+    document.body.classList.remove('is-loading');
+
+    // 2. Clear all inline override styles applied during loading
+    document.documentElement.removeAttribute('style');
+    document.body.removeAttribute('style');
+
+    // 3. Make stage pointer-events none so user can interact with the underlying content
+    const stage = document.getElementById('hero-stage');
+    if (stage) {
+      stage.style.pointerEvents = 'none';
+    }
+  }
+
+  // Live Local Time Updater
+  function updateHeroClock() {
+    const clockEl = document.getElementById('live-time');
+    const zoneEl = document.getElementById('time-zone');
+    if (!clockEl) return;
+
+    const now = new Date();
+    clockEl.textContent = now.toTimeString().split(' ')[0];
+
+    if (zoneEl) {
+      const tzString = now.toLocaleDateString('en-US', { timeZoneName: 'short' });
+      const shortTz = tzString.split(' ').pop() || '';
+      zoneEl.textContent = shortTz;
+    }
+  }
+
+  function initHeroAnimation() {
+    const stage = document.getElementById('hero-stage');
+    if (!stage) return;
+
+    const logo = document.getElementById('logo-mark');
+    const textFacet = document.getElementById('text-facet');
+    const textArchitecture = document.getElementById('text-architecture');
+    const clock = document.getElementById('hero-clock');
+    const heroFrame = document.getElementById('hero-frame');
+
+    if (!logo || !textFacet || !textArchitecture || !clock || !heroFrame) return;
+
+    // Reset window position to top on animation start
+    window.scrollTo(0, 0);
+
+    updateHeroClock();
+    setInterval(updateHeroClock, 1000);
+
+    gsap.killTweensOf([logo, textFacet, textArchitecture, clock, heroFrame]);
+
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const isMobile = vw <= 768;
+
+    const targetTop = isMobile ? -10 : -20;
+    const targetRight = isMobile ? 15 : 30;
+
+    const logoWidth = logo.offsetWidth || (isMobile ? 85 : 150);
+    const logoHeight = logo.offsetHeight || (isMobile ? 85 : 150);
+
+    const deltaX = (vw / 2) - targetRight - (logoWidth / 2);
+    const deltaY = -((vh / 2) - targetTop - (logoHeight / 2));
+
+    gsap.set(logo, { x: 0, y: 0, scale: 3.2, opacity: 1 });
+    gsap.set([textFacet, clock], { opacity: 0, y: -20 });
+    gsap.set(textArchitecture, { opacity: 0, y: 20 });
+    gsap.set(heroFrame, { scaleY: 0, transformOrigin: 'center center' });
+
+    const tl = gsap.timeline({ 
+      defaults: { ease: 'power3.inOut' },
+      onComplete: releaseScrollLock
+    });
+
+    tl
+      // 1. Hold logo in center for 3 seconds
+      .to(logo, {
+        duration: 3
+      })
+      // 2. Reveal FACET, ARCHITECTURE & Live Clock
+      .to([textFacet, textArchitecture, clock], {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0
+      })
+      // 3. Move logo to top right corner
+      .to(logo, {
+        x: deltaX,
+        y: deltaY,
+        scale: 1,
+        duration: 1.2
+      }, '-=0.2')
+      // 4. Expand hero image
+      .to(heroFrame, {
+        scaleY: 1,
+        duration: 1.2,
+        ease: 'power4.out'
+      }, '-=0.4');
+  }
+
+  // Execute initialization
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    initHeroAnimation();
+  } else {
+    document.addEventListener('DOMContentLoaded', initHeroAnimation);
+  }
+  document.addEventListener('astro:page-load', initHeroAnimation);
+</script>
 
 <style>
-  .site-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 980;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 24px 32px;
+  .stage-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bg-concrete, #BEBEBE);
+    overflow: hidden;
     box-sizing: border-box;
-    pointer-events: none;
+    z-index: 99;
   }
 
-  .logo-link {
-    pointer-events: auto;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-  }
-
-  .site-logo {
-    height: clamp(28px, 4vw, 40px);
-    width: auto;
-    display: block;
-    transition: filter 0.3s ease, transform 0.3s ease;
-  }
-
-  .site-logo:hover {
-    transform: scale(1.02);
-  }
-
-  /* Optional invert rule if you need to turn white logo dark on light pages */
-  .site-logo.invert-dark {
-    filter: brightness(0);
-  }
-
-  .menu-box {
-    pointer-events: auto;
-    position: fixed;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 1000;
-    width: 64px;
-    height: 72px;
-    background-color: #7c7a7a;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-sizing: border-box;
-    transition: background-color 0.3s ease;
-  }
-
-  .hamburger-lines {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    width: 28px;
-    height: 18px;
-  }
-
-  .line {
-    width: 100%;
-    height: 2px;
-    background-color: #000000;
-    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
-    transform-origin: center;
-  }
-
-  .menu-box[aria-expanded="true"] .line-1 {
-    transform: translateY(8px) rotate(45deg);
-  }
-
-  .menu-box[aria-expanded="true"] .line-2 {
+  /* FACET: Anchored top and left */
+  .text-facet {
+    position: absolute;
+    top: 20px;
+    left: 50px;
+    font-family: 'Bank Gothic', sans-serif !important;
+    font-weight: 900;
+    font-size: clamp(2.6rem, 4vw, 4.1rem);
+    letter-spacing: 0.10em;
+    color: var(--text-primary, #111111);
+    margin: 0;
+    line-height: 1;
+    z-index: 20;
+    text-transform: uppercase;
+    white-space: nowrap;
     opacity: 0;
   }
 
-  .menu-box[aria-expanded="true"] .line-3 {
-    transform: translateY(-8px) rotate(-45deg);
+  /* Live Local Clock Styling */
+  .hero-clock {
+    position: absolute;
+    bottom: 25px;
+    left: 50px;
+    z-index: 20;
+    font-family: monospace, sans-serif;
+    font-size: clamp(0.85rem, 1.2vw, 1.1rem);
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--text-primary, #111111);
+    opacity: 0;
+    display: flex;
+    align-items: center;
   }
 
+  .time-zone {
+    margin-left: 1.25rem;
+  }
+
+  /* ARCHITECTURE: Anchored bottom and right */
+  .text-architecture {
+    position: absolute;
+    bottom: 20px;
+    right: 50px;
+    font-family: 'Bank Gothic', sans-serif !important;
+    font-weight: 900;
+    font-size: clamp(2.6rem, 4vw, 4.1rem);
+    letter-spacing: 0.10em;
+    color: var(--text-primary, #111111);
+    margin: 0;
+    line-height: 1;
+    z-index: 20;
+    text-transform: uppercase;
+    white-space: nowrap;
+    opacity: 0;
+  }
+
+  /* LOGO: Center-aligned CSS base */
+  .logo-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(3.2);
+    transform-origin: center center;
+    z-index: 30;
+    will-change: transform;
+  }
+
+  .logo-img {
+    height: 150px;
+    width: auto;
+    display: block;
+    object-fit: contain;
+  }
+
+  /* Desktop Central Frame */
+  .hero-frame {
+    position: absolute;
+    top: 14%;
+    left: 12%;
+    width: 76vw;
+    height: 72vh;
+    z-index: 10;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    transform: scaleY(0);
+    transform-origin: center center;
+  }
+
+  .hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Mobile Layout Adjustments */
   @media (max-width: 768px) {
-    .site-header {
-      padding: 16px 20px;
+    .hero-frame {
+      top: 180px;
+      left: 0;
+      width: 100vw;
+      height: 44vh;
+      box-shadow: none;
     }
 
-    .menu-box {
-      width: 52px;
-      height: 60px;
+    .text-facet {
+      top: 190px;
+      left: 15px;
+      font-size: clamp(1.8rem, 6vw, 2.5rem);
     }
 
-    .hamburger-lines {
-      width: 24px;
-      height: 16px;
+    .text-architecture {
+      position: absolute;
+      top: calc(180px + 44vh - 38px);
+      bottom: auto;
+      right: 15px;
+      font-size: clamp(1.8rem, 6vw, 2.5rem);
     }
 
-    .menu-box[aria-expanded="true"] .line-1 {
-      transform: translateY(7px) rotate(45deg);
+    .hero-clock {
+      bottom: 105px;
+      left: 15px;
+      font-size: 0.85rem;
     }
 
-    .menu-box[aria-expanded="true"] .line-3 {
-      transform: translateY(-7px) rotate(-45deg);
+    .time-zone {
+      margin-left: 0.85rem;
+    }
+
+    .logo-img { 
+      height: 85px; 
+    }
+
+    .hero-img {
+      object-fit: contain;
+      object-position: center center;
     }
   }
 </style>
-
-<script>
-  function setupMenu() {
-    const toggleBtn = document.getElementById('menu-toggle');
-    const overlay = document.getElementById('menu-overlay');
-
-    if (!toggleBtn || !overlay) return;
-
-    toggleBtn.addEventListener('click', () => {
-      const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
-      
-      toggleBtn.setAttribute('aria-expanded', (!isExpanded).toString());
-      overlay.classList.toggle('active');
-
-      document.body.classList.toggle('menu-open', !isExpanded);
-    });
-  }
-
-  setupMenu();
-  document.addEventListener('astro:page-load', setupMenu);
-</script>
