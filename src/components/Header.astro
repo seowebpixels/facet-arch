@@ -1,10 +1,9 @@
 ---
 /* Header.astro - Custom Hamburger Box & Menu Overlay Integration */
 import MenuOverlay from './MenuOverlay.astro';
-import logoImg from '../assets/facet-hero-logo.avif';
 
 const { pathname } = Astro.url;
-// Check if current page is dark-themed
+// Invert logo to white on dark pages
 const isDarkPage = ['/portfolio', '/about', '/contact'].some((path) => pathname.includes(path));
 ---
 
@@ -12,7 +11,7 @@ const isDarkPage = ['/portfolio', '/about', '/contact'].some((path) => pathname.
   <!-- Brand Logo -->
   <a href="/" class="logo-link" aria-label="Facet Architecture Home">
     <img 
-      src={logoImg.src} 
+      src="/images/facet-hero-logo.avif" 
       alt="Facet Architecture Logo" 
       class={`site-logo ${isDarkPage ? 'invert-white' : ''}`}
       loading="eager"
@@ -74,13 +73,13 @@ const isDarkPage = ['/portfolio', '/about', '/contact'].some((path) => pathname.
     transform: scale(1.02);
   }
 
-  /* CSS Filter to convert dark hero logo to pure white on dark pages */
+  /* Filter turns dark logo pure white on dark backgrounds */
   .site-logo.invert-white {
     filter: brightness(0) invert(1);
   }
 
   /* ==========================================================================
-     Menu Box (#7c7a7a background, 3 black lines perfectly centered)
+     Menu Box (#7c7a7a background, 3 black lines)
      ========================================================================== */
   .menu-box {
     pointer-events: auto;
@@ -119,7 +118,6 @@ const isDarkPage = ['/portfolio', '/about', '/contact'].some((path) => pathname.
     transform-origin: center;
   }
 
-  /* Animated "X" state when menu is open */
   .menu-box[aria-expanded="true"] .line-1 {
     transform: translateY(8px) rotate(45deg);
   }
@@ -132,7 +130,6 @@ const isDarkPage = ['/portfolio', '/about', '/contact'].some((path) => pathname.
     transform: translateY(-8px) rotate(-45deg);
   }
 
-  /* Responsive positioning for mobile screens */
   @media (max-width: 768px) {
     .site-header {
       padding: 16px 20px;
