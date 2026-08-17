@@ -1,7 +1,9 @@
 ---
+/* MenuOverlay.astro */
 import featProjectImg from '../assets/res-eoa-1597.avif';
 import addressImg from '../assets/res-blann.avif';
 import sacapLogoImg from '../assets/sacap-logo.avif';
+import logoImg from '../assets/facet-logo-white.avif';
 
 interface Props {
   isOpen?: boolean;
@@ -20,10 +22,8 @@ const menuItems = [
 <div id="menu-overlay" class={`menu-overlay ${isOpen ? 'active' : ''}`}>
   <div class="menu-container">
     
-    <!-- Left Section: 2x2 Grid -->
     <div class="left-grid">
       
-      <!-- Top Tile: Featured Project -->
       <a href="/portfolio#residential" class="grid-tile tile-featured">
         <div class="tile-bg" style={`background-image: url('${featProjectImg.src}');`}></div>
         <div class="tile-overlay"></div>
@@ -33,7 +33,6 @@ const menuItems = [
         </div>
       </a>
 
-      <!-- Bottom-Left Tile: Address -->
       <div class="grid-tile tile-address">
         <div class="tile-bg" style={`background-image: url('${addressImg.src}');`}></div>
         <div class="tile-overlay address-darken"></div>
@@ -53,15 +52,17 @@ const menuItems = [
         </div>
       </div>
 
-      <!-- Bottom-Right Tile: SACAP Logo -->
       <div class="grid-tile tile-logo">
         <img src={sacapLogoImg.src} alt="SACAP Logo" class="sacap-logo-img" />
       </div>
 
     </div>
 
-    <!-- Right Section: Navigation Links -->
     <div class="right-nav">
+      <a href="/" class="overlay-logo-link" aria-label="Facet Architecture Home">
+        <img src={logoImg.src} alt="Facet Architecture Logo" class="overlay-logo" />
+      </a>
+
       <nav class="menu-nav-list">
         {menuItems.map((item) => (
           <a href={item.href} class="menu-link" data-link={item.name} data-href={item.href}>
@@ -269,12 +270,30 @@ const menuItems = [
 
   /* Right Navigation Area */
   .right-nav {
+    position: relative;
     display: flex;
     align-items: center;
     padding: 0 40px 0 10%;
     background-color: #2e343b;
     height: 100%;
     box-sizing: border-box;
+  }
+
+  /* Overlay White Logo Placement */
+  .overlay-logo-link {
+    position: absolute;
+    top: -16px;
+    right: 20px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .overlay-logo {
+    height: clamp(125px, 14vw, 155px);
+    width: auto;
+    display: block;
   }
 
   .menu-nav-list {
@@ -346,6 +365,13 @@ const menuItems = [
     .right-nav {
       padding: 32px 24px 48px 24px;
       flex-grow: 1;
+    }
+    .overlay-logo-link {
+      top: -18px;
+      right: 15px;
+    }
+    .overlay-logo {
+      height: clamp(115px, 16vw, 130px);
     }
     .menu-link-text {
       font-size: clamp(2.2rem, 8vw, 3.2rem);
