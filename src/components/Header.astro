@@ -1,7 +1,7 @@
 ---
 /* Header.astro - Custom Hamburger Box & Menu Overlay Integration */
 import MenuOverlay from './MenuOverlay.astro';
-import logoImg from '../assets/facet-logo-dark.avif'; // Update path/filename if your logo asset uses a different name
+import logoImg from '../assets/facet-hero-logo.avif';
 
 const { pathname } = Astro.url;
 // Check if current page is dark-themed
@@ -53,11 +53,11 @@ const isDarkPage = ['/portfolio', '/about', '/contact'].some((path) => pathname.
     align-items: center;
     padding: 24px 32px;
     box-sizing: border-box;
-    pointer-events: none; /* Allows clicks to pass through header container */
+    pointer-events: none;
   }
 
   .logo-link {
-    pointer-events: auto; /* Restores clickability on the logo itself */
+    pointer-events: auto;
     display: flex;
     align-items: center;
     text-decoration: none;
@@ -74,7 +74,7 @@ const isDarkPage = ['/portfolio', '/about', '/contact'].some((path) => pathname.
     transform: scale(1.02);
   }
 
-  /* CSS Filter to convert dark logo to pure white on dark pages */
+  /* CSS Filter to convert dark hero logo to pure white on dark pages */
   .site-logo.invert-white {
     filter: brightness(0) invert(1);
   }
@@ -83,7 +83,7 @@ const isDarkPage = ['/portfolio', '/about', '/contact'].some((path) => pathname.
      Menu Box (#7c7a7a background, 3 black lines perfectly centered)
      ========================================================================== */
   .menu-box {
-    pointer-events: auto; /* Restores clickability on the hamburger box */
+    pointer-events: auto;
     position: fixed;
     right: 0;
     top: 50%;
