@@ -13,7 +13,6 @@ const shouldShowLogo = !isHomePage && showLogoPages;
 ---
 
 <header class="site-header">
-  <!-- Brand Logo (Top Right - Excluded from Home Page) -->
   {shouldShowLogo && (
     <a href="/" class="logo-link" aria-label="Facet Architecture Home">
       <Image 
@@ -26,7 +25,6 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     </a>
   )}
 
-  <!-- Menu Box Container (Far Top Right) -->
   <button 
     id="menu-toggle" 
     class="menu-box" 
@@ -40,7 +38,6 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     </div>
   </button>
 
-  <!-- Navigation Overlay Component -->
   <MenuOverlay />
 </header>
 
@@ -59,12 +56,12 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     pointer-events: none;
   }
 
-  /* Position logo on the top right, positioned right beside the menu box */
+  /* Position logo on top right, next to the menu box */
   .logo-link {
     pointer-events: auto;
     position: fixed;
     top: 24px;
-    right: 100px;
+    right: 110px;
     z-index: 1001;
     display: flex;
     align-items: center;
@@ -72,10 +69,11 @@ const shouldShowLogo = !isHomePage && showLogoPages;
   }
 
   .site-logo {
-    height: clamp(45px, 6vw, 75px);
+    /* Increased base height by 30px */
+    height: clamp(75px, 9vw, 105px);
     width: auto;
     display: block;
-    filter: none; /* Preserves white image on dark/black backgrounds */
+    filter: none;
     transition: transform 0.3s ease;
   }
 
@@ -139,11 +137,11 @@ const shouldShowLogo = !isHomePage && showLogoPages;
 
     .logo-link {
       top: 16px;
-      right: 70px;
+      right: 80px;
     }
 
     .site-logo {
-      height: clamp(35px, 8vw, 50px);
+      height: clamp(65px, 10vw, 80px);
     }
 
     .menu-box {
