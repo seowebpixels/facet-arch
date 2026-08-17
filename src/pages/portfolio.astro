@@ -226,7 +226,7 @@ const portfolioData = [
 
   <div class="portfolio-spacer-gap"></div>
 
-  <!-- Dedicated Shared Footer Component -->
+  <!-- Shared Reusable Footer Component -->
   <Footer />
 
   <!-- Lightbox Modal Structure -->
@@ -247,6 +247,9 @@ const portfolioData = [
     margin: 0;
     padding: 0;
     min-height: 100%;
+    height: auto !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
   }
 
   :global(body) {
@@ -255,6 +258,9 @@ const portfolioData = [
     margin: 0;
     padding: 0;
     min-height: 100vh;
+    height: auto !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
     -webkit-touch-callout: none !important;
     -webkit-user-select: none !important;
     user-select: none !important;
@@ -393,6 +399,9 @@ const portfolioData = [
 
   .portfolio-stage {
     padding-top: 170px;
+    min-height: auto;
+    height: auto !important;
+    overflow: visible !important;
     position: relative;
   }
 
@@ -438,6 +447,7 @@ const portfolioData = [
     gap: 24px;
     padding-bottom: 20px;
     scroll-behavior: smooth;
+    overflow-x: scroll !important;
   }
 
   .portfolio-card {
@@ -545,6 +555,12 @@ const portfolioData = [
     height: 40px;
     background-color: #2a2f35;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  @media (max-width: 899px) {
+    .portfolio-stage {
+      padding-top: 165px;
+    }
   }
 
   .lightbox-modal {
