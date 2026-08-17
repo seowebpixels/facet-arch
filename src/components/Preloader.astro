@@ -47,18 +47,22 @@ import heroImg from '../assets/res-eoa-1597.avif';
   import { gsap } from 'gsap';
 
   function releaseScrollLock() {
-    document.documentElement.classList.remove('is-loading');
-    document.body.classList.remove('is-loading');
+    // 1. Remove lock classes completely from root and body
+    document.documentElement.classList.remove('is-loading', 'no-scroll');
+    document.body.classList.remove('is-loading', 'no-scroll');
 
-    document.documentElement.removeAttribute('style');
-    document.body.removeAttribute('style');
+    // 2. Clear all inline override styles applied during loading
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
 
+    // 3. Set pointer-events: none on stage so lower elements receive mouse scroll/clicks
     const stage = document.getElementById('hero-stage');
     if (stage) {
       stage.style.pointerEvents = 'none';
     }
   }
 
+  // Live Local Time Updater
   function updateHeroClock() {
     const clockEl = document.getElementById('live-time');
     const zoneEl = document.getElementById('time-zone');
@@ -84,8 +88,12 @@ import heroImg from '../assets/res-eoa-1597.avif';
     const clock = document.getElementById('hero-clock');
     const heroFrame = document.getElementById('hero-frame');
 
-    if (!logo || !textFacet || !textArchitecture || !clock || !heroFrame) return;
+    if (!logo || !textFacet || !textArchitecture || !clock || !heroFrame) {
+      releaseScrollLock();
+      return;
+    }
 
+    // Reset window position to top on animation start
     window.scrollTo(0, 0);
 
     updateHeroClock();
@@ -116,19 +124,26 @@ import heroImg from '../assets/res-eoa-1597.avif';
       onComplete: releaseScrollLock
     });
 
-    tl.to(logo, { duration: 3 })
+    tl
+      // 1. Hold logo in center for 3 seconds
+      .to(logo, {
+        duration: 3
+      })
+      // 2. Reveal FACET, ARCHITECTURE & Live Clock
       .to([textFacet, textArchitecture, clock], {
         opacity: 1,
         y: 0,
         duration: 0.8,
         stagger: 0
       })
+      // 3. Move logo to top right corner
       .to(logo, {
         x: deltaX,
         y: deltaY,
         scale: 1,
         duration: 1.2
       }, '-=0.2')
+      // 4. Expand hero image
       .to(heroFrame, {
         scaleY: 1,
         duration: 1.2,
@@ -136,6 +151,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
       }, '-=0.4');
   }
 
+  // Execute initialization
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
     initHeroAnimation();
   } else {
@@ -146,18 +162,16 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
 <style>
   .stage-container {
-    position: fixed;
-    top: 0;
-    left: 0;
+    position: relative;
     width: 100vw;
     height: 100vh;
     background-color: var(--bg-concrete, #BEBEBE);
     overflow: hidden;
     box-sizing: border-box;
-    z-index: 90;
-    pointer-events: auto;
+    z-index: 10;
   }
 
+  /* FACET: Anchored top and left */
   .text-facet {
     position: absolute;
     top: 20px;
@@ -175,6 +189,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     opacity: 0;
   }
 
+  /* Live Local Clock Styling */
   .hero-clock {
     position: absolute;
     bottom: 25px;
@@ -194,6 +209,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     margin-left: 1.25rem;
   }
 
+  /* ARCHITECTURE: Anchored bottom and right */
   .text-architecture {
     position: absolute;
     bottom: 20px;
@@ -211,6 +227,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     opacity: 0;
   }
 
+  /* LOGO: Center-aligned CSS base */
   .logo-wrapper {
     position: absolute;
     top: 50%;
@@ -228,6 +245,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     object-fit: contain;
   }
 
+  /* Desktop Central Frame */
   .hero-frame {
     position: absolute;
     top: 14%;
@@ -248,6 +266,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     display: block;
   }
 
+  /* Mobile Layout Adjustments */
   @media (max-width: 768px) {
     .hero-frame {
       top: 180px;
