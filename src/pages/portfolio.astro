@@ -826,7 +826,6 @@ const currentYear = new Date().getFullYear();
     unlock();
   } else {
     window.addEventListener('load', unlock, { once: true });
-    setTimeout(unlock, 800);
   }
 
   const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
