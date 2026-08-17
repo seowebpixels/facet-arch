@@ -178,14 +178,33 @@ const currentYear = new Date().getFullYear();
 ---
 
 <Layout title="Facet Architecture | Portfolio Matrix">
-  <!-- Direct head execution for zero-delay overflow lockdown -->
+  <!-- Immediate inline lockdown before DOM hydration -->
   <script is:inline>
     (function() {
-      document.documentElement.style.setProperty('overflow', 'hidden', 'important');
-      document.documentElement.style.setProperty('height', '100vh', 'important');
-      document.documentElement.style.setProperty('position', 'fixed', 'important');
-      document.documentElement.style.setProperty('width', '100%', 'important');
+      document.documentElement.classList.add('is-hero-loading');
     })();
+
+    window.addEventListener(
+      'touchmove',
+      function (e) {
+        if (document.documentElement.classList.contains('is-hero-loading')) {
+          e.preventDefault();
+        }
+      },
+      { passive: false }
+    );
+
+    window.addEventListener(
+      'keydown',
+      function (e) {
+        if (document.documentElement.classList.contains('is-hero-loading')) {
+          if ([32, 33, 34, 35, 36, 38, 40].indexOf(e.keyCode) > -1) {
+            e.preventDefault();
+          }
+        }
+      },
+      { passive: false }
+    );
   </script>
 
   <Header />
@@ -264,7 +283,7 @@ const currentYear = new Date().getFullYear();
           target="_blank" 
           rel="noopener noreferrer" 
           class="wdp-link"
-        >WEB DESIGN PROS</a>[cite: 1, 2]
+        >WEB DESIGN PROS</a>
       </p>
     </div>
   </footer>
@@ -281,38 +300,21 @@ const currentYear = new Date().getFullYear();
 </Layout>
 
 <style is:global>
-  /* Global Force Lockdown during page load sequence */
-  html:not(.page-fully-ready),
-  html:not(.page-fully-ready) body {
+  /* Lock state: prevents vertical scrolling and suppresses native scrollbars completely across browsers */
+  html.is-hero-loading,
+  html.is-hero-loading body {
     overflow: hidden !important;
     height: 100vh !important;
-    max-height: 100vh !important;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
     touch-action: none !important;
-    -webkit-overflow-scrolling: none !important;
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
+    -ms-overflow-style: none !important;  /* IE / Edge */
+    scrollbar-width: none !important;  /* Firefox */
   }
 
-  html:not(.page-fully-ready)::-webkit-scrollbar,
-  html:not(.page-fully-ready) body::-webkit-scrollbar {
-    display: none !important;
+  html.is-hero-loading::-webkit-scrollbar,
+  html.is-hero-loading body::-webkit-scrollbar {
+    display: none !important;  /* Chrome, Safari, Opera */
     width: 0 !important;
     height: 0 !important;
-  }
-
-  /* Unlocked state once fully loaded */
-  html.page-fully-ready,
-  html.page-fully-ready body {
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    height: auto !important;
-    max-height: none !important;
-    position: relative !important;
-    touch-action: auto !important;
   }
 </style>
 
@@ -839,23 +841,10 @@ const currentYear = new Date().getFullYear();
   const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
   const unlockPageScroll = () => {
-    document.documentElement.classList.add('page-fully-ready');
-    document.documentElement.style.removeProperty('overflow');
-    document.documentElement.style.removeProperty('height');
-    document.documentElement.style.removeProperty('position');
-    document.documentElement.style.removeProperty('width');
+    document.documentElement.classList.remove('is-hero-loading');
   };
 
-  // Prevent touch move vertical dragging during loading
-  const handleTouchMove = (e: TouchEvent) => {
-    if (!document.documentElement.classList.contains('page-fully-ready')) {
-      e.preventDefault();
-    }
-  };
-
-  window.addEventListener('touchmove', handleTouchMove, { passive: false });
-
-  // Listen to window load event or fallback timer to unlock
+  // Release scroll lock once document assets are fully loaded
   if (document.readyState === 'complete') {
     unlockPageScroll();
   } else {
