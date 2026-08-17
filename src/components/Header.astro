@@ -1,9 +1,25 @@
 ---
 /* Header.astro - Custom Hamburger Box & Menu Overlay Integration */
 import MenuOverlay from './MenuOverlay.astro';
+import logoImg from '../assets/facet-logo-dark.avif'; // Update path/filename if your logo asset uses a different name
+
+const { pathname } = Astro.url;
+// Check if current page is dark-themed
+const isDarkPage = ['/portfolio', '/about', '/contact'].some((path) => pathname.includes(path));
 ---
 
-<header>
+<header class="site-header">
+  <!-- Brand Logo -->
+  <a href="/" class="logo-link" aria-label="Facet Architecture Home">
+    <img 
+      src={logoImg.src} 
+      alt="Facet Architecture Logo" 
+      class={`site-logo ${isDarkPage ? 'invert-white' : ''}`}
+      loading="eager"
+      decoding="async"
+    />
+  </a>
+
   <!-- Menu Box Container (Fixed Middle Right) -->
   <button 
     id="menu-toggle" 
@@ -24,9 +40,50 @@ import MenuOverlay from './MenuOverlay.astro';
 
 <style>
   /* ==========================================================================
+     Header & Logo Styling
+     ========================================================================== */
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 980;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 32px;
+    box-sizing: border-box;
+    pointer-events: none; /* Allows clicks to pass through header container */
+  }
+
+  .logo-link {
+    pointer-events: auto; /* Restores clickability on the logo itself */
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .site-logo {
+    height: clamp(28px, 4vw, 40px);
+    width: auto;
+    display: block;
+    transition: filter 0.3s ease, transform 0.3s ease;
+  }
+
+  .site-logo:hover {
+    transform: scale(1.02);
+  }
+
+  /* CSS Filter to convert dark logo to pure white on dark pages */
+  .site-logo.invert-white {
+    filter: brightness(0) invert(1);
+  }
+
+  /* ==========================================================================
      Menu Box (#7c7a7a background, 3 black lines perfectly centered)
      ========================================================================== */
   .menu-box {
+    pointer-events: auto; /* Restores clickability on the hamburger box */
     position: fixed;
     right: 0;
     top: 50%;
@@ -77,6 +134,10 @@ import MenuOverlay from './MenuOverlay.astro';
 
   /* Responsive positioning for mobile screens */
   @media (max-width: 768px) {
+    .site-header {
+      padding: 16px 20px;
+    }
+
     .menu-box {
       width: 52px;
       height: 60px;
