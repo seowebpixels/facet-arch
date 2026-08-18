@@ -1,6 +1,7 @@
 ---
 /* src/layouts/Layout.astro */
 import Header from '../components/Header.astro';
+import Clock from '../components/Clock.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -16,6 +17,10 @@ const {
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
+
+// --- ADD THESE TWO LINES BELOW ---
+const { pathname } = Astro.url;
+const isHomePage = pathname === '/' || pathname === '';
 ---
 
 <!doctype html>
@@ -53,6 +58,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
   </head>
   <body>
     <Header />
+
+    {/* Render the clock at top-left for inner pages */}
+    {!isHomePage && <Clock />}
+    
     <main>
       <slot />
     </main>

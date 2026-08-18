@@ -1,0 +1,76 @@
+---
+/* src/components/Clock.astro */
+const { pathname } = Astro.url;
+
+const isHomePage = pathname === '/' || pathname === '';
+---
+
+<div id="site-clock" class={`site-clock ${isHomePage ? 'home-clock' : 'inner-page-clock'}`}>
+  <span id="clock-time">00:00:00 GMT+2</span>
+</div>
+
+<style>
+  .site-clock {
+    font-family: 'Bank Gothic', 'BankGothic', sans-serif, system-ui;
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    z-index: 999;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  /* Inner pages (Portfolio, About, Contact): Top-Left 50px offset & Light Grey */
+  .inner-page-clock {
+    position: fixed;
+    top: 50px;
+    left: 50px;
+    color: #a0a6b0; /* Light Grey */
+  }
+
+  /* Keep existing layout styles for Home page */
+  .home-clock {
+    position: absolute;
+    /* Retains your custom home page position */
+    color: #ffffff;
+  }
+
+  @media (max-width: 768px) {
+    .inner-page-clock {
+      top: 24px;
+      left: 20px;
+      font-size: 0.8rem;
+    }
+  }
+</style>
+
+<script>
+  function updateClock() {
+    const clockEl = document.querySelectorAll('#clock-time, #overlay-clock-time');
+    if (!clockEl.length) return;
+
+    const now = new Date();
+    
+    // Calculate South Africa Standard Time (GMT+2)
+    const options: Intl.DateTimeFormatOptions = {
+      timeZone: 'Africa/Johannesburg',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    };
+
+    const timeString = new Intl.DateTimeFormat('en-GB', options).format(now);
+    const fullClockText = `${timeString} GMT+2`;
+
+    clockEl.forEach((el) => {
+      el.textContent = fullClockText;
+    });
+  }
+
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  document.addEventListener('astro:page-load', () => {
+    updateClock();
+  });
+</script>
