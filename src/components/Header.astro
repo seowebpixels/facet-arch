@@ -1,5 +1,5 @@
 ---
-/* Header.astro */
+/* src/components/Header.astro */
 import { Image } from 'astro:assets';
 import MenuOverlay from './MenuOverlay.astro';
 import logoImg from '../assets/facet-logo-white.avif';
@@ -53,12 +53,16 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     align-items: center;
     padding: 24px 32px;
     box-sizing: border-box;
-    pointer-events: none;
+    pointer-events: none; /* Allows clicks through empty areas of header */
   }
 
-  /* Position logo top right: 10px higher, 10px more to the left */
+  /* Ensure interactive children explicitly capture clicks */
+  .logo-link,
+  .menu-box {
+    pointer-events: auto !important;
+  }
+
   .logo-link {
-    pointer-events: auto;
     position: fixed;
     top: -16px;
     right: 20px;
@@ -69,7 +73,6 @@ const shouldShowLogo = !isHomePage && showLogoPages;
   }
 
   .site-logo {
-    /* Increased height by 20px */
     height: clamp(125px, 14vw, 155px);
     width: auto;
     display: block;
@@ -82,12 +85,11 @@ const shouldShowLogo = !isHomePage && showLogoPages;
   }
 
   .menu-box {
-    pointer-events: auto;
     position: fixed;
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 1001;
+    z-index: 1002; /* Stacked above menu overlay */
     width: 64px;
     height: 72px;
     background-color: #7c7a7a;
@@ -108,6 +110,7 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     align-items: center;
     width: 28px;
     height: 18px;
+    pointer-events: none;
   }
 
   .line {
@@ -171,13 +174,18 @@ const shouldShowLogo = !isHomePage && showLogoPages;
 
     if (!toggleBtn || !overlay) return;
 
-    toggleBtn.addEventListener('click', () => {
-      const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
-      
-      toggleBtn.setAttribute('aria-expanded', (!isExpanded).toString());
-      overlay.classList.toggle('active');
+    // Remove existing listener duplicates on view transitions
+    const newToggleBtn = toggleBtn.cloneNode(true);
+    toggleBtn.parentNode?.replaceChild(newToggleBtn, toggleBtn);
 
-      document.body.classList.toggle('menu-open', !isExpanded);
+    newToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isExpanded = newToggleBtn.getAttribute('aria-expanded') === 'true';
+      const nextState = !isExpanded;
+      
+      newToggleBtn.setAttribute('aria-expanded', nextState.toString());
+      overlay.classList.toggle('active', nextState);
+      document.body.classList.toggle('menu-open', nextState);
     });
   }
 
