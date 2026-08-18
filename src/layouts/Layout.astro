@@ -98,10 +98,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
     -moz-user-drag: none !important;
     -o-user-drag: none !important;
     user-drag: none !important;
-    pointer-events: none;
   }
 
-  a, button, input, textarea, select, .portfolio-card, .cad-trigger {
-    pointer-events: auto;
+  /* Re-enable interaction for links, form inputs, buttons, and navigation elements */
+  a, button, input, textarea, select, .portfolio-card, .cad-trigger,
+  .site-header, .menu-box, .menu-box *, .menu-overlay, .menu-overlay * {
+    pointer-events: auto !important;
   }
 </style>
