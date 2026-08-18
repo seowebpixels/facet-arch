@@ -14,23 +14,22 @@ const isHomePage = pathname === '/' || pathname === '';
     font-family: 'Bank Gothic', 'BankGothic', sans-serif, system-ui;
     font-size: 0.95rem;
     letter-spacing: 2px;
-    z-index: 999;
+    z-index: 99;
     pointer-events: none;
     white-space: nowrap;
   }
 
-  /* Inner pages (Portfolio, About, Contact): Top-Left 50px offset & Light Grey */
+  /* Inner pages (Portfolio, About, Contact): Absolute position so it scrolls up with the page */
   .inner-page-clock {
-    position: fixed;
+    position: absolute;
     top: 50px;
     left: 50px;
     color: #a0a6b0; /* Light Grey */
   }
 
-  /* Keep existing layout styles for Home page */
+  /* Home Page clock styling */
   .home-clock {
     position: absolute;
-    /* Retains your custom home page position */
     color: #ffffff;
   }
 
@@ -50,7 +49,6 @@ const isHomePage = pathname === '/' || pathname === '';
 
     const now = new Date();
     
-    // Calculate South Africa Standard Time (GMT+2)
     const options: Intl.DateTimeFormatOptions = {
       timeZone: 'Africa/Johannesburg',
       hour: '2-digit',
@@ -70,7 +68,5 @@ const isHomePage = pathname === '/' || pathname === '';
   updateClock();
   setInterval(updateClock, 1000);
 
-  document.addEventListener('astro:page-load', () => {
-    updateClock();
-  });
+  document.addEventListener('astro:page-load', updateClock);
 </script>
