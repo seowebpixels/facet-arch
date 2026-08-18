@@ -85,7 +85,7 @@ const menuItems = [
   .menu-overlay {
     position: fixed;
     inset: 0;
-    z-index: 990;
+    z-index: 99998; /* Raised above main page content */
     background-color: #2e343b;
     opacity: 0;
     pointer-events: none;
@@ -98,8 +98,12 @@ const menuItems = [
 
   .menu-overlay.active {
     opacity: 1;
-    pointer-events: auto;
+    pointer-events: auto !important;
     visibility: visible;
+  }
+
+  .menu-overlay * {
+    pointer-events: auto !important;
   }
 
   .menu-container {
