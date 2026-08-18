@@ -6,7 +6,6 @@ import logoImg from '../assets/facet-logo-white.avif';
 
 const { pathname } = Astro.url;
 
-// Check current page route
 const isHomePage = pathname === '/' || pathname === '';
 const showLogoPages = ['/portfolio', '/about', '/contact'].some((path) => pathname.includes(path));
 const shouldShowLogo = !isHomePage && showLogoPages;
@@ -30,6 +29,15 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     class="menu-box" 
     aria-label="Toggle Navigation Menu" 
     aria-expanded="false"
+    onclick="
+      const overlay = document.getElementById('menu-overlay');
+      const isExpanded = this.getAttribute('aria-expanded') === 'true';
+      this.setAttribute('aria-expanded', (!isExpanded).toString());
+      if (overlay) {
+        overlay.classList.toggle('active', !isExpanded);
+        document.body.classList.toggle('menu-open', !isExpanded);
+      }
+    "
   >
     <div class="hamburger-lines">
       <span class="line line-1"></span>
@@ -37,22 +45,18 @@ const shouldShowLogo = !isHomePage && showLogoPages;
       <span class="line line-3"></span>
     </div>
   </button>
-
-  <MenuOverlay />
 </header>
+
+<MenuOverlay />
 
 <style>
   .site-header {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    z-index: 9999;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 24px 32px;
-    box-sizing: border-box;
+    width: 100vw;
+    height: 0;
+    z-index: 2147483646; /* Maximum browser z-index value */
     pointer-events: none;
   }
 
@@ -61,7 +65,7 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     position: fixed;
     top: -16px;
     right: 20px;
-    z-index: 10000;
+    z-index: 2147483647;
     display: flex;
     align-items: center;
     text-decoration: none;
@@ -71,7 +75,6 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     height: clamp(125px, 14vw, 155px);
     width: auto;
     display: block;
-    filter: none;
     transition: transform 0.3s ease;
   }
 
@@ -85,7 +88,7 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 10001;
+    z-index: 2147483647; /* Maximum browser z-index value */
     width: 64px;
     height: 72px;
     background-color: #7c7a7a;
@@ -96,7 +99,6 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
-    transition: background-color 0.3s ease;
   }
 
   .hamburger-lines {
@@ -113,8 +115,7 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     width: 100%;
     height: 2px;
     background-color: #000000;
-    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
-    transform-origin: center;
+    transition: transform 0.3s ease, opacity 0.3s ease;
     pointer-events: none;
   }
 
@@ -131,19 +132,6 @@ const shouldShowLogo = !isHomePage && showLogoPages;
   }
 
   @media (max-width: 768px) {
-    .site-header {
-      padding: 16px 20px;
-    }
-
-    .logo-link {
-      top: -18px;
-      right: 15px;
-    }
-
-    .site-logo {
-      height: clamp(115px, 16vw, 130px);
-    }
-
     .menu-box {
       width: 52px;
       height: 60px;
@@ -163,30 +151,3 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     }
   }
 </style>
-
-<script>
-  function setupMenu() {
-    const toggleBtn = document.getElementById('menu-toggle');
-    const overlay = document.getElementById('menu-overlay');
-
-    if (!toggleBtn || !overlay) return;
-
-    toggleBtn.onclick = (e) => {
-      e.stopPropagation();
-      const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
-      const nextState = !isExpanded;
-      
-      toggleBtn.setAttribute('aria-expanded', nextState.toString());
-      if (nextState) {
-        overlay.classList.add('active');
-        document.body.classList.add('menu-open');
-      } else {
-        overlay.classList.remove('active');
-        document.body.classList.remove('menu-open');
-      }
-    };
-  }
-
-  setupMenu();
-  document.addEventListener('astro:page-load', setupMenu);
-</script>

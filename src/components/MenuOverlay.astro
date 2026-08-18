@@ -83,24 +83,30 @@ const menuItems = [
   }
 
   .menu-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 99998; /* Raised above main page content */
-    background-color: #2e343b;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s ease, visibility 0.4s ease;
-    visibility: hidden;
-    width: 100vw;
-    height: 100dvh;
-    overflow: hidden;
-  }
+  position: fixed;
+  inset: 0;
+  z-index: 2147483640; /* Set to maximum layer depth */
+  background-color: #2e343b;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+  visibility: hidden;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+}
 
-  .menu-overlay.active {
-    opacity: 1;
-    pointer-events: auto !important;
-    visibility: visible;
-  }
+/* Must be defined so clicks work when open */
+.menu-overlay.active {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+}
+
+/* Ensure child elements inside overlay capture mouse/tap events */
+.menu-overlay.active * {
+  pointer-events: auto !important;
+}
 
   .menu-overlay * {
     pointer-events: auto !important;
