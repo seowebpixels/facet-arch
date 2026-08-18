@@ -416,7 +416,7 @@ const menuItems = [
 </style>
 
 <script>
-  function updateOverlayClock() {
+  function renderClockTime() {
     const clockEl = document.getElementById('overlay-clock-time');
     if (!clockEl) return;
 
@@ -433,46 +433,35 @@ const menuItems = [
     clockEl.textContent = `${timeString} GMT+2`;
   }
 
-  function setupOverlayMenu() {
-    // Update clock immediately when menu component runs
-    updateOverlayClock();
+  function initMenuOverlay() {
+    // Render current time immediately as soon as element exists
+    renderClockTime();
 
     const links = document.querySelectorAll<HTMLAnchorElement>('.menu-link');
     if (!links.length) return;
 
-    // Detect active page based on current URL path
     const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
 
-    function syncActiveLink() {
-      let activeItemName = 'HOME';
+    let activeItemName = 'HOME';
+    links.forEach((link) => {
+      const href = link.getAttribute('data-href')?.replace(/\/$/, '') || '/';
+      const name = link.getAttribute('data-link');
 
-      links.forEach((link) => {
-        const href = link.getAttribute('data-href')?.replace(/\/$/, '') || '/';
-        const name = link.getAttribute('data-link');
-
-        if (href === currentPath) {
-          activeItemName = name || 'HOME';
-        }
-      });
-
-      links.forEach((link) => {
-        const linkName = link.getAttribute('data-link');
-        if (linkName === activeItemName) {
-          link.classList.add('selected');
-        } else {
-          link.classList.remove('selected');
-        }
-      });
-    }
-
-    syncActiveLink();
+      if (href === currentPath) {
+        activeItemName = name || 'HOME';
+      }
+    });
 
     links.forEach((link) => {
       const linkName = link.getAttribute('data-link');
+      if (linkName === activeItemName) {
+        link.classList.add('selected');
+      } else {
+        link.classList.remove('selected');
+      }
 
       link.addEventListener('mousedown', () => link.classList.add('holding'));
       link.addEventListener('touchstart', () => link.classList.add('holding'), { passive: true });
-
       link.addEventListener('mouseup', () => link.classList.remove('holding'));
       link.addEventListener('mouseleave', () => link.classList.remove('holding'));
       link.addEventListener('touchend', () => link.classList.remove('holding'));
@@ -485,14 +474,17 @@ const menuItems = [
     });
   }
 
-  // Ensure interval runs continuously for the overlay clock
-  if (!(window as any)._overlayClockInterval) {
-    (window as any)._overlayClockInterval = setInterval(updateOverlayClock, 1000);
+  // Ensure clock update interval is registered globally once
+  if (!(window as any)._overlayClockTimer) {
+    (window as any)._overlayClockTimer = setInterval(renderClockTime, 1000);
   }
 
-  setupOverlayMenu();
-  document.addEventListener('astro:page-load', () => {
-    updateOverlayClock();
-    setupOverlayMenu();
-  });
+  // Run on DOM load and Astro page transitions
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMenuOverlay);
+  } else {
+    initMenuOverlay();
+  }
+
+  document.addEventListener('astro:page-load', initMenuOverlay);
 </script>
