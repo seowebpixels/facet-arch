@@ -1,0 +1,443 @@
+---
+/* src/pages/contact.astro */
+import Layout from '../layouts/Layout.astro';
+import SEO from '../components/SEO.astro';
+
+// Replace with Warren's Web3Forms Access Key from web3forms.com
+const WEB3FORMS_ACCESS_KEY = "5809f663-d9b7-4c8e-8269-ae38456c0f05";
+---
+
+<Layout title="Contact | Facet Architecture">
+  <SEO 
+    title="Contact Facet Architecture | Johannesburg Architects"
+    description="Get in touch with Warren Green and the team at Facet Architecture for residential, commercial, and master planning architectural projects."
+  />
+
+  <main class="contact-page">
+    <div class="contact-container">
+      
+      <!-- Left Column: Direct Info & Map -->
+      <div class="info-column">
+        <div class="header-block">
+          <span class="sub-label">GET IN TOUCH</span>
+          <h1 class="main-title">START A PROJECT</h1>
+          <p class="intro-text">
+            Whether you are looking to design a bespoke private residence or a modern commercial development, Warren Green and our architectural team are ready to realize your vision.
+          </p>
+        </div>
+
+        <div class="details-list">
+          <div class="detail-item">
+            <span class="detail-label">DIRECT CONTACT</span>
+            <a href="tel:+27609960690" class="detail-value">+27 60 996 0690</a>
+            <a href="mailto:info@facetarch.com" class="detail-value text-accent">info@facetarch.com</a>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">STUDIO ADDRESS</span>
+            <address class="detail-value address-block">
+              118 Kastaiing Street<br />
+              Weltevredenpark<br />
+              Johannesburg, South Africa<br />
+              1709
+            </address>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">LEADERSHIP</span>
+            <p class="detail-value">Warren Green — Founder & CEO</p>
+          </div>
+        </div>
+
+        <!-- Embedded Google Map -->
+        <div class="map-wrapper">
+          <iframe
+            title="Facet Architecture Location"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3582.358241088732!2d27.923221!3d-26.1268!2m3!1f0!0f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e957593c6f4fb5b%3A0x289f648601c2438c!2s118%20Kastaiing%20St%2C%20Weltevredenpark%2C%20Roodepoort%2C%201709!5e0!3m2!1sen!2sza!4v1700000000000!5m2!1sen!2sza"
+            width="100%"
+            height="100%"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Contact Form & Success Card -->
+      <div class="form-column">
+        
+        <!-- Web3Forms Form -->
+        <form id="contact-form" class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+          <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
+          <input type="hidden" name="subject" value="New Architectural Inquiry - Facet Architecture" />
+          <input type="hidden" name="from_name" value="Facet Architecture Website" />
+          <input type="checkbox" name="botcheck" class="hidden-field" style="display:none" />
+
+          <div class="field-row">
+            <div class="field-group">
+              <label for="name">YOUR NAME *</label>
+              <input type="text" id="name" name="name" required placeholder="e.g. John Doe" />
+            </div>
+
+            <div class="field-group">
+              <label for="email">EMAIL ADDRESS *</label>
+              <input type="email" id="email" name="email" required placeholder="john@example.com" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label for="phone">PHONE NUMBER *</label>
+              <input type="tel" id="phone" name="phone" required placeholder="+27 82 000 0000" />
+            </div>
+
+            <div class="field-group">
+              <label for="project_type">PROJECT TYPE</label>
+
+              <select id="project_type" name="project_type">
+                <option value="Luxury Residential">Luxury Residential</option>
+                <option value="Commercial Development">Commercial Development</option>
+                <option value="Master Planning">Master Planning</option>
+                <option value="Architectural Consulting">Architectural Consulting</option>
+                <option value="Other Inquiry">Other Inquiry</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="message">PROJECT BRIEF / DETAILS *</label>
+            <textarea id="message" name="message" rows="5" required placeholder="Tell us about the site location, estimated square footage, or architectural vision..."></textarea>
+          </div>
+
+          <button type="submit" id="submit-btn" class="submit-button">
+            <span class="btn-text">TRANSMIT INQUIRY</span>
+            <span class="btn-arrow">→</span>
+          </button>
+        </form>
+
+        <!-- Custom Success Card (Hidden initially via CSS) -->
+        <div id="success-card" class="success-card">
+          <div class="success-icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <span class="success-sub">TRANSMISSION CONFIRMED</span>
+          <h2 class="success-title">INQUIRY RECEIVED</h2>
+          <p class="success-desc">
+            Thank you for reaching out. Your project details have been successfully transmitted to <strong>Warren Green</strong> and the studio team at <strong>Facet Architecture</strong>.
+          </p>
+          <div class="success-footer">
+            <p>EXPECTED RESPONSE TIME: <strong>WITHIN 24 HOURS</strong></p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .contact-page {
+    background-color: #2e343b;
+    color: #ffffff;
+    min-height: 100vh;
+    padding: clamp(100px, 12vh, 160px) 5% 80px 5%;
+    box-sizing: border-box;
+  }
+
+  .contact-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+
+  @media (min-width: 1024px) {
+    .contact-container {
+      grid-template-columns: 45% 55%;
+      gap: 80px;
+    }
+  }
+
+  /* Header & Info Styling */
+  .sub-label {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    color: #00ffc8;
+    font-weight: 600;
+  }
+
+  .main-title {
+    font-family: 'Bank Gothic', 'BankGothic', sans-serif, system-ui;
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    margin: 8px 0 20px 0;
+    letter-spacing: 2px;
+  }
+
+  .intro-text {
+    font-family: system-ui, -apple-system, sans-serif;
+    color: #a0a6b0;
+    line-height: 1.6;
+    font-size: 1.05rem;
+    margin-bottom: 40px;
+  }
+
+  .details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    margin-bottom: 40px;
+  }
+
+  .detail-label {
+    font-family: 'Bank Gothic', 'BankGothic', sans-serif, system-ui;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    color: #8a929e;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .detail-value {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 1.1rem;
+    color: #ffffff;
+    text-decoration: none;
+    line-height: 1.4;
+    display: block;
+  }
+
+  .text-accent {
+    color: #00ffc8;
+  }
+
+  .address-block {
+    font-style: normal;
+  }
+
+  /* Map Container */
+  .map-wrapper {
+    width: 100%;
+    height: 260px;
+    border-radius: 4px;
+    overflow: hidden;
+    filter: grayscale(100%) invert(90%) contrast(90%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Form Styling */
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: clamp(24px, 4vw, 48px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  @media (min-width: 640px) {
+    .field-row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .field-group label {
+    font-family: 'Bank Gothic', 'BankGothic', sans-serif, system-ui;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    color: #a0a6b0;
+  }
+
+  .field-group input,
+  .field-group select,
+  .field-group textarea {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    padding: 14px 16px;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 0.95rem;
+    border-radius: 2px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+  }
+
+  .field-group input:focus,
+  .field-group select:focus,
+  .field-group textarea:focus {
+    outline: none;
+    border-color: #00ffc8;
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  .submit-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #00ffc8;
+    color: #1a1e23;
+    border: none;
+    padding: 18px 28px;
+    font-family: 'Bank Gothic', 'BankGothic', sans-serif, system-ui;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    margin-top: 12px;
+  }
+
+  .submit-button:hover {
+    background: #00e0b0;
+    transform: translateY(-2px);
+  }
+
+  .submit-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* Custom Success Card Display */
+  .success-card {
+    display: none; /* JS toggles to flex on submit */
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: rgba(0, 255, 200, 0.04);
+    border: 1px solid #00ffc8;
+    padding: clamp(40px, 6vw, 64px) 32px;
+    border-radius: 4px;
+    animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .success-icon-badge {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #00ffc8;
+    color: #1a1e23;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+
+  .success-icon-badge svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .success-sub {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    color: #00ffc8;
+    margin-bottom: 8px;
+  }
+
+  .success-title {
+    font-family: 'Bank Gothic', 'BankGothic', sans-serif, system-ui;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    margin: 0 0 16px 0;
+  }
+
+  .success-desc {
+    font-family: system-ui, -apple-system, sans-serif;
+    color: #c5cbd3;
+    line-height: 1.6;
+    max-width: 500px;
+    margin-bottom: 32px;
+  }
+
+  .success-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 20px;
+    width: 100%;
+  }
+
+  .success-footer p {
+    font-family: 'Bank Gothic', 'BankGothic', sans-serif, system-ui;
+    font-size: 0.8rem;
+    letter-spacing: 1.5px;
+    color: #8a929e;
+    margin: 0;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<script>
+  function initContactForm() {
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    const successCard = document.getElementById('success-card');
+    const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
+
+    if (!form || !successCard || !submitBtn) return;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // UI Feedback while sending
+      const btnText = submitBtn.querySelector('.btn-text');
+      if (btnText) btnText.textContent = 'TRANSMITTING...';
+      submitBtn.disabled = true;
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          // Hide Form and Show Custom Success Card
+          form.style.display = 'none';
+          successCard.style.display = 'flex';
+        } else {
+          alert('Transmission failed. Please check your details or call us directly.');
+          if (btnText) btnText.textContent = 'TRANSMIT INQUIRY';
+          submitBtn.disabled = false;
+        }
+      } catch (error) {
+        console.error('Submission error:', error);
+        alert('There was an error connecting to the server. Please try again or reach out via telephone.');
+        if (btnText) btnText.textContent = 'TRANSMIT INQUIRY';
+        submitBtn.disabled = false;
+      }
+    });
+  }
+
+  initContactForm();
+  document.addEventListener('astro:page-load', initContactForm);
+</script>
