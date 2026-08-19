@@ -6,11 +6,10 @@ import logoImg from '../assets/facet-logo-white.avif';
 
 const { pathname } = Astro.url;
 
-// Explicitly check if current route is Home or Menu
 const isHomePage = pathname === '/' || pathname === '';
 const showLogoPages = ['/portfolio', '/about', '/contact'].some((path) => pathname.includes(path));
 
-// White header logo ONLY renders on inner pages (brought down 20px)
+// White header logo only renders on inner pages
 const shouldShowLogo = !isHomePage && showLogoPages;
 ---
 
@@ -63,24 +62,31 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     pointer-events: none;
   }
 
-  /* Inner Pages White Logo: Brought down 20px */
+  /* Raised logo by 30px: Desktop shifted from top: 4px to top: -26px */
   .logo-link {
     pointer-events: auto !important;
     position: fixed;
-    top: 4px; /* Shifted down 20px on Desktop */
+    top: -26px;
     right: 20px;
     left: auto;
     z-index: 2147483647;
     display: flex;
     align-items: center;
     text-decoration: none;
+    transition: opacity 0.2s ease, transform 0.3s ease;
+  }
+
+  /* CRITICAL: Instantly hide white header logo whenever Menu Overlay is active */
+  :global(body.menu-open) .logo-link {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
 
   .site-logo {
     height: clamp(125px, 14vw, 155px);
     width: auto;
     display: block;
-    transition: transform 0.3s ease;
   }
 
   .site-logo:hover {
@@ -138,9 +144,10 @@ const shouldShowLogo = !isHomePage && showLogoPages;
   }
 
   @media (max-width: 768px) {
+    /* Raised logo by 30px: Mobile shifted from top: 8px to top: -22px */
     .logo-link {
       right: 12px;
-      top: 8px; /* Shifted down 20px on Mobile */
+      top: -22px;
     }
 
     .menu-box {
