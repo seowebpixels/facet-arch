@@ -119,24 +119,24 @@ const teamMembers = [
 
       <div class="team-grid">
         {teamMembers.map((member) => (
-          <article class="team-card">
-            <div class="image-wrapper">
-              <img
-                src={member.image.src}
-                alt={member.name}
-                width="450"
-                height="600"
-                loading={member.eager ? "eager" : "lazy"}
-                decoding="async"
-                class="team-img"
-              />
-            </div>
-            <div class="team-meta">
-              <h3 class="member-name">{member.name}</h3>
-              <p class="member-role">{member.role}</p>
-            </div>
-          </article>
-        ))}
+  <article class="team-card">
+    <div class="image-wrapper">
+      <img
+        src={member.image.src}
+        alt={`${member.name} - ${member.role} at Facet Architecture`}
+        width="450"
+        height="600"
+        loading={member.eager ? "eager" : "lazy"}
+        decoding="async"
+        class="team-img"
+      />
+    </div>
+    <div class="team-meta">
+      <h3 class="member-name">{member.name}</h3>
+      <p class="member-role">{member.role}</p>
+    </div>
+  </article>
+))}
       </div>
     </section>
   </main>
@@ -339,4 +339,4 @@ const teamMembers = [
       gap: 70px;
     }
   }
-</style>
+</style>+
