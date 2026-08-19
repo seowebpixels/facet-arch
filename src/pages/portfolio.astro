@@ -583,7 +583,7 @@ const portfolioData = [
   .lightbox-close {
     position: absolute;
     top: 24px;
-    right: 24px;
+    left: 24px;
     background: none;
     border: 1px solid #00ffc8;
     color: #00ffc8;
@@ -593,6 +593,13 @@ const portfolioData = [
     cursor: pointer;
     text-transform: uppercase;
     z-index: 1010;
+  }
+
+  @media (max-width: 768px) {
+    .lightbox-close {
+      top: 16px;
+      left: 16px;
+    }
   }
 
   .lightbox-content {
