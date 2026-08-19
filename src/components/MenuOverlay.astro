@@ -397,26 +397,28 @@ const menuItems = [
       flex-shrink: 0;
     }
     .right-nav {
-      padding: 32px 24px 48px 24px;
+      padding: 16px 24px 48px 24px;
       flex-grow: 1;
+      align-items: flex-start;
     }
-    /* Fixed: Move logo to the LEFT only on mobile */
+    /* Fixed: Clean, positive top positioning for Mobile iOS Chrome */
     .overlay-logo-link {
-      top: -12px;
-      left: 12px;
+      top: 12px;
+      left: 20px;
       right: auto;
     }
     .overlay-logo {
-      height: clamp(115px, 16vw, 130px);
+      height: clamp(65px, 12vw, 85px);
     }
     .menu-nav-list {
-      margin-top: 15px;
+      margin-top: 0;
+      padding-top: 85px;
     }
     .menu-link-text {
-      font-size: clamp(2.2rem, 8vw, 3.2rem);
+      font-size: clamp(2rem, 7vw, 2.8rem);
     }
     .overlay-clock-container {
-      bottom: 24px;
+      bottom: 20px;
     }
   }
 </style>
