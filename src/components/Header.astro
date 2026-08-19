@@ -60,12 +60,13 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     pointer-events: none;
   }
 
+  /* Logo pinned cleanly to the RIGHT side */
   .logo-link {
     pointer-events: auto !important;
     position: fixed;
     top: -16px;
-    left: 20px;
-    right: auto;
+    right: 20px;
+    left: auto;
     z-index: 2147483647;
     display: flex;
     align-items: center;
@@ -83,10 +84,12 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     transform: scale(1.04);
   }
 
+  /* Menu Toggle / CLOSE block pinned cleanly to the LEFT side */
   .menu-box {
     pointer-events: auto !important;
     position: fixed;
-    right: 0;
+    left: 0;
+    right: auto;
     top: 50%;
     transform: translateY(-50%);
     z-index: 2147483647; /* Maximum browser z-index value */
@@ -134,7 +137,7 @@ const shouldShowLogo = !isHomePage && showLogoPages;
 
   @media (max-width: 768px) {
     .logo-link {
-      left: 12px;
+      right: 12px;
       top: -12px;
     }
 
