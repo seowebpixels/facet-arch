@@ -105,7 +105,8 @@ import heroImg from '../assets/res-eoa-1597.avif';
     const vh = window.innerHeight;
     const isMobile = vw <= 768;
 
-    const targetTop = isMobile ? -10 : -20;
+    // Mobile targetTop shifted up 25px (from -10 to -35). Desktop left at -20.
+    const targetTop = isMobile ? -35 : -20;
     const targetRight = isMobile ? 15 : 30;
 
     const logoWidth = logo.offsetWidth || (isMobile ? 85 : 150);
@@ -136,11 +137,11 @@ import heroImg from '../assets/res-eoa-1597.avif';
         duration: 0.8,
         stagger: 0
       })
-      // 3. Move logo to top right corner
+      // 3. Move logo to top right corner (scaled up on mobile only)
       .to(logo, {
         x: deltaX,
         y: deltaY,
-        scale: 1,
+        scale: isMobile ? 1.22 : 1,
         duration: 1.2
       }, '-=0.2')
       // 4. Expand hero image
