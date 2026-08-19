@@ -14,9 +14,12 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
 ---
 
 <Layout title="Facet Architecture | Selected Works">
-  <!-- Immediate inline scroll lock strictly for index.astro -->
+  <!-- Immediate inline scroll lock strictly for index.astro preloader -->
   <script is:inline>
-    document.documentElement.classList.add('home-preloader-locked');
+    // Only lock if preloader hasn't already completed in session
+    if (!sessionStorage.getItem('preloader_completed')) {
+      document.documentElement.classList.add('home-preloader-locked');
+    }
   </script>
 
   <Preloader />
@@ -426,20 +429,26 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
 </style>
 
 <script>
-  import { ScrollLock } from '../utils/scrollLock';
-
-  // Unlock function for Home preloader
+  // Robust unlock function for Home preloader
   const unlockHomePreloader = () => {
     document.documentElement.classList.remove('home-preloader-locked');
-    ScrollLock.unlock();
+    document.body.classList.remove('home-preloader-locked');
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.touchAction = '';
   };
 
-  // Listen for window load or custom preloader completion event
+  // Immediate unlock if navigated back via menu or restored from WebKit BFCache
+  window.addEventListener('pageshow', unlockHomePreloader);
+
+  // Listen for window load
   window.addEventListener('load', () => {
-    // If your Preloader component emits a custom completion event or GSAP callback,
-    // call unlockHomePreloader() there. Otherwise, fallback timeout unlocks after load:
-    setTimeout(unlockHomePreloader, 1200);
+    setTimeout(unlockHomePreloader, 800);
   }, { once: true });
+
+  // Safety fallback: guaranteed unlock after 1.5 seconds under all conditions
+  setTimeout(unlockHomePreloader, 1500);
 
   // Listen for explicit custom unlock event if emitted by Preloader.astro
   window.addEventListener('preloader:complete', unlockHomePreloader, { once: true });
