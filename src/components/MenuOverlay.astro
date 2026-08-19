@@ -1,4 +1,3 @@
----
 /* MenuOverlay.astro */
 import featProjectImg from '../assets/res-eoa-1597.avif';
 import addressImg from '../assets/res-blann.avif';
@@ -88,30 +87,30 @@ const menuItems = [
   }
 
   .menu-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 2147483640; /* Set to maximum layer depth */
-  background-color: #2e343b;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s ease, visibility 0.4s ease;
-  visibility: hidden;
-  width: 100vw;
-  height: 100dvh;
-  overflow: hidden;
-}
+    position: fixed;
+    inset: 0;
+    z-index: 2147483640; /* Set to maximum layer depth */
+    background-color: #2e343b;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+    visibility: hidden;
+    width: 100vw;
+    height: 100dvh;
+    overflow: hidden;
+  }
 
-/* Must be defined so clicks work when open */
-.menu-overlay.active {
-  opacity: 1 !important;
-  pointer-events: auto !important;
-  visibility: visible !important;
-}
+  /* Must be defined so clicks work when open */
+  .menu-overlay.active {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
+  }
 
-/* Ensure child elements inside overlay capture mouse/tap events */
-.menu-overlay.active * {
-  pointer-events: auto !important;
-}
+  /* Ensure child elements inside overlay capture mouse/tap events */
+  .menu-overlay.active * {
+    pointer-events: auto !important;
+  }
 
   .menu-overlay * {
     pointer-events: auto !important;
@@ -283,7 +282,7 @@ const menuItems = [
     border: none;
   }
 
-  /* Right Navigation Area */
+  /* Right Navigation Area - Desktop Default */
   .right-nav {
     position: relative;
     display: flex;
@@ -294,7 +293,7 @@ const menuItems = [
     box-sizing: border-box;
   }
 
-  /* Overlay White Logo Placement */
+  /* Overlay White Logo Placement - Desktop Default */
   .overlay-logo-link {
     position: absolute;
     top: -16px;
@@ -399,12 +398,18 @@ const menuItems = [
       padding: 32px 24px 48px 24px;
       flex-grow: 1;
     }
+    /* Mobile-only logo position override: shifted to the left */
     .overlay-logo-link {
       top: -18px;
-      right: 15px;
+      left: 15px;
+      right: auto;
     }
     .overlay-logo {
       height: clamp(115px, 16vw, 130px);
+    }
+    /* Mobile-only menu items offset override: moved down 15px */
+    .menu-nav-list {
+      margin-top: 15px;
     }
     .menu-link-text {
       font-size: clamp(2.2rem, 8vw, 3.2rem);
