@@ -294,11 +294,12 @@ const menuItems = [
     box-sizing: border-box;
   }
 
-  /* Overlay White Logo Placement - Desktop Default */
+  /* Overlay White Logo Placement - Desktop & Mobile pinned to the RIGHT */
   .overlay-logo-link {
     position: absolute;
     top: -16px;
     right: 20px;
+    left: auto;
     z-index: 10;
     display: flex;
     align-items: center;
@@ -399,16 +400,15 @@ const menuItems = [
       padding: 32px 24px 48px 24px;
       flex-grow: 1;
     }
-    /* Mobile-only logo position override: shifted to the left */
+    /* Fixed: Keep logo pinned to the RIGHT on mobile */
     .overlay-logo-link {
-      top: -18px;
-      left: 15px;
-      right: auto;
+      top: -12px;
+      right: 12px;
+      left: auto;
     }
     .overlay-logo {
       height: clamp(115px, 16vw, 130px);
     }
-    /* Mobile-only menu items offset override: moved down 15px */
     .menu-nav-list {
       margin-top: 15px;
     }
@@ -440,7 +440,6 @@ const menuItems = [
   }
 
   function initMenuOverlay() {
-    // Render current time immediately as soon as element exists
     renderClockTime();
 
     const links = document.querySelectorAll<HTMLAnchorElement>('.menu-link');
@@ -480,12 +479,10 @@ const menuItems = [
     });
   }
 
-  // Ensure clock update interval is registered globally once
   if (!(window as any)._overlayClockTimer) {
     (window as any)._overlayClockTimer = setInterval(renderClockTime, 1000);
   }
 
-  // Run on DOM load and Astro page transitions
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initMenuOverlay);
   } else {

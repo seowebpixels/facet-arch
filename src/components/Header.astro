@@ -56,11 +56,11 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     left: 0;
     width: 100vw;
     height: 0;
-    z-index: 2147483646; /* Maximum browser z-index value */
+    z-index: 2147483646;
     pointer-events: none;
   }
 
-  /* Logo stays on the RIGHT */
+  /* Logo pinned to the RIGHT */
   .logo-link {
     pointer-events: auto !important;
     position: fixed;
@@ -84,15 +84,14 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     transform: scale(1.04);
   }
 
-  /* MENU BUTTON: Pinned to the RIGHT when menu is closed */
+  /* TOGGLE BOX: Fixed to the RIGHT at all times */
   .menu-box {
     pointer-events: auto !important;
     position: fixed;
     right: 0;
-    left: auto;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 2147483647; /* Maximum browser z-index value */
+    z-index: 2147483647;
     width: 64px;
     height: 72px;
     background-color: #7c7a7a;
@@ -103,13 +102,6 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
-    transition: left 0.3s ease, right 0.3s ease;
-  }
-
-  /* CLOSE BUTTON STATE: Explicitly unsets right and shifts to LEFT edge */
-  .menu-box[aria-expanded="true"] {
-    left: 0 !important;
-    right: unset !important;
   }
 
   .hamburger-lines {
@@ -130,6 +122,7 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     pointer-events: none;
   }
 
+  /* MORPH TO 'X' IN PLACE WHEN ACTIVE */
   .menu-box[aria-expanded="true"] .line-1 {
     transform: translateY(8px) rotate(45deg);
   }
