@@ -294,7 +294,7 @@ const menuItems = [
     box-sizing: border-box;
   }
 
-  /* Overlay White Logo Placement - Desktop & Mobile pinned to the RIGHT */
+  /* Overlay White Logo Placement - Desktop default pinned to the RIGHT */
   .overlay-logo-link {
     position: absolute;
     top: -16px;
@@ -400,11 +400,11 @@ const menuItems = [
       padding: 32px 24px 48px 24px;
       flex-grow: 1;
     }
-    /* Fixed: Keep logo pinned to the RIGHT on mobile */
+    /* Fixed: Move logo to the LEFT only on mobile */
     .overlay-logo-link {
       top: -12px;
-      right: 12px;
-      left: auto;
+      left: 12px;
+      right: auto;
     }
     .overlay-logo {
       height: clamp(115px, 16vw, 130px);
