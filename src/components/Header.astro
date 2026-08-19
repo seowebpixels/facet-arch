@@ -60,7 +60,7 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     pointer-events: none;
   }
 
-  /* Logo pinned cleanly to the RIGHT side */
+  /* Logo stays on the RIGHT */
   .logo-link {
     pointer-events: auto !important;
     position: fixed;
@@ -84,12 +84,12 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     transform: scale(1.04);
   }
 
-  /* Menu Toggle / CLOSE block pinned cleanly to the LEFT side */
+  /* MENU BUTTON: Pinned to the RIGHT when menu is closed */
   .menu-box {
     pointer-events: auto !important;
     position: fixed;
-    left: 0;
-    right: auto;
+    right: 0;
+    left: auto;
     top: 50%;
     transform: translateY(-50%);
     z-index: 2147483647; /* Maximum browser z-index value */
@@ -103,6 +103,13 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
+    transition: left 0.3s ease, right 0.3s ease;
+  }
+
+  /* CLOSE BUTTON STATE: Shifts automatically to the LEFT when menu opens */
+  .menu-box[aria-expanded="true"] {
+    left: 0 !important;
+    right: auto !important;
   }
 
   .hamburger-lines {
