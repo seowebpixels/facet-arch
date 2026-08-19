@@ -206,7 +206,13 @@ const portfolioData = [
             {cat.items.map((item) => (
               <div class="portfolio-card cad-trigger" data-fullsrc={item.img} data-caption={item.name}>
                 <div class="card-frame">
-                  <div class="card-image-layer" style={`background-image: url('${item.img}');`}></div>
+                  <img 
+                    src={item.img} 
+                    alt={`${item.name} - ${cat.title} Architectural Project by Facet Architecture`} 
+                    class="card-image-layer" 
+                    loading="lazy"
+                    decoding="async"
+                  />
                   <div class="card-shield"></div>
                   <div class="cad-grid-layer"></div>
                 </div>
@@ -509,8 +515,9 @@ const portfolioData = [
   .card-image-layer {
     width: 100%;
     height: 100%;
-    background-size: cover;
-    background-position: center;
+    object-fit: cover;
+    object-position: center;
+    display: block;
     filter: grayscale(100%) contrast(110%);
     transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease;
   }
@@ -583,7 +590,7 @@ const portfolioData = [
   .lightbox-close {
     position: absolute;
     top: 24px;
-    left: 24px;
+    right: 24px;
     background: none;
     border: 1px solid #00ffc8;
     color: #00ffc8;
@@ -593,13 +600,6 @@ const portfolioData = [
     cursor: pointer;
     text-transform: uppercase;
     z-index: 1010;
-  }
-
-  @media (max-width: 768px) {
-    .lightbox-close {
-      top: 16px;
-      left: 16px;
-    }
   }
 
   .lightbox-content {
