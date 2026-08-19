@@ -406,13 +406,15 @@ const menuItems = [
       left: 20px;
       right: auto;
     }
-    /* Increased logo height by 20px on mobile */
+    /* Increased logo height by another 20px */
     .overlay-logo {
-      height: clamp(85px, 15vw, 105px);
+      height: clamp(105px, 18vw, 125px);
     }
+    /* Tightened menu list gap by 10px and adjusted top padding */
     .menu-nav-list {
       margin-top: 0;
-      padding-top: 105px; /* Offset to clear larger logo height */
+      padding-top: 125px;
+      gap: clamp(6px, 1.5vh, 26px);
     }
     .menu-link-text {
       font-size: clamp(2rem, 7vw, 2.8rem);
