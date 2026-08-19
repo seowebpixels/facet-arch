@@ -64,7 +64,8 @@ const shouldShowLogo = !isHomePage && showLogoPages;
     pointer-events: auto !important;
     position: fixed;
     top: -16px;
-    right: 20px;
+    left: 20px;
+    right: auto;
     z-index: 2147483647;
     display: flex;
     align-items: center;
@@ -132,6 +133,11 @@ const shouldShowLogo = !isHomePage && showLogoPages;
   }
 
   @media (max-width: 768px) {
+    .logo-link {
+      left: 12px;
+      top: -12px;
+    }
+
     .menu-box {
       width: 52px;
       height: 60px;
