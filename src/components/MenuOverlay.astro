@@ -401,18 +401,18 @@ const menuItems = [
       flex-grow: 1;
       align-items: flex-start;
     }
-    /* Fixed: Clean, positive top positioning for Mobile iOS Chrome */
     .overlay-logo-link {
       top: 12px;
       left: 20px;
       right: auto;
     }
+    /* Increased logo height by 20px on mobile */
     .overlay-logo {
-      height: clamp(65px, 12vw, 85px);
+      height: clamp(85px, 15vw, 105px);
     }
     .menu-nav-list {
       margin-top: 0;
-      padding-top: 85px;
+      padding-top: 105px; /* Offset to clear larger logo height */
     }
     .menu-link-text {
       font-size: clamp(2rem, 7vw, 2.8rem);
