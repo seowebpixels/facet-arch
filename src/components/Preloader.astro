@@ -121,24 +121,23 @@ import heroImg from '../assets/res-eoa-1597.avif';
     const deltaX = (vw / 2) - targetRight - (logoWidth / 2);
     const deltaY = -((vh / 2) - targetTop - (logoHeight / 2));
 
-    // Reduced Motion / Instant Load Check
+    // Reduced Motion Check
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (prefersReducedMotion) {
-      // Instantly position elements and reveal hero frame without delays
-      gsap.set(logo, { x: deltaX, y: deltaY, scale: isMobile ? 1.22 : 1, opacity: 1 });
+      gsap.set(logo, { xPercent: -50, yPercent: -50, x: deltaX, y: deltaY, scale: isMobile ? 1.22 : 1, opacity: 1 });
       gsap.set([textFacet, textArchitecture, clock], { opacity: 1, y: 0 });
       gsap.set(heroFrame, { scaleY: 1 });
       releaseScrollLock();
       return;
     }
 
-    // Standard GSAP Intro Sequence
-    gsap.set(logo, { x: 0, y: 0, scale: 3.2, opacity: 1 });
+    // Standard GSAP Intro Sequence with explicit centering offsets
+    gsap.set(logo, { xPercent: -50, yPercent: -50, x: 0, y: 0, scale: 3.2, opacity: 1 });
     gsap.set([textFacet, clock], { opacity: 0, y: -20 });
     gsap.set(textArchitecture, { opacity: 0, y: 20 });
     
-    // GSAP instantly collapses the frame at start of execution so animation runs
+    // Collapse frame instantly when JS loads so animation unfolds properly
     gsap.set(heroFrame, { scaleY: 0, transformOrigin: 'center center' });
 
     const tl = gsap.timeline({ 
@@ -147,25 +146,25 @@ import heroImg from '../assets/res-eoa-1597.avif';
     });
 
     tl
-      // 1. Hold logo in center for 3 seconds on all viewports
+      // 1. Hold logo centered for 3 seconds (Desktop & Mobile)
       .to(logo, {
         duration: 3
       })
-      // 2. Reveal FACET, ARCHITECTURE & Live Clock
+      // 2. Reveal typography
       .to([textFacet, textArchitecture, clock], {
         opacity: 1,
         y: 0,
         duration: 0.8,
         stagger: 0
       })
-      // 3. Move logo to top right corner
+      // 3. Move logo to corner
       .to(logo, {
         x: deltaX,
         y: deltaY,
         scale: isMobile ? 1.22 : 1,
         duration: 1.2
       }, '-=0.2')
-      // 4. Expand hero image
+      // 4. Expand hero showcase frame
       .to(heroFrame, {
         scaleY: 1,
         duration: 1.2,
@@ -254,8 +253,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) scale(3.2);
-    transform-origin: center center;
+    transform: translate(-50%, -50%);
     z-index: 30;
     will-change: transform;
   }
@@ -267,7 +265,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     object-fit: contain;
   }
 
-  /* Desktop Central Frame - Updated to scaleY(1) so browser registers LCP instantly during initial paint */
+  /* Desktop Central Frame - CSS defaults to scaleY(1) for instant LCP render */
   .hero-frame {
     position: absolute;
     top: 14%;
