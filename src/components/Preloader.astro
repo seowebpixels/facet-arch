@@ -15,7 +15,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     <span id="time-zone" class="time-zone">SAST</span>
   </div>
 
-  <!-- Logo Mark Container (Highest Z-Index Layer) -->
+  <!-- Logo Mark Container -->
   <div id="logo-mark" class="logo-wrapper">
     <Image 
       src={heroLogoImg} 
@@ -102,40 +102,20 @@ import heroImg from '../assets/res-eoa-1597.avif';
     setInterval(updateHeroClock, 1000);
 
     gsap.killTweensOf([logo, textFacet, textArchitecture, clock, heroFrame]);
-
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    const isMobile = vw <= 768;
-
-    const logoWidth = isMobile ? 85 : 150;
-    const logoHeight = isMobile ? 85 : 150;
-
-    const targetTop = 20;
-    const targetRight = isMobile ? 15 : 30;
-
-    // Translation target relative to center
-    const deltaX = (vw / 2) - targetRight - (logoWidth / 2);
-    const deltaY = -((vh / 2) - targetTop - (logoHeight / 2));
+    logo.classList.remove('is-docked');
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (prefersReducedMotion) {
-      gsap.set(logo, { x: deltaX, y: deltaY, scale: isMobile ? 1.22 : 1, opacity: 1 });
+      logo.classList.add('is-docked');
       gsap.set([textFacet, textArchitecture, clock], { opacity: 1, y: 0 });
       gsap.set(heroFrame, { scaleY: 1 });
       releaseScrollLock();
       return;
     }
 
-    // Force logo visibility and reset translation
-    gsap.set(logo, { 
-      x: 0, 
-      y: 0, 
-      scale: isMobile ? 2.2 : 3.2, 
-      opacity: 1,
-      visibility: 'visible'
-    });
-    
+    // Reset initial positions (Logo is naturally centered in CSS)
+    gsap.set(logo, { scale: 2.5, opacity: 1 });
     gsap.set([textFacet, clock], { opacity: 0, y: -20 });
     gsap.set(textArchitecture, { opacity: 0, y: 20 });
     gsap.set(heroFrame, { scaleY: 0, transformOrigin: 'center center' });
@@ -146,25 +126,24 @@ import heroImg from '../assets/res-eoa-1597.avif';
     });
 
     tl
-      // 1. Hold logo centered for 3 seconds on Desktop AND Mobile
+      // 1. Hold logo dead-center for 3 seconds on Desktop AND Mobile
       .to(logo, {
         duration: 3
       })
-      // 2. Reveal text typography & clock
+      // 2. Reveal text components
       .to([textFacet, textArchitecture, clock], {
         opacity: 1,
         y: 0,
         duration: 0.8,
         stagger: 0
       })
-      // 3. Move logo to top right
+      // 3. Smoothly transition logo to top-right corner via CSS
       .to(logo, {
-        x: deltaX,
-        y: deltaY,
-        scale: isMobile ? 1.22 : 1,
-        duration: 1.2
+        scale: 1,
+        duration: 1.2,
+        onStart: () => logo.classList.add('is-docked')
       }, '-=0.2')
-      // 4. Expand hero showcase
+      // 4. Expand hero image frame
       .to(heroFrame, {
         scaleY: 1,
         duration: 1.2,
@@ -247,21 +226,29 @@ import heroImg from '../assets/res-eoa-1597.avif';
     opacity: 0;
   }
 
-  /* LOGO WRAPPER: Absolute high z-index center positioning */
+  /* LOGO BASE: Always centered in viewport by default */
   .logo-wrapper {
     position: fixed;
     top: 50%;
     left: 50%;
+    transform: translate(-50%, -50%);
     width: 150px;
     height: 150px;
-    margin-top: -75px;
-    margin-left: -75px;
+    z-index: 999;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 9999;
-    will-change: transform;
-    visibility: visible;
+    transition: top 1.2s cubic-bezier(0.77, 0, 0.175, 1), 
+                left 1.2s cubic-bezier(0.77, 0, 0.175, 1), 
+                transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+  }
+
+  /* DOCKED STATE: Exact top-right placement */
+  .logo-wrapper.is-docked {
+    top: 20px;
+    left: auto;
+    right: 30px;
+    transform: translate(0, 0);
   }
 
   .logo-img {
@@ -297,8 +284,11 @@ import heroImg from '../assets/res-eoa-1597.avif';
     .logo-wrapper {
       width: 85px;
       height: 85px;
-      margin-top: -42.5px;
-      margin-left: -42.5px;
+    }
+
+    .logo-wrapper.is-docked {
+      top: 15px;
+      right: 15px;
     }
 
     .hero-frame {
