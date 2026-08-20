@@ -5,8 +5,48 @@ import heroLogoImg from '../assets/facet-hero-logo.avif';
 import heroImg from '../assets/res-eoa-1597.avif';
 ---
 
+<!-- PRELOADER OVERLAY: Pinned on top of everything -->
+<div id="preloader-overlay" class="preloader-overlay">
+  <div class="preloader-logo-wrapper">
+    <Image 
+      src={heroLogoImg} 
+      alt="Facet Architecture Logo" 
+      class="preloader-logo"
+      widths={[120, 240, 360]}
+      sizes="200px"
+      quality={80}
+      loading="eager"
+      fetchpriority="high"
+      decoding="sync"
+    />
+  </div>
+</div>
+
+<!-- MAIN HERO STAGE -->
 <div id="hero-stage" class="stage-container">
-  <!-- 1. BASE HERO IMAGE SHOWCASE -->
+  <h1 id="text-facet" class="title-text text-facet">FACET</h1>
+
+  <div id="hero-clock" class="hero-clock">
+    <span id="live-time">00:00:00</span>
+    <span id="time-zone" class="time-zone">SAST</span>
+  </div>
+
+  <div id="logo-docked" class="logo-docked-wrapper">
+    <Image 
+      src={heroLogoImg} 
+      alt="Facet Architecture Logo" 
+      class="logo-img-small"
+      widths={[120, 240, 360]}
+      sizes="(max-width: 768px) 120px, 200px"
+      quality={80}
+      loading="eager"
+      fetchpriority="high"
+      decoding="sync"
+    />
+  </div>
+
+  <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
+
   <div id="hero-frame" class="hero-frame">
     <Image 
       src={heroImg} 
@@ -21,163 +61,84 @@ import heroImg from '../assets/res-eoa-1597.avif';
       decoding="sync"
     />
   </div>
-
-  <!-- 2. TYPOGRAPHY LAYERS -->
-  <h1 id="text-facet" class="title-text text-facet">FACET</h1>
-
-  <div id="hero-clock" class="hero-clock">
-    <span id="live-time">00:00:00</span>
-    <span id="time-zone" class="time-zone">SAST</span>
-  </div>
-
-  <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
-
-  <!-- 3. CENTER PRELOADER LOGO (Overlays everything visually) -->
-  <div id="logo-center" class="logo-center-wrapper">
-    <Image 
-      src={heroLogoImg} 
-      alt="Facet Architecture Logo" 
-      class="logo-img-large"
-      widths={[120, 240, 360]}
-      sizes="(max-width: 768px) 120px, 200px"
-      quality={80}
-      loading="eager"
-      fetchpriority="high"
-      decoding="sync"
-    />
-  </div>
-
-  <!-- 4. TOP-RIGHT DOCKED LOGO -->
-  <div id="logo-docked" class="logo-docked-wrapper">
-    <Image 
-      src={heroLogoImg} 
-      alt="Facet Architecture Logo" 
-      class="logo-img-small"
-      widths={[120, 240, 360]}
-      sizes="(max-width: 768px) 120px, 200px"
-      quality={80}
-      loading="eager"
-      fetchpriority="high"
-      decoding="sync"
-    />
-  </div>
 </div>
 
-<script>
-  import { gsap } from 'gsap';
-
-  function releaseScrollLock() {
-    document.documentElement.classList.remove('is-loading', 'no-scroll');
-    document.body.classList.remove('is-loading', 'no-scroll');
-
-    document.documentElement.style.overflow = '';
-    document.body.style.overflow = '';
-
-    const stage = document.getElementById('hero-stage');
-    if (stage) {
-      stage.style.pointerEvents = 'none';
+<script is:inline>
+  // Pure inline execution - no Astro bundler delay
+  (function() {
+    function updateClock() {
+      var clockEl = document.getElementById('live-time');
+      var zoneEl = document.getElementById('time-zone');
+      if (!clockEl) return;
+      var now = new Date();
+      clockEl.textContent = now.toTimeString().split(' ')[0];
+      if (zoneEl) {
+        var tzString = now.toLocaleDateString('en-US', { timeZoneName: 'short' });
+        zoneEl.textContent = tzString.split(' ').pop() || 'SAST';
+      }
     }
-  }
+    updateClock();
+    setInterval(updateClock, 1000);
 
-  function updateHeroClock() {
-    const clockEl = document.getElementById('live-time');
-    const zoneEl = document.getElementById('time-zone');
-    if (!clockEl) return;
+    // Lock scroll initially
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
 
-    const now = new Date();
-    clockEl.textContent = now.toTimeString().split(' ')[0];
+    // Hold screen overlay for 3 seconds, then reveal page seamlessly
+    setTimeout(function() {
+      var overlay = document.getElementById('preloader-overlay');
+      var stage = document.getElementById('hero-stage');
+      
+      if (overlay) {
+        overlay.classList.add('fade-out');
+      }
+      if (stage) {
+        stage.classList.add('is-active');
+      }
 
-    if (zoneEl) {
-      const tzString = now.toLocaleDateString('en-US', { timeZoneName: 'short' });
-      const shortTz = tzString.split(' ').pop() || '';
-      zoneEl.textContent = shortTz;
-    }
-  }
-
-  function initHeroAnimation() {
-    const stage = document.getElementById('hero-stage');
-    if (!stage) return;
-
-    const logoCenter = document.getElementById('logo-center');
-    const logoDocked = document.getElementById('logo-docked');
-    const textFacet = document.getElementById('text-facet');
-    const textArchitecture = document.getElementById('text-architecture');
-    const clock = document.getElementById('hero-clock');
-    const heroFrame = document.getElementById('hero-frame');
-
-    if (!logoCenter || !logoDocked || !textFacet || !textArchitecture || !clock || !heroFrame) {
-      releaseScrollLock();
-      return;
-    }
-
-    window.scrollTo(0, 0);
-    updateHeroClock();
-    setInterval(updateHeroClock, 1000);
-
-    gsap.killTweensOf([logoCenter, logoDocked, textFacet, textArchitecture, clock, heroFrame]);
-
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (prefersReducedMotion) {
-      gsap.set(logoCenter, { display: 'none' });
-      gsap.set(logoDocked, { display: 'flex', opacity: 1 });
-      gsap.set([textFacet, textArchitecture, clock], { opacity: 1, y: 0 });
-      gsap.set(heroFrame, { scaleY: 1 });
-      releaseScrollLock();
-      return;
-    }
-
-    // Set initial GSAP values before playing
-    gsap.set(logoCenter, { display: 'flex', opacity: 1, scale: 1 });
-    gsap.set(logoDocked, { display: 'flex', opacity: 0 });
-    gsap.set([textFacet, clock], { opacity: 0, y: -20 });
-    gsap.set(textArchitecture, { opacity: 0, y: 20 });
-    gsap.set(heroFrame, { scaleY: 0, transformOrigin: 'center center' });
-
-    const tl = gsap.timeline({ 
-      defaults: { ease: 'power3.inOut' },
-      onComplete: releaseScrollLock
-    });
-
-    tl
-      // 1. HOLD CENTER LOGO FOR EXACTLY 3 SECONDS
-      .to(logoCenter, {
-        duration: 3
-      })
-      // 2. REVEAL FACET, ARCHITECTURE & CLOCK
-      .to([textFacet, textArchitecture, clock], {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        stagger: 0
-      })
-      // 3. FADE OUT CENTER LOGO / FADE IN TOP RIGHT DOCKED LOGO
-      .to(logoCenter, {
-        opacity: 0,
-        scale: 0.8,
-        duration: 0.8,
-        onComplete: () => {
-          logoCenter.style.display = 'none';
-        }
-      }, '-=0.2')
-      .to(logoDocked, {
-        opacity: 1,
-        duration: 0.8
-      }, '<')
-      // 4. EXPAND HERO SHOWCASE FRAME
-      .to(heroFrame, {
-        scaleY: 1,
-        duration: 1.2,
-        ease: 'power4.out'
-      }, '-=0.4');
-  }
-
-  // Execute immediately on script load
-  initHeroAnimation();
-  document.addEventListener('astro:page-load', initHeroAnimation);
+      // Unlock scroll after fade completes
+      setTimeout(function() {
+        if (overlay) overlay.style.display = 'none';
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+      }, 1000);
+    }, 3000);
+  })();
 </script>
 
 <style>
+  /* 1. OVERLAY LAYER: Covers entire viewport for 3s */
+  .preloader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bg-concrete, #BEBEBE);
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+  }
+
+  .preloader-overlay.fade-out {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .preloader-logo-wrapper {
+    width: 280px;
+    height: 280px;
+  }
+
+  .preloader-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* 2. MAIN HERO STAGE */
   .stage-container {
     position: relative;
     width: 100vw;
@@ -188,7 +149,12 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 10;
   }
 
-  /* FACET: Anchored top left (CSS default hidden) */
+  /* Elements animate smoothly via CSS classes once .is-active is appended */
+  .text-facet, .text-architecture, .hero-clock, .logo-docked-wrapper {
+    opacity: 0;
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+
   .text-facet {
     position: absolute;
     top: 20px;
@@ -200,18 +166,16 @@ import heroImg from '../assets/res-eoa-1597.avif';
     color: var(--text-primary, #111111);
     margin: 0;
     line-height: 1;
-    z-index: 40;
+    z-index: 20;
     text-transform: uppercase;
-    white-space: nowrap;
-    opacity: 0;
+    transform: translateY(-20px);
   }
 
-  /* Live Clock Styling (CSS default hidden) */
   .hero-clock {
     position: absolute;
     bottom: 25px;
     left: 50px;
-    z-index: 40;
+    z-index: 20;
     font-family: monospace, sans-serif;
     font-size: clamp(0.85rem, 1.2vw, 1.1rem);
     font-weight: 700;
@@ -219,14 +183,13 @@ import heroImg from '../assets/res-eoa-1597.avif';
     color: var(--text-primary, #111111);
     display: flex;
     align-items: center;
-    opacity: 0;
+    transform: translateY(-20px);
   }
 
   .time-zone {
     margin-left: 1.25rem;
   }
 
-  /* ARCHITECTURE: Anchored bottom right (CSS default hidden) */
   .text-architecture {
     position: absolute;
     bottom: 20px;
@@ -238,82 +201,64 @@ import heroImg from '../assets/res-eoa-1597.avif';
     color: var(--text-primary, #111111);
     margin: 0;
     line-height: 1;
-    z-index: 40;
+    z-index: 20;
     text-transform: uppercase;
-    white-space: nowrap;
-    opacity: 0;
+    transform: translateY(20px);
   }
 
-  /* CENTER LOGO: High z-index (99999) fixed overlay */
-  .logo-center-wrapper {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 320px;
-    height: 320px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 99999;
-    pointer-events: none;
-    opacity: 1;
-  }
-
-  .logo-img-large {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: contain;
-  }
-
-  /* DOCKED LOGO: Top-right target (CSS default hidden) */
   .logo-docked-wrapper {
     position: absolute;
     top: 20px;
     right: 50px;
     width: 150px;
     height: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 99999;
-    opacity: 0;
+    z-index: 30;
   }
 
   .logo-img-small {
     width: 100%;
     height: 100%;
-    display: block;
     object-fit: contain;
   }
 
-  /* HERO FRAME: CSS default collapsed */
   .hero-frame {
     position: absolute;
     top: 14%;
     left: 12%;
     width: 76vw;
     height: 72vh;
-    z-index: 20;
+    z-index: 10;
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     transform: scaleY(0);
     transform-origin: center center;
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .hero-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
   }
 
-  /* Mobile Responsive */
+  /* ACTIVE REVEAL STATE (Triggers after 3s hold) */
+  .stage-container.is-active .text-facet,
+  .stage-container.is-active .text-architecture,
+  .stage-container.is-active .hero-clock,
+  .stage-container.is-active .logo-docked-wrapper {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .stage-container.is-active .hero-frame {
+    transform: scaleY(1);
+  }
+
+  /* Mobile Adjustments */
   @media (max-width: 768px) {
-    .logo-center-wrapper {
-      width: 200px;
-      height: 200px;
+    .preloader-logo-wrapper {
+      width: 180px;
+      height: 180px;
     }
 
     .logo-docked-wrapper {
@@ -349,15 +294,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
       bottom: 105px;
       left: 15px;
       font-size: 0.85rem;
-    }
-
-    .time-zone {
-      margin-left: 0.85rem;
-    }
-
-    .hero-img {
-      object-fit: contain;
-      object-position: center center;
     }
   }
 </style>
