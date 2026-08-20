@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Preloader from '../components/Preloader.astro';
 import MoodGrid from '../components/MoodGrid.astro';
 import HomeFooter from '../components/HomeFooter.astro';
+import { Image } from 'astro:assets';
 
 // Import featured assets
 import commImg from '../assets/comm-emerald-resort-hotel.avif';
@@ -48,7 +49,14 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
       <!-- Tile 1 -->
       <a href="/portfolio#commercial" class="tile-card tile-1" data-bg="#3A3F47" data-text-light="true">
         <div class="image-container">
-          <img src={commImg.src} alt="Emerald Resort Hotel" loading="eager" />
+          <Image 
+            src={commImg} 
+            alt="Emerald Resort Hotel" 
+            widths={[360, 720]} 
+            sizes="(max-width: 768px) 90vw, 400px" 
+            loading="eager" 
+            decoding="sync"
+          />
           <div class="tile-overlay">
             <span class="tile-num">01</span>
             <div class="tile-meta">
@@ -62,7 +70,14 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
       <!-- Tile 2 -->
       <a href="/portfolio#development" class="tile-card tile-2" data-bg="#5c5e5d" data-text-light="true">
         <div class="image-container">
-          <img src={devImg.src} alt="Ascot Manor" loading="lazy" />
+          <Image 
+            src={devImg} 
+            alt="Ascot Manor" 
+            widths={[360, 720]} 
+            sizes="(max-width: 768px) 90vw, 400px" 
+            loading="lazy" 
+            decoding="async"
+          />
           <div class="tile-overlay">
             <span class="tile-num">02</span>
             <div class="tile-meta">
@@ -76,7 +91,14 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
       <!-- Tile 3 -->
       <a href="/portfolio#interiors" class="tile-card tile-3" data-bg="#BF6363" data-text-light="true">
         <div class="image-container">
-          <img src={intImg.src} alt="Ndlovu Interior Design" loading="lazy" />
+          <Image 
+            src={intImg} 
+            alt="Ndlovu Interior Design" 
+            widths={[360, 720]} 
+            sizes="(max-width: 768px) 90vw, 400px" 
+            loading="lazy" 
+            decoding="async"
+          />
           <div class="tile-overlay">
             <span class="tile-num">03</span>
             <div class="tile-meta">
@@ -90,7 +112,14 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
       <!-- Tile 4 -->
       <a href="/portfolio#residential" class="tile-card tile-4" data-bg="#8C8275" data-text-light="true">
         <div class="image-container">
-          <img src={resImg.src} alt="EOA Residence" loading="lazy" />
+          <Image 
+            src={resImg} 
+            alt="EOA Residence" 
+            widths={[360, 720]} 
+            sizes="(max-width: 768px) 90vw, 400px" 
+            loading="lazy" 
+            decoding="async"
+          />
           <div class="tile-overlay">
             <span class="tile-num">04</span>
             <div class="tile-meta">
@@ -104,7 +133,14 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
       <!-- Tile 5 -->
       <a href="/portfolio#sustainability" class="tile-card tile-5" data-bg="#E3DFD5" data-text-light="false">
         <div class="image-container">
-          <img src={sustImg.src} alt="Thermal Comfort Sustainability Project" loading="lazy" />
+          <Image 
+            src={sustImg} 
+            alt="Thermal Comfort Sustainability Project" 
+            widths={[360, 720]} 
+            sizes="(max-width: 768px) 90vw, 400px" 
+            loading="lazy" 
+            decoding="async"
+          />
           <div class="tile-overlay">
             <span class="tile-num">05</span>
             <div class="tile-meta">
@@ -491,4 +527,4 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
   }, observerOptions);
 
   tiles.forEach((tile) => observer.observe(tile));
-</script>
+</script>+
