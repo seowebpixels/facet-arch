@@ -1,10 +1,14 @@
-// @ts-check
 import { defineConfig } from 'astro/config';
-
 import sitemap from '@astrojs/sitemap';
 
-// https://astro.build/config
 export default defineConfig({
-  site: 'https://facetarchitecture.co.za',
-  integrations: [sitemap()]
+  site: 'https://facetarchitecture.co.za', // Required for @astrojs/sitemap to work
+  integrations: [sitemap()],
+  image: {
+    service: {
+      entrypoint: 'astro/assets/services/sharp'
+    },
+    domains: [],
+    remotePatterns: [],
+  },
 });

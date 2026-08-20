@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { Image } from 'astro:assets';
 
 // Commercial Imports
 import commAgriSeta from '../assets/comm-agri-seta.avif';
@@ -81,20 +82,20 @@ const portfolioData = [
     title: 'COMMERCIAL',
     num: '01',
     items: [
-      { name: 'EMERALD RESORT HOTEL', img: commEmeraldResort.src },
-      { name: 'AGRI SETA', img: commAgriSeta.src },
-      { name: 'BEME', img: commBeme.src },
-      { name: 'CARS.CO.ZA', img: commCarsCoZa.src },
-      { name: 'CRESTRON', img: commCrestron.src },
-      { name: 'ECO CITY STUDENT RES', img: commEcoCityStudRes.src },
-      { name: 'HIBISCUS KINDERGARTEN', img: commHibiscusKindergarten.src },
-      { name: 'ISTORES', img: commIStores.src },
-      { name: 'LEE COOPER FOURWAYS', img: commLeeCooper.src },
-      { name: 'NICHE', img: commNiche.src },
-      { name: 'NINTENDO', img: commNintendo.src },
-      { name: 'NORTHCLIFF PRIMARY', img: commNorthcliffPrimary.src },
-      { name: 'OMEGA CENTER', img: commOmegaCenter.src },
-      { name: 'RIVIERA SHOPPING CENTRE', img: commRivieraShopping.src }
+      { name: 'EMERALD RESORT HOTEL', img: commEmeraldResort },
+      { name: 'AGRI SETA', img: commAgriSeta },
+      { name: 'BEME', img: commBeme },
+      { name: 'CARS.CO.ZA', img: commCarsCoZa },
+      { name: 'CRESTRON', img: commCrestron },
+      { name: 'ECO CITY STUDENT RES', img: commEcoCityStudRes },
+      { name: 'HIBISCUS KINDERGARTEN', img: commHibiscusKindergarten },
+      { name: 'ISTORES', img: commIStores },
+      { name: 'LEE COOPER FOURWAYS', img: commLeeCooper },
+      { name: 'NICHE', img: commNiche },
+      { name: 'NINTENDO', img: commNintendo },
+      { name: 'NORTHCLIFF PRIMARY', img: commNorthcliffPrimary },
+      { name: 'OMEGA CENTER', img: commOmegaCenter },
+      { name: 'RIVIERA SHOPPING CENTRE', img: commRivieraShopping }
     ]
   },
   {
@@ -102,26 +103,26 @@ const portfolioData = [
     title: 'DEVELOPMENTS',
     num: '02',
     items: [
-      { name: 'ASCOT MANOR', img: devAscotManor.src },
-      { name: 'ECO CITY ENTRANCE', img: devEcoCityEntrance.src },
-      { name: 'ELEMENTUM', img: devElementum.src },
-      { name: 'HABITAT ALPHA', img: devHabitatAlpha.src },
-      { name: 'HABITAT BETA', img: devHabitatBeta.src },
-      { name: 'HABITAT EPSILON', img: devHabitatEpsilon.src },
-      { name: 'HABITAT KAPPA', img: devHabitatKappa.src },
-      { name: 'KENGIES', img: devKengies.src },
-      { name: 'KUBU', img: devKubu.src },
-      { name: 'KWENA', img: devKwena.src },
-      { name: 'LA TERRACE', img: devLaTerrace.src },
-      { name: 'MODITLO LODGE', img: devModitloLodge.src },
-      { name: 'OCEAN VIEWS', img: devOceanViews.src },
-      { name: 'RIVIERA APARTMENTS', img: devRivieraApartments.src },
-      { name: 'RIVIERA GUARD HOUSE', img: devRivieraGuardHouse.src },
-      { name: 'RIVIERA TOWNHOUSES', img: devRivieraTownhouses.src },
-      { name: 'SARONA CITY MASTER PLAN', img: devSaronaCityPlan.src },
-      { name: 'SIMBA', img: devSimba.src },
-      { name: 'THE FIG', img: devTheFig.src },
-      { name: 'TLOU', img: devTlou.src }
+      { name: 'ASCOT MANOR', img: devAscotManor },
+      { name: 'ECO CITY ENTRANCE', img: devEcoCityEntrance },
+      { name: 'ELEMENTUM', img: devElementum },
+      { name: 'HABITAT ALPHA', img: devHabitatAlpha },
+      { name: 'HABITAT BETA', img: devHabitatBeta },
+      { name: 'HABITAT EPSILON', img: devHabitatEpsilon },
+      { name: 'HABITAT KAPPA', img: devHabitatKappa },
+      { name: 'KENGIES', img: devKengies },
+      { name: 'KUBU', img: devKubu },
+      { name: 'KWENA', img: devKwena },
+      { name: 'LA TERRACE', img: devLaTerrace },
+      { name: 'MODITLO LODGE', img: devModitloLodge },
+      { name: 'OCEAN VIEWS', img: devOceanViews },
+      { name: 'RIVIERA APARTMENTS', img: devRivieraApartments },
+      { name: 'RIVIERA GUARD HOUSE', img: devRivieraGuardHouse },
+      { name: 'RIVIERA TOWNHOUSES', img: devRivieraTownhouses },
+      { name: 'SARONA CITY MASTER PLAN', img: devSaronaCityPlan },
+      { name: 'SIMBA', img: devSimba },
+      { name: 'THE FIG', img: devTheFig },
+      { name: 'TLOU', img: devTlou }
     ]
   },
   {
@@ -129,17 +130,17 @@ const portfolioData = [
     title: 'INTERIORS',
     num: '03',
     items: [
-      { name: 'NDLOVU RESIDENCE', img: intNdlovu.src },
-      { name: 'CABANOSSI', img: intCabanossi.src },
-      { name: 'CHILISA', img: intChilisa.src },
-      { name: 'CRESTRON INTERIOR', img: intCrestron.src },
-      { name: 'DAVID SPACE', img: intDavid.src },
-      { name: 'DOORASAMY', img: intDoorasamy.src },
-      { name: 'KHALPEY', img: intKhalpey.src },
-      { name: 'LEOPARD LODGE', img: intLeopardLodge.src },
-      { name: 'RACE BESPOKE SPACES', img: intRaceBespoke.src },
-      { name: 'STARCK', img: intStarck.src },
-      { name: 'TSUKUDUV', img: intTsukuduv.src }
+      { name: 'NDLOVU RESIDENCE', img: intNdlovu },
+      { name: 'CABANOSSI', img: intCabanossi },
+      { name: 'CHILISA', img: intChilisa },
+      { name: 'CRESTRON INTERIOR', img: intCrestron },
+      { name: 'DAVID SPACE', img: intDavid },
+      { name: 'DOORASAMY', img: intDoorasamy },
+      { name: 'KHALPEY', img: intKhalpey },
+      { name: 'LEOPARD LODGE', img: intLeopardLodge },
+      { name: 'RACE BESPOKE SPACES', img: intRaceBespoke },
+      { name: 'STARCK', img: intStarck },
+      { name: 'TSUKUDUV', img: intTsukuduv }
     ]
   },
   {
@@ -147,20 +148,20 @@ const portfolioData = [
     title: 'RESIDENTIAL',
     num: '04',
     items: [
-      { name: 'EOA 1597', img: resEoa1597.src },
-      { name: 'BLANN RESIDENCE', img: resBlann.src },
-      { name: 'COPPERLEAF', img: resCopperleaf.src },
-      { name: 'COURTYARDS', img: resCourtyards.src },
-      { name: 'DAVID RESIDENCE', img: resDavid.src },
-      { name: 'DE LA REY', img: resDeLaRey.src },
-      { name: 'KAREN RESIDENCE', img: resKaren.src },
-      { name: 'MBOKI', img: resMboki.src },
-      { name: 'OSUMMIT', img: resOsummit.src },
-      { name: 'PELOETLETSE', img: resPeloetletse.src },
-      { name: 'SOMERTON ESTATE', img: resSomertonEstate.src },
-      { name: 'STONE & STEEL', img: resStoneSteel.src },
-      { name: 'THORN VALLEY', img: resThornValley.src },
-      { name: 'WATERFALL 1951', img: resWaterfall1951.src }
+      { name: 'EOA 1597', img: resEoa1597 },
+      { name: 'BLANN RESIDENCE', img: resBlann },
+      { name: 'COPPERLEAF', img: resCopperleaf },
+      { name: 'COURTYARDS', img: resCourtyards },
+      { name: 'DAVID RESIDENCE', img: resDavid },
+      { name: 'DE LA REY', img: resDeLaRey },
+      { name: 'KAREN RESIDENCE', img: resKaren },
+      { name: 'MBOKI', img: resMboki },
+      { name: 'OSUMMIT', img: resOsummit },
+      { name: 'PELOETLETSE', img: resPeloetletse },
+      { name: 'SOMERTON ESTATE', img: resSomertonEstate },
+      { name: 'STONE & STEEL', img: resStoneSteel },
+      { name: 'THORN VALLEY', img: resThornValley },
+      { name: 'WATERFALL 1951', img: resWaterfall1951 }
     ]
   },
   {
@@ -168,9 +169,9 @@ const portfolioData = [
     title: 'SUSTAINABILITY',
     num: '05',
     items: [
-      { name: 'THERMAL COMFORT STUDY', img: sustThermalComfort.src },
-      { name: 'ELECTRICITY INTEGRATION', img: sustElectricity.src },
-      { name: 'WATER HARVESTING SYSTEM', img: sustWater.src }
+      { name: 'THERMAL COMFORT STUDY', img: sustThermalComfort },
+      { name: 'ELECTRICITY INTEGRATION', img: sustElectricity },
+      { name: 'WATER HARVESTING SYSTEM', img: sustWater }
     ]
   }
 ];
@@ -204,9 +205,17 @@ const portfolioData = [
         <div class="scroll-rail-wrapper">
           <div class="scroll-rail scroll-container">
             {cat.items.map((item) => (
-              <div class="portfolio-card cad-trigger" data-fullsrc={item.img} data-caption={item.name}>
+              <div class="portfolio-card cad-trigger" data-fullsrc={item.img.src} data-caption={item.name}>
                 <div class="card-frame">
-                  <div class="card-image-layer" style={`background-image: url('${item.img}');`}></div>
+                  <Image 
+                    src={item.img} 
+                    alt={item.name} 
+                    class="card-image-layer" 
+                    widths={[400, 800, 1200]}
+                    sizes="(max-width: 768px) 320px, 440px"
+                    loading="lazy"
+                    decoding="async"
+                  />
                   <div class="card-shield"></div>
                   <div class="cad-grid-layer"></div>
                 </div>
@@ -509,10 +518,11 @@ const portfolioData = [
   .card-image-layer {
     width: 100%;
     height: 100%;
-    background-size: cover;
-    background-position: center;
+    object-fit: cover;
+    object-position: center;
     filter: grayscale(100%) contrast(110%);
     transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease;
+    display: block;
   }
 
   .card-shield {

@@ -17,29 +17,33 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
   <!-- Logo Mark Container -->
   <div id="logo-mark" class="logo-wrapper">
-    <Image 
-      src={heroLogoImg} 
-      alt="Facet Architecture Logo" 
-      class="logo-img"
-      loading="eager"
-      fetchpriority="high"
-      decoding="sync"
-    />
+     <Image 
+  src={heroLogoImg} 
+  alt="Facet Architecture Logo" 
+  class="logo-img"
+  widths={[250, 450, 800]}
+  sizes="(max-width: 768px) 250px, 450px"
+  loading="eager"
+  fetchpriority="high"
+  decoding="sync"
+  />
   </div>
 
   <!-- Bottom Right Typography -->
   <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
 
-  <!-- Center Expandable Hero Showcase -->
+  <!-- Center Expan<Imagedable Hero Showcase -->
   <div id="hero-frame" class="hero-frame">
     <Image 
-      src={heroImg} 
-      alt="Facet Architecture Project Showcase" 
-      class="hero-img"
-      loading="eager"
-      fetchpriority="high"
-      decoding="sync"
-    />
+  src={heroImg} 
+  alt="Facet Architecture Project Showcase" 
+  class="hero-img"
+  widths={[600, 900, 1600]}
+  sizes="(max-width: 768px) 100vw, 76vw"
+  loading="eager"
+  fetchpriority="high"
+  decoding="sync"
+/>
   </div>
 </div>
 
