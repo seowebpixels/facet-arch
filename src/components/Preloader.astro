@@ -6,8 +6,8 @@ import heroImg from '../assets/res-eoa-1597.avif';
 ---
 
 <div id="hero-stage" class="stage-container">
-  <!-- 1. BASE BACKGROUND LAYER: Hero Image Showcase -->
-  <div id="hero-frame" class="hero-frame" style="transform: scaleY(0);">
+  <!-- 1. BASE HERO IMAGE SHOWCASE -->
+  <div id="hero-frame" class="hero-frame">
     <Image 
       src={heroImg} 
       alt="Facet Architecture Project Showcase" 
@@ -23,18 +23,16 @@ import heroImg from '../assets/res-eoa-1597.avif';
   </div>
 
   <!-- 2. TYPOGRAPHY LAYERS -->
-  <h1 id="text-facet" class="title-text text-facet" style="opacity: 0;">FACET</h1>
+  <h1 id="text-facet" class="title-text text-facet">FACET</h1>
 
-  <div id="hero-clock" class="hero-clock" style="opacity: 0;">
+  <div id="hero-clock" class="hero-clock">
     <span id="live-time">00:00:00</span>
     <span id="time-zone" class="time-zone">SAST</span>
   </div>
 
-  <h1 id="text-architecture" class="title-text text-architecture" style="opacity: 0;">ARCHITECTURE</h1>
+  <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
 
-  <!-- 3. TOP FOREGROUND LAYERS: Logos placed AFTER hero frame to stay on top -->
-
-  <!-- CENTER LOGO: Hardcoded inline style guarantees visibility without flashing -->
+  <!-- 3. CENTER PRELOADER LOGO (Overlays everything visually) -->
   <div id="logo-center" class="logo-center-wrapper">
     <Image 
       src={heroLogoImg} 
@@ -49,8 +47,8 @@ import heroImg from '../assets/res-eoa-1597.avif';
     />
   </div>
 
-  <!-- TOP-RIGHT DOCKED LOGO: Inline opacity:0 guarantees ZERO initial flash -->
-  <div id="logo-docked" class="logo-docked-wrapper" style="opacity: 0; display: none;">
+  <!-- 4. TOP-RIGHT DOCKED LOGO -->
+  <div id="logo-docked" class="logo-docked-wrapper">
     <Image 
       src={heroLogoImg} 
       alt="Facet Architecture Logo" 
@@ -113,7 +111,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     }
 
     window.scrollTo(0, 0);
-
     updateHeroClock();
     setInterval(updateHeroClock, 1000);
 
@@ -122,21 +119,17 @@ import heroImg from '../assets/res-eoa-1597.avif';
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (prefersReducedMotion) {
-      logoCenter.style.display = 'none';
-      logoDocked.style.display = 'flex';
-      gsap.set(logoDocked, { opacity: 1 });
+      gsap.set(logoCenter, { display: 'none' });
+      gsap.set(logoDocked, { display: 'flex', opacity: 1 });
       gsap.set([textFacet, textArchitecture, clock], { opacity: 1, y: 0 });
       gsap.set(heroFrame, { scaleY: 1 });
       releaseScrollLock();
       return;
     }
 
-    // Force exact pre-animation states
-    logoCenter.style.display = 'flex';
-    logoDocked.style.display = 'flex';
-
-    gsap.set(logoCenter, { opacity: 1, scale: 1 });
-    gsap.set(logoDocked, { opacity: 0 });
+    // Set initial GSAP values before playing
+    gsap.set(logoCenter, { display: 'flex', opacity: 1, scale: 1 });
+    gsap.set(logoDocked, { display: 'flex', opacity: 0 });
     gsap.set([textFacet, clock], { opacity: 0, y: -20 });
     gsap.set(textArchitecture, { opacity: 0, y: 20 });
     gsap.set(heroFrame, { scaleY: 0, transformOrigin: 'center center' });
@@ -147,22 +140,25 @@ import heroImg from '../assets/res-eoa-1597.avif';
     });
 
     tl
-      // 1. HOLD CENTER LOGO FOR 3 SECONDS
+      // 1. HOLD CENTER LOGO FOR EXACTLY 3 SECONDS
       .to(logoCenter, {
         duration: 3
       })
-      // 2. REVEAL TYPOGRAPHY & CLOCK
+      // 2. REVEAL FACET, ARCHITECTURE & CLOCK
       .to([textFacet, textArchitecture, clock], {
         opacity: 1,
         y: 0,
         duration: 0.8,
         stagger: 0
       })
-      // 3. FADE OUT CENTER LOGO & FADE IN TOP-RIGHT DOCKED LOGO
+      // 3. FADE OUT CENTER LOGO / FADE IN TOP RIGHT DOCKED LOGO
       .to(logoCenter, {
         opacity: 0,
         scale: 0.8,
-        duration: 0.8
+        duration: 0.8,
+        onComplete: () => {
+          logoCenter.style.display = 'none';
+        }
       }, '-=0.2')
       .to(logoDocked, {
         opacity: 1,
@@ -176,11 +172,8 @@ import heroImg from '../assets/res-eoa-1597.avif';
       }, '-=0.4');
   }
 
-  if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    initHeroAnimation();
-  } else {
-    document.addEventListener('DOMContentLoaded', initHeroAnimation);
-  }
+  // Execute immediately on script load
+  initHeroAnimation();
   document.addEventListener('astro:page-load', initHeroAnimation);
 </script>
 
@@ -195,7 +188,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 10;
   }
 
-  /* FACET: Anchored top left */
+  /* FACET: Anchored top left (CSS default hidden) */
   .text-facet {
     position: absolute;
     top: 20px;
@@ -210,9 +203,10 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 40;
     text-transform: uppercase;
     white-space: nowrap;
+    opacity: 0;
   }
 
-  /* Live Clock Styling */
+  /* Live Clock Styling (CSS default hidden) */
   .hero-clock {
     position: absolute;
     bottom: 25px;
@@ -225,13 +219,14 @@ import heroImg from '../assets/res-eoa-1597.avif';
     color: var(--text-primary, #111111);
     display: flex;
     align-items: center;
+    opacity: 0;
   }
 
   .time-zone {
     margin-left: 1.25rem;
   }
 
-  /* ARCHITECTURE: Anchored bottom right */
+  /* ARCHITECTURE: Anchored bottom right (CSS default hidden) */
   .text-architecture {
     position: absolute;
     bottom: 20px;
@@ -246,11 +241,12 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 40;
     text-transform: uppercase;
     white-space: nowrap;
+    opacity: 0;
   }
 
-  /* CENTER LOGO: High z-index (9999) above all layers */
+  /* CENTER LOGO: High z-index (99999) fixed overlay */
   .logo-center-wrapper {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -259,8 +255,9 @@ import heroImg from '../assets/res-eoa-1597.avif';
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 9999;
+    z-index: 99999;
     pointer-events: none;
+    opacity: 1;
   }
 
   .logo-img-large {
@@ -270,7 +267,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     object-fit: contain;
   }
 
-  /* DOCKED LOGO: High z-index top right target */
+  /* DOCKED LOGO: Top-right target (CSS default hidden) */
   .logo-docked-wrapper {
     position: absolute;
     top: 20px;
@@ -280,7 +277,8 @@ import heroImg from '../assets/res-eoa-1597.avif';
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 9999;
+    z-index: 99999;
+    opacity: 0;
   }
 
   .logo-img-small {
@@ -290,7 +288,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     object-fit: contain;
   }
 
-  /* HERO FRAME: Visual background container */
+  /* HERO FRAME: CSS default collapsed */
   .hero-frame {
     position: absolute;
     top: 14%;
@@ -300,6 +298,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 20;
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    transform: scaleY(0);
     transform-origin: center center;
   }
 
@@ -310,7 +309,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     display: block;
   }
 
-  /* Mobile Responsive rules */
+  /* Mobile Responsive */
   @media (max-width: 768px) {
     .logo-center-wrapper {
       width: 200px;
