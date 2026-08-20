@@ -15,19 +15,21 @@ import heroImg from '../assets/res-eoa-1597.avif';
     <span id="time-zone" class="time-zone">SAST</span>
   </div>
 
-  <!-- Logo Mark Container -->
-  <div id="logo-mark" class="logo-wrapper">
-    <Image 
-      src={heroLogoImg} 
-      alt="Facet Architecture Logo" 
-      class="logo-img"
-      widths={[120, 240, 360]}
-      sizes="(max-width: 768px) 120px, 200px"
-      quality={80}
-      loading="eager"
-      fetchpriority="high"
-      decoding="sync"
-    />
+  <!-- Centered Flexbox Outer Container -->
+  <div class="logo-center-box">
+    <div id="logo-mark" class="logo-wrapper">
+      <Image 
+        src={heroLogoImg} 
+        alt="Facet Architecture Logo" 
+        class="logo-img"
+        widths={[120, 240, 360]}
+        sizes="(max-width: 768px) 120px, 200px"
+        quality={80}
+        loading="eager"
+        fetchpriority="high"
+        decoding="sync"
+      />
+    </div>
   </div>
 
   <!-- Bottom Right Typography -->
@@ -54,22 +56,18 @@ import heroImg from '../assets/res-eoa-1597.avif';
   import { gsap } from 'gsap';
 
   function releaseScrollLock() {
-    // 1. Remove lock classes completely from root and body
     document.documentElement.classList.remove('is-loading', 'no-scroll');
     document.body.classList.remove('is-loading', 'no-scroll');
 
-    // 2. Clear all inline override styles applied during loading
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
 
-    // 3. Set pointer-events: none on stage so lower elements receive mouse scroll/clicks
     const stage = document.getElementById('hero-stage');
     if (stage) {
       stage.style.pointerEvents = 'none';
     }
   }
 
-  // Live Local Time Updater
   function updateHeroClock() {
     const clockEl = document.getElementById('live-time');
     const zoneEl = document.getElementById('time-zone');
@@ -100,7 +98,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
       return;
     }
 
-    // Reset window position to top on animation start
     window.scrollTo(0, 0);
 
     updateHeroClock();
@@ -121,23 +118,22 @@ import heroImg from '../assets/res-eoa-1597.avif';
     const deltaX = (vw / 2) - targetRight - (logoWidth / 2);
     const deltaY = -((vh / 2) - targetTop - (logoHeight / 2));
 
-    // Reduced Motion Check
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (prefersReducedMotion) {
-      gsap.set(logo, { xPercent: -50, yPercent: -50, x: deltaX, y: deltaY, scale: isMobile ? 1.22 : 1, opacity: 1 });
+      gsap.set(logo, { x: deltaX, y: deltaY, scale: isMobile ? 1.22 : 1, opacity: 1 });
       gsap.set([textFacet, textArchitecture, clock], { opacity: 1, y: 0 });
       gsap.set(heroFrame, { scaleY: 1 });
       releaseScrollLock();
       return;
     }
 
-    // Standard GSAP Intro Sequence with explicit centering offsets
-    gsap.set(logo, { xPercent: -50, yPercent: -50, x: 0, y: 0, scale: 3.2, opacity: 1 });
+    // Reset logo clean in center of screen
+    gsap.set(logo, { x: 0, y: 0, scale: 3.2, opacity: 1 });
     gsap.set([textFacet, clock], { opacity: 0, y: -20 });
     gsap.set(textArchitecture, { opacity: 0, y: 20 });
     
-    // Collapse frame instantly when JS loads so animation unfolds properly
+    // Instantly collapses the hero frame when JS initializes
     gsap.set(heroFrame, { scaleY: 0, transformOrigin: 'center center' });
 
     const tl = gsap.timeline({ 
@@ -146,11 +142,11 @@ import heroImg from '../assets/res-eoa-1597.avif';
     });
 
     tl
-      // 1. Hold logo centered for 3 seconds (Desktop & Mobile)
+      // 1. Hold logo centered for 3 seconds on both Desktop and Mobile
       .to(logo, {
         duration: 3
       })
-      // 2. Reveal typography
+      // 2. Reveal text components
       .to([textFacet, textArchitecture, clock], {
         opacity: 1,
         y: 0,
@@ -172,7 +168,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
       }, '-=0.4');
   }
 
-  // Execute initialization
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
     initHeroAnimation();
   } else {
@@ -248,14 +243,24 @@ import heroImg from '../assets/res-eoa-1597.avif';
     opacity: 0;
   }
 
-  /* LOGO: Center-aligned CSS base */
-  .logo-wrapper {
+  /* Dedicated Flexbox wrapper handles true viewport centering */
+  .logo-center-box {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     z-index: 30;
+    pointer-events: none;
+  }
+
+  /* LOGO: Inner animatable target */
+  .logo-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     will-change: transform;
+    pointer-events: auto;
   }
 
   .logo-img {
