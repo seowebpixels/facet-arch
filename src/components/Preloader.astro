@@ -6,16 +6,35 @@ import heroImg from '../assets/res-eoa-1597.avif';
 ---
 
 <div id="hero-stage" class="stage-container">
-  <!-- Top Left Typography -->
-  <h1 id="text-facet" class="title-text text-facet">FACET</h1>
+  <!-- 1. BASE BACKGROUND LAYER: Hero Image Showcase -->
+  <div id="hero-frame" class="hero-frame" style="transform: scaleY(0);">
+    <Image 
+      src={heroImg} 
+      alt="Facet Architecture Project Showcase" 
+      class="hero-img"
+      widths={[360, 480, 720]}
+      sizes="(max-width: 768px) 100vw, 720px"
+      format="avif"
+      quality={60}
+      loading="eager"
+      fetchpriority="high"
+      decoding="sync"
+    />
+  </div>
 
-  <!-- Live Local Clock -->
-  <div id="hero-clock" class="hero-clock">
+  <!-- 2. TYPOGRAPHY LAYERS -->
+  <h1 id="text-facet" class="title-text text-facet" style="opacity: 0;">FACET</h1>
+
+  <div id="hero-clock" class="hero-clock" style="opacity: 0;">
     <span id="live-time">00:00:00</span>
     <span id="time-zone" class="time-zone">SAST</span>
   </div>
 
-  <!-- 1. CENTERED PRELOADER LOGO (Visible instantly on CSS load) -->
+  <h1 id="text-architecture" class="title-text text-architecture" style="opacity: 0;">ARCHITECTURE</h1>
+
+  <!-- 3. TOP FOREGROUND LAYERS: Logos placed AFTER hero frame to stay on top -->
+
+  <!-- CENTER LOGO: Hardcoded inline style guarantees visibility without flashing -->
   <div id="logo-center" class="logo-center-wrapper">
     <Image 
       src={heroLogoImg} 
@@ -30,8 +49,8 @@ import heroImg from '../assets/res-eoa-1597.avif';
     />
   </div>
 
-  <!-- 2. TOP-RIGHT DOCKED LOGO (Target position) -->
-  <div id="logo-docked" class="logo-docked-wrapper">
+  <!-- TOP-RIGHT DOCKED LOGO: Inline opacity:0 guarantees ZERO initial flash -->
+  <div id="logo-docked" class="logo-docked-wrapper" style="opacity: 0; display: none;">
     <Image 
       src={heroLogoImg} 
       alt="Facet Architecture Logo" 
@@ -39,25 +58,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
       widths={[120, 240, 360]}
       sizes="(max-width: 768px) 120px, 200px"
       quality={80}
-      loading="eager"
-      fetchpriority="high"
-      decoding="sync"
-    />
-  </div>
-
-  <!-- Bottom Right Typography -->
-  <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
-
-  <!-- Center Expandable Hero Showcase -->
-  <div id="hero-frame" class="hero-frame">
-    <Image 
-      src={heroImg} 
-      alt="Facet Architecture Project Showcase" 
-      class="hero-img"
-      widths={[360, 480, 720]}
-      sizes="(max-width: 768px) 100vw, 720px"
-      format="avif"
-      quality={60}
       loading="eager"
       fetchpriority="high"
       decoding="sync"
@@ -122,7 +122,8 @@ import heroImg from '../assets/res-eoa-1597.avif';
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (prefersReducedMotion) {
-      gsap.set(logoCenter, { opacity: 0 });
+      logoCenter.style.display = 'none';
+      logoDocked.style.display = 'flex';
       gsap.set(logoDocked, { opacity: 1 });
       gsap.set([textFacet, textArchitecture, clock], { opacity: 1, y: 0 });
       gsap.set(heroFrame, { scaleY: 1 });
@@ -130,7 +131,10 @@ import heroImg from '../assets/res-eoa-1597.avif';
       return;
     }
 
-    // Force strict initial states
+    // Force exact pre-animation states
+    logoCenter.style.display = 'flex';
+    logoDocked.style.display = 'flex';
+
     gsap.set(logoCenter, { opacity: 1, scale: 1 });
     gsap.set(logoDocked, { opacity: 0 });
     gsap.set([textFacet, clock], { opacity: 0, y: -20 });
@@ -143,28 +147,28 @@ import heroImg from '../assets/res-eoa-1597.avif';
     });
 
     tl
-      // 1. HOLD LOGO DEAD-CENTER FOR EXACTLY 3 SECONDS
+      // 1. HOLD CENTER LOGO FOR 3 SECONDS
       .to(logoCenter, {
         duration: 3
       })
-      // 2. REVEAL FACET, ARCHITECTURE & CLOCK
+      // 2. REVEAL TYPOGRAPHY & CLOCK
       .to([textFacet, textArchitecture, clock], {
         opacity: 1,
         y: 0,
         duration: 0.8,
         stagger: 0
       })
-      // 3. FADE OUT CENTER LOGO / FADE IN TOP-RIGHT DOCKED LOGO
+      // 3. FADE OUT CENTER LOGO & FADE IN TOP-RIGHT DOCKED LOGO
       .to(logoCenter, {
         opacity: 0,
-        scale: 0.5,
+        scale: 0.8,
         duration: 0.8
       }, '-=0.2')
       .to(logoDocked, {
         opacity: 1,
         duration: 0.8
       }, '<')
-      // 4. EXPAND HERO IMAGE FRAME
+      // 4. EXPAND HERO SHOWCASE FRAME
       .to(heroFrame, {
         scaleY: 1,
         duration: 1.2,
@@ -191,7 +195,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 10;
   }
 
-  /* FACET: Anchored top and left (Hidden by default in CSS) */
+  /* FACET: Anchored top left */
   .text-facet {
     position: absolute;
     top: 20px;
@@ -203,24 +207,22 @@ import heroImg from '../assets/res-eoa-1597.avif';
     color: var(--text-primary, #111111);
     margin: 0;
     line-height: 1;
-    z-index: 20;
+    z-index: 40;
     text-transform: uppercase;
     white-space: nowrap;
-    opacity: 0;
   }
 
-  /* Live Local Clock Styling (Hidden by default in CSS) */
+  /* Live Clock Styling */
   .hero-clock {
     position: absolute;
     bottom: 25px;
     left: 50px;
-    z-index: 20;
+    z-index: 40;
     font-family: monospace, sans-serif;
     font-size: clamp(0.85rem, 1.2vw, 1.1rem);
     font-weight: 700;
     letter-spacing: 0.15em;
     color: var(--text-primary, #111111);
-    opacity: 0;
     display: flex;
     align-items: center;
   }
@@ -229,7 +231,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     margin-left: 1.25rem;
   }
 
-  /* ARCHITECTURE: Anchored bottom and right (Hidden by default in CSS) */
+  /* ARCHITECTURE: Anchored bottom right */
   .text-architecture {
     position: absolute;
     bottom: 20px;
@@ -241,13 +243,12 @@ import heroImg from '../assets/res-eoa-1597.avif';
     color: var(--text-primary, #111111);
     margin: 0;
     line-height: 1;
-    z-index: 20;
+    z-index: 40;
     text-transform: uppercase;
     white-space: nowrap;
-    opacity: 0;
   }
 
-  /* 1. CENTER LOGO: Hardcoded CSS centering (ALWAYS visible on direct page hit) */
+  /* CENTER LOGO: High z-index (9999) above all layers */
   .logo-center-wrapper {
     position: absolute;
     top: 50%;
@@ -258,8 +259,8 @@ import heroImg from '../assets/res-eoa-1597.avif';
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 999;
-    opacity: 1;
+    z-index: 9999;
+    pointer-events: none;
   }
 
   .logo-img-large {
@@ -269,7 +270,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     object-fit: contain;
   }
 
-  /* 2. DOCKED LOGO: Exact Top Right Placement (Hidden initially in CSS) */
+  /* DOCKED LOGO: High z-index top right target */
   .logo-docked-wrapper {
     position: absolute;
     top: 20px;
@@ -279,8 +280,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 999;
-    opacity: 0;
+    z-index: 9999;
   }
 
   .logo-img-small {
@@ -290,17 +290,16 @@ import heroImg from '../assets/res-eoa-1597.avif';
     object-fit: contain;
   }
 
-  /* HERO FRAME: Collapsed vertically by default in CSS */
+  /* HERO FRAME: Visual background container */
   .hero-frame {
     position: absolute;
     top: 14%;
     left: 12%;
     width: 76vw;
     height: 72vh;
-    z-index: 10;
+    z-index: 20;
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    transform: scaleY(0);
     transform-origin: center center;
   }
 
@@ -311,7 +310,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     display: block;
   }
 
-  /* Mobile Layout Adjustments */
+  /* Mobile Responsive rules */
   @media (max-width: 768px) {
     .logo-center-wrapper {
       width: 200px;
