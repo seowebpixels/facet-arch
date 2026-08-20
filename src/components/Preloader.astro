@@ -5,8 +5,8 @@ import heroImg from '../assets/res-eoa-1597.avif';
 ---
 
 <div id="hero-stage" class="stage-container">
-  <!-- 1. HERO IMAGE SHOWCASE CONTAINER -->
-  <div id="hero-frame" class="hero-frame">
+  <!-- 1. HERO IMAGE SHOWCASE (Hardcoded scaleY(0) prevents initial flash) -->
+  <div id="hero-frame" class="hero-frame" style="transform: scaleY(0); transform-origin: center center;">
     <Image 
       src={heroImg} 
       alt="Facet Architecture Project Showcase" 
@@ -21,22 +21,22 @@ import heroImg from '../assets/res-eoa-1597.avif';
     />
   </div>
 
-  <!-- 2. TYPOGRAPHY & CLOCK LAYERS -->
-  <h1 id="text-facet" class="title-text text-facet">FACET</h1>
+  <!-- 2. TYPOGRAPHY & CLOCK LAYERS (Hardcoded initial hidden offsets) -->
+  <h1 id="text-facet" class="title-text text-facet" style="opacity: 0; transform: translate(-80px, -40px);">FACET</h1>
 
-  <div id="hero-clock" class="hero-clock">
+  <div id="hero-clock" class="hero-clock" style="opacity: 0; transform: translateY(-20px);">
     <span id="live-time">00:00:00</span>
     <span id="time-zone" class="time-zone">SAST</span>
   </div>
 
-  <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
+  <h1 id="text-architecture" class="title-text text-architecture" style="opacity: 0; transform: translate(80px, 40px);">ARCHITECTURE</h1>
 
-  <!-- 3. TOP-RIGHT TARGET CONTAINER (Adjusted top/right spacing) -->
+  <!-- 3. TOP-RIGHT TARGET CONTAINER -->
   <div id="logo-docked" class="logo-docked-wrapper">
     <div class="logo-placeholder"></div>
   </div>
 
-  <!-- 4. ANIMATING CENTER LOGO -->
+  <!-- 4. ANIMATING CENTER LOGO (Visible immediately on load) -->
   <div id="logo-center" class="logo-center-wrapper">
     <Image 
       src={heroLogoImg} 
@@ -95,14 +95,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
         return;
       }
 
-      // 1. HARD INITIAL STATES BEFORE ANIMATION STARTS
-      gsap.set(logoCenter, { opacity: 1, x: 0, y: 0, scale: 1 });
-      gsap.set(textFacet, { opacity: 0, x: -80, y: -40 });
-      gsap.set(textArchitecture, { opacity: 0, x: 80, y: 40 });
-      gsap.set(clock, { opacity: 0, y: -20 });
-      gsap.set(heroFrame, { scaleY: 0, transformOrigin: 'center center' });
-
-      // 2. CALCULATE EXACT TRAJECTORY DISTANCE TO TOP-RIGHT
+      // 1. CALCULATE EXACT TRAJECTORY DISTANCE TO TOP-RIGHT
       var centerRect = logoCenter.getBoundingClientRect();
       var dockedRect = logoDocked.getBoundingClientRect();
 
@@ -110,7 +103,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
       var deltaY = (dockedRect.top + dockedRect.height / 2) - (centerRect.top + centerRect.height / 2);
       var targetScale = dockedRect.width / centerRect.width;
 
-      // 3. MASTER TIMELINE
+      // 2. MASTER TIMELINE
       var tl = gsap.timeline({
         defaults: { ease: 'power3.inOut' },
         onComplete: releaseScrollLock
@@ -185,7 +178,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 40;
     text-transform: uppercase;
     white-space: nowrap;
-    opacity: 0;
   }
 
   /* Live Clock Styling */
@@ -201,7 +193,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     color: var(--text-primary, #111111);
     display: flex;
     align-items: center;
-    opacity: 0;
   }
 
   .time-zone {
@@ -223,7 +214,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 40;
     text-transform: uppercase;
     white-space: nowrap;
-    opacity: 0;
   }
 
   /* CENTER LOGO: Pinned at center initial state */
@@ -249,16 +239,16 @@ import heroImg from '../assets/res-eoa-1597.avif';
     object-fit: contain;
   }
 
-  /* DOCKED LOGO TARGET: Moved 50px UP and 10px RIGHT relative to top:20px / right:50px */
+  /* DOCKED LOGO TARGET: Shifted up 50px and right 10px */
   .logo-docked-wrapper {
     position: absolute;
-    top: -30px; /* Shifted up 50px from original 20px */
-    right: 40px; /* Shifted right 10px from original 50px */
+    top: -30px; 
+    right: 40px; 
     width: 140px;
     height: 140px;
     z-index: 30;
     pointer-events: none;
-    visibility: hidden; /* Target container used purely for coordinate calculation */
+    visibility: hidden; 
   }
 
   .logo-placeholder {
