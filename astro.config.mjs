@@ -2,13 +2,16 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://facetarchitecture.co.za', // Required for @astrojs/sitemap to work
+  site: 'https://facetarchitecture.co.za',
   integrations: [sitemap()],
+  build: {
+    inlineStylesheets: 'always'
+  },
   image: {
     service: {
       entrypoint: 'astro/assets/services/sharp',
       config: {
-        quality: 78 // Default quality for all optimized images (0-100)
+        quality: 78
       }
     },
     domains: [],
