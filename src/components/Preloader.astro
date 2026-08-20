@@ -102,20 +102,34 @@ import heroImg from '../assets/res-eoa-1597.avif';
     setInterval(updateHeroClock, 1000);
 
     gsap.killTweensOf([logo, textFacet, textArchitecture, clock, heroFrame]);
-    logo.classList.remove('is-docked');
+
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const isMobile = vw <= 768;
+
+    // Exact top-right corner coordinates matching layout
+    const targetTop = isMobile ? 20 : 20;
+    const targetRight = isMobile ? 15 : 50;
+
+    const logoWidth = isMobile ? 85 : 150;
+    const logoHeight = isMobile ? 85 : 150;
+
+    // Distance needed to travel from exact screen center to top right corner
+    const deltaX = (vw / 2) - targetRight - (logoWidth / 2);
+    const deltaY = -((vh / 2) - targetTop - (logoHeight / 2));
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (prefersReducedMotion) {
-      logo.classList.add('is-docked');
+      gsap.set(logo, { x: deltaX, y: deltaY, scale: 1, opacity: 1 });
       gsap.set([textFacet, textArchitecture, clock], { opacity: 1, y: 0 });
       gsap.set(heroFrame, { scaleY: 1 });
       releaseScrollLock();
       return;
     }
 
-    // Reset initial positions (Logo is naturally centered in CSS)
-    gsap.set(logo, { scale: 2.5, opacity: 1 });
+    // Force exact starting positions in JS instantly
+    gsap.set(logo, { x: 0, y: 0, scale: isMobile ? 2.0 : 2.8, opacity: 1 });
     gsap.set([textFacet, clock], { opacity: 0, y: -20 });
     gsap.set(textArchitecture, { opacity: 0, y: 20 });
     gsap.set(heroFrame, { scaleY: 0, transformOrigin: 'center center' });
@@ -126,24 +140,25 @@ import heroImg from '../assets/res-eoa-1597.avif';
     });
 
     tl
-      // 1. Hold logo dead-center for 3 seconds on Desktop AND Mobile
+      // 1. HOLD LOGO IN SCREEN CENTER FOR 3 SECONDS
       .to(logo, {
         duration: 3
       })
-      // 2. Reveal text components
+      // 2. REVEAL FACET, ARCHITECTURE & CLOCK
       .to([textFacet, textArchitecture, clock], {
         opacity: 1,
         y: 0,
         duration: 0.8,
         stagger: 0
       })
-      // 3. Smoothly transition logo to top-right corner via CSS
+      // 3. MOVE LOGO TO EXACT TOP-RIGHT CORNER
       .to(logo, {
+        x: deltaX,
+        y: deltaY,
         scale: 1,
-        duration: 1.2,
-        onStart: () => logo.classList.add('is-docked')
+        duration: 1.2
       }, '-=0.2')
-      // 4. Expand hero image frame
+      // 4. EXPAND HERO IMAGE FRAME
       .to(heroFrame, {
         scaleY: 1,
         duration: 1.2,
@@ -170,7 +185,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 10;
   }
 
-  /* FACET: Anchored top and left */
+  /* FACET: Anchored top and left - Hidden by default in CSS */
   .text-facet {
     position: absolute;
     top: 20px;
@@ -188,7 +203,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     opacity: 0;
   }
 
-  /* Live Local Clock Styling */
+  /* Live Local Clock Styling - Hidden by default in CSS */
   .hero-clock {
     position: absolute;
     bottom: 25px;
@@ -208,7 +223,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     margin-left: 1.25rem;
   }
 
-  /* ARCHITECTURE: Anchored bottom and right */
+  /* ARCHITECTURE: Anchored bottom and right - Hidden by default in CSS */
   .text-architecture {
     position: absolute;
     bottom: 20px;
@@ -226,29 +241,21 @@ import heroImg from '../assets/res-eoa-1597.avif';
     opacity: 0;
   }
 
-  /* LOGO BASE: Always centered in viewport by default */
+  /* LOGO WRAPPER: Dead Center in CSS, zero transitions to prevent GSAP conflicts */
   .logo-wrapper {
-    position: fixed;
+    position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
     width: 150px;
     height: 150px;
-    z-index: 999;
+    margin-top: -75px;
+    margin-left: -75px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: top 1.2s cubic-bezier(0.77, 0, 0.175, 1), 
-                left 1.2s cubic-bezier(0.77, 0, 0.175, 1), 
-                transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
-  }
-
-  /* DOCKED STATE: Exact top-right placement */
-  .logo-wrapper.is-docked {
-    top: 20px;
-    left: auto;
-    right: 30px;
-    transform: translate(0, 0);
+    z-index: 999;
+    will-change: transform;
+    transition: none !important;
   }
 
   .logo-img {
@@ -258,7 +265,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     object-fit: contain;
   }
 
-  /* Desktop Central Frame */
+  /* Hero Showcase Frame - Collapsed by default in CSS */
   .hero-frame {
     position: absolute;
     top: 14%;
@@ -268,7 +275,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 10;
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    transform: scaleY(1);
+    transform: scaleY(0);
     transform-origin: center center;
   }
 
@@ -284,11 +291,8 @@ import heroImg from '../assets/res-eoa-1597.avif';
     .logo-wrapper {
       width: 85px;
       height: 85px;
-    }
-
-    .logo-wrapper.is-docked {
-      top: 15px;
-      right: 15px;
+      margin-top: -42.5px;
+      margin-left: -42.5px;
     }
 
     .hero-frame {
