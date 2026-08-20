@@ -6,9 +6,12 @@ export default defineConfig({
   integrations: [sitemap()],
   image: {
     service: {
-      entrypoint: 'astro/assets/services/sharp'
+      entrypoint: 'astro/assets/services/sharp',
+      config: {
+        quality: 78 // Default quality for all optimized images (0-100)
+      }
     },
     domains: [],
-    remotePatterns: [],
-  },
+    remotePatterns: []
+  }
 });

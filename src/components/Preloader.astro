@@ -16,35 +16,37 @@ import heroImg from '../assets/res-eoa-1597.avif';
   </div>
 
   <!-- Logo Mark Container -->
-  <div id="logo-mark" class="logo-wrapper">
-     <Image 
-  src={heroLogoImg} 
-  alt="Facet Architecture Logo" 
-  class="logo-img"
-  widths={[250, 450, 800]}
-  sizes="(max-width: 768px) 250px, 450px"
-  loading="eager"
-  fetchpriority="high"
-  decoding="sync"
+<div id="logo-mark" class="logo-wrapper">
+  <Image 
+    src={heroLogoImg} 
+    alt="Facet Architecture Logo" 
+    class="logo-img"
+    widths={[120, 240, 360]}
+    sizes="(max-width: 768px) 120px, 200px"
+    quality={80}
+    loading="eager"
+    fetchpriority="high"
+    decoding="sync"
   />
-  </div>
+</div>
 
   <!-- Bottom Right Typography -->
   <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
 
-  <!-- Center Expan<Imagedable Hero Showcase -->
-  <div id="hero-frame" class="hero-frame">
-    <Image 
-  src={heroImg} 
-  alt="Facet Architecture Project Showcase" 
-  class="hero-img"
-  widths={[400, 600, 900, 1600]}
-  sizes="(max-width: 768px) 400px, 76vw"
-  loading="eager"
-  fetchpriority="high"
-  decoding="sync"
-/>
-  </div>
+  <!-- Center Expandable Hero Showcase -->
+<div id="hero-frame" class="hero-frame">
+  <Image 
+    src={heroImg} 
+    alt="Facet Architecture Project Showcase" 
+    class="hero-img"
+    widths={[360, 600, 900, 1400]}
+    sizes="(max-width: 768px) 90vw, 76vw"
+    quality={75}
+    loading="eager"
+    fetchpriority="high"
+    decoding="sync"
+  />
+</div>
 </div>
 
 <script>
