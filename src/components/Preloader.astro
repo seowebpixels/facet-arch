@@ -15,7 +15,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     <span id="time-zone" class="time-zone">SAST</span>
   </div>
 
-  <!-- Logo Mark Container -->
+  <!-- Logo Mark Container (Highest Z-Index Layer) -->
   <div id="logo-mark" class="logo-wrapper">
     <Image 
       src={heroLogoImg} 
@@ -107,14 +107,13 @@ import heroImg from '../assets/res-eoa-1597.avif';
     const vh = window.innerHeight;
     const isMobile = vw <= 768;
 
-    // Fixed dimensions matching CSS height to prevent 0px calculations
     const logoWidth = isMobile ? 85 : 150;
     const logoHeight = isMobile ? 85 : 150;
 
-    const targetTop = isMobile ? 20 : 20;
+    const targetTop = 20;
     const targetRight = isMobile ? 15 : 30;
 
-    // Compute absolute translation delta relative to viewport center
+    // Translation target relative to center
     const deltaX = (vw / 2) - targetRight - (logoWidth / 2);
     const deltaY = -((vh / 2) - targetTop - (logoHeight / 2));
 
@@ -128,14 +127,13 @@ import heroImg from '../assets/res-eoa-1597.avif';
       return;
     }
 
-    // Explicit GSAP initial state: set display & visibility directly to ensure visibility
+    // Force logo visibility and reset translation
     gsap.set(logo, { 
       x: 0, 
       y: 0, 
       scale: isMobile ? 2.2 : 3.2, 
       opacity: 1,
-      visibility: 'visible',
-      display: 'block'
+      visibility: 'visible'
     });
     
     gsap.set([textFacet, clock], { opacity: 0, y: -20 });
@@ -152,21 +150,21 @@ import heroImg from '../assets/res-eoa-1597.avif';
       .to(logo, {
         duration: 3
       })
-      // 2. Reveal FACET, ARCHITECTURE & Live Clock
+      // 2. Reveal text typography & clock
       .to([textFacet, textArchitecture, clock], {
         opacity: 1,
         y: 0,
         duration: 0.8,
         stagger: 0
       })
-      // 3. Move logo to top right corner
+      // 3. Move logo to top right
       .to(logo, {
         x: deltaX,
         y: deltaY,
         scale: isMobile ? 1.22 : 1,
         duration: 1.2
       }, '-=0.2')
-      // 4. Expand hero image
+      // 4. Expand hero showcase
       .to(heroFrame, {
         scaleY: 1,
         duration: 1.2,
@@ -249,19 +247,19 @@ import heroImg from '../assets/res-eoa-1597.avif';
     opacity: 0;
   }
 
-  /* LOGO: Clean Center Position using margin offset */
+  /* LOGO WRAPPER: Absolute high z-index center positioning */
   .logo-wrapper {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
-    margin-top: -75px;
-    margin-left: -75px;
     width: 150px;
     height: 150px;
+    margin-top: -75px;
+    margin-left: -75px;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 30;
+    z-index: 9999;
     will-change: transform;
     visibility: visible;
   }
@@ -297,10 +295,10 @@ import heroImg from '../assets/res-eoa-1597.avif';
   /* Mobile Layout Adjustments */
   @media (max-width: 768px) {
     .logo-wrapper {
-      margin-top: -42.5px;
-      margin-left: -42.5px;
       width: 85px;
       height: 85px;
+      margin-top: -42.5px;
+      margin-left: -42.5px;
     }
 
     .hero-frame {
