@@ -137,6 +137,8 @@ import heroImg from '../assets/res-eoa-1597.avif';
     gsap.set(logo, { x: 0, y: 0, scale: 3.2, opacity: 1 });
     gsap.set([textFacet, clock], { opacity: 0, y: -20 });
     gsap.set(textArchitecture, { opacity: 0, y: 20 });
+    
+    // GSAP instantly collapses the frame at start of execution so animation runs
     gsap.set(heroFrame, { scaleY: 0, transformOrigin: 'center center' });
 
     const tl = gsap.timeline({ 
@@ -145,7 +147,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     });
 
     tl
-      // 1. Hold logo in center for 3 seconds
+      // 1. Hold logo in center for 3 seconds on all viewports
       .to(logo, {
         duration: 3
       })
@@ -265,7 +267,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     object-fit: contain;
   }
 
-  /* Desktop Central Frame */
+  /* Desktop Central Frame - Updated to scaleY(1) so browser registers LCP instantly during initial paint */
   .hero-frame {
     position: absolute;
     top: 14%;
@@ -275,7 +277,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 10;
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    transform: scaleY(0);
+    transform: scaleY(1);
     transform-origin: center center;
   }
 
