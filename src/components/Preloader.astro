@@ -52,25 +52,25 @@ import heroImg from '../assets/res-eoa-1597.avif';
   </div>
 </div>
 
-<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+  import gsap from 'gsap';
 
-<script is:inline>
   (function initPreloader() {
     function releaseScrollLock() {
       document.documentElement.style.overflow = '';
       document.body.style.overflow = '';
-      var stage = document.getElementById('hero-stage');
+      const stage = document.getElementById('hero-stage');
       if (stage) stage.style.pointerEvents = 'none';
     }
 
     function updateClock() {
-      var clockEl = document.getElementById('live-time');
-      var zoneEl = document.getElementById('time-zone');
+      const clockEl = document.getElementById('live-time');
+      const zoneEl = document.getElementById('time-zone');
       if (!clockEl) return;
-      var now = new Date();
+      const now = new Date();
       clockEl.textContent = now.toTimeString().split(' ')[0];
       if (zoneEl) {
-        var tzString = now.toLocaleDateString('en-US', { timeZoneName: 'short' });
+        const tzString = now.toLocaleDateString('en-US', { timeZoneName: 'short' });
         zoneEl.textContent = tzString.split(' ').pop() || 'SAST';
       }
     }
@@ -81,38 +81,34 @@ import heroImg from '../assets/res-eoa-1597.avif';
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
 
-    window.addEventListener('load', function() {
-      // Defer execution by 1 frame to clear initial render thread and drop TBT
-      requestAnimationFrame(function() {
-        var logoCenter = document.getElementById('logo-center');
-        var textFacet = document.getElementById('text-facet');
-        var textArchitecture = document.getElementById('text-architecture');
-        var clock = document.getElementById('hero-clock');
-        var heroFrame = document.getElementById('hero-frame');
+    window.addEventListener('load', () => {
+      requestAnimationFrame(() => {
+        const logoCenter = document.getElementById('logo-center');
+        const textFacet = document.getElementById('text-facet');
+        const textArchitecture = document.getElementById('text-architecture');
+        const clock = document.getElementById('hero-clock');
+        const heroFrame = document.getElementById('hero-frame');
 
         if (!logoCenter || !textFacet || !textArchitecture || !clock || !heroFrame) {
           releaseScrollLock();
           return;
         }
 
-        var isMobile = window.innerWidth <= 768;
+        const isMobile = window.innerWidth <= 768;
 
-        // Static Viewport Offsets: 0 Reflow / 0 Layout Thrashing
-        var targetX = isMobile ? (window.innerWidth / 2 - 50) : (window.innerWidth / 2 - 120);
-        var targetY = isMobile ? -(window.innerHeight / 2 - 35) : -(window.innerHeight / 2 - 40);
-        var targetScale = isMobile ? 0.45 : 0.5;
+        const targetX = isMobile ? (window.innerWidth / 2 - 50) : (window.innerWidth / 2 - 120);
+        const targetY = isMobile ? -(window.innerHeight / 2 - 35) : -(window.innerHeight / 2 - 40);
+        const targetScale = isMobile ? 0.45 : 0.5;
 
-        var tl = gsap.timeline({
+        const tl = gsap.timeline({
           defaults: { ease: 'power3.inOut' },
           onComplete: releaseScrollLock
         });
 
         tl
-          // Phase 1: Preloader Hold (1.2s optimal for Mobile Speed Index/LCP)
           .to(logoCenter, {
             duration: 1.2
           })
-          // Phase 2: Split Words FACET & ARCHITECTURE into Corners
           .to(textFacet, {
             opacity: 1,
             x: 0,
@@ -132,7 +128,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
             y: 0,
             duration: 0.6
           }, '-=0.4')
-          // Phase 3: Glide Logo directly into top-right target
           .to(logoCenter, {
             x: targetX,
             y: targetY,
@@ -140,7 +135,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
             duration: 1,
             ease: 'power3.inOut'
           }, '-=0.4')
-          // Phase 4: Expand Central Hero Image
           .to(heroFrame, {
             scaleY: 1,
             duration: 1,
