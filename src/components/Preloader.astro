@@ -38,18 +38,20 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
   <!-- 4. ANIMATING CENTER LOGO -->
   <div id="logo-center" class="logo-center-wrapper">
-    <Image 
-      src={heroLogoImg} 
+<Image 
+  src={heroLogoImg} 
   alt="Facet Architecture Logo" 
   class="logo-img-large"
   width={800}
   height={800}
+  widths={[320, 480, 800]}
+  sizes="(max-width: 768px) 315px, 800px"
   format="avif"
   quality={80}
   loading="eager"
   fetchpriority="high"
   decoding="sync"
-    />
+/>
   </div>
 </div>
 
