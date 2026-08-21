@@ -52,7 +52,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
   </div>
 </div>
 
-<!-- Load GSAP with defer so it downloads in parallel without blocking main HTML thread -->
 <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 
 <script is:inline>
@@ -84,7 +83,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
     function runAnimation() {
       if (typeof gsap === 'undefined') {
-        setTimeout(runAnimation, 30);
+        requestAnimationFrame(runAnimation);
         return;
       }
 
@@ -99,10 +98,10 @@ import heroImg from '../assets/res-eoa-1597.avif';
         return;
       }
 
-      var isMobile = window.innerWidth <= 768;
+      var isMobile = matchMedia('(max-width: 768px)').matches;
 
-      var targetX = isMobile ? (window.innerWidth / 2 - 50) : (window.innerWidth / 2 - 120);
-      var targetY = isMobile ? -(window.innerHeight / 2 - 35) : -(window.innerHeight / 2 - 40);
+      var targetX = isMobile ? 'calc(50vw - 70px)' : 'calc(50vw - 120px)';
+      var targetY = isMobile ? 'calc(-50vh + 45px)' : 'calc(-50vh + 40px)';
       var targetScale = isMobile ? 0.45 : 0.5;
 
       var tl = gsap.timeline({
@@ -111,18 +110,27 @@ import heroImg from '../assets/res-eoa-1597.avif';
       });
 
       tl
-        .to(logoCenter, { duration: 0.3 })
-        .to(textFacet, { opacity: 1, x: 0, y: 0, duration: 0.5, ease: 'power4.out' })
-        .to(textArchitecture, { opacity: 1, x: 0, y: 0, duration: 0.5, ease: 'power4.out' }, '<')
-        .to(clock, { opacity: 1, y: 0, duration: 0.4 }, '-=0.2')
-        .to(logoCenter, { x: targetX, y: targetY, scale: targetScale, duration: 0.7, ease: 'power3.inOut' }, '-=0.2')
-        .to(heroFrame, { scaleY: 1, duration: 0.7, ease: 'power4.out' }, '-=0.3');
+        // 1. Logo loads and holds for 3 seconds
+        .to(logoCenter, { duration: 3.0 })
+
+        // 2. FACET and ARCHITECTURE split outward
+        .to(textFacet, { opacity: 1, x: 0, y: 0, duration: 0.8, ease: 'power4.out' })
+        .to(textArchitecture, { opacity: 1, x: 0, y: 0, duration: 0.8, ease: 'power4.out' }, '<')
+        .to(clock, { opacity: 1, y: 0, duration: 0.6 }, '-=0.4')
+
+        // 3. Logo shrinks and glides to top right
+        .to(logoCenter, { x: targetX, y: targetY, scale: targetScale, duration: 1.0, ease: 'power3.inOut' }, '-=0.4')
+
+        // 4. Hero image expands center outwards
+        .to(heroFrame, { scaleY: 1, duration: 1.0, ease: 'power4.out' }, '-=0.5');
     }
 
     if (document.readyState === 'complete') {
-      runAnimation();
+      setTimeout(function() { requestAnimationFrame(runAnimation); }, 100);
     } else {
-      window.addEventListener('load', runAnimation);
+      window.addEventListener('load', function() {
+        setTimeout(function() { requestAnimationFrame(runAnimation); }, 100);
+      });
     }
   })();
 </script>
