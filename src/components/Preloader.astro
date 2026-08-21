@@ -5,7 +5,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
 ---
 
 <div id="hero-stage" class="stage-container">
-  <!-- 1. HERO IMAGE SHOWCASE (Hardcoded scaleY(0) prevents initial flash) -->
+  <!-- 1. HERO IMAGE SHOWCASE -->
   <div id="hero-frame" class="hero-frame" style="transform: scaleY(0); transform-origin: center center;">
     <Image 
       src={heroImg} 
@@ -21,7 +21,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     />
   </div>
 
-  <!-- 2. TYPOGRAPHY & CLOCK LAYERS (Hardcoded initial hidden offsets) -->
+  <!-- 2. TYPOGRAPHY & CLOCK LAYERS -->
   <h1 id="text-facet" class="title-text text-facet" style="opacity: 0; transform: translate(-80px, -40px);">FACET</h1>
 
   <div id="hero-clock" class="hero-clock" style="opacity: 0; transform: translateY(-20px);">
@@ -36,7 +36,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     <div class="logo-placeholder"></div>
   </div>
 
-  <!-- 4. ANIMATING CENTER LOGO (Visible immediately on load) -->
+  <!-- 4. ANIMATING CENTER LOGO -->
   <div id="logo-center" class="logo-center-wrapper">
     <Image 
       src={heroLogoImg} 
@@ -78,75 +78,75 @@ import heroImg from '../assets/res-eoa-1597.avif';
     updateClock();
     setInterval(updateClock, 1000);
 
-    // Strict Scroll Lock on Start
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
 
-    window.addEventListener('DOMContentLoaded', function() {
-      var logoCenter = document.getElementById('logo-center');
-      var logoDocked = document.getElementById('logo-docked');
-      var textFacet = document.getElementById('text-facet');
-      var textArchitecture = document.getElementById('text-architecture');
-      var clock = document.getElementById('hero-clock');
-      var heroFrame = document.getElementById('hero-frame');
+    window.addEventListener('load', function() {
+      // Defer execution by 1 frame to clear initial render thread and drop TBT
+      requestAnimationFrame(function() {
+        var logoCenter = document.getElementById('logo-center');
+        var textFacet = document.getElementById('text-facet');
+        var textArchitecture = document.getElementById('text-architecture');
+        var clock = document.getElementById('hero-clock');
+        var heroFrame = document.getElementById('hero-frame');
 
-      if (!logoCenter || !logoDocked || !textFacet || !textArchitecture || !clock || !heroFrame) {
-        releaseScrollLock();
-        return;
-      }
+        if (!logoCenter || !textFacet || !textArchitecture || !clock || !heroFrame) {
+          releaseScrollLock();
+          return;
+        }
 
-      // Single initial measurement calculation
-      var centerRect = logoCenter.getBoundingClientRect();
-      var dockedRect = logoDocked.getBoundingClientRect();
+        var isMobile = window.innerWidth <= 768;
 
-      var deltaX = (dockedRect.left + dockedRect.width / 2) - (centerRect.left + centerRect.width / 2);
-      var deltaY = (dockedRect.top + dockedRect.height / 2) - (centerRect.top + centerRect.height / 2);
-      var targetScale = dockedRect.width / centerRect.width;
+        // Static Viewport Offsets: 0 Reflow / 0 Layout Thrashing
+        var targetX = isMobile ? (window.innerWidth / 2 - 50) : (window.innerWidth / 2 - 120);
+        var targetY = isMobile ? -(window.innerHeight / 2 - 35) : -(window.innerHeight / 2 - 40);
+        var targetScale = isMobile ? 0.45 : 0.5;
 
-      var tl = gsap.timeline({
-        defaults: { ease: 'power3.inOut' },
-        onComplete: releaseScrollLock
+        var tl = gsap.timeline({
+          defaults: { ease: 'power3.inOut' },
+          onComplete: releaseScrollLock
+        });
+
+        tl
+          // Phase 1: Preloader Hold (1.2s optimal for Mobile Speed Index/LCP)
+          .to(logoCenter, {
+            duration: 1.2
+          })
+          // Phase 2: Split Words FACET & ARCHITECTURE into Corners
+          .to(textFacet, {
+            opacity: 1,
+            x: 0,
+            y: 0,
+            duration: 0.8,
+            ease: 'power4.out'
+          })
+          .to(textArchitecture, {
+            opacity: 1,
+            x: 0,
+            y: 0,
+            duration: 0.8,
+            ease: 'power4.out'
+          }, '<')
+          .to(clock, {
+            opacity: 1,
+            y: 0,
+            duration: 0.6
+          }, '-=0.4')
+          // Phase 3: Glide Logo directly into top-right target
+          .to(logoCenter, {
+            x: targetX,
+            y: targetY,
+            scale: targetScale,
+            duration: 1,
+            ease: 'power3.inOut'
+          }, '-=0.4')
+          // Phase 4: Expand Central Hero Image
+          .to(heroFrame, {
+            scaleY: 1,
+            duration: 1,
+            ease: 'power4.out'
+          }, '-=0.5');
       });
-
-      tl
-        // Phase 1: Hold Logo in Center
-        .to(logoCenter, {
-          duration: 2
-        })
-        // Phase 2: Split Words FACET & ARCHITECTURE into Corners
-        .to(textFacet, {
-          opacity: 1,
-          x: 0,
-          y: 0,
-          duration: 0.8,
-          ease: 'power4.out'
-        })
-        .to(textArchitecture, {
-          opacity: 1,
-          x: 0,
-          y: 0,
-          duration: 0.8,
-          ease: 'power4.out'
-        }, '<')
-        .to(clock, {
-          opacity: 1,
-          y: 0,
-          duration: 0.6
-        }, '-=0.4')
-        // Phase 3: Glide Logo across vector directly into top-right target
-        .to(logoCenter, {
-          x: deltaX,
-          y: deltaY,
-          scale: targetScale,
-          duration: 1,
-          ease: 'power3.inOut'
-        }, '-=0.4')
-        // Phase 4: Expand Central Hero Showcase Image
-        .to(heroFrame, {
-          scaleY: 1,
-          duration: 1,
-          ease: 'power4.out'
-        }, '-=0.5');
     });
   })();
 </script>
@@ -162,7 +162,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 10;
   }
 
-  /* FACET: Anchored top left */
   .text-facet {
     position: absolute;
     top: 20px;
@@ -179,7 +178,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     white-space: nowrap;
   }
 
-  /* Live Clock Styling */
   .hero-clock {
     position: absolute;
     bottom: 25px;
@@ -198,7 +196,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     margin-left: 1.25rem;
   }
 
-  /* ARCHITECTURE: Anchored bottom right */
   .text-architecture {
     position: absolute;
     bottom: 20px;
@@ -215,7 +212,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     white-space: nowrap;
   }
 
-  /* CENTER LOGO: Pinned at center initial state */
   .logo-center-wrapper {
     position: fixed;
     top: 50%;
@@ -239,7 +235,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     object-fit: contain;
   }
 
-  /* DOCKED LOGO TARGET: Shifted up 50px and right 10px */
   .logo-docked-wrapper {
     position: absolute;
     top: -30px; 
@@ -256,7 +251,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     height: 100%;
   }
 
-  /* HERO FRAME: Visual background showcase */
   .hero-frame {
     position: absolute;
     top: 14%;
@@ -276,7 +270,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     display: block;
   }
 
-  /* Mobile Responsive adjustments */
   @media (max-width: 768px) {
     .logo-center-wrapper {
       width: 180px;
