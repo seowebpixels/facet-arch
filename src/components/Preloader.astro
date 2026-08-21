@@ -53,8 +53,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
 </div>
 
 <script>
-  import gsap from 'gsap';
-
   (function initPreloader() {
     function releaseScrollLock() {
       document.documentElement.style.overflow = '';
@@ -81,67 +79,74 @@ import heroImg from '../assets/res-eoa-1597.avif';
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
 
-    window.addEventListener('load', () => {
-      requestAnimationFrame(() => {
-        const logoCenter = document.getElementById('logo-center');
-        const textFacet = document.getElementById('text-facet');
-        const textArchitecture = document.getElementById('text-architecture');
-        const clock = document.getElementById('hero-clock');
-        const heroFrame = document.getElementById('hero-frame');
+    // Dynamic import to unblock critical path completely
+    const startAnimation = async () => {
+      const { default: gsap } = await import('gsap');
 
-        if (!logoCenter || !textFacet || !textArchitecture || !clock || !heroFrame) {
-          releaseScrollLock();
-          return;
-        }
+      const logoCenter = document.getElementById('logo-center');
+      const textFacet = document.getElementById('text-facet');
+      const textArchitecture = document.getElementById('text-architecture');
+      const clock = document.getElementById('hero-clock');
+      const heroFrame = document.getElementById('hero-frame');
 
-        const isMobile = window.innerWidth <= 768;
+      if (!logoCenter || !textFacet || !textArchitecture || !clock || !heroFrame) {
+        releaseScrollLock();
+        return;
+      }
 
-        const targetX = isMobile ? (window.innerWidth / 2 - 50) : (window.innerWidth / 2 - 120);
-        const targetY = isMobile ? -(window.innerHeight / 2 - 35) : -(window.innerHeight / 2 - 40);
-        const targetScale = isMobile ? 0.45 : 0.5;
+      const isMobile = window.innerWidth <= 768;
 
-        const tl = gsap.timeline({
-          defaults: { ease: 'power3.inOut' },
-          onComplete: releaseScrollLock
-        });
+      const targetX = isMobile ? (window.innerWidth / 2 - 50) : (window.innerWidth / 2 - 120);
+      const targetY = isMobile ? -(window.innerHeight / 2 - 35) : -(window.innerHeight / 2 - 40);
+      const targetScale = isMobile ? 0.45 : 0.5;
 
-        tl
-          .to(logoCenter, {
-            duration: 1.2
-          })
-          .to(textFacet, {
-            opacity: 1,
-            x: 0,
-            y: 0,
-            duration: 0.8,
-            ease: 'power4.out'
-          })
-          .to(textArchitecture, {
-            opacity: 1,
-            x: 0,
-            y: 0,
-            duration: 0.8,
-            ease: 'power4.out'
-          }, '<')
-          .to(clock, {
-            opacity: 1,
-            y: 0,
-            duration: 0.6
-          }, '-=0.4')
-          .to(logoCenter, {
-            x: targetX,
-            y: targetY,
-            scale: targetScale,
-            duration: 1,
-            ease: 'power3.inOut'
-          }, '-=0.4')
-          .to(heroFrame, {
-            scaleY: 1,
-            duration: 1,
-            ease: 'power4.out'
-          }, '-=0.5');
+      const tl = gsap.timeline({
+        defaults: { ease: 'power3.inOut' },
+        onComplete: releaseScrollLock
       });
-    });
+
+      tl
+        .to(logoCenter, {
+          duration: 0.4
+        })
+        .to(textFacet, {
+          opacity: 1,
+          x: 0,
+          y: 0,
+          duration: 0.6,
+          ease: 'power4.out'
+        })
+        .to(textArchitecture, {
+          opacity: 1,
+          x: 0,
+          y: 0,
+          duration: 0.6,
+          ease: 'power4.out'
+        }, '<')
+        .to(clock, {
+          opacity: 1,
+          y: 0,
+          duration: 0.5
+        }, '-=0.3')
+        .to(logoCenter, {
+          x: targetX,
+          y: targetY,
+          scale: targetScale,
+          duration: 0.8,
+          ease: 'power3.inOut'
+        }, '-=0.3')
+        .to(heroFrame, {
+          scaleY: 1,
+          duration: 0.8,
+          ease: 'power4.out'
+        }, '-=0.4');
+    };
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(startAnimation);
+    } else {
+      window.addEventListener('load', () => setTimeout(startAnimation, 50));
+    }
   })();
 </script>
 
