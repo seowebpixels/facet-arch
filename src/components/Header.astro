@@ -1,5 +1,4 @@
 ---
-/* src/components/Header.astro */
 import { Image } from 'astro:assets';
 import MenuOverlay from './MenuOverlay.astro';
 import logoImg from '../assets/facet-logo-white.avif';
@@ -20,6 +19,8 @@ const shouldShowLogo = !isHomePage && showLogoPages;
         src={logoImg} 
         alt="Facet Architecture Logo" 
         class="site-logo"
+        width={300}
+        height={300}
         loading="eager"
         decoding="sync"
       />

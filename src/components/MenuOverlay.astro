@@ -1,5 +1,4 @@
 ---
-/* MenuOverlay.astro */
 import featProjectImg from '../assets/res-eoa-1597.avif';
 import addressImg from '../assets/res-blann.avif';
 import sacapLogoImg from '../assets/sacap-logo.avif';
@@ -53,14 +52,30 @@ const menuItems = [
       </div>
 
       <div class="grid-tile tile-logo">
-        <img src={sacapLogoImg.src} alt="SACAP Logo" class="sacap-logo-img" />
+        <img 
+          src={sacapLogoImg.src} 
+          alt="SACAP Logo" 
+          class="sacap-logo-img" 
+          width={sacapLogoImg.width || 120}
+          height={sacapLogoImg.height || 120}
+          loading="lazy"
+          decoding="async"
+        />
       </div>
 
     </div>
 
     <div class="right-nav">
       <a href="/" class="overlay-logo-link" aria-label="Facet Architecture Home">
-        <img src={logoImg.src} alt="Facet Architecture Logo" class="overlay-logo" />
+        <img 
+          src={logoImg.src} 
+          alt="Facet Architecture Logo" 
+          class="overlay-logo"
+          width={logoImg.width || 300}
+          height={logoImg.height || 300}
+          loading="eager"
+          decoding="sync"
+        />
       </a>
 
       <nav class="menu-nav-list">
