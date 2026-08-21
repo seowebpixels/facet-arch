@@ -5,7 +5,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
 ---
 
 <div id="hero-stage" class="stage-container">
-  <!-- 1. HERO IMAGE SHOWCASE -->
+  <!-- 1. HERO IMAGE SHOWCASE (Hardcoded scaleY(0) prevents initial flash) -->
   <div id="hero-frame" class="hero-frame" style="transform: scaleY(0); transform-origin: center center;">
     <Image 
       src={heroImg} 
@@ -21,7 +21,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     />
   </div>
 
-  <!-- 2. TYPOGRAPHY & CLOCK LAYERS -->
+  <!-- 2. TYPOGRAPHY & CLOCK LAYERS (Hardcoded initial hidden offsets) -->
   <h1 id="text-facet" class="title-text text-facet" style="opacity: 0; transform: translate(-80px, -40px);">FACET</h1>
 
   <div id="hero-clock" class="hero-clock" style="opacity: 0; transform: translateY(-20px);">
@@ -31,7 +31,12 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
   <h1 id="text-architecture" class="title-text text-architecture" style="opacity: 0; transform: translate(80px, 40px);">ARCHITECTURE</h1>
 
-  <!-- 3. ANIMATING CENTER LOGO -->
+  <!-- 3. TOP-RIGHT TARGET CONTAINER -->
+  <div id="logo-docked" class="logo-docked-wrapper">
+    <div class="logo-placeholder"></div>
+  </div>
+
+  <!-- 4. ANIMATING CENTER LOGO (Visible immediately on load) -->
   <div id="logo-center" class="logo-center-wrapper">
     <Image 
       src={heroLogoImg} 
@@ -79,22 +84,24 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
     window.addEventListener('DOMContentLoaded', function() {
       var logoCenter = document.getElementById('logo-center');
+      var logoDocked = document.getElementById('logo-docked');
       var textFacet = document.getElementById('text-facet');
       var textArchitecture = document.getElementById('text-architecture');
       var clock = document.getElementById('hero-clock');
       var heroFrame = document.getElementById('hero-frame');
 
-      if (!logoCenter || !textFacet || !textArchitecture || !clock || !heroFrame) {
+      if (!logoCenter || !logoDocked || !textFacet || !textArchitecture || !clock || !heroFrame) {
         releaseScrollLock();
         return;
       }
 
-      var isMobile = window.innerWidth <= 768;
+      // Single initial measurement calculation
+      var centerRect = logoCenter.getBoundingClientRect();
+      var dockedRect = logoDocked.getBoundingClientRect();
 
-      // Pure CSS transform offset targets (Zero forced reflow reads)
-      var targetX = isMobile ? 'calc(50vw - 60px)' : 'calc(50vw - 120px)';
-      var targetY = isMobile ? '-calc(50vh - 40px)' : '-calc(50vh - 20px)';
-      var targetScale = isMobile ? 0.45 : 0.5;
+      var deltaX = (dockedRect.left + dockedRect.width / 2) - (centerRect.left + centerRect.width / 2);
+      var deltaY = (dockedRect.top + dockedRect.height / 2) - (centerRect.top + centerRect.height / 2);
+      var targetScale = dockedRect.width / centerRect.width;
 
       var tl = gsap.timeline({
         defaults: { ease: 'power3.inOut' },
@@ -102,7 +109,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
       });
 
       tl
-        // Phase 1: Preloader Hold (Reduced slightly to 2s for optimal mobile Speed Index)
+        // Phase 1: Hold Logo in Center
         .to(logoCenter, {
           duration: 2
         })
@@ -126,15 +133,15 @@ import heroImg from '../assets/res-eoa-1597.avif';
           y: 0,
           duration: 0.6
         }, '-=0.4')
-        // Phase 3: Glide Logo into top-right without reading offset geometry
+        // Phase 3: Glide Logo across vector directly into top-right target
         .to(logoCenter, {
-          x: targetX,
-          y: targetY,
+          x: deltaX,
+          y: deltaY,
           scale: targetScale,
           duration: 1,
           ease: 'power3.inOut'
         }, '-=0.4')
-        // Phase 4: Expand Central Hero Image
+        // Phase 4: Expand Central Hero Showcase Image
         .to(heroFrame, {
           scaleY: 1,
           duration: 1,
@@ -155,6 +162,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 10;
   }
 
+  /* FACET: Anchored top left */
   .text-facet {
     position: absolute;
     top: 20px;
@@ -171,6 +179,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     white-space: nowrap;
   }
 
+  /* Live Clock Styling */
   .hero-clock {
     position: absolute;
     bottom: 25px;
@@ -189,6 +198,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     margin-left: 1.25rem;
   }
 
+  /* ARCHITECTURE: Anchored bottom right */
   .text-architecture {
     position: absolute;
     bottom: 20px;
@@ -205,6 +215,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     white-space: nowrap;
   }
 
+  /* CENTER LOGO: Pinned at center initial state */
   .logo-center-wrapper {
     position: fixed;
     top: 50%;
@@ -228,6 +239,24 @@ import heroImg from '../assets/res-eoa-1597.avif';
     object-fit: contain;
   }
 
+  /* DOCKED LOGO TARGET: Shifted up 50px and right 10px */
+  .logo-docked-wrapper {
+    position: absolute;
+    top: -30px; 
+    right: 40px; 
+    width: 140px;
+    height: 140px;
+    z-index: 30;
+    pointer-events: none;
+    visibility: hidden; 
+  }
+
+  .logo-placeholder {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* HERO FRAME: Visual background showcase */
   .hero-frame {
     position: absolute;
     top: 14%;
@@ -247,10 +276,18 @@ import heroImg from '../assets/res-eoa-1597.avif';
     display: block;
   }
 
+  /* Mobile Responsive adjustments */
   @media (max-width: 768px) {
     .logo-center-wrapper {
       width: 180px;
       height: 180px;
+    }
+
+    .logo-docked-wrapper {
+      top: -10px;
+      right: 10px;
+      width: 85px;
+      height: 85px;
     }
 
     .hero-frame {
