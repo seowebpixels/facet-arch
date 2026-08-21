@@ -26,35 +26,41 @@ const isHomePage = pathname === '/' || pathname === '';
 <!doctype html>
 <html lang="en">
   <head>
+
     <!-- Google Tag Manager (Lazy Loaded) -->
 <script is:inline>
-  function loadGTM() {
-    if (window.gtmLoaded) return;
-    window.gtmLoaded = true;
+  (function() {
+    var gtmId = 'GTM-NB7RZJ26';
+    var loaded = false;
 
-    // Google Tag Manager Snippet
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-NB7RZJ26');
-  }
+    function loadGTM() {
+      if (loaded) return;
+      loaded = true;
 
-  // Defer loading until browser idle or user interaction
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(function() {
-      setTimeout(loadGTM, 2500);
+      // Initialize dataLayer
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+
+      // Inject GTM script element
+      var script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://www.googletagmanager.com/gtm.js?id=' + gtmId;
+      document.head.appendChild(script);
+
+      // Clean up event listeners once loaded
+      events.forEach(function(event) {
+        window.removeEventListener(event, loadGTM, { passive: true });
+      });
+    }
+
+    var events = ['touchstart', 'mouseover', 'wheel', 'scroll', 'keydown'];
+    events.forEach(function(event) {
+      window.addEventListener(event, loadGTM, { passive: true });
     });
-  } else {
-    window.addEventListener('load', function() {
-      setTimeout(loadGTM, 2500);
-    });
-  }
 
-  // Trigger instantly if user interacts sooner
-  ['touchstart', 'scroll', 'mousemove'].forEach(function(evt) {
-    window.addEventListener(evt, loadGTM, { once: true, passive: true });
-  });
+    // Fallback timer: load GTM after 4 seconds if no user interaction occurs
+    setTimeout(loadGTM, 4000);
+  })();
 </script>
 
     <meta charset="UTF-8" />
