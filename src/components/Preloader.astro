@@ -33,7 +33,8 @@ import heroImg from '../assets/res-eoa-1597.avif';
     <div class="logo-placeholder"></div>
   </div>
 
-  <div id="logo-center" class="logo-center-wrapper">
+  <!-- Force immediate paint for LCP -->
+  <div id="logo-center" class="logo-center-wrapper" style="opacity: 1; visibility: visible;">
     <Image 
       src={heroLogoImg} 
       alt="Facet Architecture Logo" 
@@ -49,7 +50,8 @@ import heroImg from '../assets/res-eoa-1597.avif';
   </div>
 </div>
 
-<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<!-- Defer GSAP so it never blocks LCP -->
+<script is:inline defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 
 <script is:inline>
   (function initPreloader() {
@@ -80,7 +82,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
     function runAnimation() {
       if (typeof gsap === 'undefined') {
-        setTimeout(runAnimation, 30);
+        setTimeout(runAnimation, 20);
         return;
       }
 
@@ -109,7 +111,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
       });
 
       tl
-        .to(logoCenter, { duration: 1.0 })
+        .to(logoCenter, { duration: 0.8 })
         .to(textFacet, { opacity: 1, x: 0, y: 0, duration: 0.8, ease: 'power4.out' })
         .to(textArchitecture, { opacity: 1, x: 0, y: 0, duration: 0.8, ease: 'power4.out' }, '<')
         .to(clock, { opacity: 1, y: 0, duration: 0.6 }, '-=0.4')
@@ -117,9 +119,12 @@ import heroImg from '../assets/res-eoa-1597.avif';
         .to(heroFrame, { scaleY: 1, duration: 1, ease: 'power4.out' }, '-=0.5');
     }
 
-    requestAnimationFrame(function() {
-      requestAnimationFrame(runAnimation);
-    });
+    // Wait until the DOM is parsed so GSAP deferred script finishes loading
+    if (document.readyState === 'complete') {
+      runAnimation();
+    } else {
+      window.addEventListener('load', runAnimation);
+    }
   })();
 </script>
 
@@ -197,8 +202,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 99999;
     pointer-events: none;
     transform-origin: center center;
-    opacity: 1 !important;
-    visibility: visible !important;
   }
 
   .logo-img-large {
