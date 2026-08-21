@@ -100,8 +100,9 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
       var isMobile = matchMedia('(max-width: 768px)').matches;
 
-      var targetX = isMobile ? 'calc(50vw - 70px)' : 'calc(50vw - 120px)';
-      var targetY = isMobile ? 'calc(-50vh + 45px)' : 'calc(-50vh + 40px)';
+      // Clean numeric pixel offsets for GSAP
+      var targetX = isMobile ? (window.innerWidth / 2 - 50) : (window.innerWidth / 2 - 120);
+      var targetY = isMobile ? -(window.innerHeight / 2 - 35) : -(window.innerHeight / 2 - 40);
       var targetScale = isMobile ? 0.45 : 0.5;
 
       var tl = gsap.timeline({
@@ -126,10 +127,10 @@ import heroImg from '../assets/res-eoa-1597.avif';
     }
 
     if (document.readyState === 'complete') {
-      setTimeout(function() { requestAnimationFrame(runAnimation); }, 100);
+      setTimeout(function() { requestAnimationFrame(runAnimation); }, 50);
     } else {
       window.addEventListener('load', function() {
-        setTimeout(function() { requestAnimationFrame(runAnimation); }, 100);
+        setTimeout(function() { requestAnimationFrame(runAnimation); }, 50);
       });
     }
   })();
@@ -196,8 +197,9 @@ import heroImg from '../assets/res-eoa-1597.avif';
     white-space: nowrap;
   }
 
+  /* Changed position: fixed -> position: absolute so it scrolls naturally with the hero stage */
   .logo-center-wrapper {
-    position: fixed;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
