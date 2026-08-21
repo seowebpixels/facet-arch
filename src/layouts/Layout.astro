@@ -26,15 +26,36 @@ const isHomePage = pathname === '/' || pathname === '';
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Google Tag Manager -->
-    <script is:inline>
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-NB7RZJ26');
-    </script>
-    <!-- End Google Tag Manager -->
+    <!-- Google Tag Manager (Lazy Loaded) -->
+<script is:inline>
+  function loadGTM() {
+    if (window.gtmLoaded) return;
+    window.gtmLoaded = true;
+
+    // Google Tag Manager Snippet
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-NB7RZJ26');
+  }
+
+  // Defer loading until browser idle or user interaction
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(function() {
+      setTimeout(loadGTM, 2500);
+    });
+  } else {
+    window.addEventListener('load', function() {
+      setTimeout(loadGTM, 2500);
+    });
+  }
+
+  // Trigger instantly if user interacts sooner
+  ['touchstart', 'scroll', 'mousemove'].forEach(function(evt) {
+    window.addEventListener(evt, loadGTM, { once: true, passive: true });
+  });
+</script>
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
