@@ -8,6 +8,8 @@ export default defineConfig({
     inlineStylesheets: 'always'
   },
   image: {
+    // Defines preferred output formats for Astro's image service
+    formats: ['avif', 'webp'],
     service: {
       entrypoint: 'astro/assets/services/sharp',
       config: {
