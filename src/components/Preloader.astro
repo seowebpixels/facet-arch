@@ -5,7 +5,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
 ---
 
 <div id="hero-stage" class="stage-container">
-  <!-- 1. HERO IMAGE SHOWCASE -->
   <div id="hero-frame" class="hero-frame" style="transform: scaleY(0); transform-origin: center center;">
     <Image 
       src={heroImg} 
@@ -21,7 +20,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     />
   </div>
 
-  <!-- 2. TYPOGRAPHY & CLOCK LAYERS -->
   <h1 id="text-facet" class="title-text text-facet" style="opacity: 0; transform: translate(-80px, -40px);">FACET</h1>
 
   <div id="hero-clock" class="hero-clock" style="opacity: 0; transform: translateY(-20px);">
@@ -31,12 +29,10 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
   <h1 id="text-architecture" class="title-text text-architecture" style="opacity: 0; transform: translate(80px, 40px);">ARCHITECTURE</h1>
 
-  <!-- 3. TOP-RIGHT TARGET CONTAINER -->
   <div id="logo-docked" class="logo-docked-wrapper">
     <div class="logo-placeholder"></div>
   </div>
 
-  <!-- 4. ANIMATING CENTER LOGO -->
   <div id="logo-center" class="logo-center-wrapper">
     <Image 
       src={heroLogoImg} 
@@ -53,116 +49,72 @@ import heroImg from '../assets/res-eoa-1597.avif';
   </div>
 </div>
 
-<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<!-- Bundle GSAP locally or import inline to kill the external CDN network dependency tree -->
+<script>
+  import { gsap } from 'gsap';
 
-<script is:inline>
-  (function initPreloader() {
-    function releaseScrollLock() {
-      document.documentElement.style.overflow = '';
-      document.body.style.overflow = '';
-      var stage = document.getElementById('hero-stage');
-      if (stage) stage.style.pointerEvents = 'none';
+  function releaseScrollLock() {
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    const stage = document.getElementById('hero-stage');
+    if (stage) stage.style.pointerEvents = 'none';
+  }
+
+  function updateClock() {
+    const clockEl = document.getElementById('live-time');
+    const zoneEl = document.getElementById('time-zone');
+    if (!clockEl) return;
+    const now = new Date();
+    clockEl.textContent = now.toTimeString().split(' ')[0];
+    if (zoneEl) {
+      const tzString = now.toLocaleDateString('en-US', { timeZoneName: 'short' });
+      zoneEl.textContent = tzString.split(' ').pop() || 'SAST';
     }
+  }
 
-    function updateClock() {
-      var clockEl = document.getElementById('live-time');
-      var zoneEl = document.getElementById('time-zone');
-      if (!clockEl) return;
-      var now = new Date();
-      clockEl.textContent = now.toTimeString().split(' ')[0];
-      if (zoneEl) {
-        var tzString = now.toLocaleDateString('en-US', { timeZoneName: 'short' });
-        zoneEl.textContent = tzString.split(' ').pop() || 'SAST';
-      }
-    }
+  updateClock();
+  setInterval(updateClock, 1000);
 
-    updateClock();
-    setInterval(updateClock, 1000);
+  document.documentElement.style.overflow = 'hidden';
+  document.body.style.overflow = 'hidden';
 
-    // Strict Scroll Lock on Start
-    document.documentElement.style.overflow = 'hidden';
-    document.body.style.overflow = 'hidden';
-
-    function runAnimation() {
-      // Ensure GSAP is fully loaded before animating
-      if (typeof gsap === 'undefined') {
-        setTimeout(runAnimation, 50);
-        return;
-      }
-
-      var logoCenter = document.getElementById('logo-center');
-      var logoDocked = document.getElementById('logo-docked');
-      var textFacet = document.getElementById('text-facet');
-      var textArchitecture = document.getElementById('text-architecture');
-      var clock = document.getElementById('hero-clock');
-      var heroFrame = document.getElementById('hero-frame');
+  // Double requestAnimationFrame guarantees DOM styles are fully flushed without forced reflow
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      const logoCenter = document.getElementById('logo-center');
+      const logoDocked = document.getElementById('logo-docked');
+      const textFacet = document.getElementById('text-facet');
+      const textArchitecture = document.getElementById('text-architecture');
+      const clock = document.getElementById('hero-clock');
+      const heroFrame = document.getElementById('hero-frame');
 
       if (!logoCenter || !logoDocked || !textFacet || !textArchitecture || !clock || !heroFrame) {
         releaseScrollLock();
         return;
       }
 
-      // 1. CALCULATE EXACT TRAJECTORY DISTANCE TO TOP-RIGHT
-      var centerRect = logoCenter.getBoundingClientRect();
-      var dockedRect = logoDocked.getBoundingClientRect();
+      // Read geometry ONCE in a single batch frame
+      const centerRect = logoCenter.getBoundingClientRect();
+      const dockedRect = logoDocked.getBoundingClientRect();
 
-      var deltaX = (dockedRect.left + dockedRect.width / 2) - (centerRect.left + centerRect.width / 2);
-      var deltaY = (dockedRect.top + dockedRect.height / 2) - (centerRect.top + centerRect.height / 2);
-      var targetScale = dockedRect.width / centerRect.width;
+      const deltaX = (dockedRect.left + dockedRect.width / 2) - (centerRect.left + centerRect.width / 2);
+      const deltaY = (dockedRect.top + dockedRect.height / 2) - (centerRect.top + centerRect.height / 2);
+      const targetScale = dockedRect.width / centerRect.width;
 
-      // 2. MASTER TIMELINE
-      var tl = gsap.timeline({
+      const tl = gsap.timeline({
         defaults: { ease: 'power3.inOut' },
         onComplete: releaseScrollLock
       });
 
       tl
-        // Phase 1: Hold Logo in Center
-        .to(logoCenter, {
-          duration: 1.5
-        })
-        // Phase 2: Split Words FACET & ARCHITECTURE into Corners + Fade in Clock
-        .to(textFacet, {
-          opacity: 1,
-          x: 0,
-          y: 0,
-          duration: 0.8,
-          ease: 'power4.out'
-        })
-        .to(textArchitecture, {
-          opacity: 1,
-          x: 0,
-          y: 0,
-          duration: 0.8,
-          ease: 'power4.out'
-        }, '<')
-        .to(clock, {
-          opacity: 1,
-          y: 0,
-          duration: 0.6
-        }, '-=0.4')
-        // Phase 3: Move Logo across trajectory to Top Right target
-        .to(logoCenter, {
-          x: deltaX,
-          y: deltaY,
-          scale: targetScale,
-          duration: 1,
-          ease: 'power3.inOut'
-        }, '-=0.3')
-        // Phase 4: Expand Central Hero Showcase Image
-        .to(heroFrame, {
-          scaleY: 1,
-          duration: 1,
-          ease: 'power4.out'
-        }, '-=0.5');
-    }
-
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
-      runAnimation();
-    } else {
-      window.addEventListener('DOMContentLoaded', runAnimation);
-    }
-  })();
+        .to(logoCenter, { duration: 1.2 })
+        .to(textFacet, { opacity: 1, x: 0, y: 0, duration: 0.8, ease: 'power4.out' })
+        .to(textArchitecture, { opacity: 1, x: 0, y: 0, duration: 0.8, ease: 'power4.out' }, '<')
+        .to(clock, { opacity: 1, y: 0, duration: 0.6 }, '-=0.4')
+        .to(logoCenter, { x: deltaX, y: deltaY, scale: targetScale, duration: 1, ease: 'power3.inOut' }, '-=0.3')
+        .to(heroFrame, { scaleY: 1, duration: 1, ease: 'power4.out' }, '-=0.5');
+    });
+  });
 </script>
 
 <style>
@@ -176,7 +128,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 10;
   }
 
-  /* FACET: Anchored top left */
   .text-facet {
     position: absolute;
     top: 20px;
@@ -193,7 +144,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     white-space: nowrap;
   }
 
-  /* Live Clock Styling */
   .hero-clock {
     position: absolute;
     bottom: 25px;
@@ -212,7 +162,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     margin-left: 1.25rem;
   }
 
-  /* ARCHITECTURE: Anchored bottom right */
   .text-architecture {
     position: absolute;
     bottom: 20px;
@@ -229,7 +178,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     white-space: nowrap;
   }
 
-  /* CENTER LOGO: Pinned at center initial state */
   .logo-center-wrapper {
     position: fixed;
     top: 50%;
@@ -254,7 +202,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     object-fit: contain;
   }
 
-  /* DOCKED LOGO TARGET */
   .logo-docked-wrapper {
     position: absolute;
     top: -30px; 
@@ -271,7 +218,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     height: 100%;
   }
 
-  /* HERO FRAME: Visual background showcase */
   .hero-frame {
     position: absolute;
     top: 14%;
@@ -290,7 +236,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     display: block;
   }
 
-  /* Mobile Responsive adjustments */
   @media (max-width: 768px) {
     .logo-center-wrapper {
       width: 180px;
