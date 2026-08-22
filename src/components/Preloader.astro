@@ -49,75 +49,81 @@ import heroImg from '../assets/res-eoa-1597.avif';
   </div>
 </div>
 
-<!-- Import GSAP locally to eliminate 3rd-party domain lookups completely -->
-<script>
-  import { gsap } from 'gsap';
+<!-- Points directly to your local static GSAP file -->
+<script is:inline defer src="/js/gsap.min.js"></script>
 
-  function releaseScrollLock() {
-    document.documentElement.style.overflow = '';
-    document.body.style.overflow = '';
-    const stage = document.getElementById('hero-stage');
-    if (stage) stage.style.pointerEvents = 'none';
-  }
-
-  function updateClock() {
-    const clockEl = document.getElementById('live-time');
-    const zoneEl = document.getElementById('time-zone');
-    if (!clockEl) return;
-    const now = new Date();
-    clockEl.textContent = now.toTimeString().split(' ')[0];
-    if (zoneEl) {
-      const tzString = now.toLocaleDateString('en-US', { timeZoneName: 'short' });
-      zoneEl.textContent = tzString.split(' ').pop() || 'SAST';
-    }
-  }
-
-  updateClock();
-  setInterval(updateClock, 1000);
-
-  document.documentElement.style.overflow = 'hidden';
-  document.body.style.overflow = 'hidden';
-
-  function runAnimation() {
-    const logoCenter = document.getElementById('logo-center');
-    const logoDocked = document.getElementById('logo-docked');
-    const textFacet = document.getElementById('text-facet');
-    const textArchitecture = document.getElementById('text-architecture');
-    const clock = document.getElementById('hero-clock');
-    const heroFrame = document.getElementById('hero-frame');
-
-    if (!logoCenter || !logoDocked || !textFacet || !textArchitecture || !clock || !heroFrame) {
-      releaseScrollLock();
-      return;
+<script is:inline>
+  (function initPreloader() {
+    function releaseScrollLock() {
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      var stage = document.getElementById('hero-stage');
+      if (stage) stage.style.pointerEvents = 'none';
     }
 
-    const centerRect = logoCenter.getBoundingClientRect();
-    const dockedRect = logoDocked.getBoundingClientRect();
+    function updateClock() {
+      var clockEl = document.getElementById('live-time');
+      var zoneEl = document.getElementById('time-zone');
+      if (!clockEl) return;
+      var now = new Date();
+      clockEl.textContent = now.toTimeString().split(' ')[0];
+      if (zoneEl) {
+        var tzString = now.toLocaleDateString('en-US', { timeZoneName: 'short' });
+        zoneEl.textContent = tzString.split(' ').pop() || 'SAST';
+      }
+    }
 
-    const deltaX = (dockedRect.left + dockedRect.width / 2) - (centerRect.left + centerRect.width / 2);
-    const deltaY = (dockedRect.top + dockedRect.height / 2) - (centerRect.top + centerRect.height / 2);
-    const targetScale = dockedRect.width / centerRect.width;
+    updateClock();
+    setInterval(updateClock, 1000);
 
-    const tl = gsap.timeline({
-      defaults: { ease: 'power3.inOut' },
-      onComplete: releaseScrollLock
-    });
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
 
-    // Maintains full 3.0 second preloader display before animation
-    tl
-      .to(logoCenter, { duration: 3.0 })
-      .to(textFacet, { opacity: 1, x: 0, y: 0, duration: 0.8, ease: 'power4.out' })
-      .to(textArchitecture, { opacity: 1, x: 0, y: 0, duration: 0.8, ease: 'power4.out' }, '<')
-      .to(clock, { opacity: 1, y: 0, duration: 0.6 }, '-=0.4')
-      .to(logoCenter, { x: deltaX, y: deltaY, scale: targetScale, duration: 1, ease: 'power3.inOut' }, '-=0.3')
-      .to(heroFrame, { scaleY: 1, duration: 1, ease: 'power4.out' }, '-=0.5');
-  }
+    function runAnimation() {
+      if (typeof gsap === 'undefined') {
+        setTimeout(runAnimation, 30);
+        return;
+      }
 
-  if (document.readyState === 'complete') {
-    runAnimation();
-  } else {
-    window.addEventListener('load', runAnimation);
-  }
+      var logoCenter = document.getElementById('logo-center');
+      var logoDocked = document.getElementById('logo-docked');
+      var textFacet = document.getElementById('text-facet');
+      var textArchitecture = document.getElementById('text-architecture');
+      var clock = document.getElementById('hero-clock');
+      var heroFrame = document.getElementById('hero-frame');
+
+      if (!logoCenter || !logoDocked || !textFacet || !textArchitecture || !clock || !heroFrame) {
+        releaseScrollLock();
+        return;
+      }
+
+      var centerRect = logoCenter.getBoundingClientRect();
+      var dockedRect = logoDocked.getBoundingClientRect();
+
+      var deltaX = (dockedRect.left + dockedRect.width / 2) - (centerRect.left + centerRect.width / 2);
+      var deltaY = (dockedRect.top + dockedRect.height / 2) - (centerRect.top + centerRect.height / 2);
+      var targetScale = dockedRect.width / centerRect.width;
+
+      var tl = gsap.timeline({
+        defaults: { ease: 'power3.inOut' },
+        onComplete: releaseScrollLock
+      });
+
+      tl
+        .to(logoCenter, { duration: 3.0 })
+        .to(textFacet, { opacity: 1, x: 0, y: 0, duration: 0.8, ease: 'power4.out' })
+        .to(textArchitecture, { opacity: 1, x: 0, y: 0, duration: 0.8, ease: 'power4.out' }, '<')
+        .to(clock, { opacity: 1, y: 0, duration: 0.6 }, '-=0.4')
+        .to(logoCenter, { x: deltaX, y: deltaY, scale: targetScale, duration: 1, ease: 'power3.inOut' }, '-=0.3')
+        .to(heroFrame, { scaleY: 1, duration: 1, ease: 'power4.out' }, '-=0.5');
+    }
+
+    if (document.readyState === 'complete') {
+      runAnimation();
+    } else {
+      window.addEventListener('load', runAnimation);
+    }
+  })();
 </script>
 
 <style>
@@ -174,7 +180,8 @@ import heroImg from '../assets/res-eoa-1597.avif';
     font-size: clamp(2.6rem, 4vw, 4.1rem);
     letter-spacing: 0.10em;
     color: var(--text-primary, #111111);
-    margin: 0; line-height: 1;
+    margin: 0;
+    line-height: 1;
     z-index: 40;
     text-transform: uppercase;
     white-space: nowrap;
