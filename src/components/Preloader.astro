@@ -5,7 +5,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
 ---
 
 <div id="hero-stage" class="stage-container">
-  <div id="hero-frame" class="hero-frame" style="transform: scaleY(0); transform-origin: center center;">
+  <div id="hero-frame" class="hero-frame">
     <Image 
       src={heroImg} 
       alt="Facet Architecture Project Showcase" 
@@ -20,14 +20,14 @@ import heroImg from '../assets/res-eoa-1597.avif';
     />
   </div>
 
-  <h1 id="text-facet" class="title-text text-facet" style="opacity: 0; transform: translate(-80px, -40px);">FACET</h1>
+  <h1 id="text-facet" class="title-text text-facet">FACET</h1>
 
-  <div id="hero-clock" class="hero-clock" style="opacity: 0; transform: translateY(-20px);">
+  <div id="hero-clock" class="hero-clock">
     <span id="live-time">00:00:00</span>
     <span id="time-zone" class="time-zone">SAST</span>
   </div>
 
-  <h1 id="text-architecture" class="title-text text-architecture" style="opacity: 0; transform: translate(80px, 40px);">ARCHITECTURE</h1>
+  <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
 
   <div id="logo-docked" class="logo-docked-wrapper">
     <div class="logo-placeholder"></div>
@@ -78,11 +78,17 @@ import heroImg from '../assets/res-eoa-1597.avif';
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
 
+    var hasRun = false;
+
     function runAnimation() {
+      if (hasRun) return;
+      
       if (typeof gsap === 'undefined') {
-        setTimeout(runAnimation, 20);
+        setTimeout(runAnimation, 10);
         return;
       }
+
+      hasRun = true;
 
       var logoCenter = document.getElementById('logo-center');
       var logoDocked = document.getElementById('logo-docked');
@@ -96,6 +102,8 @@ import heroImg from '../assets/res-eoa-1597.avif';
         return;
       }
 
+      var isMobile = window.innerWidth <= 768;
+
       var centerRect = logoCenter.getBoundingClientRect();
       var dockedRect = logoDocked.getBoundingClientRect();
 
@@ -103,24 +111,45 @@ import heroImg from '../assets/res-eoa-1597.avif';
       var deltaY = (dockedRect.top + dockedRect.height / 2) - (centerRect.top + centerRect.height / 2);
       var targetScale = dockedRect.width / centerRect.width;
 
+      // Initial element positioning prior to timeline start
+      gsap.set(heroFrame, { scaleY: 0, transformOrigin: 'center center' });
+      gsap.set(textFacet, { opacity: 0, x: -80, y: -40 });
+      gsap.set(textArchitecture, { opacity: 0, x: 80, y: 40 });
+      gsap.set(clock, { opacity: 0, y: -20 });
+
       var tl = gsap.timeline({
         defaults: { ease: 'power3.inOut' },
         onComplete: releaseScrollLock
       });
 
-      // Zero hold time: Dock logo instantly to kill Element Render Delay
-      tl
-        .to(logoCenter, { x: deltaX, y: deltaY, scale: targetScale, duration: 0.9, ease: 'power3.inOut' })
-        .to(textFacet, { opacity: 1, x: 0, y: 0, duration: 0.6, ease: 'power4.out' }, '-=0.4')
-        .to(textArchitecture, { opacity: 1, x: 0, y: 0, duration: 0.6, ease: 'power4.out' }, '<')
-        .to(clock, { opacity: 1, y: 0, duration: 0.5 }, '-=0.3')
-        .to(heroFrame, { scaleY: 1, duration: 0.8, ease: 'power4.out' }, '-=0.4');
+      var durLogo = isMobile ? 0.45 : 0.8;
+      var durText = isMobile ? 0.35 : 0.55;
+      var durFrame = isMobile ? 0.45 : 0.75;
+
+      // delay: 3 holds the center hero logo for 3 seconds before transition starts
+      tl.to(logoCenter, { 
+        x: deltaX, 
+        y: deltaY, 
+        scale: targetScale, 
+        duration: durLogo, 
+        delay: 3, 
+        ease: 'power3.inOut' 
+      })
+      .to(textFacet, { opacity: 1, x: 0, y: 0, duration: durText, ease: 'power4.out' }, '-=0.3')
+      .to(textArchitecture, { opacity: 1, x: 0, y: 0, duration: durText, ease: 'power4.out' }, '<')
+      .to(clock, { opacity: 1, y: 0, duration: isMobile ? 0.25 : 0.4 }, '-=0.2')
+      .to(heroFrame, { scaleY: 1, duration: durFrame, ease: 'power4.out' }, '-=0.3');
     }
 
-    if (document.readyState === 'complete') {
+    // Extended failsafe to allow for full 3s logo hold time
+    setTimeout(function() {
+      if (!hasRun) runAnimation();
+    }, 4500);
+
+    if (document.readyState === 'interactive' || document.readyState === 'complete') {
       requestAnimationFrame(runAnimation);
     } else {
-      window.addEventListener('load', function() {
+      document.addEventListener('DOMContentLoaded', function() {
         requestAnimationFrame(runAnimation);
       });
     }
@@ -152,6 +181,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 40;
     text-transform: uppercase;
     white-space: nowrap;
+    will-change: transform, opacity;
   }
 
   .hero-clock {
@@ -166,6 +196,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     color: var(--text-primary, #111111);
     display: flex;
     align-items: center;
+    will-change: transform, opacity;
   }
 
   .time-zone {
@@ -186,6 +217,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 40;
     text-transform: uppercase;
     white-space: nowrap;
+    will-change: transform, opacity;
   }
 
   .logo-center-wrapper {
@@ -201,6 +233,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 99999;
     pointer-events: none;
     transform-origin: center center;
+    will-change: transform;
   }
 
   .logo-img-large {
@@ -235,6 +268,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 20;
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    will-change: transform;
   }
 
   .hero-img {
