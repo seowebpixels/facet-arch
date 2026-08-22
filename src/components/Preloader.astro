@@ -111,8 +111,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
       var deltaY = (dockedRect.top + dockedRect.height / 2) - (centerRect.top + centerRect.height / 2);
       var targetScale = dockedRect.width / centerRect.width;
 
-      // Initial element positioning prior to timeline start
-      gsap.set(heroFrame, { scaleY: 0, transformOrigin: 'center center' });
+      // Initial state for text & clock handled by GSAP
       gsap.set(textFacet, { opacity: 0, x: -80, y: -40 });
       gsap.set(textArchitecture, { opacity: 0, x: 80, y: 40 });
       gsap.set(clock, { opacity: 0, y: -20 });
@@ -138,7 +137,11 @@ import heroImg from '../assets/res-eoa-1597.avif';
       .to(textFacet, { opacity: 1, x: 0, y: 0, duration: durText, ease: 'power4.out' }, '-=0.3')
       .to(textArchitecture, { opacity: 1, x: 0, y: 0, duration: durText, ease: 'power4.out' }, '<')
       .to(clock, { opacity: 1, y: 0, duration: isMobile ? 0.25 : 0.4 }, '-=0.2')
-      .to(heroFrame, { scaleY: 1, duration: durFrame, ease: 'power4.out' }, '-=0.3');
+      .fromTo(heroFrame, 
+        { scaleY: 0 }, 
+        { scaleY: 1, duration: durFrame, ease: 'power4.out' }, 
+        '-=0.3'
+      );
     }
 
     // Extended failsafe to allow for full 3s logo hold time
@@ -268,7 +271,10 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 20;
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    transform: scaleY(0);
+    transform-origin: center center;
     will-change: transform;
+    backface-visibility: hidden;
   }
 
   .hero-img {
