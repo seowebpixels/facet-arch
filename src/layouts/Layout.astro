@@ -24,11 +24,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
 const { pathname } = Astro.url;
 const isHomePage = pathname === '/' || pathname === '';
 
-// Pre-generate the 320px AVIF mobile variant for instant high-priority preloading
+// Pre-generate the exact AVIF variant for high-priority preloading
 const preloadedLogo = await getImage({
   src: heroLogoImg,
   format: 'avif',
-  width: 320,
+  width: 280,
   quality: 80
 });
 ---
@@ -37,41 +37,35 @@ const preloadedLogo = await getImage({
 <html lang="en">
   <head>
 
-    <!-- Google Tag Manager (Lazy Loaded) -->
-<script is:inline>
-  (function() {
-    var gtmId = 'GTM-NB7RZJ26';
-    var loaded = false;
+    <!-- Google Tag Manager (Pure Interaction Trigger — No Fallback Timer) -->
+    <script is:inline>
+      (function() {
+        var gtmId = 'GTM-NB7RZJ26';
+        var loaded = false;
 
-    function loadGTM() {
-      if (loaded) return;
-      loaded = true;
+        function loadGTM() {
+          if (loaded) return;
+          loaded = true;
 
-      // Initialize dataLayer
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
 
-      // Inject GTM script element
-      var script = document.createElement('script');
-      script.async = true;
-      script.src = 'https://www.googletagmanager.com/gtm.js?id=' + gtmId;
-      document.head.appendChild(script);
+          var script = document.createElement('script');
+          script.async = true;
+          script.src = 'https://www.googletagmanager.com/gtm.js?id=' + gtmId;
+          document.head.appendChild(script);
 
-      // Clean up event listeners once loaded
-      events.forEach(function(event) {
-        window.removeEventListener(event, loadGTM, { passive: true });
-      });
-    }
+          events.forEach(function(event) {
+            window.removeEventListener(event, loadGTM, { passive: true });
+          });
+        }
 
-    var events = ['touchstart', 'mouseover', 'wheel', 'scroll', 'keydown'];
-    events.forEach(function(event) {
-      window.addEventListener(event, loadGTM, { passive: true });
-    });
-
-    // Fallback timer: load GTM after 4 seconds if no user interaction occurs
-    setTimeout(loadGTM, 4000);
-  })();
-</script>
+        var events = ['pointerdown', 'touchstart', 'scroll', 'keydown'];
+        events.forEach(function(event) {
+          window.addEventListener(event, loadGTM, { passive: true });
+        });
+      })();
+    </script>
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -84,11 +78,11 @@ const preloadedLogo = await getImage({
     <meta name="title" content={title} />
     <meta name="description" content={description} />
 
-    <!-- Preload the exact 320px AVIF mobile variant instantly -->
+    <!-- Preload dynamically calculated logo path -->
     <link 
       rel="preload" 
       as="image" 
-      href="/_astro/facet-hero-logo.WrPel0_J.avif"
+      href={preloadedLogo.src}
       type="image/avif" 
       fetchpriority="high"
     />
@@ -130,11 +124,9 @@ const preloadedLogo = await getImage({
         width="0"
         style="display:none;visibility:hidden"></iframe></noscript
     >
-    <!-- End Google Tag Manager (noscript) -->
 
     <Header />
 
-    {/* Render the clock at top-left for inner pages */}
     {!isHomePage && <Clock />}
     
     <main>
@@ -184,7 +176,6 @@ const preloadedLogo = await getImage({
     user-drag: none !important;
   }
 
-  /* Re-enable interaction for links, form inputs, buttons, and navigation elements */
   a, button, input, textarea, select, .portfolio-card, .cad-trigger,
   .site-header, .menu-box, .menu-box *, .menu-overlay, .menu-overlay * {
     pointer-events: auto !important;
