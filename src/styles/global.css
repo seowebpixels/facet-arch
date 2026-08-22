@@ -106,10 +106,21 @@ footer[style*="background-color"],
   color: #ffffff !important;
 }
 
+/* Accessibility High-Contrast Force Overrides */
+.legend-item, 
+.legend-item span,
+.quote-text, 
+.quote-cite,
+blockquote,
+cite {
+  color: #000000 !important;
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.9), 0 0 8px rgba(255, 255, 255, 0.9) !important;
+  font-weight: 600 !important;
+}
+
+/* Ensure section titles on dark gray cards meet 4.5:1 WCAG ratio */
 p[style*="font-size: 11px"], 
 span[style*="font-size: 11px"], 
-h2[style*="font-size: 11px"],
-.legend-item,
-.headline {
+h2[style*="font-size: 11px"] {
   color: #ffffff !important;
 }
