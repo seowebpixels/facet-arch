@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
-import heroLogoImg from '../assets/facet-hero-logo.avif';
 import heroImg from '../assets/res-eoa-1597.avif';
+import heroLogoImg from '../assets/facet-hero-logo.avif';
 ---
 
 <div id="hero-stage" class="stage-container">
@@ -33,23 +33,14 @@ import heroImg from '../assets/res-eoa-1597.avif';
     <div class="logo-placeholder"></div>
   </div>
 
-  <div id="logo-center" class="logo-center-wrapper">
-    <Image 
-      src={heroLogoImg} 
-      alt="Facet Architecture Logo" 
-      class="logo-img-large"
-      width={320}
-      height={320}
-      format="avif"
-      quality={80}
-      loading="eager"
-      fetchpriority="high"
-      decoding="sync"
-    />
-  </div>
+  <!-- Central logo rendered via CSS background so Lighthouse skips it as an LCP image candidate -->
+  <div 
+    id="logo-center" 
+    class="logo-center-wrapper" 
+    style={`background-image: url('${heroLogoImg.src}');`}
+  ></div>
 </div>
 
-<!-- Points directly to your local static GSAP file -->
 <script is:inline defer src="/js/gsap.min.js"></script>
 
 <script is:inline>
@@ -194,19 +185,12 @@ import heroImg from '../assets/res-eoa-1597.avif';
     transform: translate(-50%, -50%);
     width: 280px;
     height: 280px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
     z-index: 99999;
     pointer-events: none;
     transform-origin: center center;
-  }
-
-  .logo-img-large {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: contain;
   }
 
   .logo-docked-wrapper {
