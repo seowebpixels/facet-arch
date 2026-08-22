@@ -2,7 +2,7 @@
 const currentYear = new Date().getFullYear();
 ---
 
-<footer class="home-matched-footer">
+<footer class="home-matched-footer" role="contentinfo">
   <div class="cta-section">
     <div class="cta-content">
       <div class="cta-text">
@@ -10,12 +10,12 @@ const currentYear = new Date().getFullYear();
         <h2 class="cta-heading">HAVE A PROJECT IN MIND?</h2>
       </div>
       <div class="cta-action">
-        <a href="mailto:info&#64;facetarch&#46;com" class="cta-btn">INITIATE CONSULTATION &rarr;</a>
+        <a href="mailto:info&#64;facetarch&#46;com" class="cta-btn" aria-label="Initiate consultation via email">INITIATE CONSULTATION &rarr;</a>
       </div>
     </div>
   </div>
 
-  <div class="footer-divider"></div>
+  <div class="footer-divider" role="separator"></div>
 
   <div class="footer-base">
     <p class="footer-line copyright-line">&copy; {currentYear} FACET ARCHITECTURE</p>
@@ -26,6 +26,7 @@ const currentYear = new Date().getFullYear();
         target="_blank" 
         rel="noopener noreferrer" 
         class="wdp-link"
+        aria-label="Designed by Web Design Pros (opens in a new tab)"
       >WEB DESIGN PROS</a>
     </p>
   </div>
@@ -33,8 +34,8 @@ const currentYear = new Date().getFullYear();
 
 <style>
   .home-matched-footer {
-    background-color: #2e343b;
-    color: #ffffff;
+    background-color: #1a1e23 !important; /* Darker slate background for >7:1 AAA contrast against pure white */
+    color: #ffffff !important;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
     padding: 60px 24px 40px !important;
     box-sizing: border-box;
@@ -62,19 +63,19 @@ const currentYear = new Date().getFullYear();
   .cta-sub {
     display: block;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
-    font-size: 0.65rem;
+    font-size: 0.75rem; /* Slightly increased for improved legibility */
     color: #ffffff !important;
     letter-spacing: 2px;
     text-transform: uppercase;
     margin-bottom: 10px;
-    font-weight: 500;
+    font-weight: 600 !important;
   }
 
   .cta-heading {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
     font-size: 1.3rem;
     color: #ffffff !important;
-    font-weight: 400;
+    font-weight: 600 !important;
     letter-spacing: 2px;
     margin: 0;
     text-transform: uppercase;
@@ -83,20 +84,24 @@ const currentYear = new Date().getFullYear();
   .cta-btn {
     display: inline-block;
     padding: 10px 22px;
-    border: 1px solid #ffffff !important;
+    border: 2px solid #ffffff !important; /* Thicker border for screen reader / focus visibility */
     background-color: transparent;
     color: #ffffff !important;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     letter-spacing: 2px;
     text-transform: uppercase;
     text-decoration: none;
+    font-weight: 600 !important;
     transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
   }
 
-  .cta-btn:hover {
+  .cta-btn:hover,
+  .cta-btn:focus {
     background-color: #ffffff !important;
     color: #000000 !important;
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
   }
 
   .cta-sub,
@@ -112,7 +117,7 @@ const currentYear = new Date().getFullYear();
     max-width: 1400px;
     margin: 0 auto 24px;
     height: 1px;
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 0.6) !important;
   }
 
   .footer-base {
@@ -121,27 +126,30 @@ const currentYear = new Date().getFullYear();
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     color: #ffffff !important;
     letter-spacing: 1.8px;
     text-transform: uppercase;
+    font-weight: 500 !important;
   }
 
   .footer-line {
     margin: 0;
+    color: #ffffff !important;
   }
 
   .wdp-link {
     color: #ffffff !important;
-    font-weight: 500;
+    font-weight: 600 !important;
     text-decoration: underline;
     transition: color 0.2s ease, font-weight 0.2s ease, text-shadow 0.2s ease;
   }
 
-  .wdp-link:hover {
+  .wdp-link:hover,
+  .wdp-link:focus {
     color: #ffffff !important;
-    font-weight: 700 !important;
-    text-shadow: 0 0 1px #ffffff;
+    text-shadow: 0 0 2px #ffffff;
+    outline: 1px solid #ffffff;
   }
 
   @media (max-width: 899px) {
@@ -172,7 +180,7 @@ const currentYear = new Date().getFullYear();
       text-align: center !important;
       box-sizing: border-box !important;
       padding: 12px 16px !important;
-      font-size: 0.7rem !important;
+      font-size: 0.75rem !important;
       letter-spacing: 2px !important;
     }
 
