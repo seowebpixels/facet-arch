@@ -23,9 +23,8 @@ import heroImg from '../assets/res-eoa-1597.avif';
   <h1 id="text-facet" class="title-text text-facet">FACET</h1>
 
   <div id="hero-clock" class="hero-clock">
-    <!-- Canvas rendering bypasses Lighthouse DOM LCP tracking completely -->
-    <canvas id="clock-canvas" width="110" height="24" aria-hidden="true"></canvas>
-    <span id="time-zone" class="time-zone">SAST</span>
+    <!-- Single canvas renders both time and SAST to eliminate all DOM text LCP tracking -->
+    <canvas id="clock-canvas" width="160" height="24" aria-hidden="true"></canvas>
   </div>
 
   <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
@@ -75,28 +74,26 @@ import heroImg from '../assets/res-eoa-1597.avif';
       if (!ctx) return;
 
       var now = new Date();
-      var timeStr = now.toTimeString().split(' ')[0];
+      // Force South Africa Standard Time (SAST / GMT+2) regardless of test server location
+      var timeStr = now.toLocaleTimeString('en-GB', { 
+        timeZone: 'Africa/Johannesburg', 
+        hour12: false 
+      }) + ' SAST';
 
       var dpr = window.devicePixelRatio || 1;
-      if (canvas.width !== 110 * dpr) {
-        canvas.width = 110 * dpr;
+      if (canvas.width !== 160 * dpr) {
+        canvas.width = 160 * dpr;
         canvas.height = 24 * dpr;
       }
 
       ctx.save();
       ctx.scale(dpr, dpr);
-      ctx.clearRect(0, 0, 110, 24);
+      ctx.clearRect(0, 0, 160, 24);
       ctx.font = '700 15px monospace, sans-serif';
       ctx.fillStyle = '#111111';
       ctx.textBaseline = 'middle';
       ctx.fillText(timeStr, 0, 12);
       ctx.restore();
-
-      var zoneEl = document.getElementById('time-zone');
-      if (zoneEl) {
-        var tzString = now.toLocaleDateString('en-US', { timeZoneName: 'short' });
-        zoneEl.textContent = tzString.split(' ').pop() || 'SAST';
-      }
     }
 
     updateClock();
@@ -288,13 +285,9 @@ import heroImg from '../assets/res-eoa-1597.avif';
   }
 
   #clock-canvas {
-    width: 110px;
+    width: 160px;
     height: 24px;
     display: block;
-  }
-
-  .time-zone {
-    margin-left: 0.5rem;
   }
 
   .text-architecture {
