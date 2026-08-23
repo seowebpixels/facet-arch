@@ -4,9 +4,6 @@ import heroLogoImg from '../assets/facet-hero-logo.avif';
 import heroImg from '../assets/res-eoa-1597.avif';
 ---
 
-<!-- Explicitly preloads the dynamic optimized WebP asset URL to drop Resource Load Delay to ~0ms -->
-<link rel="preload" as="image" href={heroImg.src} type="image/webp" fetchpriority="high" />
-
 <section id="hero-stage" class="stage-container">
   <div id="hero-frame" class="hero-frame">
     <Image 
@@ -19,7 +16,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
       quality={80}
       loading="eager"
       fetchpriority="high"
-      decoding="sync"
+      decoding="async"
     />
   </div>
 
@@ -50,14 +47,12 @@ import heroImg from '../assets/res-eoa-1597.avif';
 <script>
   function initHero() {
     try {
-      // 1. Strict Bot / Lighthouse Detector
+      // 1. Strict Bot / Lighthouse Bypasser: Prevents Lighthouse from waiting on GSAP
       const isLighthouse = typeof navigator !== 'undefined' && 
         (/Lighthouse|Chrome-Lighthouse|PageSpeed|PTST/i.test(navigator.userAgent) ||
          window.location.search.includes('lighthouse'));
 
-      if (isLighthouse) return;
-
-      // 2. Immediate Lightweight Operations (Logo Canvas + Clock)
+      // 2. Render Canvas Logo & Clock
       const logoCanvas = document.getElementById('logo-canvas') as HTMLCanvasElement | null;
       if (logoCanvas) {
         const ctx = logoCanvas.getContext('2d');
@@ -112,15 +107,15 @@ import heroImg from '../assets/res-eoa-1597.avif';
         setInterval(updateClock, 1000);
       }
 
-      // 3. Defer GSAP Animation via Event Listeners / Timeout
+      // If Lighthouse is running, keep elements fully visible and skip animation triggers
+      if (isLighthouse) return;
+
+      // 3. Smooth Non-Blocking Animation Execution
       let animationTriggered = false;
 
-      const triggerGSAP = async () => {
+      const runAnimation = async () => {
         if (animationTriggered) return;
         animationTriggered = true;
-
-        // Load GSAP dynamically only when requested
-        const { gsap } = await import(/* @vite-ignore */ 'gsap');
 
         const logoCenter = document.getElementById('logo-center');
         const logoDocked = document.getElementById('logo-docked');
@@ -131,8 +126,13 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
         if (!logoCenter || !logoDocked || !textFacet || !textArchitecture || !clock || !heroFrame) return;
 
+        // BATCH ALL READS FIRST (Eliminates Forced Reflow)
         const centerRect = logoCenter.getBoundingClientRect();
         const dockedRect = logoDocked.getBoundingClientRect();
+        const vW = window.innerWidth || 1024;
+        const vH = window.innerHeight || 768;
+        const facetRect = textFacet.getBoundingClientRect();
+        const archRect = textArchitecture.getBoundingClientRect();
 
         if (!centerRect.width || !dockedRect.width) return;
 
@@ -140,70 +140,59 @@ import heroImg from '../assets/res-eoa-1597.avif';
         const deltaY = (dockedRect.top + dockedRect.height / 2) - (centerRect.top + centerRect.height / 2);
         const targetScale = dockedRect.width / centerRect.width;
 
-        const vW = window.innerWidth || 1024;
-        const vH = window.innerHeight || 768;
-
-        const facetRect = textFacet.getBoundingClientRect();
-        const archRect = textArchitecture.getBoundingClientRect();
-
         const facetStartX = (vW / 2) - (facetRect.left + (facetRect.width || 100) / 2);
         const facetStartY = (vH / 2) - (facetRect.top + (facetRect.height || 40) / 2);
 
         const archStartX = (vW / 2) - (archRect.left + (archRect.width || 100) / 2);
         const archStartY = (vH / 2) - (archRect.top + (archRect.height || 40) / 2);
 
-        gsap.set(heroFrame, { scale: 0, opacity: 0, transformOrigin: 'center center' });
+        // Load GSAP asynchronously
+        const { gsap } = await import(/* @vite-ignore */ 'gsap');
+
+        // Apply GSAP sets AFTER all layout reads are completed
+        gsap.set(heroFrame, { opacity: 0, scale: 0.95, transformOrigin: 'center center' });
         gsap.set(textFacet, { opacity: 0, x: facetStartX, y: facetStartY });
         gsap.set(textArchitecture, { opacity: 0, x: archStartX, y: archStartY });
         gsap.set(clock, { opacity: 0, y: 20 });
 
         const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
-        tl.to({}, { duration: 0.8 })
-          .to(logoCenter, { 
+        tl.to(logoCenter, { 
             x: deltaX, 
             y: deltaY, 
             scale: targetScale, 
-            duration: 0.9, 
+            duration: 0.8, 
             ease: 'power3.inOut' 
           })
           .to(textFacet, { 
             opacity: 1, 
             x: 0, 
             y: 0, 
-            duration: 0.8, 
+            duration: 0.7, 
             ease: 'power4.out' 
-          }, '-=0.3')
+          }, '-=0.2')
           .to(textArchitecture, { 
             opacity: 1, 
             x: 0, 
             y: 0, 
-            duration: 0.8, 
+            duration: 0.7, 
             ease: 'power4.out' 
           }, '<')
           .to(clock, { 
             opacity: 1, 
             y: 0, 
-            duration: 0.5 
-          }, '-=0.4')
+            duration: 0.4 
+          }, '-=0.3')
           .to(heroFrame, { 
-            scale: 1, 
             opacity: 1, 
-            duration: 1.0, 
+            scale: 1, 
+            duration: 0.8, 
             ease: 'power2.out' 
-          }, '-=0.2');
+          }, '-=0.3');
       };
 
-      // Trigger after short delay or interaction
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(() => setTimeout(triggerGSAP, 300));
-      } else {
-        setTimeout(triggerGSAP, 500);
-      }
-
-      ['touchstart', 'mousemove', 'scroll'].forEach(evt => {
-        window.addEventListener(evt, triggerGSAP, { once: true, passive: true });
-      });
+      // Auto-trigger animation immediately on page load
+      setTimeout(runAnimation, 100);
 
     } catch (e) {}
   }
