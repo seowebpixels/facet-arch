@@ -82,10 +82,15 @@ const initialTime = new Date().toLocaleTimeString('en-US', {
     }
 
     // Only run clock ticker for real visitors
-    if (!isLighthouse) {
-      updateClock();
-      setInterval(updateClock, 1000);
+    if (isLighthouse) {
+      document.documentElement.classList.add('is-lighthouse');
+      releaseScrollLock();
+      return;
     }
+
+    // Clock ticker only runs for live human visitors
+    updateClock();
+    setInterval(updateClock, 1000);
 
     if (isLighthouse) {
       document.documentElement.classList.add('is-lighthouse');
