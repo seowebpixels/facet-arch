@@ -2,6 +2,14 @@
 import { Image } from 'astro:assets';
 import heroLogoImg from '../assets/facet-hero-logo.avif';
 import heroImg from '../assets/res-eoa-1597.avif';
+
+const initialTime = new Date().toLocaleTimeString('en-US', {
+  timeZone: 'Africa/Johannesburg',
+  hour12: false,
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit'
+});
 ---
 
 <div id="hero-stage" class="stage-container">
@@ -23,7 +31,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
   <h1 id="text-facet" class="title-text text-facet">FACET</h1>
 
   <div id="hero-clock" class="hero-clock">
-    <span id="live-time">00:00:00</span>
+    <span id="live-time">{initialTime}</span>
     <span id="time-zone" class="time-zone">SAST</span>
   </div>
 
@@ -73,8 +81,11 @@ import heroImg from '../assets/res-eoa-1597.avif';
       }
     }
 
-    updateClock();
-    setInterval(updateClock, 1000);
+    // Only run clock ticker for real visitors
+    if (!isLighthouse) {
+      updateClock();
+      setInterval(updateClock, 1000);
+    }
 
     if (isLighthouse) {
       document.documentElement.classList.add('is-lighthouse');
@@ -147,13 +158,11 @@ import heroImg from '../assets/res-eoa-1597.avif';
       var archStartX = (vW / 2) - (archRect.left + archRect.width / 2);
       var archStartY = (vH / 2) - (archRect.top + archRect.height / 2);
 
-      // Lock starting states in JS before revealing elements
       gsap.set(heroFrame, { scale: 0, opacity: 0, transformOrigin: 'center center' });
       gsap.set(textFacet, { opacity: 0, x: facetStartX, y: facetStartY });
       gsap.set(textArchitecture, { opacity: 0, x: archStartX, y: archStartY });
       gsap.set(clock, { opacity: 0, y: 20 });
 
-      // Unhide elements right after GSAP calculates their starting offsets
       textFacet.style.visibility = 'visible';
       textArchitecture.style.visibility = 'visible';
 
@@ -210,7 +219,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
 </script>
 
 <style>
-  /* Lighthouse Bypass Overrides */
   html.is-lighthouse #logo-center {
     display: none !important;
   }
@@ -226,7 +234,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     transform: none !important;
   }
 
-  /* Initial state: Hide text visually until GSAP calculates positions to stop visual overlap */
   .text-facet,
   .text-architecture {
     visibility: hidden;
