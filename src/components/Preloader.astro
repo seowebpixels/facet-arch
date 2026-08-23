@@ -150,8 +150,8 @@ import heroImg from '../assets/res-eoa-1597.avif';
       var archStartY = (vH / 2) - (archRect.top + archRect.height / 2);
 
       gsap.set(heroFrame, { scale: 0, opacity: 0, transformOrigin: 'center center' });
-      gsap.set(textFacet, { opacity: 0, x: facetStartX, y: facetStartY });
-      gsap.set(textArchitecture, { opacity: 0, x: archStartX, y: archStartY });
+      gsap.set(textFacet, { x: facetStartX, y: facetStartY });
+      gsap.set(textArchitecture, { x: archStartX, y: archStartY });
       gsap.set(clock, { opacity: 0, y: 20 });
 
       var tl = gsap.timeline({
@@ -167,7 +167,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
         y: deltaY, 
         scale: targetScale, 
         duration: durLogo, 
-        delay: 0.2, 
         ease: 'power3.inOut' 
       })
       .to(textFacet, { 
