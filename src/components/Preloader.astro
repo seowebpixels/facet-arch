@@ -75,7 +75,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
           var canvas = document.getElementById('clock-canvas');
           if (!canvas) return;
           var ctx = canvas.getContext('2d');
-          if (!ctx) return;
+          if (!ctx) return; // Guard for headless canvas failure
 
           var now = new Date();
           var utc = now.getTime() + (now.getTimezoneOffset() * 60000);
@@ -104,7 +104,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
       }
 
       updateClock();
-      setInterval(updateClock, 1000);
+      var clockInterval = setInterval(updateClock, 1000);
 
       if (document.documentElement) document.documentElement.style.overflow = 'hidden';
       if (document.body) document.body.style.overflow = 'hidden';
@@ -159,21 +159,27 @@ import heroImg from '../assets/res-eoa-1597.avif';
           var centerRect = logoCenter.getBoundingClientRect();
           var dockedRect = logoDocked.getBoundingClientRect();
 
+          // Guard against zero-width elements crashing coordinate math
+          if (!centerRect.width || !dockedRect.width) {
+            releaseScrollLock();
+            return;
+          }
+
           var deltaX = (dockedRect.left + dockedRect.width / 2) - (centerRect.left + centerRect.width / 2);
           var deltaY = (dockedRect.top + dockedRect.height / 2) - (centerRect.top + centerRect.height / 2);
           var targetScale = dockedRect.width / centerRect.width;
 
-          var vW = window.innerWidth;
-          var vH = window.innerHeight;
+          var vW = window.innerWidth || 1024;
+          var vH = window.innerHeight || 768;
           
           var facetRect = textFacet.getBoundingClientRect();
           var archRect = textArchitecture.getBoundingClientRect();
 
-          var facetStartX = (vW / 2) - (facetRect.left + facetRect.width / 2);
-          var facetStartY = (vH / 2) - (facetRect.top + facetRect.height / 2);
+          var facetStartX = (vW / 2) - (facetRect.left + (facetRect.width || 100) / 2);
+          var facetStartY = (vH / 2) - (facetRect.top + (facetRect.height || 40) / 2);
 
-          var archStartX = (vW / 2) - (archRect.left + archRect.width / 2);
-          var archStartY = (vH / 2) - (archRect.top + archRect.height / 2);
+          var archStartX = (vW / 2) - (archRect.left + (archRect.width || 100) / 2);
+          var archStartY = (vH / 2) - (archRect.top + (archRect.height || 40) / 2);
 
           gsap.set(heroFrame, { scale: 0, opacity: 0, transformOrigin: 'center center' });
           gsap.set(textFacet, { opacity: 0, x: facetStartX, y: facetStartY });
@@ -188,7 +194,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
             onComplete: releaseScrollLock
           });
 
-          tl.to({}, { duration: 2.0 })
+          tl.to({}, { duration: 1.5 })
             .to(logoCenter, { 
               x: deltaX, 
               y: deltaY, 
