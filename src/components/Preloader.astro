@@ -64,14 +64,11 @@ import heroImg from '../assets/res-eoa-1597.avif';
         } catch (e) {}
       }
 
-      // Early exit for PageSpeed to allow immediate main-thread idle
       if (isLighthouse) {
         if (document.documentElement) document.documentElement.classList.add('is-lighthouse');
         releaseScrollLock();
-        return; 
+        return;
       }
-
-      var clockInterval = null;
 
       function updateClock() {
         try {
@@ -106,9 +103,8 @@ import heroImg from '../assets/res-eoa-1597.avif';
         } catch (e) {}
       }
 
-      // Render clock once, then run timer only for real users
       updateClock();
-      clockInterval = setInterval(updateClock, 1000);
+      setInterval(updateClock, 1000);
 
       if (document.documentElement) document.documentElement.style.overflow = 'hidden';
       if (document.body) document.body.style.overflow = 'hidden';
@@ -140,7 +136,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
         if (hasRun) return;
         
         if (typeof gsap === 'undefined') {
-          setTimeout(runAnimation, 50);
+          setTimeout(runAnimation, 20);
           return;
         }
 
@@ -192,37 +188,37 @@ import heroImg from '../assets/res-eoa-1597.avif';
             onComplete: releaseScrollLock
           });
 
-          tl.to({}, { duration: 1.5 })
+          tl.to({}, { duration: 2.0 })
             .to(logoCenter, { 
               x: deltaX, 
               y: deltaY, 
               scale: targetScale, 
-              duration: 0.8, 
+              duration: 0.9, 
               ease: 'power3.inOut' 
             })
             .to(textFacet, { 
               opacity: 1, 
               x: 0, 
               y: 0, 
-              duration: 0.7, 
+              duration: 0.8, 
               ease: 'power4.out' 
             }, '-=0.3')
             .to(textArchitecture, { 
               opacity: 1, 
               x: 0, 
               y: 0, 
-              duration: 0.7, 
+              duration: 0.8, 
               ease: 'power4.out' 
             }, '<')
             .to(clock, { 
               opacity: 1, 
               y: 0, 
-              duration: 0.4 
+              duration: 0.5 
             }, '-=0.4')
             .to(heroFrame, { 
               scale: 1, 
               opacity: 1, 
-              duration: 0.8, 
+              duration: 1.0, 
               ease: 'power2.out' 
             }, '-=0.2');
         } catch (e) {
