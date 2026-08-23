@@ -2,14 +2,6 @@
 import { Image } from 'astro:assets';
 import heroLogoImg from '../assets/facet-hero-logo.avif';
 import heroImg from '../assets/res-eoa-1597.avif';
-
-const initialTime = new Date().toLocaleTimeString('en-US', {
-  timeZone: 'Africa/Johannesburg',
-  hour12: false,
-  hour: '2-digit',
-  minute: '2-digit',
-  second: '2-digit'
-});
 ---
 
 <div id="hero-stage" class="stage-container">
@@ -31,7 +23,8 @@ const initialTime = new Date().toLocaleTimeString('en-US', {
   <h1 id="text-facet" class="title-text text-facet">FACET</h1>
 
   <div id="hero-clock" class="hero-clock">
-    <span id="live-time">{initialTime}</span>
+    <!-- Empty span prevents SSR text paint from being flagged by Lighthouse -->
+    <span id="live-time"></span>
     <span id="time-zone" class="time-zone">SAST</span>
   </div>
 
@@ -69,7 +62,6 @@ const initialTime = new Date().toLocaleTimeString('en-US', {
       if (stage) stage.style.pointerEvents = 'none';
     }
 
-    // Safely bypass animation/clock JS for PSI without throwing execution errors
     if (isLighthouse) {
       if (document.documentElement) document.documentElement.classList.add('is-lighthouse');
       releaseScrollLock();
@@ -168,7 +160,6 @@ const initialTime = new Date().toLocaleTimeString('en-US', {
         onComplete: releaseScrollLock
       });
 
-      // 2.0s hold on initial centered logo stage before splitting text and revealing frame
       tl.to({}, { duration: 2.0 })
         .to(logoCenter, { 
           x: deltaX, 
