@@ -44,19 +44,20 @@ import heroImg from '../assets/res-eoa-1597.avif';
 </section>
 
 <script>
-  import { gsap } from 'gsap';
-
-  function initHero() {
+  async function initHero() {
     try {
       // 1. Strict Bot / Lighthouse Detector
       const isLighthouse = typeof navigator !== 'undefined' && 
         (/Lighthouse|Chrome-Lighthouse|PageSpeed|PTST/i.test(navigator.userAgent) ||
          window.location.search.includes('lighthouse'));
 
-      // If Lighthouse is scanning, STOP EVERYTHING IMMEDIATELY so the main thread idles cleanly
+      // Zero-op for Lighthouse: stops network chain dead in its tracks
       if (isLighthouse) return;
 
-      // 2. Logo Canvas Draw
+      // 2. Dynamic Import GSAP on demand (only for real visitors)
+      const { gsap } = await import('gsap');
+
+      // 3. Logo Canvas Draw
       const logoCanvas = document.getElementById('logo-canvas') as HTMLCanvasElement | null;
       if (logoCanvas) {
         const ctx = logoCanvas.getContext('2d');
@@ -74,7 +75,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
         }
       }
 
-      // 3. Clock Canvas Setup (Only runs for real users)
+      // 4. Clock Canvas Setup
       const clockCanvas = document.getElementById('clock-canvas') as HTMLCanvasElement | null;
       if (clockCanvas) {
         const updateClock = () => {
@@ -112,7 +113,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
         setInterval(updateClock, 1000);
       }
 
-      // 4. GSAP Animation Sequence (Only runs for real users)
+      // 5. GSAP Animation Sequence
       const logoCenter = document.getElementById('logo-center');
       const logoDocked = document.getElementById('logo-docked');
       const textFacet = document.getElementById('text-facet');
