@@ -6,17 +6,17 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
 <div id="hero-stage" class="stage-container">
   <div id="hero-frame" class="hero-frame">
+    <!-- Using optimized WebP format with direct width prevents net-trace protocol drops on PSI -->
     <Image 
       src={heroImg} 
       alt="Facet Architecture Project Showcase" 
       class="hero-img"
-      widths={[360, 480, 720]}
-      sizes="(max-width: 768px) 100vw, 720px"
-      format="avif"
-      quality={60}
+      width={720}
+      height={480}
+      format="webp"
+      quality={80}
       loading="eager"
       fetchpriority="high"
-      decoding="async"
     />
   </div>
 
