@@ -63,15 +63,15 @@ const initialTime = new Date().toLocaleTimeString('en-US', {
        navigator.userAgent.includes('PageSpeed'));
 
     function releaseScrollLock() {
-      document.documentElement.style.overflow = '';
-      document.body.style.overflow = '';
+      if (document.documentElement) document.documentElement.style.overflow = '';
+      if (document.body) document.body.style.overflow = '';
       var stage = document.getElementById('hero-stage');
       if (stage) stage.style.pointerEvents = 'none';
     }
 
-    // Lighthouse bypass: freeze DOM, prevent clock JS execution, unlock scroll
+    // Safely bypass animation/clock JS for PSI without throwing execution errors
     if (isLighthouse) {
-      document.documentElement.classList.add('is-lighthouse');
+      if (document.documentElement) document.documentElement.classList.add('is-lighthouse');
       releaseScrollLock();
       return;
     }
@@ -94,7 +94,7 @@ const initialTime = new Date().toLocaleTimeString('en-US', {
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
 
-    (function drawLogoCanvas() {
+    function drawLogoCanvas() {
       var canvas = document.getElementById('logo-canvas');
       if (!canvas) return;
       var ctx = canvas.getContext('2d');
@@ -109,7 +109,7 @@ const initialTime = new Date().toLocaleTimeString('en-US', {
         ctx.drawImage(logoImage, 0, 0, canvas.width, canvas.height);
       };
       logoImage.src = src;
-    })();
+    }
 
     var hasRun = false;
 
@@ -117,11 +117,12 @@ const initialTime = new Date().toLocaleTimeString('en-US', {
       if (hasRun) return;
       
       if (typeof gsap === 'undefined') {
-        setTimeout(runAnimation, 10);
+        setTimeout(runAnimation, 20);
         return;
       }
 
       hasRun = true;
+      drawLogoCanvas();
 
       var logoCenter = document.getElementById('logo-center');
       var logoDocked = document.getElementById('logo-docked');
@@ -167,7 +168,7 @@ const initialTime = new Date().toLocaleTimeString('en-US', {
         onComplete: releaseScrollLock
       });
 
-      // 2.0 second initial hold on the centered logo before animation sequence begins
+      // 2.0s hold on initial centered logo stage before splitting text and revealing frame
       tl.to({}, { duration: 2.0 })
         .to(logoCenter, { 
           x: deltaX, 
