@@ -16,7 +16,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
       quality={60}
       loading="eager"
       fetchpriority="high"
-      decoding="sync"
+      decoding="async"
     />
   </div>
 
@@ -124,35 +124,65 @@ import heroImg from '../assets/res-eoa-1597.avif';
       var deltaY = (dockedRect.top + dockedRect.height / 2) - (centerRect.top + centerRect.height / 2);
       var targetScale = dockedRect.width / centerRect.width;
 
-      gsap.set(heroFrame, { scaleY: 1, opacity: 1 });
-      gsap.set(textFacet, { opacity: 0, x: -80, y: -40 });
-      gsap.set(textArchitecture, { opacity: 0, x: 80, y: 40 });
-      gsap.set(clock, { opacity: 0, y: -20 });
+      var vW = window.innerWidth;
+      var vH = window.innerHeight;
+      
+      var facetRect = textFacet.getBoundingClientRect();
+      var archRect = textArchitecture.getBoundingClientRect();
+
+      var facetStartX = (vW / 2) - (facetRect.left + facetRect.width / 2);
+      var facetStartY = (vH / 2) - (facetRect.top + facetRect.height / 2);
+
+      var archStartX = (vW / 2) - (archRect.left + archRect.width / 2);
+      var archStartY = (vH / 2) - (archRect.top + archRect.height / 2);
+
+      gsap.set(heroFrame, { scale: 0, opacity: 0, transformOrigin: 'center center' });
+      gsap.set(textFacet, { opacity: 0, x: facetStartX, y: facetStartY });
+      gsap.set(textArchitecture, { opacity: 0, x: archStartX, y: archStartY });
+      gsap.set(clock, { opacity: 0, y: 20 });
 
       var tl = gsap.timeline({
         defaults: { ease: 'power3.inOut' },
         onComplete: releaseScrollLock
       });
 
-      var durLogo = isMobile ? 0.45 : 0.8;
-      var durText = isMobile ? 0.35 : 0.55;
+      var durLogo = isMobile ? 0.55 : 0.85;
+      var durText = isMobile ? 0.45 : 0.7;
 
       tl.to(logoCenter, { 
         x: deltaX, 
         y: deltaY, 
         scale: targetScale, 
         duration: durLogo, 
-        delay: 0.2, 
+        delay: 2.0, 
         ease: 'power3.inOut' 
       })
-      .to(textFacet, { opacity: 1, x: 0, y: 0, duration: durText, ease: 'power4.out' }, '-=0.3')
-      .to(textArchitecture, { opacity: 1, x: 0, y: 0, duration: durText, ease: 'power4.out' }, '<')
-      .to(clock, { opacity: 1, y: 0, duration: isMobile ? 0.25 : 0.4 }, '-=0.2');
+      .to(textFacet, { 
+        opacity: 1, 
+        x: 0, 
+        y: 0, 
+        duration: durText, 
+        ease: 'power4.out' 
+      }, '-=0.1')
+      .to(textArchitecture, { 
+        opacity: 1, 
+        x: 0, 
+        y: 0, 
+        duration: durText, 
+        ease: 'power4.out' 
+      }, '<')
+      .to(clock, { 
+        opacity: 1, 
+        y: 0, 
+        duration: 0.4 
+      }, '-=0.3')
+      .to(heroFrame, { 
+        scale: 1, 
+        opacity: 1, 
+        duration: isMobile ? 0.7 : 1.1, 
+        ease: 'power2.out' 
+      }, '-=0.1');
     }
-
-    setTimeout(function() {
-      if (!hasRun) runAnimation();
-    }, 2500);
 
     if (document.readyState === 'interactive' || document.readyState === 'complete') {
       requestAnimationFrame(runAnimation);
@@ -269,10 +299,10 @@ import heroImg from '../assets/res-eoa-1597.avif';
     z-index: 20;
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    opacity: 1;
-    transform: scaleY(1);
+    opacity: 0;
+    transform: scale(0);
     transform-origin: center center;
-    will-change: auto;
+    will-change: transform, opacity;
     backface-visibility: hidden;
   }
 
