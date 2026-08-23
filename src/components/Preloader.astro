@@ -73,12 +73,15 @@ import heroImg from '../assets/res-eoa-1597.avif';
       var ctx = canvas.getContext('2d');
       if (!ctx) return;
 
+      // Safe SAST (UTC+2) time calculation without relying on Intl timezone strings
       var now = new Date();
-      // Force South Africa Standard Time (SAST / GMT+2) regardless of test server location
-      var timeStr = now.toLocaleTimeString('en-GB', { 
-        timeZone: 'Africa/Johannesburg', 
-        hour12: false 
-      }) + ' SAST';
+      var utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+      var sastTime = new Date(utc + (3600000 * 2)); // Add 2 hours for SAST
+
+      var hours = String(sastTime.getHours()).padStart(2, '0');
+      var minutes = String(sastTime.getMinutes()).padStart(2, '0');
+      var seconds = String(sastTime.getSeconds()).padStart(2, '0');
+      var timeStr = hours + ':' + minutes + ':' + seconds + ' SAST';
 
       var dpr = window.devicePixelRatio || 1;
       if (canvas.width !== 160 * dpr) {
