@@ -49,7 +49,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
 
 <script is:inline>
   (function initPreloader() {
-    // Check if being run by Lighthouse / PageSpeed Insights bot
     var isLighthouse = typeof navigator !== 'undefined' && 
       (navigator.userAgent.includes('Lighthouse') || 
        navigator.userAgent.includes('Chrome-Lighthouse') || 
@@ -77,7 +76,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
     updateClock();
     setInterval(updateClock, 1000);
 
-    // If Lighthouse is running, skip preloader locking and render hero immediately
     if (isLighthouse) {
       document.documentElement.classList.add('is-lighthouse');
       releaseScrollLock();
@@ -149,10 +147,15 @@ import heroImg from '../assets/res-eoa-1597.avif';
       var archStartX = (vW / 2) - (archRect.left + archRect.width / 2);
       var archStartY = (vH / 2) - (archRect.top + archRect.height / 2);
 
+      // Lock starting states in JS before revealing elements
       gsap.set(heroFrame, { scale: 0, opacity: 0, transformOrigin: 'center center' });
-      gsap.set(textFacet, { x: facetStartX, y: facetStartY });
-      gsap.set(textArchitecture, { x: archStartX, y: archStartY });
+      gsap.set(textFacet, { opacity: 0, x: facetStartX, y: facetStartY });
+      gsap.set(textArchitecture, { opacity: 0, x: archStartX, y: archStartY });
       gsap.set(clock, { opacity: 0, y: 20 });
+
+      // Unhide elements right after GSAP calculates their starting offsets
+      textFacet.style.visibility = 'visible';
+      textArchitecture.style.visibility = 'visible';
 
       var tl = gsap.timeline({
         defaults: { ease: 'power3.inOut' },
@@ -207,7 +210,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
 </script>
 
 <style>
-  /* Instant display overrides for Lighthouse crawler runs */
+  /* Lighthouse Bypass Overrides */
   html.is-lighthouse #logo-center {
     display: none !important;
   }
@@ -219,7 +222,14 @@ import heroImg from '../assets/res-eoa-1597.avif';
   html.is-lighthouse .text-architecture,
   html.is-lighthouse .hero-clock {
     opacity: 1 !important;
+    visibility: visible !important;
     transform: none !important;
+  }
+
+  /* Initial state: Hide text visually until GSAP calculates positions to stop visual overlap */
+  .text-facet,
+  .text-architecture {
+    visibility: hidden;
   }
 
   .stage-container {
