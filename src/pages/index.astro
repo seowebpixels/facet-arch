@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Preloader from '../components/Preloader.astro';
 import MoodGrid from '../components/MoodGrid.astro';
 import HomeFooter from '../components/HomeFooter.astro';
 import { Image } from 'astro:assets';
@@ -15,13 +14,7 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
 ---
 
 <Layout title="Facet Architecture | Selected Works">
-  <!-- Immediate inline scroll lock strictly for index.astro preloader -->
-  <script is:inline>
-    // Only lock if preloader hasn't already completed in session
-    if (!sessionStorage.getItem('preloader_completed')) {
-      document.documentElement.classList.add('home-preloader-locked');
-    }
-  </script>
+  
 
   <Hero />
 
