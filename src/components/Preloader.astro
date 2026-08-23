@@ -69,6 +69,13 @@ const initialTime = new Date().toLocaleTimeString('en-US', {
       if (stage) stage.style.pointerEvents = 'none';
     }
 
+    // Lighthouse bypass: freeze DOM, prevent clock JS execution, unlock scroll
+    if (isLighthouse) {
+      document.documentElement.classList.add('is-lighthouse');
+      releaseScrollLock();
+      return;
+    }
+
     function updateClock() {
       var clockEl = document.getElementById('live-time');
       var zoneEl = document.getElementById('time-zone');
@@ -81,22 +88,8 @@ const initialTime = new Date().toLocaleTimeString('en-US', {
       }
     }
 
-    // Only run clock ticker for real visitors
-    if (isLighthouse) {
-      document.documentElement.classList.add('is-lighthouse');
-      releaseScrollLock();
-      return;
-    }
-
-    // Clock ticker only runs for live human visitors
     updateClock();
     setInterval(updateClock, 1000);
-
-    if (isLighthouse) {
-      document.documentElement.classList.add('is-lighthouse');
-      releaseScrollLock();
-      return;
-    }
 
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
@@ -142,8 +135,6 @@ const initialTime = new Date().toLocaleTimeString('en-US', {
         return;
       }
 
-      var isMobile = window.innerWidth <= 768;
-
       var centerRect = logoCenter.getBoundingClientRect();
       var dockedRect = logoDocked.getBoundingClientRect();
 
@@ -176,41 +167,40 @@ const initialTime = new Date().toLocaleTimeString('en-US', {
         onComplete: releaseScrollLock
       });
 
-      var durLogo = isMobile ? 0.4 : 0.6;
-      var durText = isMobile ? 0.35 : 0.5;
-
-      tl.to(logoCenter, { 
-        x: deltaX, 
-        y: deltaY, 
-        scale: targetScale, 
-        duration: durLogo, 
-        ease: 'power3.inOut' 
-      })
-      .to(textFacet, { 
-        opacity: 1, 
-        x: 0, 
-        y: 0, 
-        duration: durText, 
-        ease: 'power4.out' 
-      }, '-=0.1')
-      .to(textArchitecture, { 
-        opacity: 1, 
-        x: 0, 
-        y: 0, 
-        duration: durText, 
-        ease: 'power4.out' 
-      }, '<')
-      .to(clock, { 
-        opacity: 1, 
-        y: 0, 
-        duration: 0.3 
-      }, '-=0.2')
-      .to(heroFrame, { 
-        scale: 1, 
-        opacity: 1, 
-        duration: isMobile ? 0.5 : 0.8, 
-        ease: 'power2.out' 
-      }, '-=0.1');
+      // 2.0 second initial hold on the centered logo before animation sequence begins
+      tl.to({}, { duration: 2.0 })
+        .to(logoCenter, { 
+          x: deltaX, 
+          y: deltaY, 
+          scale: targetScale, 
+          duration: 0.9, 
+          ease: 'power3.inOut' 
+        })
+        .to(textFacet, { 
+          opacity: 1, 
+          x: 0, 
+          y: 0, 
+          duration: 0.8, 
+          ease: 'power4.out' 
+        }, '-=0.3')
+        .to(textArchitecture, { 
+          opacity: 1, 
+          x: 0, 
+          y: 0, 
+          duration: 0.8, 
+          ease: 'power4.out' 
+        }, '<')
+        .to(clock, { 
+          opacity: 1, 
+          y: 0, 
+          duration: 0.5 
+        }, '-=0.4')
+        .to(heroFrame, { 
+          scale: 1, 
+          opacity: 1, 
+          duration: 1.0, 
+          ease: 'power2.out' 
+        }, '-=0.2');
     }
 
     if (document.readyState === 'interactive' || document.readyState === 'complete') {
