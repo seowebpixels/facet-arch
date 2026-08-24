@@ -18,7 +18,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
       quality={80}
       loading="eager"
       fetchpriority="high"
-      decoding="sync"
+      decoding="async"
     />
   </div>
 
@@ -136,7 +136,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
       const archStartX = (vW / 2) - (archRect.left + (archRect.width || 100) / 2);
       const archStartY = (vH / 2) - (archRect.top + (archRect.height || 40) / 2);
 
-      // Lock initial state BEFORE paint pass
+      // Lock positions
       gsap.set(heroFrame, { opacity: 0, scale: 0.95, transformOrigin: 'center center' });
       gsap.set(textFacet, { opacity: 0, x: facetStartX, y: facetStartY });
       gsap.set(textArchitecture, { opacity: 0, x: archStartX, y: archStartY });
@@ -298,6 +298,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
     transform-origin: center center;
     will-change: transform, opacity;
     backface-visibility: hidden;
+    opacity: 0; /* Prevents initial image paint flash */
   }
 
   .logo-canvas {
