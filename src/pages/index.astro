@@ -18,22 +18,22 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
   <Hero />
 
   <main class="main-wrapper">
-    <!-- Left Column: Sticky Editorial Content with explicit inline background container -->
+    <!-- Left Column: Sticky Editorial Content -->
     <section class="left-sticky-col" style="background-color: #2D3239 !important; color: #FFFFFF !important;">
       <div class="brand-intro">
-        <p class="subtitle">SELECTED WORKS</p>
-        <h1 class="headline">Precision in Spatial & Structural Design</h1>
-        <p class="philosophy">
+        <p class="subtitle" style="background-color: #2D3239 !important; color: #FFFFFF !important;">SELECTED WORKS</p>
+        <h1 class="headline" style="background-color: #2D3239 !important; color: #FFFFFF !important;">Precision in Spatial & Structural Design</h1>
+        <p class="philosophy" style="background-color: #2D3239 !important; color: #FFFFFF !important;">
           Facet Architecture transforms complex spatial challenges into minimalist, forward-thinking structural design. Rooted in material clarity and environmental context, our practice explores the interplay between light, shadow, and structural integrity.
         </p>
       </div>
 
       <div class="index-legend">
-        <div class="legend-item" data-index="0"><span class="legend-num">01</span> Emerald Resort Hotel</div>
-        <div class="legend-item" data-index="1"><span class="legend-num">02</span> Ascot Manor</div>
-        <div class="legend-item" data-index="2"><span class="legend-num">03</span> Ndlovu Interior</div>
-        <div class="legend-item" data-index="3"><span class="legend-num">04</span> EOA Residence</div>
-        <div class="legend-item" data-index="4"><span class="legend-num">05</span> Thermal Comfort Study</div>
+        <div class="legend-item" data-index="0" style="background-color: #2D3239 !important; color: #FFFFFF !important;"><span class="legend-num" style="color: #FFFFFF !important;">01</span> Emerald Resort Hotel</div>
+        <div class="legend-item" data-index="1" style="background-color: #2D3239 !important; color: #FFFFFF !important;"><span class="legend-num" style="color: #FFFFFF !important;">02</span> Ascot Manor</div>
+        <div class="legend-item" data-index="2" style="background-color: #2D3239 !important; color: #FFFFFF !important;"><span class="legend-num" style="color: #FFFFFF !important;">03</span> Ndlovu Interior</div>
+        <div class="legend-item" data-index="3" style="background-color: #2D3239 !important; color: #FFFFFF !important;"><span class="legend-num" style="color: #FFFFFF !important;">04</span> EOA Residence</div>
+        <div class="legend-item" data-index="4" style="background-color: #2D3239 !important; color: #FFFFFF !important;"><span class="legend-num" style="color: #FFFFFF !important;">05</span> Thermal Comfort Study</div>
       </div>
     </section>
 
@@ -157,11 +157,11 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
 
   <!-- Responsive Centered Architectural Quote Banner -->
   <section class="quote-container" style="background-color: #E3DFD5 !important; color: #111111 !important;">
-    <div class="quote-inner">
-      <blockquote class="quote-text" style="color: #111111 !important;">
+    <div class="quote-inner" style="background-color: #E3DFD5 !important;">
+      <blockquote class="quote-text" style="background-color: #E3DFD5 !important; color: #111111 !important;">
         “Architecture should speak of its time and place, but yearn for timelessness.”
       </blockquote>
-      <cite class="quote-cite" style="color: #111111 !important;">
+      <cite class="quote-cite" style="background-color: #E3DFD5 !important; color: #111111 !important;">
         — Frank Gehry
       </cite>
     </div>
@@ -202,6 +202,10 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     letter-spacing: 0.08em;
   }
 
+  :global(html) {
+    background-color: #2D3239 !important;
+  }
+
   :global(body) {
     background-color: #2D3239 !important;
     color: #FFFFFF !important;
@@ -221,6 +225,7 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     margin: 0 auto;
     padding: 120px 24px 80px;
     gap: 40px;
+    background-color: #2D3239 !important;
   }
 
   @media (min-width: 900px) {
@@ -253,7 +258,6 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     letter-spacing: 2px;
     color: #FFFFFF !important;
     font-weight: 700 !important;
-    opacity: 1 !important;
     margin-bottom: 12px;
   }
 
@@ -262,7 +266,6 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     font-size: 2.2rem;
     line-height: 1.2;
     color: #FFFFFF !important;
-    opacity: 1 !important;
     margin-bottom: 24px;
   }
 
@@ -270,7 +273,6 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     font-size: 1rem;
     line-height: 1.6;
     color: #FFFFFF !important;
-    opacity: 1 !important;
     margin-bottom: 40px;
   }
 
@@ -285,7 +287,6 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     font-size: 0.9rem;
     letter-spacing: 1px;
     color: #FFFFFF !important;
-    opacity: 1 !important;
     transition: transform 0.3s ease;
   }
 
@@ -293,7 +294,6 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     margin-right: 12px;
     font-weight: bold;
     color: #FFFFFF !important;
-    opacity: 1 !important;
   }
 
   .legend-item.active {
@@ -429,7 +429,6 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     font-family: inherit;
     word-break: normal;
     overflow-wrap: break-word;
-    opacity: 1 !important;
   }
 
   .quote-cite {
@@ -439,7 +438,6 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     letter-spacing: 0.3em;
     text-transform: uppercase;
     font-style: normal;
-    opacity: 1 !important;
   }
 
   /* Mobile-Specific Centering & Scale Adjustments */
