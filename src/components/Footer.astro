@@ -34,7 +34,7 @@ const currentYear = new Date().getFullYear();
 
 <style>
   .home-matched-footer {
-    background-color: #1a1e23 !important; /* Darker slate background for >7:1 AAA contrast against pure white */
+    background-color: #1a1e23 !important;
     color: #ffffff !important;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
     padding: 60px 24px 40px !important;
@@ -63,7 +63,7 @@ const currentYear = new Date().getFullYear();
   .cta-sub {
     display: block;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
-    font-size: 0.75rem; /* Slightly increased for improved legibility */
+    font-size: 0.75rem;
     color: #ffffff !important;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -82,9 +82,12 @@ const currentYear = new Date().getFullYear();
   }
 
   .cta-btn {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
     padding: 10px 22px;
-    border: 2px solid #ffffff !important; /* Thicker border for screen reader / focus visibility */
+    border: 2px solid #ffffff !important;
     background-color: transparent;
     color: #ffffff !important;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
@@ -97,11 +100,11 @@ const currentYear = new Date().getFullYear();
   }
 
   .cta-btn:hover,
-  .cta-btn:focus {
+  .cta-btn:focus-visible {
     background-color: #ffffff !important;
     color: #000000 !important;
-    outline: 2px solid #ffffff;
-    outline-offset: 2px;
+    outline: 3px solid #ffffff;
+    outline-offset: 3px;
   }
 
   .cta-sub,
@@ -117,7 +120,7 @@ const currentYear = new Date().getFullYear();
     max-width: 1400px;
     margin: 0 auto 24px;
     height: 1px;
-    background-color: rgba(255, 255, 255, 0.6) !important;
+    background-color: #ffffff !important;
   }
 
   .footer-base {
@@ -139,6 +142,8 @@ const currentYear = new Date().getFullYear();
   }
 
   .wdp-link {
+    display: inline-inline-block;
+    padding: 4px 2px;
     color: #ffffff !important;
     font-weight: 600 !important;
     text-decoration: underline;
@@ -146,10 +151,11 @@ const currentYear = new Date().getFullYear();
   }
 
   .wdp-link:hover,
-  .wdp-link:focus {
+  .wdp-link:focus-visible {
     color: #ffffff !important;
     text-shadow: 0 0 2px #ffffff;
-    outline: 1px solid #ffffff;
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
   }
 
   @media (max-width: 899px) {
@@ -175,7 +181,7 @@ const currentYear = new Date().getFullYear();
     }
 
     .cta-btn {
-      display: block !important;
+      display: flex !important;
       width: 100% !important;
       text-align: center !important;
       box-sizing: border-box !important;
