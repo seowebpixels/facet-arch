@@ -32,14 +32,16 @@ const currentYear = new Date().getFullYear();
   </div>
 </footer>
 
-<style>
+<style is:global>
+  /* Force dark background & pure white text across all footer child elements */
+  footer.home-matched-footer,
   .home-matched-footer {
-    background-color: #1a1e23 !important;
+    background-color: #111418 !important;
     color: #ffffff !important;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
     padding: 60px 24px 40px !important;
     box-sizing: border-box;
-    width: 100%;
+    width: 100% !important;
     position: relative !important;
     z-index: 10 !important;
     margin-top: 40px !important;
@@ -48,19 +50,19 @@ const currentYear = new Date().getFullYear();
     opacity: 1 !important;
   }
 
-  .cta-section {
+  .home-matched-footer .cta-section {
     max-width: 1400px;
     margin: 0 auto;
     padding-bottom: 32px;
   }
 
-  .cta-content {
+  .home-matched-footer .cta-content {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
   }
 
-  .cta-sub {
+  .home-matched-footer .cta-sub {
     display: block;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
     font-size: 0.75rem;
@@ -69,19 +71,21 @@ const currentYear = new Date().getFullYear();
     text-transform: uppercase;
     margin-bottom: 10px;
     font-weight: 600 !important;
+    opacity: 1 !important;
   }
 
-  .cta-heading {
+  .home-matched-footer .cta-heading {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
-    font-size: 1.3rem;
+    font-size: 1.3rem !important;
     color: #ffffff !important;
     font-weight: 600 !important;
     letter-spacing: 2px;
     margin: 0;
     text-transform: uppercase;
+    opacity: 1 !important;
   }
 
-  .cta-btn {
+  .home-matched-footer .cta-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -99,31 +103,23 @@ const currentYear = new Date().getFullYear();
     transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
   }
 
-  .cta-btn:hover,
-  .cta-btn:focus-visible {
+  .home-matched-footer .cta-btn:hover,
+  .home-matched-footer .cta-btn:focus-visible {
     background-color: #ffffff !important;
     color: #000000 !important;
     outline: 3px solid #ffffff;
     outline-offset: 3px;
   }
 
-  .cta-sub,
-  .cta-heading,
-  .footer-base,
-  .footer-line,
-  .wdp-link {
-    color: #ffffff !important;
-    opacity: 1 !important;
-  }
-
-  .footer-divider {
+  .home-matched-footer .footer-divider {
     max-width: 1400px;
     margin: 0 auto 24px;
     height: 1px;
     background-color: #ffffff !important;
+    opacity: 0.8 !important;
   }
 
-  .footer-base {
+  .home-matched-footer .footer-base {
     max-width: 1400px;
     margin: 0 auto;
     display: flex;
@@ -134,24 +130,27 @@ const currentYear = new Date().getFullYear();
     letter-spacing: 1.8px;
     text-transform: uppercase;
     font-weight: 500 !important;
+    opacity: 1 !important;
   }
 
-  .footer-line {
+  .home-matched-footer .footer-line {
     margin: 0;
     color: #ffffff !important;
+    opacity: 1 !important;
   }
 
-  .wdp-link {
-    display: inline-inline-block;
+  .home-matched-footer .wdp-link {
+    display: inline-block;
     padding: 4px 2px;
     color: #ffffff !important;
     font-weight: 600 !important;
     text-decoration: underline;
+    opacity: 1 !important;
     transition: color 0.2s ease, font-weight 0.2s ease, text-shadow 0.2s ease;
   }
 
-  .wdp-link:hover,
-  .wdp-link:focus-visible {
+  .home-matched-footer .wdp-link:hover,
+  .home-matched-footer .wdp-link:focus-visible {
     color: #ffffff !important;
     text-shadow: 0 0 2px #ffffff;
     outline: 2px solid #ffffff;
@@ -159,28 +158,28 @@ const currentYear = new Date().getFullYear();
   }
 
   @media (max-width: 899px) {
-    .cta-content {
+    .home-matched-footer .cta-content {
       flex-direction: column !important;
       align-items: flex-start !important;
       gap: 20px !important;
     }
 
-    .cta-text {
+    .home-matched-footer .cta-text {
       width: 100% !important;
     }
 
-    .cta-heading {
+    .home-matched-footer .cta-heading {
       font-size: clamp(1rem, 4.8vw, 1.3rem) !important;
       white-space: nowrap !important;
       letter-spacing: 1.5px !important;
       line-height: 1.2 !important;
     }
 
-    .cta-action {
+    .home-matched-footer .cta-action {
       width: 100% !important;
     }
 
-    .cta-btn {
+    .home-matched-footer .cta-btn {
       display: flex !important;
       width: 100% !important;
       text-align: center !important;
@@ -190,19 +189,19 @@ const currentYear = new Date().getFullYear();
       letter-spacing: 2px !important;
     }
 
-    .footer-base {
+    .home-matched-footer .footer-base {
       flex-direction: column !important;
       align-items: center !important;
       text-align: center !important;
       gap: 8px !important;
     }
 
-    .footer-line {
+    .home-matched-footer .footer-line {
       white-space: nowrap !important;
       line-height: 1.6 !important;
     }
 
-    .credits-line {
+    .home-matched-footer .credits-line {
       margin-top: 0.5rem !important;
     }
   }

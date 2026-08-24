@@ -39,8 +39,8 @@ body {
 
 /* Interactive Focus Indicators */
 :focus-visible {
-  outline: 2px solid var(--text-primary);
-  outline-offset: 3px;
+  outline: 2px solid #111111 !important;
+  outline-offset: 3px !important;
 }
 
 /* Loading state locks */
@@ -96,6 +96,32 @@ h1, h2, h3, .heading-bankgothic {
   transform-origin: left;
 }
 
+/* Targeted Overrides for Astro Component Class Names Flagged in Audit */
+h1.headline[data-astro-cid-lcdefpme],
+.headline {
+  color: #111111 !important;
+  opacity: 1 !important;
+}
+
+div.legend-item[data-astro-cid-lcdefpme],
+.legend-item,
+.legend-item span {
+  color: #111111 !important;
+  opacity: 1 !important;
+}
+
+blockquote.quote-text[data-astro-cid-lcdefpme],
+.quote-text {
+  color: #111111 !important;
+  opacity: 1 !important;
+}
+
+cite.quote-cite[data-astro-cid-lcdefpme],
+.quote-cite {
+  color: #111111 !important;
+  opacity: 1 !important;
+}
+
 /* Grid Overlay & Contrast Fixes */
 @media (min-width: 900px) {
   .right-grid-col .tile-overlay {
@@ -105,29 +131,4 @@ h1, h2, h3, .heading-bankgothic {
   .right-grid-col .tile-meta {
     order: -1 !important;
   }
-}
-
-/* Accessibility Color Contrast Overrides for Dark Panels & Small Text */
-section[style*="background-color"], 
-footer[style*="background-color"],
-.tile-content, 
-.legend-item {
-  color: #ffffff !important;
-}
-
-.legend-item, 
-.legend-item span,
-.quote-text, 
-.quote-cite,
-blockquote,
-cite {
-  color: #111111 !important;
-  font-weight: 600 !important;
-}
-
-/* High contrast small text compliance */
-p[style*="font-size: 11px"], 
-span[style*="font-size: 11px"], 
-h2[style*="font-size: 11px"] {
-  color: #ffffff !important;
 }
