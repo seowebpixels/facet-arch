@@ -10,12 +10,12 @@ import box6 from '../assets/box-six-vast-desert-ridge-with-sharp-light-shadow-li
 import box7 from '../assets/box-seven-close-up-of-woven-metallic-mesh.avif';
 import box8 from '../assets/box-eight-topographic-macro-view-of-cracked-dry-clay.avif';
 
-// Import video path
+// Import video path correctly for Astro asset pipeline
 import box2Video from '../assets/box-two-grey-paint-brush-strokes.mp4';
 
 const gridItems = [
   { id: 1, type: 'image', word: "STRUCTURE", src: box1, alt: "Rust metal surface texture" },
-  { id: 2, type: 'video', word: "", src: box2Video, alt: "Moving brush stroke texture loop" },
+  { id: 2, type: 'video', word: "", src: typeof box2Video === 'string' ? box2Video : box2Video.src, alt: "Moving brush stroke texture loop" },
   { id: 3, type: 'image', word: "LIGHT", src: box3, alt: "Home on a foggy hill" },
   { id: 4, type: 'image', word: "FORM", src: box4, alt: "Intricate wood carving floral design" },
   { id: 5, type: 'image', word: "", src: box5, alt: "Raindrops on dark glass" },
@@ -32,16 +32,18 @@ const gridItems = [
         
         {item.type === 'video' ? (
           <video
-            src={item.src}
             autoplay
             loop
             muted
             playsinline
+            preload="metadata"
             class="tile-media"
-          />
+          >
+            <source src={item.src} type="video/mp4" />
+          </video>
         ) : (
           <Image
-            src={item.src}
+            src={item.src as ImageMetadata}
             alt={item.alt}
             width={800}
             height={800}
