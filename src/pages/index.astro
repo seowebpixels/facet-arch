@@ -231,14 +231,16 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     }
   }
 
-  /* Fixed Dark Sticky Container to satisfy Lighthouse Accessibility Audit 100% */
+  /* Explicit solid background color and opacity to force Lighthouse DOM tree evaluation */
   .left-sticky-col {
     width: 100%;
-    padding: 24px;
-    border-radius: 6px;
+    padding: 32px;
+    border-radius: 8px;
     box-sizing: border-box;
-    background-color: #2D3239;
-    color: #FFFFFF;
+    background-color: #2D3239 !important;
+    opacity: 1 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
   }
 
   @media (min-width: 900px) {
@@ -254,7 +256,7 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     font-family: 'BankGothic', sans-serif, system-ui;
     font-size: 0.85rem;
     letter-spacing: 2px;
-    color: #FFFFFF;
+    color: #FFFFFF !important;
     font-weight: 700;
     margin-bottom: 12px;
   }
@@ -263,14 +265,14 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     font-family: 'BankGothic', sans-serif, system-ui;
     font-size: 2.2rem;
     line-height: 1.2;
-    color: #FFFFFF;
+    color: #FFFFFF !important;
     margin-bottom: 24px;
   }
 
   .philosophy {
     font-size: 1rem;
     line-height: 1.6;
-    color: #E2E8F0;
+    color: #E2E8F0 !important;
     margin-bottom: 40px;
   }
 
@@ -284,24 +286,24 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     font-family: 'BankGothic', sans-serif, system-ui;
     font-size: 0.9rem;
     letter-spacing: 1px;
-    color: #CBD5E1;
+    color: #CBD5E1 !important;
     transition: transform 0.3s ease, color 0.3s ease;
   }
 
   .legend-num {
     margin-right: 12px;
     font-weight: bold;
-    color: #94A3B8;
+    color: #94A3B8 !important;
   }
 
   .legend-item.active {
     font-weight: 900;
-    color: #FFFFFF;
+    color: #FFFFFF !important;
     transform: translateX(6px);
   }
 
   .legend-item.active .legend-num {
-    color: #FFFFFF;
+    color: #FFFFFF !important;
   }
 
   /* Right Staggered Grid Column */
@@ -404,7 +406,7 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     .tile-5 { top: 980px; left: 42%; z-index: 5; }
   }
 
-  /* Base Quote Container Styles with explicitly defined contrast */
+  /* Base Quote Container Styles */
   .quote-container {
     width: 100%;
     min-height: 350px;
@@ -483,7 +485,6 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
 </style>
 
 <script>
-  // Preloader unlock logic
   const unlockHomePreloader = () => {
     document.documentElement.classList.remove('home-preloader-locked');
     document.body.classList.remove('home-preloader-locked');
@@ -498,7 +499,6 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
   setTimeout(unlockHomePreloader, 1500);
   window.addEventListener('preloader:complete', unlockHomePreloader, { once: true });
 
-  // IntersectionObserver strictly toggling page background color
   const tiles = document.querySelectorAll('.tile-card');
   const legendItems = document.querySelectorAll('.legend-item');
 
