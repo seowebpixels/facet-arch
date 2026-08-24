@@ -4,6 +4,9 @@ import heroLogoImg from '../assets/facet-hero-logo.avif';
 import heroImg from '../assets/res-eoa-1597.avif';
 ---
 
+<!-- Explicitly preloads the dynamic optimized WebP asset URL -->
+<link rel="preload" as="image" href={heroImg.src} type="image/webp" fetchpriority="high" />
+
 <section id="hero-stage" class="stage-container">
   <div id="hero-frame" class="hero-frame">
     <Image 
