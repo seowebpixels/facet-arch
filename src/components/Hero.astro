@@ -4,7 +4,6 @@ import heroLogoImg from '../assets/facet-hero-logo.avif';
 import heroImg from '../assets/res-eoa-1597.avif';
 ---
 
-<!-- Explicitly preloads the dynamic optimized WebP asset URL -->
 <link rel="preload" as="image" href={heroImg.src} type="image/webp" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
@@ -50,12 +49,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
 <script>
   function initHero() {
     try {
-      // 1. Strict Bot / Lighthouse Bypasser
-      const isLighthouse = typeof navigator !== 'undefined' && 
-        (/Lighthouse|Chrome-Lighthouse|PageSpeed|PTST/i.test(navigator.userAgent) ||
-         window.location.search.includes('lighthouse'));
-
-      // 2. Immediate Canvas Logo Draw
+      // 1. Immediate Canvas Logo Draw
       const logoCanvas = document.getElementById('logo-canvas') as HTMLCanvasElement | null;
       if (logoCanvas) {
         const ctx = logoCanvas.getContext('2d');
@@ -73,7 +67,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
         }
       }
 
-      // 3. SAST Clock Canvas
+      // 2. SAST Clock Canvas
       const clockCanvas = document.getElementById('clock-canvas') as HTMLCanvasElement | null;
       if (clockCanvas) {
         const updateClock = () => {
@@ -111,95 +105,78 @@ import heroImg from '../assets/res-eoa-1597.avif';
         setInterval(updateClock, 1000);
       }
 
-      if (isLighthouse) return;
+      // 3. Smooth GSAP Animation Execution
+      requestAnimationFrame(async () => {
+        const logoCenter = document.getElementById('logo-center');
+        const logoDocked = document.getElementById('logo-docked');
+        const textFacet = document.getElementById('text-facet');
+        const textArchitecture = document.getElementById('text-architecture');
+        const clock = document.getElementById('hero-clock');
+        const heroFrame = document.getElementById('hero-frame');
 
-      // 4. Zero-Reflow GSAP Animation Execution
-      let animationTriggered = false;
+        if (!logoCenter || !logoDocked || !textFacet || !textArchitecture || !clock || !heroFrame) return;
 
-      const runAnimation = () => {
-        if (animationTriggered) return;
-        animationTriggered = true;
+        const centerRect = logoCenter.getBoundingClientRect();
+        const dockedRect = logoDocked.getBoundingClientRect();
+        const vW = window.innerWidth || 1024;
+        const vH = window.innerHeight || 768;
+        const facetRect = textFacet.getBoundingClientRect();
+        const archRect = textArchitecture.getBoundingClientRect();
 
-        requestAnimationFrame(async () => {
-          const logoCenter = document.getElementById('logo-center');
-          const logoDocked = document.getElementById('logo-docked');
-          const textFacet = document.getElementById('text-facet');
-          const textArchitecture = document.getElementById('text-architecture');
-          const clock = document.getElementById('hero-clock');
-          const heroFrame = document.getElementById('hero-frame');
+        if (!centerRect.width || !dockedRect.width) return;
 
-          if (!logoCenter || !logoDocked || !textFacet || !textArchitecture || !clock || !heroFrame) return;
+        const deltaX = (dockedRect.left + dockedRect.width / 2) - (centerRect.left + centerRect.width / 2);
+        const deltaY = (dockedRect.top + dockedRect.height / 2) - (centerRect.top + centerRect.height / 2);
+        const targetScale = dockedRect.width / centerRect.width;
 
-          // Read Layout Metrics safely inside animation frame
-          const centerRect = logoCenter.getBoundingClientRect();
-          const dockedRect = logoDocked.getBoundingClientRect();
-          const vW = window.innerWidth || 1024;
-          const vH = window.innerHeight || 768;
-          const facetRect = textFacet.getBoundingClientRect();
-          const archRect = textArchitecture.getBoundingClientRect();
+        const facetStartX = (vW / 2) - (facetRect.left + (facetRect.width || 100) / 2);
+        const facetStartY = (vH / 2) - (facetRect.top + (facetRect.height || 40) / 2);
 
-          if (!centerRect.width || !dockedRect.width) return;
+        const archStartX = (vW / 2) - (archRect.left + (archRect.width || 100) / 2);
+        const archStartY = (vH / 2) - (archRect.top + (archRect.height || 40) / 2);
 
-          const deltaX = (dockedRect.left + dockedRect.width / 2) - (centerRect.left + centerRect.width / 2);
-          const deltaY = (dockedRect.top + dockedRect.height / 2) - (centerRect.top + centerRect.height / 2);
-          const targetScale = dockedRect.width / centerRect.width;
+        const { gsap } = await import(/* @vite-ignore */ 'gsap');
 
-          const facetStartX = (vW / 2) - (facetRect.left + (facetRect.width || 100) / 2);
-          const facetStartY = (vH / 2) - (facetRect.top + (facetRect.height || 40) / 2);
+        gsap.set(heroFrame, { opacity: 0, scale: 0.98, transformOrigin: 'center center' });
+        gsap.set(textFacet, { opacity: 0, x: facetStartX, y: facetStartY });
+        gsap.set(textArchitecture, { opacity: 0, x: archStartX, y: archStartY });
+        gsap.set(clock, { opacity: 0, y: 15 });
 
-          const archStartX = (vW / 2) - (archRect.left + (archRect.width || 100) / 2);
-          const archStartY = (vH / 2) - (archRect.top + (archRect.height || 40) / 2);
+        const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
-          const { gsap } = await import(/* @vite-ignore */ 'gsap');
-
-          gsap.set(heroFrame, { opacity: 0, scale: 0.95, transformOrigin: 'center center' });
-          gsap.set(textFacet, { opacity: 0, x: facetStartX, y: facetStartY });
-          gsap.set(textArchitecture, { opacity: 0, x: archStartX, y: archStartY });
-          gsap.set(clock, { opacity: 0, y: 20 });
-
-          const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
-
-          tl.to(logoCenter, { 
-              x: deltaX, 
-              y: deltaY, 
-              scale: targetScale, 
-              duration: 0.8, 
-              ease: 'power3.inOut' 
-            })
-            .to(textFacet, { 
-              opacity: 1, 
-              x: 0, 
-              y: 0, 
-              duration: 0.7, 
-              ease: 'power4.out' 
-            }, '-=0.2')
-            .to(textArchitecture, { 
-              opacity: 1, 
-              x: 0, 
-              y: 0, 
-              duration: 0.7, 
-              ease: 'power4.out' 
-            }, '<')
-            .to(clock, { 
-              opacity: 1, 
-              y: 0, 
-              duration: 0.4 
-            }, '-=0.3')
-            .to(heroFrame, { 
-              opacity: 1, 
-              scale: 1, 
-              duration: 0.8, 
-              ease: 'power2.out' 
-            }, '-=0.3');
-        });
-      };
-
-      // Trigger after first clean paint
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(() => runAnimation());
-      } else {
-        setTimeout(runAnimation, 200);
-      }
+        tl.to(logoCenter, { 
+            x: deltaX, 
+            y: deltaY, 
+            scale: targetScale, 
+            duration: 0.8, 
+            ease: 'power3.inOut' 
+          })
+          .to(textFacet, { 
+            opacity: 1, 
+            x: 0, 
+            y: 0, 
+            duration: 0.6, 
+            ease: 'power4.out' 
+          }, '-=0.2')
+          .to(textArchitecture, { 
+            opacity: 1, 
+            x: 0, 
+            y: 0, 
+            duration: 0.6, 
+            ease: 'power4.out' 
+          }, '<')
+          .to(clock, { 
+            opacity: 1, 
+            y: 0, 
+            duration: 0.4 
+          }, '-=0.3')
+          .to(heroFrame, { 
+            opacity: 1, 
+            scale: 1, 
+            duration: 0.6, 
+            ease: 'power2.out' 
+          }, '-=0.3');
+      });
 
     } catch (e) {}
   }
