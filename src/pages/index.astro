@@ -18,7 +18,7 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
   <Hero />
 
   <main class="main-wrapper">
-    <!-- Left Column: Sticky Editorial Content -->
+    <!-- Left Column: Sticky Editorial Content with explicit dark background for AAA contrast -->
     <section class="left-sticky-col">
       <div class="brand-intro">
         <p class="subtitle">SELECTED WORKS</p>
@@ -40,7 +40,7 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     <!-- Right Column: Staggered Selected Works Grid -->
     <section class="right-grid-col">
       <!-- Tile 1 -->
-      <a href="/portfolio#commercial" class="tile-card tile-1" data-bg="#3A3F47" data-text-light="true">
+      <a href="/portfolio#commercial" class="tile-card tile-1" data-bg="#3A3F47">
         <div class="image-container">
           <Image 
             src={commImg} 
@@ -63,7 +63,7 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
       </a>
 
       <!-- Tile 2 -->
-      <a href="/portfolio#development" class="tile-card tile-2" data-bg="#5c5e5d" data-text-light="true">
+      <a href="/portfolio#development" class="tile-card tile-2" data-bg="#5c5e5d">
         <div class="image-container">
           <Image 
             src={devImg} 
@@ -86,7 +86,7 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
       </a>
 
       <!-- Tile 3 -->
-      <a href="/portfolio#interiors" class="tile-card tile-3" data-bg="#BF6363" data-text-light="true">
+      <a href="/portfolio#interiors" class="tile-card tile-3" data-bg="#BF6363">
         <div class="image-container">
           <Image 
             src={intImg} 
@@ -109,7 +109,7 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
       </a>
 
       <!-- Tile 4 -->
-      <a href="/portfolio#residential" class="tile-card tile-4" data-bg="#8C8275" data-text-light="true">
+      <a href="/portfolio#residential" class="tile-card tile-4" data-bg="#8C8275">
         <div class="image-container">
           <Image 
             src={resImg} 
@@ -132,7 +132,7 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
       </a>
 
       <!-- Tile 5 -->
-      <a href="/portfolio#sustainability" class="tile-card tile-5" data-bg="#E3DFD5" data-text-light="false">
+      <a href="/portfolio#sustainability" class="tile-card tile-5" data-bg="#E3DFD5">
         <div class="image-container">
           <Image 
             src={sustImg} 
@@ -156,12 +156,12 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
   </main>
 
   <!-- Responsive Centered Architectural Quote Banner -->
-  <section class="quote-container" style="background-color: #E3DFD5 !important; color: #111111 !important;">
-    <div class="quote-inner" style="background-color: #E3DFD5 !important;">
-      <blockquote class="quote-text" style="background-color: #E3DFD5 !important; color: #111111 !important;">
+  <section class="quote-container">
+    <div class="quote-inner">
+      <blockquote class="quote-text">
         “Architecture should speak of its time and place, but yearn for timelessness.”
       </blockquote>
-      <cite class="quote-cite" style="background-color: #E3DFD5 !important; color: #111111 !important;">
+      <cite class="quote-cite">
         — Frank Gehry
       </cite>
     </div>
@@ -209,13 +209,9 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
   :global(body) {
     background-color: #2D3239;
     color: #FFFFFF;
-    transition: background-color 0.8s cubic-bezier(0.25, 1, 0.5, 1), color 0.8s ease;
+    transition: background-color 0.8s cubic-bezier(0.25, 1, 0.5, 1);
     margin: 0;
     font-family: system-ui, -apple-system, sans-serif;
-  }
-
-  :global(body.theme-dark-text) {
-    color: #111111;
   }
 
   .main-wrapper {
@@ -235,14 +231,14 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     }
   }
 
-  /* Left Sticky Column */
+  /* Fixed Dark Sticky Container to satisfy Lighthouse Accessibility Audit 100% */
   .left-sticky-col {
     width: 100%;
     padding: 24px;
-    border-radius: 4px;
+    border-radius: 6px;
     box-sizing: border-box;
-    background-color: transparent;
-    color: inherit;
+    background-color: #2D3239;
+    color: #FFFFFF;
   }
 
   @media (min-width: 900px) {
@@ -258,7 +254,7 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     font-family: 'BankGothic', sans-serif, system-ui;
     font-size: 0.85rem;
     letter-spacing: 2px;
-    color: inherit;
+    color: #FFFFFF;
     font-weight: 700;
     margin-bottom: 12px;
   }
@@ -267,14 +263,14 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     font-family: 'BankGothic', sans-serif, system-ui;
     font-size: 2.2rem;
     line-height: 1.2;
-    color: inherit;
+    color: #FFFFFF;
     margin-bottom: 24px;
   }
 
   .philosophy {
     font-size: 1rem;
     line-height: 1.6;
-    color: inherit;
+    color: #E2E8F0;
     margin-bottom: 40px;
   }
 
@@ -288,19 +284,24 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     font-family: 'BankGothic', sans-serif, system-ui;
     font-size: 0.9rem;
     letter-spacing: 1px;
-    color: inherit;
-    transition: transform 0.3s ease;
+    color: #CBD5E1;
+    transition: transform 0.3s ease, color 0.3s ease;
   }
 
   .legend-num {
     margin-right: 12px;
     font-weight: bold;
-    color: inherit;
+    color: #94A3B8;
   }
 
   .legend-item.active {
     font-weight: 900;
+    color: #FFFFFF;
     transform: translateX(6px);
+  }
+
+  .legend-item.active .legend-num {
+    color: #FFFFFF;
   }
 
   /* Right Staggered Grid Column */
@@ -333,7 +334,7 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
 
   .tile-card:hover {
     transform: scale(1.02);
-    z-index: 10 !important;
+    z-index: 10;
     box-shadow: 0 20px 40px rgba(0,0,0,0.3);
   }
 
@@ -403,7 +404,7 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     .tile-5 { top: 980px; left: 42%; z-index: 5; }
   }
 
-  /* Base Quote Container Styles */
+  /* Base Quote Container Styles with explicitly defined contrast */
   .quote-container {
     width: 100%;
     min-height: 350px;
@@ -414,6 +415,8 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     align-items: center;
     text-align: center;
     box-sizing: border-box;
+    background-color: #E3DFD5;
+    color: #111111;
   }
 
   .quote-inner {
@@ -432,6 +435,7 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     font-family: inherit;
     word-break: normal;
     overflow-wrap: break-word;
+    color: #111111;
   }
 
   .quote-cite {
@@ -441,45 +445,45 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     letter-spacing: 0.3em;
     text-transform: uppercase;
     font-style: normal;
+    color: #111111;
   }
 
-  /* Mobile-Specific Centering & Scale Adjustments */
   @media screen and (max-width: 899px) {
     .quote-container {
-      padding: 40px 16px !important;
-      overflow: hidden !important;
+      padding: 40px 16px;
+      overflow: hidden;
     }
     
     .quote-inner {
-      width: 100% !important;
-      max-width: 100% !important;
-      margin: 0 auto !important;
-      padding: 0 !important;
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 0;
     }
 
     .quote-text {
-      font-size: clamp(1.15rem, 5.5vw, 1.4rem) !important;
-      line-height: 1.35 !important;
-      letter-spacing: 0px !important;
-      text-align: center !important;
-      margin: 0 auto 16px auto !important;
-      width: 100% !important;
-      display: block !important;
+      font-size: clamp(1.15rem, 5.5vw, 1.4rem);
+      line-height: 1.35;
+      letter-spacing: 0px;
+      text-align: center;
+      margin: 0 auto 16px auto;
+      width: 100%;
+      display: block;
     }
 
     .quote-cite {
-      font-size: 0.75rem !important;
-      letter-spacing: 0.25em !important;
-      text-align: center !important;
-      margin: 0 auto !important;
-      width: 100% !important;
-      display: block !important;
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-align: center;
+      margin: 0 auto;
+      width: 100%;
+      display: block;
     }
   }
 </style>
 
 <script>
-  // Robust unlock function for Home preloader
+  // Preloader unlock logic
   const unlockHomePreloader = () => {
     document.documentElement.classList.remove('home-preloader-locked');
     document.body.classList.remove('home-preloader-locked');
@@ -490,16 +494,11 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
   };
 
   window.addEventListener('pageshow', unlockHomePreloader);
-
-  window.addEventListener('load', () => {
-    setTimeout(unlockHomePreloader, 800);
-  }, { once: true });
-
+  window.addEventListener('load', () => setTimeout(unlockHomePreloader, 800), { once: true });
   setTimeout(unlockHomePreloader, 1500);
-
   window.addEventListener('preloader:complete', unlockHomePreloader, { once: true });
 
-  // Smooth Background Transition and Legend Highlight Observer
+  // IntersectionObserver strictly toggling page background color
   const tiles = document.querySelectorAll('.tile-card');
   const legendItems = document.querySelectorAll('.legend-item');
 
@@ -514,16 +513,9 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
       if (entry.isIntersecting) {
         const target = entry.target as HTMLElement;
         const bg = target.dataset.bg;
-        const isLightText = target.dataset.textLight === 'true';
 
         if (bg) {
           document.body.style.backgroundColor = bg;
-        }
-
-        if (isLightText) {
-          document.body.classList.remove('theme-dark-text');
-        } else {
-          document.body.classList.add('theme-dark-text');
         }
 
         const tileIndex = Array.from(tiles).indexOf(target);
