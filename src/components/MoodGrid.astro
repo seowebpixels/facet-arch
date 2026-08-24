@@ -1,8 +1,9 @@
 ---
 import { Image } from 'astro:assets';
 
-// Import AVIF assets
+// Import AVIF & GIF assets
 import box1 from '../assets/box-one-rust-metal-surface.avif';
+import box2Gif from '../assets/box-two-grey-paint-brush-strokes.gif';
 import box3 from '../assets/box-three-home-on-foggy-hill.avif';
 import box4 from '../assets/box-four-intricate-wood-carving-of-floral-design.avif';
 import box5 from '../assets/box-five-rain-drops-on-dark-glass.avif';
@@ -10,17 +11,15 @@ import box6 from '../assets/box-six-vast-desert-ridge-with-sharp-light-shadow-li
 import box7 from '../assets/box-seven-close-up-of-woven-metallic-mesh.avif';
 import box8 from '../assets/box-eight-topographic-macro-view-of-cracked-dry-clay.avif';
 
-const box2VideoPath = '/videos/box-two-grey-paint-brush-strokes.mp4';
-
 const gridItems = [
-  { id: 1, type: 'image', word: "STRUCTURE", src: box1, alt: "Rust metal surface texture" },
-  { id: 2, type: 'video', word: "", src: box2VideoPath, alt: "Moving brush stroke texture loop" },
-  { id: 3, type: 'image', word: "LIGHT", src: box3, alt: "Home on a foggy hill" },
-  { id: 4, type: 'image', word: "FORM", src: box4, alt: "Intricate wood carving floral design" },
-  { id: 5, type: 'image', word: "", src: box5, alt: "Raindrops on dark glass" },
-  { id: 6, type: 'image', word: "SPACE", src: box6, alt: "Desert ridge light and shadow lines" },
-  { id: 7, type: 'image', word: "", src: box7, alt: "Close-up of woven metallic mesh" },
-  { id: 8, type: 'image', word: "VISION", src: box8, alt: "Topographic view of cracked clay" },
+  { id: 1, word: "STRUCTURE", src: box1, alt: "Rust metal surface texture" },
+  { id: 2, word: "", src: box2Gif, alt: "Moving brush stroke texture loop" },
+  { id: 3, word: "LIGHT", src: box3, alt: "Home on a foggy hill" },
+  { id: 4, word: "FORM", src: box4, alt: "Intricate wood carving floral design" },
+  { id: 5, word: "", src: box5, alt: "Raindrops on dark glass" },
+  { id: 6, word: "SPACE", src: box6, alt: "Desert ridge light and shadow lines" },
+  { id: 7, word: "", src: box7, alt: "Close-up of woven metallic mesh" },
+  { id: 8, word: "VISION", src: box8, alt: "Topographic view of cracked clay" },
 ];
 ---
 
@@ -28,28 +27,13 @@ const gridItems = [
   <div class="mood-grid-container">
     {gridItems.map((item) => (
       <div class="mood-grid-tile group">
-        
-        {item.type === 'video' ? (
-          <video
-            autoplay
-            loop
-            muted
-            playsinline
-            preload="none"
-            data-src={item.src as string}
-            class="tile-media mood-video-lazy"
-          >
-          </video>
-        ) : (
-          <Image
-            src={item.src as ImageMetadata}
-            alt={item.alt}
-            width={800}
-            height={800}
-            format="avif"
-            class="tile-media"
-          />
-        )}
+        <Image
+          src={item.src}
+          alt={item.alt}
+          width={800}
+          height={800}
+          class="tile-media"
+        />
 
         <div class="tile-overlay"></div>
 
@@ -60,43 +44,10 @@ const gridItems = [
             </span>
           </div>
         )}
-
       </div>
     ))}
   </div>
 </section>
-
-<script>
-  // Lazy-attach video source after browser idle to bypass headless audit connection drops
-  const initLazyVideos = () => {
-    const lazyVideos = document.querySelectorAll<HTMLVideoElement>('.mood-video-lazy');
-    
-    lazyVideos.forEach((video) => {
-      const src = video.dataset.src;
-      if (src && !video.querySelector('source')) {
-        const source = document.createElement('source');
-        source.src = src;
-        source.type = 'video/mp4';
-        video.appendChild(source);
-        video.load();
-        
-        const playPromise = video.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(() => {
-            // Suppress error in automated test suites
-          });
-        }
-      }
-    });
-  };
-
-  // Wait for browser idle / initial execution frame before mounting video src
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(() => setTimeout(initLazyVideos, 1000));
-  } else {
-    window.addEventListener('load', () => setTimeout(initLazyVideos, 1000));
-  }
-</script>
 
 <style>
   /* Explicit Grid Definition */
