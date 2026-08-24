@@ -47,26 +47,11 @@ import heroImg from '../assets/res-eoa-1597.avif';
 </section>
 
 <script>
+  import { gsap } from 'gsap';
+
   function initHero() {
     try {
-      // 1. Precise Bot / Audit Detection
-      const isAudit = typeof navigator !== 'undefined' && 
-        (/Lighthouse|Chrome-Lighthouse|PageSpeed|PTST/i.test(navigator.userAgent) ||
-         window.location.search.includes('lighthouse'));
-
-      // If running an audit, reveal elements immediately without animation delays
-      if (isAudit) {
-        const frame = document.getElementById('hero-frame');
-        const facet = document.getElementById('text-facet');
-        const arch = document.getElementById('text-architecture');
-        const clock = document.getElementById('hero-clock');
-        if (frame) frame.style.opacity = '1';
-        if (facet) facet.style.opacity = '1';
-        if (arch) arch.style.opacity = '1';
-        if (clock) clock.style.opacity = '1';
-      }
-
-      // 2. Draw Canvas Logo
+      // 1. Draw Canvas Logo
       const logoCanvas = document.getElementById('logo-canvas') as HTMLCanvasElement | null;
       if (logoCanvas) {
         const ctx = logoCanvas.getContext('2d');
@@ -84,7 +69,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
         }
       }
 
-      // 3. SAST Clock Canvas
+      // 2. SAST Clock Canvas
       const clockCanvas = document.getElementById('clock-canvas') as HTMLCanvasElement | null;
       if (clockCanvas) {
         const updateClock = () => {
@@ -122,81 +107,76 @@ import heroImg from '../assets/res-eoa-1597.avif';
         setInterval(updateClock, 1000);
       }
 
-      // Bypass GSAP timeline for synthetic lighthouse runs
-      if (isAudit) return;
+      // 3. Setup GSAP Animation
+      const logoCenter = document.getElementById('logo-center');
+      const logoDocked = document.getElementById('logo-docked');
+      const textFacet = document.getElementById('text-facet');
+      const textArchitecture = document.getElementById('text-architecture');
+      const clock = document.getElementById('hero-clock');
+      const heroFrame = document.getElementById('hero-frame');
 
-      // 4. GSAP Execution for Real Visitors
-      requestAnimationFrame(async () => {
-        const logoCenter = document.getElementById('logo-center');
-        const logoDocked = document.getElementById('logo-docked');
-        const textFacet = document.getElementById('text-facet');
-        const textArchitecture = document.getElementById('text-architecture');
-        const clock = document.getElementById('hero-clock');
-        const heroFrame = document.getElementById('hero-frame');
+      if (!logoCenter || !logoDocked || !textFacet || !textArchitecture || !clock || !heroFrame) return;
 
-        if (!logoCenter || !logoDocked || !textFacet || !textArchitecture || !clock || !heroFrame) return;
+      const centerRect = logoCenter.getBoundingClientRect();
+      const dockedRect = logoDocked.getBoundingClientRect();
+      const vW = window.innerWidth || 1024;
+      const vH = window.innerHeight || 768;
+      const facetRect = textFacet.getBoundingClientRect();
+      const archRect = textArchitecture.getBoundingClientRect();
 
-        const centerRect = logoCenter.getBoundingClientRect();
-        const dockedRect = logoDocked.getBoundingClientRect();
-        const vW = window.innerWidth || 1024;
-        const vH = window.innerHeight || 768;
-        const facetRect = textFacet.getBoundingClientRect();
-        const archRect = textArchitecture.getBoundingClientRect();
+      if (!centerRect.width || !dockedRect.width) return;
 
-        if (!centerRect.width || !dockedRect.width) return;
+      const deltaX = (dockedRect.left + dockedRect.width / 2) - (centerRect.left + centerRect.width / 2);
+      const deltaY = (dockedRect.top + dockedRect.height / 2) - (centerRect.top + centerRect.height / 2);
+      const targetScale = dockedRect.width / centerRect.width;
 
-        const deltaX = (dockedRect.left + dockedRect.width / 2) - (centerRect.left + centerRect.width / 2);
-        const deltaY = (dockedRect.top + dockedRect.height / 2) - (centerRect.top + centerRect.height / 2);
-        const targetScale = dockedRect.width / centerRect.width;
+      const facetStartX = (vW / 2) - (facetRect.left + (facetRect.width || 100) / 2);
+      const facetStartY = (vH / 2) - (facetRect.top + (facetRect.height || 40) / 2);
 
-        const facetStartX = (vW / 2) - (facetRect.left + (facetRect.width || 100) / 2);
-        const facetStartY = (vH / 2) - (facetRect.top + (facetRect.height || 40) / 2);
+      const archStartX = (vW / 2) - (archRect.left + (archRect.width || 100) / 2);
+      const archStartY = (vH / 2) - (archRect.top + (archRect.height || 40) / 2);
 
-        const archStartX = (vW / 2) - (archRect.left + (archRect.width || 100) / 2);
-        const archStartY = (vH / 2) - (archRect.top + (archRect.height || 40) / 2);
+      // Explicit initial placement via GSAP to ensure smooth inline transforms
+      gsap.set(heroFrame, { opacity: 0, scale: 0.95, transformOrigin: 'center center' });
+      gsap.set(textFacet, { opacity: 0, x: facetStartX, y: facetStartY });
+      gsap.set(textArchitecture, { opacity: 0, x: archStartX, y: archStartY });
+      gsap.set(clock, { opacity: 0, y: 15 });
 
-        const { gsap } = await import(/* @vite-ignore */ 'gsap');
+      // Run sequence with a 1.8s logo hold pause
+      const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' }, delay: 1.8 });
 
-        gsap.set(heroFrame, { opacity: 0, scale: 0.95, transformOrigin: 'center center' });
-        gsap.set(textFacet, { opacity: 0, x: facetStartX, y: facetStartY });
-        gsap.set(textArchitecture, { opacity: 0, x: archStartX, y: archStartY });
-        gsap.set(clock, { opacity: 0, y: 15 });
-
-        const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' }, delay: 1.8 });
-
-        tl.to(logoCenter, { 
-            x: deltaX, 
-            y: deltaY, 
-            scale: targetScale, 
-            duration: 0.9, 
-            ease: 'power3.inOut' 
-          })
-          .to(textFacet, { 
-            opacity: 1, 
-            x: 0, 
-            y: 0, 
-            duration: 0.8, 
-            ease: 'power4.out' 
-          }, '-=0.3')
-          .to(textArchitecture, { 
-            opacity: 1, 
-            x: 0, 
-            y: 0, 
-            duration: 0.8, 
-            ease: 'power4.out' 
-          }, '<')
-          .to(clock, { 
-            opacity: 1, 
-            y: 0, 
-            duration: 0.5 
-          }, '-=0.4')
-          .to(heroFrame, { 
-            opacity: 1, 
-            scale: 1, 
-            duration: 0.8, 
-            ease: 'power2.out' 
-          }, '-=0.4');
-      });
+      tl.to(logoCenter, { 
+          x: deltaX, 
+          y: deltaY, 
+          scale: targetScale, 
+          duration: 0.9, 
+          ease: 'power3.inOut' 
+        })
+        .to(textFacet, { 
+          opacity: 1, 
+          x: 0, 
+          y: 0, 
+          duration: 0.8, 
+          ease: 'power4.out' 
+        }, '-=0.3')
+        .to(textArchitecture, { 
+          opacity: 1, 
+          x: 0, 
+          y: 0, 
+          duration: 0.8, 
+          ease: 'power4.out' 
+        }, '<')
+        .to(clock, { 
+          opacity: 1, 
+          y: 0, 
+          duration: 0.5 
+        }, '-=0.4')
+        .to(heroFrame, { 
+          opacity: 1, 
+          scale: 1, 
+          duration: 0.8, 
+          ease: 'power2.out' 
+        }, '-=0.4');
 
     } catch (e) {}
   }
@@ -217,6 +197,14 @@ import heroImg from '../assets/res-eoa-1597.avif';
     overflow: hidden;
     box-sizing: border-box;
     z-index: 10;
+  }
+
+  /* CSS Initial States prevent layout flashes before JS fires */
+  .text-facet,
+  .text-architecture,
+  .hero-clock,
+  .hero-frame {
+    opacity: 0;
   }
 
   .text-facet {
