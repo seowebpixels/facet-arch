@@ -1,10 +1,12 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import heroLogoImg from '../assets/facet-hero-logo.avif';
 import heroImg from '../assets/res-eoa-1597.avif';
+
+const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720, height: 480, quality: 80 });
 ---
 
-<link rel="preload" as="image" href={heroImg.src} type="image/avif" fetchpriority="high" />
+<link rel="preload" as="image" href={optimizedHero.src} type="image/webp" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
   <div id="hero-frame" class="hero-frame">
@@ -47,10 +49,10 @@ import heroImg from '../assets/res-eoa-1597.avif';
 </section>
 
 <script>
-  import { gsap } from 'gsap';
-
-  function initHero() {
+  const runHeroScript = async () => {
     try {
+      const { gsap } = await import('gsap');
+
       // 1. Safe Canvas Logo Setup
       const logoCanvas = document.getElementById('logo-canvas') as HTMLCanvasElement | null;
       if (logoCanvas) {
@@ -109,7 +111,7 @@ import heroImg from '../assets/res-eoa-1597.avif';
         setInterval(updateClock, 1000);
       }
 
-      // 3. GSAP Animation with Complete Safeguards
+      // 3. GSAP Animation Setup
       const logoCenter = document.getElementById('logo-center');
       const logoDocked = document.getElementById('logo-docked');
       const textFacet = document.getElementById('text-facet');
@@ -127,7 +129,6 @@ import heroImg from '../assets/res-eoa-1597.avif';
       const vW = window.innerWidth || 1024;
       const vH = window.innerHeight || 768;
 
-      // Ensure valid dimensions before running calculations
       if (!centerRect || !dockedRect || centerRect.width === 0 || dockedRect.width === 0) {
         gsap.set([heroFrame, textFacet, textArchitecture, clock], { opacity: 1 });
         return;
@@ -143,13 +144,11 @@ import heroImg from '../assets/res-eoa-1597.avif';
       const archStartX = (vW / 2) - (archRect.left + (archRect.width || 100) / 2);
       const archStartY = (vH / 2) - (archRect.top + (archRect.height || 40) / 2);
 
-      // Lock positions before animation
       gsap.set(heroFrame, { opacity: 0, scale: 0.95, transformOrigin: 'center center' });
       gsap.set(textFacet, { opacity: 0, x: facetStartX, y: facetStartY });
       gsap.set(textArchitecture, { opacity: 0, x: archStartX, y: archStartY });
       gsap.set(clock, { opacity: 0, y: 15 });
 
-      // Run GSAP sequence with 1.8s hold duration
       const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' }, delay: 1.8 });
 
       tl.to(logoCenter, { 
@@ -186,19 +185,17 @@ import heroImg from '../assets/res-eoa-1597.avif';
         }, '-=0.4');
 
     } catch (err) {
-      // Emergency fallback in case headless browser throws unexpected exceptions
-      const elements = ['hero-frame', 'text-facet', 'text-architecture', 'hero-clock'];
-      elements.forEach(id => {
+      ['hero-frame', 'text-facet', 'text-architecture', 'hero-clock'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.style.opacity = '1';
       });
     }
-  }
+  };
 
-  if (document.readyState === 'interactive' || document.readyState === 'complete') {
-    initHero();
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(() => runHeroScript());
   } else {
-    document.addEventListener('DOMContentLoaded', initHero);
+    setTimeout(() => runHeroScript(), 50);
   }
 </script>
 
