@@ -18,7 +18,7 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
   <Hero />
 
   <main class="main-wrapper">
-    <!-- Left Column: Sticky Editorial Content with explicit dark background for AAA contrast -->
+    <!-- Left Column: Sticky Editorial Content -->
     <section class="left-sticky-col">
       <div class="brand-intro">
         <p class="subtitle">SELECTED WORKS</p>
@@ -231,16 +231,17 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     }
   }
 
-  /* Explicit solid background color and opacity to force Lighthouse DOM tree evaluation */
+  /* Stacking Context Isolation + Opaque Container for Lighthouse Audit Compliance */
   .left-sticky-col {
     width: 100%;
     padding: 32px;
     border-radius: 8px;
     box-sizing: border-box;
-    background-color: #2D3239 !important;
-    opacity: 1 !important;
-    color: #FFFFFF !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    background-color: #2D3239;
+    color: #FFFFFF;
+    isolation: isolate;
+    position: relative;
+    z-index: 2;
   }
 
   @media (min-width: 900px) {
@@ -256,7 +257,7 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     font-family: 'BankGothic', sans-serif, system-ui;
     font-size: 0.85rem;
     letter-spacing: 2px;
-    color: #FFFFFF !important;
+    color: #FFFFFF;
     font-weight: 700;
     margin-bottom: 12px;
   }
@@ -265,14 +266,14 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     font-family: 'BankGothic', sans-serif, system-ui;
     font-size: 2.2rem;
     line-height: 1.2;
-    color: #FFFFFF !important;
+    color: #FFFFFF;
     margin-bottom: 24px;
   }
 
   .philosophy {
     font-size: 1rem;
     line-height: 1.6;
-    color: #E2E8F0 !important;
+    color: #FFFFFF;
     margin-bottom: 40px;
   }
 
@@ -286,24 +287,20 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
     font-family: 'BankGothic', sans-serif, system-ui;
     font-size: 0.9rem;
     letter-spacing: 1px;
-    color: #CBD5E1 !important;
-    transition: transform 0.3s ease, color 0.3s ease;
+    color: #FFFFFF;
+    transition: transform 0.3s ease;
   }
 
   .legend-num {
     margin-right: 12px;
     font-weight: bold;
-    color: #94A3B8 !important;
+    color: #FFFFFF;
   }
 
   .legend-item.active {
     font-weight: 900;
-    color: #FFFFFF !important;
+    color: #FFFFFF;
     transform: translateX(6px);
-  }
-
-  .legend-item.active .legend-num {
-    color: #FFFFFF !important;
   }
 
   /* Right Staggered Grid Column */
