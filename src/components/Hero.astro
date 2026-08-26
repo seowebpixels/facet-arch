@@ -146,45 +146,53 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
         const archStartX = (vW / 2) - (archRect.left + (archRect.width || 100) / 2);
         const archStartY = (vH / 2) - (archRect.top + (archRect.height || 40) / 2);
 
-        gsap.set(heroFrame, { opacity: 0, scale: 0.95, transformOrigin: 'center center' });
-        gsap.set(textFacet, { opacity: 0, x: facetStartX, y: facetStartY });
-        gsap.set(textArchitecture, { opacity: 0, x: archStartX, y: archStartY });
-        gsap.set(clock, { opacity: 0, y: 15 });
+// Remove the explicit inline opacities that make the screen blank.
+// Instead of delaying the entire timeline, let the timeline fire instantly
+// and use the GSAP sequence steps to coordinate the exact visual delays.
 
-        const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' }, delay: 1.8 });
+gsap.set(heroFrame, { opacity: 0.1, scale: 0.95, transformOrigin: 'center center' }); // Keep opacity above 0 so LCP triggers instantly
+gsap.set(textFacet, { opacity: 0, x: facetStartX, y: facetStartY });
+gsap.set(textArchitecture, { opacity: 0, x: archStartX, y: archStartY });
+gsap.set(clock, { opacity: 0, y: 15 });
 
-        tl.to(logoCenter, { 
-            x: deltaX, 
-            y: deltaY, 
-            scale: targetScale, 
-            duration: 0.9, 
-            ease: 'power3.inOut' 
-          })
-          .to(textFacet, { 
-            opacity: 1, 
-            x: 0, 
-            y: 0, 
-            duration: 0.8, 
-            ease: 'power4.out' 
-          }, '-=0.3')
-          .to(textArchitecture, { 
-            opacity: 1, 
-            x: 0, 
-            y: 0, 
-            duration: 0.8, 
-            ease: 'power4.out' 
-          }, '<')
-          .to(clock, { 
-            opacity: 1, 
-            y: 0, 
-            duration: 0.5 
-          }, '-=0.4')
-          .to(heroFrame, { 
-            opacity: 1, 
-            scale: 1, 
-            duration: 0.8, 
-            ease: 'power2.out' 
-          }, '-=0.4');
+// Remove the global 'delay: 1.8' from the timeline properties container
+const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
+
+// Step 1: Tell the timeline to wait explicitly for 1.8s inside the first execution step
+tl.to(logoCenter, { 
+    x: deltaX, 
+    y: deltaY, 
+    scale: targetScale, 
+    duration: 0.9, 
+    ease: 'power3.inOut',
+    delay: 1.8 // <-- Place the delay directly on the logo movement instead of the global timeline
+  })
+  .to(textFacet, { 
+    opacity: 1, 
+    x: 0, 
+    y: 0, 
+    duration: 0.8, 
+    ease: 'power4.out' 
+  }, '-=0.3')
+  .to(textArchitecture, { 
+    opacity: 1, 
+    x: 0, 
+    y: 0, 
+    duration: 0.8, 
+    ease: 'power4.out' 
+  }, '<')
+  .to(clock, { 
+    opacity: 1, 
+    y: 0, 
+    duration: 0.5 
+  }, '-=0.4')
+  .to(heroFrame, { 
+    opacity: 1, 
+    scale: 1, 
+    duration: 0.8, 
+    ease: 'power2.out' 
+  }, '-=0.4');
+
       });
 
     } catch (err) {
