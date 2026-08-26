@@ -51,9 +51,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
 <script>
   const runHeroScript = async () => {
     try {
-      const { gsap } = await import('gsap');
-
-      // 1. Safe Canvas Logo Setup
+      // 1. Safe Canvas Logo Setup (Executes instantly)
       const logoCanvas = document.getElementById('logo-canvas') as HTMLCanvasElement | null;
       if (logoCanvas) {
         const ctx = logoCanvas.getContext('2d');
@@ -111,7 +109,9 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
         setInterval(updateClock, 1000);
       }
 
-      // 3. GSAP Animation Setup
+      // 3. True Async Import for GSAP to fully isolate Critical Request Chains
+      const { gsap } = await import('gsap');
+
       const logoCenter = document.getElementById('logo-center');
       const logoDocked = document.getElementById('logo-docked');
       const textFacet = document.getElementById('text-facet');
@@ -121,68 +121,71 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
 
       if (!logoCenter || !logoDocked || !textFacet || !textArchitecture || !clock || !heroFrame) return;
 
-      const centerRect = logoCenter.getBoundingClientRect();
-      const dockedRect = logoDocked.getBoundingClientRect();
-      const facetRect = textFacet.getBoundingClientRect();
-      const archRect = textArchitecture.getBoundingClientRect();
+      // 4. Use requestAnimationFrame to eliminate layout thrashing/blocking during geometric calculations
+      requestAnimationFrame(() => {
+        const centerRect = logoCenter.getBoundingClientRect();
+        const dockedRect = logoDocked.getBoundingClientRect();
+        const facetRect = textFacet.getBoundingClientRect();
+        const archRect = textArchitecture.getBoundingClientRect();
 
-      const vW = window.innerWidth || 1024;
-      const vH = window.innerHeight || 768;
+        const vW = window.innerWidth || 1024;
+        const vH = window.innerHeight || 768;
 
-      if (!centerRect || !dockedRect || centerRect.width === 0 || dockedRect.width === 0) {
-        gsap.set([heroFrame, textFacet, textArchitecture, clock], { opacity: 1 });
-        return;
-      }
+        if (!centerRect || !dockedRect || centerRect.width === 0 || dockedRect.width === 0) {
+          gsap.set([heroFrame, textFacet, textArchitecture, clock], { opacity: 1 });
+          return;
+        }
 
-      const deltaX = (dockedRect.left + dockedRect.width / 2) - (centerRect.left + centerRect.width / 2);
-      const deltaY = (dockedRect.top + dockedRect.height / 2) - (centerRect.top + centerRect.height / 2);
-      const targetScale = dockedRect.width / centerRect.width || 0.5;
+        const deltaX = (dockedRect.left + dockedRect.width / 2) - (centerRect.left + centerRect.width / 2);
+        const deltaY = (dockedRect.top + dockedRect.height / 2) - (centerRect.top + centerRect.height / 2);
+        const targetScale = dockedRect.width / centerRect.width || 0.5;
 
-      const facetStartX = (vW / 2) - (facetRect.left + (facetRect.width || 100) / 2);
-      const facetStartY = (vH / 2) - (facetRect.top + (facetRect.height || 40) / 2);
+        const facetStartX = (vW / 2) - (facetRect.left + (facetRect.width || 100) / 2);
+        const facetStartY = (vH / 2) - (facetRect.top + (facetRect.height || 40) / 2);
 
-      const archStartX = (vW / 2) - (archRect.left + (archRect.width || 100) / 2);
-      const archStartY = (vH / 2) - (archRect.top + (archRect.height || 40) / 2);
+        const archStartX = (vW / 2) - (archRect.left + (archRect.width || 100) / 2);
+        const archStartY = (vH / 2) - (archRect.top + (archRect.height || 40) / 2);
 
-      gsap.set(heroFrame, { opacity: 0, scale: 0.95, transformOrigin: 'center center' });
-      gsap.set(textFacet, { opacity: 0, x: facetStartX, y: facetStartY });
-      gsap.set(textArchitecture, { opacity: 0, x: archStartX, y: archStartY });
-      gsap.set(clock, { opacity: 0, y: 15 });
+        gsap.set(heroFrame, { opacity: 0, scale: 0.95, transformOrigin: 'center center' });
+        gsap.set(textFacet, { opacity: 0, x: facetStartX, y: facetStartY });
+        gsap.set(textArchitecture, { opacity: 0, x: archStartX, y: archStartY });
+        gsap.set(clock, { opacity: 0, y: 15 });
 
-      const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' }, delay: 1.8 });
+        const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' }, delay: 1.8 });
 
-      tl.to(logoCenter, { 
-          x: deltaX, 
-          y: deltaY, 
-          scale: targetScale, 
-          duration: 0.9, 
-          ease: 'power3.inOut' 
-        })
-        .to(textFacet, { 
-          opacity: 1, 
-          x: 0, 
-          y: 0, 
-          duration: 0.8, 
-          ease: 'power4.out' 
-        }, '-=0.3')
-        .to(textArchitecture, { 
-          opacity: 1, 
-          x: 0, 
-          y: 0, 
-          duration: 0.8, 
-          ease: 'power4.out' 
-        }, '<')
-        .to(clock, { 
-          opacity: 1, 
-          y: 0, 
-          duration: 0.5 
-        }, '-=0.4')
-        .to(heroFrame, { 
-          opacity: 1, 
-          scale: 1, 
-          duration: 0.8, 
-          ease: 'power2.out' 
-        }, '-=0.4');
+        tl.to(logoCenter, { 
+            x: deltaX, 
+            y: deltaY, 
+            scale: targetScale, 
+            duration: 0.9, 
+            ease: 'power3.inOut' 
+          })
+          .to(textFacet, { 
+            opacity: 1, 
+            x: 0, 
+            y: 0, 
+            duration: 0.8, 
+            ease: 'power4.out' 
+          }, '-=0.3')
+          .to(textArchitecture, { 
+            opacity: 1, 
+            x: 0, 
+            y: 0, 
+            duration: 0.8, 
+            ease: 'power4.out' 
+          }, '<')
+          .to(clock, { 
+            opacity: 1, 
+            y: 0, 
+            duration: 0.5 
+          }, '-=0.4')
+          .to(heroFrame, { 
+            opacity: 1, 
+            scale: 1, 
+            duration: 0.8, 
+            ease: 'power2.out' 
+          }, '-=0.4');
+      });
 
     } catch (err) {
       ['hero-frame', 'text-facet', 'text-architecture', 'hero-clock'].forEach(id => {
@@ -192,10 +195,11 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
     }
   };
 
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(() => runHeroScript());
+  // Wait safely for the browser load state before triggering script routines
+  if (document.readyState === 'complete') {
+    runHeroScript();
   } else {
-    setTimeout(() => runHeroScript(), 50);
+    window.addEventListener('load', runHeroScript);
   }
 </script>
 
