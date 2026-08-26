@@ -51,7 +51,6 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
   </div>
 </section>
 
-<!-- Bundled execution context processes correctly through the Astro transpilation pipeline -->
 <script>
   const runHeroScript = async () => {
     try {
@@ -113,8 +112,9 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
         setInterval(updateClock, 1000);
       }
 
-      // 3. True Async Loading to Unblock the Main Thread
-      const { gsap } = await import('gsap');
+      // 3. Obfuscated Variable String Import breaks the static compilation chain completely
+      const libraryName = "gsap";
+      const { gsap } = await import(/* @vite-ignore */ libraryName);
 
       const logoCenter = document.getElementById('logo-center');
       const logoDocked = document.getElementById('logo-docked');
@@ -289,7 +289,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
     display: block;
   }
 
-    .text-architecture {
+  .text-architecture {
     position: absolute;
     bottom: 20px;
     right: 50px;
