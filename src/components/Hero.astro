@@ -51,11 +51,12 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
   </div>
 </section>
 
-<script>
+<!-- Added is:inline to completely remove the script from Astro's critical compiler bundling chain -->
+<script is:inline>
   const runHeroScript = async () => {
     try {
       // 1. Canvas Logo Initialization Setup
-      const logoCanvas = document.getElementById('logo-canvas') as HTMLCanvasElement | null;
+      const logoCanvas = document.getElementById('logo-canvas');
       if (logoCanvas) {
         const ctx = logoCanvas.getContext('2d');
         const src = logoCanvas.getAttribute('data-logo-src');
@@ -75,7 +76,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
       }
 
       // 2. Real-time SAST Clock Engine
-      const clockCanvas = document.getElementById('clock-canvas') as HTMLCanvasElement | null;
+      const clockCanvas = document.getElementById('clock-canvas');
       if (clockCanvas) {
         const updateClock = () => {
           try {
@@ -112,8 +113,8 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
         setInterval(updateClock, 1000);
       }
 
-      // 3. True Async Loading to Unblock the Main Thread
-      const { gsap } = await import('gsap');
+      // 3. True Async CDN Import for GSAP to fully isolate Critical Request Chains from local build bundling
+      const { gsap } = await import('https://esm.sh');
 
       const logoCenter = document.getElementById('logo-center');
       const logoDocked = document.getElementById('logo-docked');
@@ -302,33 +303,33 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
     height: 280px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    z-index: 99999;
-    pointer-events: none;
-    transform-origin: center center;
-    will-change: transform;
-  }
+
+
+justify-content: center;
+z-index: 99999;
+pointer-events: none;
+transform-origin: center center;
+will-change: transform;
+}
 
 .logo-docked-wrapper {
 position: absolute;
 top: -30px;
-right: 40px;
-width: 140px;
+right: 40px;width: 140px;
 height: 140px;
 z-index: 30;
 pointer-events: none;
 visibility: hidden;
-  }
+}
 
-.logo-placeholder 
-{width: 100%;
+.logo-placeholder {
+width: 100%;
 height: 100%;
-  }
+}
 
 .hero-frame {
 position: absolute;
-top: 14%;
-left: 12%;
+top: 14%;left: 12%;
 width: 76vw;
 height: 72vh;
 z-index: 20;
@@ -338,22 +339,22 @@ transform-origin: center center;
 will-change: transform, opacity;
 backface-visibility: hidden;
 
-/* Hard CSS rule stops initial flash; element stays completely invisible until GSAP starts running */opacity: 0;
-  }
+/* Hard CSS rule stops initial flash; element stays completely invisible until GSAP starts running */
+opacity: 0;
+}
 
 .logo-canvas {
 width: 100%;
 height: 100%;
 display: block;
-  }
+}
 
-.hero-img 
-{width: 100%;
+.hero-img {
+width: 100%;
 height: 100%;
 object-fit: cover;
-display: 
-block;
-  }
+display: block;
+}
 
 @media (max-width: 768px) {
 .logo-center-wrapper {
@@ -385,7 +386,8 @@ font-size: clamp(1.8rem, 6vw, 2.5rem);
 .text-architecture {
 position: absolute;
 top: calc(240px + 34vh + 15px);
-bottom: auto;right: 15px;
+bottom: auto;
+right: 15px;
 font-size: clamp(1.8rem, 6vw, 2.5rem);
 }
 
@@ -396,4 +398,3 @@ font-size: 0.85rem;
 }
 }
 </style>
-
