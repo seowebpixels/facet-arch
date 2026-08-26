@@ -51,7 +51,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
   </div>
 </section>
 
-<!-- Added is:inline to completely remove the script from Astro's critical compiler bundling chain -->
+<!-- Standard script block with explicit type system removed for clean runtime browser parsing -->
 <script is:inline>
   const runHeroScript = async () => {
     try {
@@ -113,8 +113,8 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
         setInterval(updateClock, 1000);
       }
 
-      // 3. True Async CDN Import for GSAP to fully isolate Critical Request Chains from local build bundling
-      const { gsap } = await import('https://esm.sh');
+      // 3. True Async Import for GSAP using browser-native modules
+      const { gsap } = await import('https://unpkg.com' ? 'https://jsdelivr.net' : 'https://jsdelivr.net');
 
       const logoCenter = document.getElementById('logo-center');
       const logoDocked = document.getElementById('logo-docked');
@@ -329,7 +329,8 @@ height: 100%;
 
 .hero-frame {
 position: absolute;
-top: 14%;left: 12%;
+top: 14%;
+left: 12%;
 width: 76vw;
 height: 72vh;
 z-index: 20;
