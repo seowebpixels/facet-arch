@@ -123,38 +123,21 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
       if (!logoCenter || !textFacet || !textArchitecture || !clock || !heroFrame) return;
 
       requestAnimationFrame(() => {
-        // Find screen configuration markers
         const isMobile = window.innerWidth <= 768;
-        
-        // Calculate exact bounding boxes of the hero frames to lock typography alignments precisely
         const frameBounds = heroFrame.getBoundingClientRect();
         
         const startX = window.innerWidth / 2;
         const startY = window.innerHeight / 2;
         
-        // Mobile specific adjustments override desktop metrics safely without bleeding dependencies
-        let endX, endY, targetScale;
-        
-        if (isMobile) {
-          // On mobile, the bounding footprint is 210px base width. Scaled down to 0.55, the active canvas area is 115.5px wide
-          endX = window.innerWidth - (115.5 / 2) - 20;
-          endY = (115.5 / 2) + 20;
-          targetScale = 0.55; // Enlarged layout footprint calculation for mobile views
-        } else {
-          // Keep desktop layout variables intact
-          endX = window.innerWidth - (98 / 2) - 20;
-          endY = (98 / 2) + 20;
-          targetScale = 0.35;
-        }
+        // Exact pixel placement target metrics for Desktop layout
+        const endX = window.innerWidth - (98 / 2) - 20;
+        const endY = (98 / 2) + 20;
 
-        // Form linear velocity directions for the movement trajectory path
         const movementDeltaX = endX - startX;
         const movementDeltaY = endY - startY;
 
         // Configure initial placement transforms relative to dead center before execution playbacks
         gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
-        
-        // Track outward text splits relative to initialization coordinate zero marks
         gsap.set(textFacet, { opacity: 0, x: startX, y: startY, xPercent: -50, yPercent: -50 }); 
         gsap.set(textArchitecture, { opacity: 0, x: startX, y: startY, xPercent: -50, yPercent: -50 });
         gsap.set(clock, { opacity: 0, y: 15 });
@@ -168,46 +151,72 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
 
         const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
-        // Steps 1, 2, & 3: Logo paints, holds for 2 seconds, then glides cleanly into corner specifications
-        tl.to(logoCenter, {
-            x: movementDeltaX,
-            y: movementDeltaY,
-            scale: targetScale,
-            duration: 1.3,
-            ease: 'power2.inOut',
-            delay: 2.0
-          })
-          // Step 4: Typography vectors split cleanly outward from mid-screen to explicit positions
-          .to(textFacet, {
-            opacity: 1,
-            x: isMobile ? '6vw' : frameBounds.left, // Links to mobile layout boundaries perfectly
-            y: isMobile ? (window.innerHeight * 0.25) - 35 : frameBounds.top - 35, 
-            xPercent: 0,
-            yPercent: -100,
-            duration: 1.1,
-            ease: 'power4.out'
-          }, '-=0.5')
-          .to(textArchitecture, {
-            opacity: 1,
-            x: isMobile ? '6vw' : frameBounds.right, 
-            y: isMobile ? (window.innerHeight * 0.25) + (window.innerHeight * 0.45) + 35 : frameBounds.bottom + 35, 
-            xPercent: isMobile ? 0 : -100, // Keeps architecture flush left on mobile screens
-            yPercent: 0,
-            duration: 1.1,
-            ease: 'power4.out'
-          }, '<')
-          .to(clock, {
-            opacity: 1,
-            y: 0,
-            duration: 0.5
-          }, '-=0.4')
-          // Steps 5 & 6: Main showcase viewport windows scale up seamlessly from center points outward
-          .to(heroFrame, {
-            opacity: 1,
-            scale: 1,
-            duration: 1.2,
-            ease: 'power4.out'
-          }, '-=0.6');
+        if (isMobile) {
+          // Mobile Execution Path: Uses simple opacity fades. Coordinates are fully handled by CSS !important rules
+          tl.to(logoCenter, {
+              opacity: 1,
+              duration: 1.3,
+              delay: 2.0,
+              onComplete: () => {
+                logoCenter.classList.add('mobile-docked');
+              }
+            })
+            .to([textFacet, textArchitecture], {
+              opacity: 1,
+              duration: 1.1,
+              ease: 'power4.out'
+            }, '-=0.5')
+            .to(clock, {
+              opacity: 1,
+              y: 0,
+              duration: 0.5
+            }, '-=0.4')
+            .to(heroFrame, {
+              opacity: 1,
+              scale: 1,
+              duration: 1.2,
+              ease: 'power4.out'
+            }, '-=0.6');
+        } else {
+          // Desktop Execution Path: Retains your pixel-perfect trajectory movements exactly as configured
+          tl.to(logoCenter, {
+              x: movementDeltaX,
+              y: movementDeltaY,
+              scale: 0.35,
+              duration: 1.3,
+              ease: 'power2.inOut',
+              delay: 2.0
+            })
+            .to(textFacet, {
+              opacity: 1,
+              x: frameBounds.left, 
+              y: frameBounds.top - 35, 
+              xPercent: 0,
+              yPercent: -100,
+              duration: 1.1,
+              ease: 'power4.out'
+            }, '-=0.5')
+            .to(textArchitecture, {
+              opacity: 1,
+              x: frameBounds.right, 
+              y: frameBounds.bottom + 35, 
+              xPercent: -100, 
+              yPercent: 0,
+              duration: 1.1,
+              ease: 'power4.out'
+            }, '<')
+            .to(clock, {
+              opacity: 1,
+              y: 0,
+              duration: 0.5
+            }, '-=0.4')
+            .to(heroFrame, {
+              opacity: 1,
+              scale: 1,
+              duration: 1.2,
+              ease: 'power4.out'
+            }, '-=0.6');
+        }
       });
 
     } catch (err) {
@@ -257,7 +266,6 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
     z-index: 10;
   }
 
-  /* Structural position definitions are fully delegated to runtime layout boundary properties */
   .text-facet {
     position: absolute;
     top: 0;
@@ -276,7 +284,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
     visibility: hidden;
   }
 
-    .text-architecture {
+  .text-architecture {
     position: absolute;
     top: 0;
     left: 0;
@@ -285,16 +293,16 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
     font-size: clamp(2.2rem, 3.8vw, 4.1rem);
     letter-spacing: 0.10em;
     color: var(--text-primary, #111111);
-margin: 0;
-line-height: 1;
-z-index: 40;
-text-transform: uppercase;
-white-space: nowrap;
-will-change: transform, opacity;
-visibility: hidden;
-}
+    margin: 0;
+    line-height: 1;
+    z-index: 40;
+    text-transform: uppercase;
+    white-space: nowrap;
+    will-change: transform, opacity;
+    visibility: hidden;
+  }
 
-.hero-clock {
+  .hero-clock {
     position: absolute;
     bottom: 25px;
     left: 50px;
@@ -421,8 +429,3 @@ font-size: 0.85rem;
 }
 }
 </style>
-
-
-
-
-
