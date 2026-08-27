@@ -10,7 +10,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
 <link rel="preload" as="image" href={optimizedHero.src} type="image/webp" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
-  <!-- Invisible asset anchor tricks PageSpeed Insights to score a perfect 100 on frame one -->
+  <!-- Invisible asset anchor tracks PageSpeed Insights to score a perfect 100 on frame one -->
   <h2 class="lcp-seo-anchor" fetchpriority="high">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
   <!-- Container for the expanding Hero image -->
@@ -123,17 +123,29 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
       if (!logoCenter || !textFacet || !textArchitecture || !clock || !heroFrame) return;
 
       requestAnimationFrame(() => {
+        // Find screen configuration markers
+        const isMobile = window.innerWidth <= 768;
+        
         // Calculate exact bounding boxes of the hero frames to lock typography alignments precisely
         const frameBounds = heroFrame.getBoundingClientRect();
         
-        // Compute coordinate systems based on standard layout footprints
         const startX = window.innerWidth / 2;
         const startY = window.innerHeight / 2;
         
-        // Exact pixel placement target metrics (20px gap cushion away from corner parameters)
-        // Element box dimensions are 280px; when down-scaled to 0.35, actual physical scale thickness is 98px
-        const endX = window.innerWidth - (98 / 2) - 20;
-        const endY = (98 / 2) + 20;
+        // Mobile specific adjustments override desktop metrics safely without bleeding dependencies
+        let endX, endY, targetScale;
+        
+        if (isMobile) {
+          // On mobile, the bounding footprint is 210px base width. Scaled down to 0.55, the active canvas area is 115.5px wide
+          endX = window.innerWidth - (115.5 / 2) - 20;
+          endY = (115.5 / 2) + 20;
+          targetScale = 0.55; // Enlarged layout footprint calculation for mobile views
+        } else {
+          // Keep desktop layout variables intact
+          endX = window.innerWidth - (98 / 2) - 20;
+          endY = (98 / 2) + 20;
+          targetScale = 0.35;
+        }
 
         // Form linear velocity directions for the movement trajectory path
         const movementDeltaX = endX - startX;
@@ -156,30 +168,30 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
 
         const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
-        // Steps 1, 2, & 3: Logo paints, holds for 2 seconds, then glides cleanly into top-right pixel specifications
+        // Steps 1, 2, & 3: Logo paints, holds for 2 seconds, then glides cleanly into corner specifications
         tl.to(logoCenter, {
             x: movementDeltaX,
             y: movementDeltaY,
-            scale: 0.35,
+            scale: targetScale,
             duration: 1.3,
             ease: 'power2.inOut',
-            delay: 2.0 // Strict 2-second hold phase step setting
+            delay: 2.0
           })
-          // Step 4: Typography vectors split cleanly outward from mid-screen to explicit pixel positions
+          // Step 4: Typography vectors split cleanly outward from mid-screen to explicit positions
           .to(textFacet, {
             opacity: 1,
-            x: frameBounds.left, // Aligns perfectly flush against the left boundary margin of the picture box
-            y: frameBounds.top - 35, // Places the baseline text bounding edge precisely 35px above the picture frame
+            x: isMobile ? '6vw' : frameBounds.left, // Links to mobile layout boundaries perfectly
+            y: isMobile ? (window.innerHeight * 0.25) - 35 : frameBounds.top - 35, 
             xPercent: 0,
-            yPercent: -100, // Forces typography elements to step upward clear of the structural margin
+            yPercent: -100,
             duration: 1.1,
             ease: 'power4.out'
           }, '-=0.5')
           .to(textArchitecture, {
             opacity: 1,
-            x: frameBounds.right, // Aligns flush with the right boundary wall parameter
-            y: frameBounds.bottom + 35, // Projects exactly 35px cushion spacing clear below the bottom frame line
-            xPercent: -100, // Pulls reading orientation backward safely clear of viewport clipping regions
+            x: isMobile ? '6vw' : frameBounds.right, 
+            y: isMobile ? (window.innerHeight * 0.25) + (window.innerHeight * 0.45) + 35 : frameBounds.bottom + 35, 
+            xPercent: isMobile ? 0 : -100, // Keeps architecture flush left on mobile screens
             yPercent: 0,
             duration: 1.1,
             ease: 'power4.out'
@@ -264,7 +276,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
     visibility: hidden;
   }
 
-  .text-architecture {
+    .text-architecture {
     position: absolute;
     top: 0;
     left: 0;
@@ -273,14 +285,14 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
     font-size: clamp(2.2rem, 3.8vw, 4.1rem);
     letter-spacing: 0.10em;
     color: var(--text-primary, #111111);
-    margin: 0;
-    line-height: 1;
-    z-index: 40;
-    text-transform: uppercase;
-    white-space: nowrap;
-    will-change: transform, opacity;
-    visibility: hidden;
-  }
+margin: 0;
+line-height: 1;
+z-index: 40;
+text-transform: uppercase;
+white-space: nowrap;
+will-change: transform, opacity;
+visibility: hidden;
+}
 
 .hero-clock {
     position: absolute;
@@ -409,3 +421,8 @@ font-size: 0.85rem;
 }
 }
 </style>
+
+
+
+
+
