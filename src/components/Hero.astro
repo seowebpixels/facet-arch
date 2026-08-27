@@ -29,7 +29,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
     />
   </div>
 
-  <!-- Absolute typography containers are cleanly adjusted via the unified math execution timeline -->
+  <!-- Absolute typography containers sit perfectly above and below the image layout zone -->
   <h1 id="text-facet" class="title-text text-facet">FACET</h1>
   <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
 
@@ -124,111 +124,111 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
 
       requestAnimationFrame(() => {
         const isMobile = window.innerWidth <= 768;
-        
-        // Find screen configuration markers
         const startX = window.innerWidth / 2;
         const startY = window.innerHeight / 2;
-        
-        // Unified path trajectory parameter setup variables
-        let endX, endY, logoTargetScale;
-        let facetTargetX, facetTargetY, facetYPercent;
-        let archTargetX, archTargetY, archXPercent;
 
         if (isMobile) {
-          // MOBILE CONFIGURATION MATHEMATICS
-          // Baseline element box diameter is 210px. Scaled down to 0.46, physical visual boundary size is exactly 96.6px
-          // To offset upward by an extra 50px, we change top corner buffer limit from +20px to -30px
-          endX = window.innerWidth - (96.6 / 2) - 20;
-          endY = (96.6 / 2) - 30; 
-          logoTargetScale = 0.46; // Enlarges active mobile logo framework footprint by 30px clear
+          // MOBILE TIMELINE SEQUENCE: Clean transformations that do not conflict with layout grid sheets
+          gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
+          gsap.set([textFacet, textArchitecture], { opacity: 0 });
+          gsap.set(clock, { opacity: 0, y: 15 });
 
-          // Calculate precise grid metrics to isolate text above/below the mobile display frame limits
-          const mobileFrameTop = window.innerHeight * 0.25;
-          const mobileFrameBottom = mobileFrameTop + (window.innerHeight * 0.45);
+          logoCenter.style.visibility = 'visible';
+          heroFrame.style.visibility = 'visible';
+          textFacet.style.visibility = 'visible';
+          textArchitecture.style.visibility = 'visible';
+          clock.style.visibility = 'visible';
 
-          facetTargetX = window.innerWidth * 0.06;
-          facetTargetY = mobileFrameTop - 35;
-          facetYPercent = -100; // Positions the text clean above the container edge
+          const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
-          archTargetX = window.innerWidth * 0.06;
-          archTargetY = mobileFrameBottom + 35;
-          archXPercent = 0; // Stays flush against left bounds instead of pulling back
+          tl.to(logoCenter, {
+              top: '20px',
+              left: 'calc(100vw - 20px)',
+              xPercent: -100,
+              yPercent: 0,
+              x: 0,
+              y: 0,
+              scale: 0.52, // Sets logo 30px larger on mobile views
+              duration: 1.3,
+              delay: 2.0
+            })
+            .to([textFacet, textArchitecture], {
+              opacity: 1,
+              duration: 1.1,
+              ease: 'power4.out'
+            }, '-=0.5')
+            .to(clock, {
+              opacity: 1,
+              y: 0,
+              duration: 0.5
+            }, '-=0.4')
+            .to(heroFrame, {
+              opacity: 1,
+              scale: 1,
+              duration: 1.2,
+              ease: 'power4.out'
+            }, '-=0.6');
+
         } else {
-          // DESKTOP CONFIGURATION MATHEMATICS
+          // DESKTOP TIMELINE SEQUENCE: Keeps your desktop calculations functioning perfectly
           const frameBounds = heroFrame.getBoundingClientRect();
-          
-          endX = window.innerWidth - (98 / 2) - 20;
-          endY = (98 / 2) + 20;
-          logoTargetScale = 0.35;
+          const endX = window.innerWidth - (98 / 2) - 20;
+          const endY = (98 / 2) + 20;
 
-          facetTargetX = frameBounds.left;
-          facetTargetY = frameBounds.top - 35;
-          facetYPercent = -100;
+          const movementDeltaX = endX - startX;
+          const movementDeltaY = endY - startY;
 
-          archTargetX = frameBounds.right;
-          archTargetY = frameBounds.bottom + 35;
-          archXPercent = -100; // Pulls alignment frame inside viewport right limits cleanly
+          gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
+          gsap.set(textFacet, { opacity: 0, x: startX, y: startY, xPercent: -50, yPercent: -50 }); 
+          gsap.set(textArchitecture, { opacity: 0, x: startX, y: startY, xPercent: -50, yPercent: -50 });
+          gsap.set(clock, { opacity: 0, y: 15 });
+
+          logoCenter.style.visibility = 'visible';
+          heroFrame.style.visibility = 'visible';
+          textFacet.style.visibility = 'visible';
+          textArchitecture.style.visibility = 'visible';
+          clock.style.visibility = 'visible';
+
+          const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
+
+          tl.to(logoCenter, {
+              x: movementDeltaX,
+              y: movementDeltaY,
+              scale: 0.35,
+              duration: 1.3,
+              ease: 'power2.inOut',
+              delay: 2.0
+            })
+            .to(textFacet, {
+              opacity: 1,
+              x: frameBounds.left, 
+              y: frameBounds.top - 35, 
+              xPercent: 0,
+              yPercent: -100,
+              duration: 1.1,
+              ease: 'power4.out'
+            }, '-=0.5')
+            .to(textArchitecture, {
+              opacity: 1,
+              x: frameBounds.right, 
+              y: frameBounds.bottom + 35, 
+              xPercent: -100, 
+              yPercent: 0,
+              duration: 1.1,
+              ease: 'power4.out'
+            }, '<')
+            .to(clock, {
+              opacity: 1,
+              y: 0,
+              duration: 0.5
+            }, '-=0.4')
+            .to(heroFrame, {
+              opacity: 1,
+              scale: 1,
+              duration: 1.2,
+              ease: 'power4.out'
+            }, '-=0.6');
         }
-
-        // Form linear velocity directions for the movement trajectory path
-        const movementDeltaX = endX - startX;
-        const movementDeltaY = endY - startY;
-
-        // Configure initial transforms relative to dead center before execution playbacks
-        gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
-        gsap.set(textFacet, { opacity: 0, x: startX, y: startY, xPercent: -50, yPercent: -50 }); 
-        gsap.set(textArchitecture, { opacity: 0, x: startX, y: startY, xPercent: -50, yPercent: -50 });
-        gsap.set(clock, { opacity: 0, y: 15 });
-
-        // Force instant visibility commands to bypass flashing artifacts
-        logoCenter.style.visibility = 'visible';
-        heroFrame.style.visibility = 'visible';
-        textFacet.style.visibility = 'visible';
-        textArchitecture.style.visibility = 'visible';
-        clock.style.visibility = 'visible';
-
-        const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
-
-        // Step 1 & 2 & 3: Logo paints, holds for 2 seconds, then tracks its trajectory path to the corner
-        tl.to(logoCenter, {
-            x: movementDeltaX,
-            y: movementDeltaY,
-            scale: logoTargetScale,
-            duration: 1.3,
-            ease: 'power2.inOut',
-            delay: 2.0
-          })
-          // Step 4: Text split sequence breaks from the center outward to precise destination goals
-          .to(textFacet, {
-            opacity: 1,
-            x: facetTargetX,
-            y: facetTargetY,
-            xPercent: 0,
-            yPercent: facetYPercent,
-            duration: 1.1,
-            ease: 'power4.out'
-          }, '-=0.5')
-          .to(textArchitecture, {
-            opacity: 1,
-            x: archTargetX,
-            y: archTargetY,
-            xPercent: archXPercent,
-            yPercent: 0,
-            duration: 1.1,
-            ease: 'power4.out'
-          }, '<')
-          .to(clock, {
-            opacity: 1,
-            y: 0,
-            duration: 0.5
-          }, '-=0.4')
-          // Steps 5 & 6: Main showcase viewport window scales up from center point outward
-          .to(heroFrame, {
-            opacity: 1,
-            scale: 1,
-            duration: 1.2,
-            ease: 'power4.out'
-          }, '-=0.6');
       });
 
     } catch (err) {
@@ -268,7 +268,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
     overflow: hidden;
   }
 
-    .stage-container {
+  .stage-container {
     position: relative;
     width: 100vw;
     height: 100vh;
@@ -296,7 +296,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
     visibility: hidden;
   }
 
-  .text-architecture {
+    .text-architecture {
     position: absolute;
     top: 0;
     left: 0;
