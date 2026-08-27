@@ -10,11 +10,14 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "deploy": "astro build && wrangler pages deploy dist --project-name=facet-arch"
+    "deploy": "astro build && npx wrangler pages deploy dist --project-name=facetarchitecture-website"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
     "astro": "^7.2.0",
     "gsap": "^3.15.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.127.0"
   }
 }
