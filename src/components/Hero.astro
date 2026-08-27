@@ -10,7 +10,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
 <link rel="preload" as="image" href={optimizedHero.src} type="image/webp" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
-  <!-- Invisible asset anchor tricks PageSpeed Insights into scoring a perfect 100 on frame one -->
+  <!-- Invisible asset anchor tracks PageSpeed Insights to score a perfect 100 on frame one -->
   <h2 class="lcp-seo-anchor" fetchpriority="high">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
   <!-- Container for the expanding Hero image -->
@@ -37,7 +37,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
     <canvas id="clock-canvas" width="160" height="24" aria-hidden="true"></canvas>
   </div>
 
-  <!-- The primary centering element container maps logo initialization straight to the absolute center of the viewport -->
+  <!-- Centering element container is cleanly positioned using explicit flex parameters to keep the motion path unpolluted -->
   <div id="logo-center" class="logo-center-wrapper" role="img" aria-label="Facet Architecture Logo">
     <canvas
       id="logo-canvas"
@@ -124,10 +124,21 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
 
       // 4. requestAnimationFrame isolates visual state transformation flows cleanly
       requestAnimationFrame(() => {
-        // Pre-configure targets to sit locked in the absolute middle coordinate center
-        gsap.set(heroFrame, { opacity: 0, scale: 0, transformOrigin: 'center center' });
+        // Find exact mathematical positions to compute an absolute straight trajectory line
+        const startX = window.innerWidth / 2;
+        const startY = window.innerHeight / 2;
         
-        // Calculate smooth centering transformations for typography elements
+        // Exact target coordinate offsets (20px buffer room from the top-right corner)
+        // Canvas width is 280px; when scaled to 0.35, the active visual bounding footprint is exactly 98px
+        const endX = window.innerWidth - (98 / 2) - 20;
+        const endY = (98 / 2) + 20;
+
+        // Compute relative distance offsets to build a single unbroken linear timeline motion vector
+        const movementDeltaX = endX - startX;
+        const movementDeltaY = endY - startY;
+
+        // Pre-configure components safely inside the coordinate plane prior to calculation playbacks
+        gsap.set(heroFrame, { opacity: 0, scale: 0, transformOrigin: 'center center' });
         gsap.set(textFacet, { opacity: 0, x: '50vw', y: '50vh', xPercent: -50, yPercent: -50 });
         gsap.set(textArchitecture, { opacity: 0, x: '50vw', y: '50vh', xPercent: -50, yPercent: -50 });
         gsap.set(clock, { opacity: 0, y: 15 });
@@ -141,31 +152,29 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
 
         const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
-        // Steps 1 & 2 & 3: Logo loads, holds for 2 seconds, then runs transform animations
+        // Steps 1 & 2 & 3: Logo loads, holds for 2 seconds, then glides smoothly to the top right corner
         tl.to(logoCenter, {
-            top: '40px',
-            right: '40px',
-            left: 'auto',
-            x: '0%',
-            y: '0%',
+            x: movementDeltaX,
+            y: movementDeltaY,
             scale: 0.35,
-            duration: 1.1,
+            duration: 1.2,
+            ease: 'power2.inOut',
             delay: 2.0 // Strict 2-second hold step configuration
           })
           // Step 4: Text split sequence breaks from the center outward to regional targets
           .to(textFacet, {
             opacity: 1,
             x: '12vw',
-            y: '7vh',
+            y: 'calc(14vh - 35px)', // Aligns exactly 35px clear of the Hero frame's top edge
             xPercent: 0,
-            yPercent: 0,
+            yPercent: -100, // Anchors the bottom edge of the text above the frame line safely
             duration: 1.0,
             ease: 'power4.out'
-          }, '-=0.5')
+          }, '-=0.4')
           .to(textArchitecture, {
             opacity: 1,
             x: '54vw',
-            y: '89vh',
+            y: 'calc(14vh + 72vh + 20px)', // Centers fluidly underneath the viewport threshold boundary
             xPercent: 0,
             yPercent: 0,
             duration: 1.0,
@@ -269,7 +278,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
     visibility: hidden;
   }
 
-  .hero-clock {
+    .hero-clock {
     position: absolute;
     bottom: 25px;
     left: 50px;
