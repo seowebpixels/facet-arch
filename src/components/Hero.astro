@@ -29,7 +29,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
     />
   </div>
 
-  <!-- Absolute typography containers are pre-positioned exactly where they belong in the grid system -->
+  <!-- Absolute typography containers sit perfectly above and below the image layout zone -->
   <h1 id="text-facet" class="title-text text-facet">FACET</h1>
   <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
 
@@ -123,15 +123,31 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
       if (!logoCenter || !textFacet || !textArchitecture || !clock || !heroFrame) return;
 
       requestAnimationFrame(() => {
-        // Pre-configure initial transforms with visibility set cleanly before playback
+        // Calculate exact bounding boxes of the hero frames to lock typography alignments precisely
+        const frameBounds = heroFrame.getBoundingClientRect();
+        
+        // Compute coordinate systems based on standard layout footprints
+        const startX = window.innerWidth / 2;
+        const startY = window.innerHeight / 2;
+        
+        // Exact pixel placement target metrics (20px gap cushion away from corner parameters)
+        // Element box dimensions are 280px; when down-scaled to 0.35, actual physical scale thickness is 98px
+        const endX = window.innerWidth - (98 / 2) - 20;
+        const endY = (98 / 2) + 20;
+
+        // Form linear velocity directions for the movement trajectory path
+        const movementDeltaX = endX - startX;
+        const movementDeltaY = endY - startY;
+
+        // Configure initial placement transforms relative to dead center before execution playbacks
         gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
         
-        // Use relative offsets from their native CSS grid coordinates to split outwards cleanly from the screen center
-        gsap.set(textFacet, { opacity: 0, x: '38vw', y: '43vh' }); 
-        gsap.set(textArchitecture, { opacity: 0, x: '-42vw', y: '-39vh' });
+        // Track outward text splits relative to initialization coordinate zero marks
+        gsap.set(textFacet, { opacity: 0, x: startX, y: startY, xPercent: -50, yPercent: -50 }); 
+        gsap.set(textArchitecture, { opacity: 0, x: startX, y: startY, xPercent: -50, yPercent: -50 });
         gsap.set(clock, { opacity: 0, y: 15 });
 
-        // Instantly display target objects to prevent structural layout flashes
+        // Force instant visibility commands to bypass flashing artifacts
         logoCenter.style.visibility = 'visible';
         heroFrame.style.visibility = 'visible';
         textFacet.style.visibility = 'visible';
@@ -140,29 +156,31 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
 
         const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
-        // Steps 1 & 2 & 3: Logo loads, holds for 2 seconds, then traces a trajectory glide straight into its top right corner grid target
+        // Steps 1, 2, & 3: Logo paints, holds for 2 seconds, then glides cleanly into top-right pixel specifications
         tl.to(logoCenter, {
-            left: 'calc(100vw - 20px)', // Snaps container to exactly 20px clear of the right view limits
-            top: '20px',               // Snaps container to exactly 20px clear of the top view limits
-            xPercent: -100,            // Offsets pivot translation cleanly based on scaled visual boundaries
-            yPercent: 0,
+            x: movementDeltaX,
+            y: movementDeltaY,
             scale: 0.35,
             duration: 1.3,
             ease: 'power2.inOut',
-            delay: 2.0 // Strict 2-second hold step configuration
+            delay: 2.0 // Strict 2-second hold phase step setting
           })
-          // Step 4: Text split sequence breaks from the center outward back to native layout grid targets smoothly
+          // Step 4: Typography vectors split cleanly outward from mid-screen to explicit pixel positions
           .to(textFacet, {
             opacity: 1,
-            x: 0,
-            y: 0,
+            x: frameBounds.left, // Aligns perfectly flush against the left boundary margin of the picture box
+            y: frameBounds.top - 35, // Places the baseline text bounding edge precisely 35px above the picture frame
+            xPercent: 0,
+            yPercent: -100, // Forces typography elements to step upward clear of the structural margin
             duration: 1.1,
             ease: 'power4.out'
           }, '-=0.5')
           .to(textArchitecture, {
             opacity: 1,
-            x: 0,
-            y: 0,
+            x: frameBounds.right, // Aligns flush with the right boundary wall parameter
+            y: frameBounds.bottom + 35, // Projects exactly 35px cushion spacing clear below the bottom frame line
+            xPercent: -100, // Pulls reading orientation backward safely clear of viewport clipping regions
+            yPercent: 0,
             duration: 1.1,
             ease: 'power4.out'
           }, '<')
@@ -171,7 +189,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
             y: 0,
             duration: 0.5
           }, '-=0.4')
-          // Step 5 & 6: Hero image expands outward from center while texts sit perfectly 35px clear above it
+          // Steps 5 & 6: Main showcase viewport windows scale up seamlessly from center points outward
           .to(heroFrame, {
             opacity: 1,
             scale: 1,
@@ -227,13 +245,11 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
     z-index: 10;
   }
 
-  /* Fixed typographic positions lock coordinates relative to the central layout window */
+  /* Structural position definitions are fully delegated to runtime layout boundary properties */
   .text-facet {
     position: absolute;
-    /* Hero image top is at 14vh. To stay exactly 35px clear above it, we subtract 35px from 14vh */
-    top: calc(14vh - 35px);
-    left: 12vw; /* Perfectly aligns with the left edge boundary layout of the hero image box */
-    transform: translateY(-100%); /* Pushes text baseline upward so its bottom margin honors the 35px buffer room */
+    top: 0;
+    left: 0;
     font-family: 'Bank Gothic', sans-serif !important;
     font-weight: 900;
     font-size: clamp(2.2rem, 3.8vw, 4.1rem);
@@ -250,9 +266,8 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
 
   .text-architecture {
     position: absolute;
-    /* Hero image bottom sits at 14vh + 72vh = 86vh. We position the architecture footer text comfortably clear below it */
-    top: calc(14vh + 72vh + 20px);
-    right: 12vw; /* Perfectly aligns with the right edge boundary layout of the hero image box */
+    top: 0;
+    left: 0;
     font-family: 'Bank Gothic', sans-serif !important;
     font-weight: 900;
     font-size: clamp(2.2rem, 3.8vw, 4.1rem);
@@ -267,7 +282,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
     visibility: hidden;
   }
 
-  .hero-clock {
+.hero-clock {
     position: absolute;
     bottom: 25px;
     left: 50px;
