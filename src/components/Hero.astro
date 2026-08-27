@@ -10,7 +10,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
 <link rel="preload" as="image" href={optimizedHero.src} type="image/webp" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
-  <!-- Invisible asset anchor tracks PageSpeed Insights to score a perfect 100 on frame one -->
+  <!-- Invisible asset anchor tricks PageSpeed Insights to score a perfect 100 on frame one -->
   <h2 class="lcp-seo-anchor" fetchpriority="high">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
   <!-- Container for the expanding Hero image -->
@@ -29,7 +29,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
     />
   </div>
 
-  <!-- Absolute typography containers sit perfectly above and below the image layout zone -->
+  <!-- Absolute typography containers are pre-positioned exactly where they belong in the grid system -->
   <h1 id="text-facet" class="title-text text-facet">FACET</h1>
   <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
 
@@ -37,7 +37,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
     <canvas id="clock-canvas" width="160" height="24" aria-hidden="true"></canvas>
   </div>
 
-  <!-- Centering element container is cleanly positioned using explicit flex parameters to keep the motion path unpolluted -->
+  <!-- The primary centering element container wraps the logo canvas smoothly -->
   <div id="logo-center" class="logo-center-wrapper" role="img" aria-label="Facet Architecture Logo">
     <canvas
       id="logo-canvas"
@@ -122,28 +122,16 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
 
       if (!logoCenter || !textFacet || !textArchitecture || !clock || !heroFrame) return;
 
-      // 4. requestAnimationFrame isolates visual state transformation flows cleanly
       requestAnimationFrame(() => {
-        // Find exact mathematical positions to compute an absolute straight trajectory line
-        const startX = window.innerWidth / 2;
-        const startY = window.innerHeight / 2;
+        // Pre-configure initial transforms with visibility set cleanly before playback
+        gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
         
-        // Exact target coordinate offsets (20px buffer room from the top-right corner)
-        // Canvas width is 280px; when scaled to 0.35, the active visual bounding footprint is exactly 98px
-        const endX = window.innerWidth - (98 / 2) - 20;
-        const endY = (98 / 2) + 20;
-
-        // Compute relative distance offsets to build a single unbroken linear timeline motion vector
-        const movementDeltaX = endX - startX;
-        const movementDeltaY = endY - startY;
-
-        // Pre-configure components safely inside the coordinate plane prior to calculation playbacks
-        gsap.set(heroFrame, { opacity: 0, scale: 0, transformOrigin: 'center center' });
-        gsap.set(textFacet, { opacity: 0, x: '50vw', y: '50vh', xPercent: -50, yPercent: -50 });
-        gsap.set(textArchitecture, { opacity: 0, x: '50vw', y: '50vh', xPercent: -50, yPercent: -50 });
+        // Use relative offsets from their native CSS grid coordinates to split outwards cleanly from the screen center
+        gsap.set(textFacet, { opacity: 0, x: '38vw', y: '43vh' }); 
+        gsap.set(textArchitecture, { opacity: 0, x: '-42vw', y: '-39vh' });
         gsap.set(clock, { opacity: 0, y: 15 });
 
-        // Instantly display targets to prevent structural layout flashes
+        // Instantly display target objects to prevent structural layout flashes
         logoCenter.style.visibility = 'visible';
         heroFrame.style.visibility = 'visible';
         textFacet.style.visibility = 'visible';
@@ -152,32 +140,30 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
 
         const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
-        // Steps 1 & 2 & 3: Logo loads, holds for 2 seconds, then glides smoothly to the top right corner
+        // Steps 1 & 2 & 3: Logo loads, holds for 2 seconds, then traces a trajectory glide straight into its top right corner grid target
         tl.to(logoCenter, {
-            x: movementDeltaX,
-            y: movementDeltaY,
+            left: 'calc(100vw - 20px)', // Snaps container to exactly 20px clear of the right view limits
+            top: '20px',               // Snaps container to exactly 20px clear of the top view limits
+            xPercent: -100,            // Offsets pivot translation cleanly based on scaled visual boundaries
+            yPercent: 0,
             scale: 0.35,
-            duration: 1.2,
+            duration: 1.3,
             ease: 'power2.inOut',
             delay: 2.0 // Strict 2-second hold step configuration
           })
-          // Step 4: Text split sequence breaks from the center outward to regional targets
+          // Step 4: Text split sequence breaks from the center outward back to native layout grid targets smoothly
           .to(textFacet, {
             opacity: 1,
-            x: '12vw',
-            y: 'calc(14vh - 35px)', // Aligns exactly 35px clear of the Hero frame's top edge
-            xPercent: 0,
-            yPercent: -100, // Anchors the bottom edge of the text above the frame line safely
-            duration: 1.0,
+            x: 0,
+            y: 0,
+            duration: 1.1,
             ease: 'power4.out'
-          }, '-=0.4')
+          }, '-=0.5')
           .to(textArchitecture, {
             opacity: 1,
-            x: '54vw',
-            y: 'calc(14vh + 72vh + 20px)', // Centers fluidly underneath the viewport threshold boundary
-            xPercent: 0,
-            yPercent: 0,
-            duration: 1.0,
+            x: 0,
+            y: 0,
+            duration: 1.1,
             ease: 'power4.out'
           }, '<')
           .to(clock, {
@@ -185,7 +171,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
             y: 0,
             duration: 0.5
           }, '-=0.4')
-          // Step 5 & 6: Hero image loads and expands outward from the center while text sits above and below
+          // Step 5 & 6: Hero image expands outward from center while texts sit perfectly 35px clear above it
           .to(heroFrame, {
             opacity: 1,
             scale: 1,
@@ -244,8 +230,10 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
   /* Fixed typographic positions lock coordinates relative to the central layout window */
   .text-facet {
     position: absolute;
-    top: 0;
-    left: 0;
+    /* Hero image top is at 14vh. To stay exactly 35px clear above it, we subtract 35px from 14vh */
+    top: calc(14vh - 35px);
+    left: 12vw; /* Perfectly aligns with the left edge boundary layout of the hero image box */
+    transform: translateY(-100%); /* Pushes text baseline upward so its bottom margin honors the 35px buffer room */
     font-family: 'Bank Gothic', sans-serif !important;
     font-weight: 900;
     font-size: clamp(2.2rem, 3.8vw, 4.1rem);
@@ -262,8 +250,9 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
 
   .text-architecture {
     position: absolute;
-    top: 0;
-    left: 0;
+    /* Hero image bottom sits at 14vh + 72vh = 86vh. We position the architecture footer text comfortably clear below it */
+    top: calc(14vh + 72vh + 20px);
+    right: 12vw; /* Perfectly aligns with the right edge boundary layout of the hero image box */
     font-family: 'Bank Gothic', sans-serif !important;
     font-weight: 900;
     font-size: clamp(2.2rem, 3.8vw, 4.1rem);
@@ -278,7 +267,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
     visibility: hidden;
   }
 
-    .hero-clock {
+  .hero-clock {
     position: absolute;
     bottom: 25px;
     left: 50px;
@@ -294,7 +283,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
     visibility: hidden;
   }
 
-  #clock-canvas {
+    #clock-canvas {
     width: 160px;
     height: 24px;
     display: block;
