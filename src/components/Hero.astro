@@ -3,7 +3,7 @@ import { Image, getImage } from 'astro:assets';
 import heroLogoImg from '../assets/facet-hero-logo.avif';
 import heroImg from '../assets/res-eoa-1597.avif';
 
-const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720, height: 480, quality: 80 });
+const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720, height: 480, quality: 100 });
 ---
 
 <!-- Preload the background image assets to optimize initial loading speeds -->
@@ -22,7 +22,7 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
       width={720}
       height={480}
       format="webp"
-      quality={80}
+      quality={100}
       loading="eager"
       fetchpriority="high"
       decoding="sync"
