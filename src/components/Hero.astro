@@ -1,9 +1,9 @@
 ---
 import { Image, getImage } from 'astro:assets';
 import heroLogoImg from '../assets/facet-hero-logo.avif';
-import heroImg from '../assets/res-eoa-1597.avif';
+import resHeroImg from '../assets/res-eoa-1597.avif';
 
-const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720, height: 480, quality: 100 });
+const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 720, height: 480, quality: 100 });
 ---
 
 <!-- Preload the background image assets to optimize initial loading speeds -->
@@ -16,12 +16,12 @@ const optimizedHero = await getImage({ src: heroImg, format: 'webp', width: 720,
   <!-- Container for the expanding Hero image -->
   <div id="hero-frame" class="hero-frame">
     <Image 
-      src={heroImg} 
+      src={resHeroImg} 
       alt="Facet Architecture Project Showcase" 
       class="hero-img"
-      width={720}
-      height={480}
-      format="webp"
+      widths={[720, 1280, 1920, 2560, 3840]}
+      sizes="100vw"
+      format="avif"
       quality={100}
       loading="eager"
       fetchpriority="high"
