@@ -42,8 +42,8 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     <canvas
       id="logo-canvas"
       class="logo-canvas"
-      width="560"
-      height="560"
+      width="700"
+      height="700"
       data-logo-src={heroLogoImg.src}
       aria-hidden="true"
     ></canvas>
@@ -53,20 +53,29 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 <script>
   const runHeroScript = async () => {
     try {
-      // 1. Canvas Logo Render Processing Engine
+      // 1. High-DPI Crisp Canvas Logo Render Processing Engine
       const logoCanvas = document.getElementById('logo-canvas') as HTMLCanvasElement | null;
       if (logoCanvas) {
         const ctx = logoCanvas.getContext('2d');
         const src = logoCanvas.getAttribute('data-logo-src');
         if (ctx && src) {
+          const dpr = window.devicePixelRatio || 1;
+          const displaySize = 350; // New base size (+70px)
+          
+          logoCanvas.width = displaySize * dpr;
+          logoCanvas.height = displaySize * dpr;
+
           const logoImage = new Image();
           logoImage.decoding = 'async';
           logoImage.onload = () => {
             try {
-              if (logoCanvas.width && logoCanvas.height) {
-                ctx.clearRect(0, 0, logoCanvas.width, logoCanvas.height);
-                ctx.drawImage(logoImage, 0, 0, logoCanvas.width, logoCanvas.height);
-              }
+              ctx.save();
+              ctx.scale(dpr, dpr);
+              ctx.imageSmoothingEnabled = true;
+              ctx.imageSmoothingQuality = 'high';
+              ctx.clearRect(0, 0, displaySize, displaySize);
+              ctx.drawImage(logoImage, 0, 0, displaySize, displaySize);
+              ctx.restore();
             } catch (err) {}
           };
           logoImage.src = src;
@@ -128,7 +137,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         const startY = window.innerHeight / 2;
 
         if (isMobile) {
-          // MOBILE TIMELINE SEQUENCE: Clean transformations that do not conflict with layout grid sheets
+          // MOBILE TIMELINE SEQUENCE
           gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
           gsap.set([textFacet, textArchitecture], { opacity: 0 });
           gsap.set(clock, { opacity: 0, y: 15 });
@@ -143,12 +152,12 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
           tl.to(logoCenter, {
               top: '20px',
-              left: 'calc(100vw - 20px)',
+              left: 'calc(100vw - 50px)', // Shifted 30px left from right border on mobile
               xPercent: -100,
               yPercent: 0,
               x: 0,
               y: 0,
-              scale: 0.52, // Sets logo 30px larger on mobile views
+              scale: 0.45,
               duration: 1.3,
               delay: 2.0
             })
@@ -170,10 +179,12 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
             }, '-=0.6');
 
         } else {
-          // DESKTOP TIMELINE SEQUENCE: Keeps your desktop calculations functioning perfectly
+          // DESKTOP TIMELINE SEQUENCE
           const frameBounds = heroFrame.getBoundingClientRect();
-          const endX = window.innerWidth - (98 / 2) - 20;
-          const endY = (98 / 2) + 20;
+          // Shifted landing coordinate 30px further to the left (50px off right edge instead of 20px)
+          const targetLogoWidth = 140; 
+          const endX = window.innerWidth - (targetLogoWidth / 2) - 50; 
+          const endY = (targetLogoWidth / 2) + 20;
 
           const movementDeltaX = endX - startX;
           const movementDeltaY = endY - startY;
@@ -194,7 +205,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           tl.to(logoCenter, {
               x: movementDeltaX,
               y: movementDeltaY,
-              scale: 0.35,
+              scale: 0.40, // Scaled smoothly for 350px base frame
               duration: 1.3,
               ease: 'power2.inOut',
               delay: 2.0
@@ -296,7 +307,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     visibility: hidden;
   }
 
-    .text-architecture {
+  .text-architecture {
     position: absolute;
     top: 0;
     left: 0;
@@ -330,7 +341,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     visibility: hidden;
   }
 
-    #clock-canvas {
+  #clock-canvas {
     width: 160px;
     height: 24px;
     display: block;
@@ -341,8 +352,8 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 280px;
-    height: 280px;
+    width: 350px; /* Increased base frame (+70px) */
+    height: 350px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -356,7 +367,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
   .logo-docked-wrapper {
     position: absolute;
     top: -30px; 
-    right: 40px; 
+    right: 70px; 
     width: 140px;
     height: 140px;
     z-index: 30;
@@ -364,80 +375,78 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     visibility: hidden; 
   }
 
-.logo-placeholder {
-width: 100%;
-height: 100%;
-}
+  .logo-placeholder {
+    width: 100%;
+    height: 100%;
+  }
 
-.hero-frame {
-position: absolute;
-top: 14%;
-left: 12%;
-width: 76vw;
-height: 72vh;
-z-index: 20;
-overflow: hidden;
-box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-transform-origin: center center;
-will-change: transform, opacity;
-backface-visibility: hidden;
+  .hero-frame {
+    position: absolute;
+    top: 14%;
+    left: 12%;
+    width: 76vw;
+    height: 72vh;
+    z-index: 20;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    transform-origin: center center;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    opacity: 0;
+  }
 
-/* Hard CSS rule stops initial flash; element stays completely invisible until GSAP starts running */
-opacity: 0;
-}
+  .logo-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
 
-.logo-canvas {
-width: 100%;
-height: 100%;
-display: block;
-}
+  .hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
 
-.hero-img {
-width: 100%;
-height: 100%;
-object-fit: cover;
-display: block;
-}
+  @media (max-width: 768px) {
+    .logo-center-wrapper {
+      width: 220px;
+      height: 220px;
+    }
 
-@media (max-width: 768px) {
-.logo-center-wrapper {
-width: 180px;
-height: 180px;
-}
+    .logo-docked-wrapper {
+      top: -10px;
+      right: 40px;
+      width: 85px;
+      height: 85px;
+    }
 
-.logo-docked-wrapper {
-top: -10px;
-right: 10px;
-width: 85px;
-height: 85px;
-}
+    .hero-frame {
+      top: 240px;
+      left: 6vw;
+      width: 88vw;
+      height: 34vh;
+      box-shadow: none;
+    }
 
-.hero-frame {
-top: 240px;
-left: 6vw;
-width: 88vw;
-height: 34vh;
-box-shadow: none;
-}
+    .text-facet {
+      top: 190px;
+      left: 15px;
+      font-size: clamp(1.8rem, 6vw, 2.5rem);
+    }
 
-.text-facet {
-top: 190px;
-left: 15px;
-font-size: clamp(1.8rem, 6vw, 2.5rem);
-}
+    .text-architecture {
+      position: absolute;
+      top: calc(240px + 34vh + 15px);
+      bottom: auto;
+      right: 15px;
+      font-size: clamp(1.8rem, 6vw, 2.5rem);
+    }
 
-.text-architecture {
-position: absolute;
-top: calc(240px + 34vh + 15px);
-bottom: auto;
-right: 15px;
-font-size: clamp(1.8rem, 6vw, 2.5rem);
-}
-
-.hero-clock {
-bottom: 105px;
-left: 15px;
-font-size: 0.85rem;
-}
-}
+    .hero-clock {
+      bottom: 105px;
+      left: 15px;
+      font-size: 0.85rem;
+    }
+  }
 </style>
