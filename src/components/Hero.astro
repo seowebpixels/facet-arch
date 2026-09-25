@@ -42,8 +42,8 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     <canvas
       id="logo-canvas"
       class="logo-canvas"
-      width="700"
-      height="700"
+      width="760"
+      height="760"
       data-logo-src={heroLogoImg.src}
       aria-hidden="true"
     ></canvas>
@@ -60,7 +60,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         const src = logoCanvas.getAttribute('data-logo-src');
         if (ctx && src) {
           const dpr = window.devicePixelRatio || 1;
-          const displaySize = 350; // New base size (+70px)
+          const displaySize = 380; // Expanded base size (+30px larger logo)
           
           logoCanvas.width = displaySize * dpr;
           logoCanvas.height = displaySize * dpr;
@@ -133,8 +133,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
       requestAnimationFrame(() => {
         const isMobile = window.innerWidth <= 768;
-        const startX = window.innerWidth / 2;
-        const startY = window.innerHeight / 2;
 
         if (isMobile) {
           // MOBILE TIMELINE SEQUENCE
@@ -151,8 +149,8 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
           tl.to(logoCenter, {
-              top: '20px',
-              left: 'calc(100vw - 50px)', // Shifted 30px left from right border on mobile
+              top: '15px',
+              left: 'calc(100vw - 35px)', // 15px closer to right edge on mobile
               xPercent: -100,
               yPercent: 0,
               x: 0,
@@ -181,13 +179,8 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         } else {
           // DESKTOP TIMELINE SEQUENCE
           const frameBounds = heroFrame.getBoundingClientRect();
-          // Shifted landing coordinate 30px further to the left (50px off right edge instead of 20px)
-          const targetLogoWidth = 140; 
-          const endX = window.innerWidth - (targetLogoWidth / 2) - 50; 
-          const endY = (targetLogoWidth / 2) + 20;
-
-          const movementDeltaX = endX - startX;
-          const movementDeltaY = endY - startY;
+          const startX = window.innerWidth / 2;
+          const startY = window.innerHeight / 2;
 
           gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
           gsap.set(textFacet, { opacity: 0, x: startX, y: startY, xPercent: -50, yPercent: -50 }); 
@@ -202,10 +195,15 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
           const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
+          // Animates logo into top-right corner, aligning with FACET baseline and clearing hero image
           tl.to(logoCenter, {
-              x: movementDeltaX,
-              y: movementDeltaY,
-              scale: 0.40, // Scaled smoothly for 350px base frame
+              top: '5px',
+              left: 'calc(100vw - 35px)', // Moved 15px closer to right edge
+              xPercent: -100,
+              yPercent: 0,
+              x: 0,
+              y: 0,
+              scale: 0.45,
               duration: 1.3,
               ease: 'power2.inOut',
               delay: 2.0
@@ -352,8 +350,8 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 350px; /* Increased base frame (+70px) */
-    height: 350px;
+    width: 380px; /* 30px bigger base size */
+    height: 380px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -410,8 +408,8 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
   @media (max-width: 768px) {
     .logo-center-wrapper {
-      width: 220px;
-      height: 220px;
+      width: 250px;
+      height: 250px;
     }
 
     .logo-docked-wrapper {
