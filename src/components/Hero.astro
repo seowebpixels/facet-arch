@@ -149,8 +149,8 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
           tl.to(logoCenter, {
-              top: '5px',
-              left: 'calc(100vw - 5px)',
+              top: '-15px',
+              left: 'calc(100vw + 25px)',
               xPercent: -100,
               yPercent: 0,
               x: 0,
@@ -195,10 +195,10 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
           const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
-          // Targets top: '-50px' to pull visible logo upward inline with FACET text, left: 'calc(100vw - 5px)' for 5px right gap
+          // Compensation for canvas boundary offset: top at -75px and left at 100vw + 65px
           tl.to(logoCenter, {
-              top: '-50px',
-              left: 'calc(100vw - 5px)',
+              top: '-75px',
+              left: 'calc(100vw + 65px)',
               xPercent: -100,
               yPercent: 0,
               x: 0,
