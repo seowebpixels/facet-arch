@@ -177,68 +177,66 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
             }, '-=0.6');
 
         } else {
-          // DESKTOP TIMELINE SEQUENCE
-          const frameBounds = heroFrame.getBoundingClientRect();
-          const startX = window.innerWidth / 2;
-          const startY = window.innerHeight / 2;
-
-          gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
-          gsap.set(textFacet, { opacity: 0, x: startX, y: startY, xPercent: -50, yPercent: -50 }); 
-          gsap.set(textArchitecture, { opacity: 0, x: startX, y: startY, xPercent: -50, yPercent: -50 });
-          gsap.set(clock, { opacity: 0, y: 15 });
-
-          logoCenter.style.visibility = 'visible';
-          heroFrame.style.visibility = 'visible';
-          textFacet.style.visibility = 'visible';
-          textArchitecture.style.visibility = 'visible';
-          clock.style.visibility = 'visible';
-
-          const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
           // DESKTOP TIMELINE SEQUENCE
-             tl.to(logoCenter, {
-             top: '-120px',                  // Lifted from -105px to -120px to align top edges perfectly
-             left: 'calc(100vw + 80px)',     // Pulled back from +145px to +80px to stop right-edge clipping
-             xPercent: -100,
-             yPercent: 0,
-             x: 0,
-             y: 0,
-             scale: 0.45,
-             duration: 1.3,
-             ease: 'power2.inOut',
-             delay: 2.0
-             })
-            .to(textFacet, {
-              opacity: 1,
-              x: frameBounds.left, 
-              y: frameBounds.top - 35, 
-              xPercent: 0,
-              yPercent: -100,
-              duration: 1.1,
-              ease: 'power4.out'
-            }, '-=0.5')
-            .to(textArchitecture, {
-              opacity: 1,
-              x: frameBounds.right, 
-              y: frameBounds.bottom + 35, 
-              xPercent: -100, 
-              yPercent: 0,
-              duration: 1.1,
-              ease: 'power4.out'
-            }, '<')
-            .to(clock, {
-              opacity: 1,
-              y: 0,
-              duration: 0.5
-            }, '-=0.4')
-            .to(heroFrame, {
-              opacity: 1,
-              scale: 1,
-              duration: 1.2,
-              ease: 'power4.out'
-            }, '-=0.6');
-        }
-      });
+const frameBounds = heroFrame.getBoundingClientRect();
+const startX = window.innerWidth / 2;
+const startY = window.innerHeight / 2;
+
+gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
+gsap.set(textFacet, { opacity: 0, x: startX, y: startY, xPercent: -50, yPercent: -50 }); 
+gsap.set(textArchitecture, { opacity: 0, x: startX, y: startY, xPercent: -50, yPercent: -50 });
+gsap.set(clock, { opacity: 0, y: 15 });
+
+logoCenter.style.visibility = 'visible';
+heroFrame.style.visibility = 'visible';
+textFacet.style.visibility = 'visible';
+textArchitecture.style.visibility = 'visible';
+clock.style.visibility = 'visible';
+
+const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
+
+tl.to(logoCenter, {
+    top: '-122px',                 // Lifted slightly higher
+    left: 'calc(100vw + 85px)',    // Moved +5px to the right as requested
+    xPercent: -100,
+    yPercent: 0,
+    x: 0,
+    y: 0,
+    scale: 0.45,
+    duration: 1.3,
+    ease: 'power2.inOut',
+    delay: 2.0
+  })
+  .to(textFacet, {
+    opacity: 1,
+    x: frameBounds.left, 
+    y: frameBounds.top - 45,       // Increased offset to clear the frame top edge on reduced viewport heights
+    xPercent: 0,
+    yPercent: -100,
+    duration: 1.1,
+    ease: 'power4.out'
+  }, '-=0.5')
+  .to(textArchitecture, {
+    opacity: 1,
+    x: frameBounds.right, 
+    y: frameBounds.bottom + 35, 
+    xPercent: -100, 
+    yPercent: 0,
+    duration: 1.1,
+    ease: 'power4.out'
+  }, '<')
+  .to(clock, {
+    opacity: 1,
+    y: 0,
+    duration: 0.5
+  }, '-=0.4')
+  .to(heroFrame, {
+    opacity: 1,
+    scale: 1,
+    duration: 1.2,
+    ease: 'power4.out'
+  }, '-=0.6');
 
     } catch (err) {
       ['hero-frame', 'text-facet', 'text-architecture', 'hero-clock', 'logo-center'].forEach(id => {
@@ -378,19 +376,19 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
   }
 
   .hero-frame {
-    position: absolute;
-    top: 14%;
-    left: 12%;
-    width: 76vw;
-    height: 72vh;
-    z-index: 20;
-    overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    transform-origin: center center;
-    will-change: transform, opacity;
-    backface-visibility: hidden;
-    opacity: 0;
-  }
+  position: absolute;
+  top: 15%; /* Increased from 14% for toolbar clearance */
+  left: 12%;
+  width: 76vw;
+  height: 70vh; /* Adjusted from 72vh to preserve proportional spacing */
+  z-index: 20;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  transform-origin: center center;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  opacity: 0;
+}
 
   .logo-canvas {
     width: 100%;
