@@ -195,19 +195,19 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
           const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
-          // Increased vertical shift (-105px) and horizontal shift (+145px)
-          tl.to(logoCenter, {
-              top: '-105px',
-              left: 'calc(100vw + 145px)',
-              xPercent: -100,
-              yPercent: 0,
-              x: 0,
-              y: 0,
-              scale: 0.45,
-              duration: 1.3,
-              ease: 'power2.inOut',
-              delay: 2.0
-            })
+          // DESKTOP TIMELINE SEQUENCE
+             tl.to(logoCenter, {
+             top: '-120px',                  // Lifted from -105px to -120px to align top edges perfectly
+             left: 'calc(100vw + 80px)',     // Pulled back from +145px to +80px to stop right-edge clipping
+             xPercent: -100,
+             yPercent: 0,
+             x: 0,
+             y: 0,
+             scale: 0.45,
+             duration: 1.3,
+             ease: 'power2.inOut',
+             delay: 2.0
+             })
             .to(textFacet, {
               opacity: 1,
               x: frameBounds.left, 
