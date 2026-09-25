@@ -195,10 +195,10 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
           const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
-          // Compensation for canvas boundary offset: top at -75px and left at 100vw + 65px
+          // Increased vertical shift (-105px) and horizontal shift (+145px)
           tl.to(logoCenter, {
-              top: '-75px',
-              left: 'calc(100vw + 65px)',
+              top: '-105px',
+              left: 'calc(100vw + 145px)',
               xPercent: -100,
               yPercent: 0,
               x: 0,
