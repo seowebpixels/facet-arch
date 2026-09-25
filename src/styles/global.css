@@ -13,7 +13,12 @@
   --text-primary: #111111;
   --border-dark: #111111;
   --font-heading: 'Bank Gothic', sans-serif;
-  --font-body: system-ui, -apple-system, sans-serif;
+  --font-body: 'Bank Gothic', sans-serif; /* <--- Updated here */
+}
+
+/* Force Bank Gothic on body elements while leaving headings intact */
+body, p, span, li, a, input, textarea, button {
+  font-family: var(--font-heading) !important;
 }
 
 *, *::before, *::after {
