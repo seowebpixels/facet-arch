@@ -1,30 +1,39 @@
 ---
 import { Image, getImage } from 'astro:assets';
 import heroLogoImg from '../assets/facet-hero-logo.avif';
+
+// Import all 4 Hero showcase images
 import resHeroImg from '../assets/res-eoa-1597.avif';
+import resBlannImg from '../assets/res-blann.avif';
+import ascotManorImg from '../assets/Ascot Manor.jpg';
+import intStarckImg from '../assets/int-starck.avif';
+
+const heroImages = [resHeroImg, resBlannImg, ascotManorImg, intStarckImg];
 
 const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 720, height: 480, quality: 100 });
 ---
 
-<!-- Preload background image -->
+<!-- Preload main initial image -->
 <link rel="preload" as="image" href={optimizedHero.src} type="image/webp" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
   <h2 class="lcp-seo-anchor" fetchpriority="high">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
   <div id="hero-frame" class="hero-frame">
-    <Image 
-      src={resHeroImg} 
-      alt="Facet Architecture Project Showcase" 
-      class="hero-img"
-      widths={[720, 1280, 1920, 2560, 3840]}
-      sizes="100vw"
-      format="avif"
-      quality={100}
-      loading="eager"
-      fetchpriority="high"
-      decoding="sync"
-    />
+    {heroImages.map((img, index) => (
+      <Image 
+        src={img} 
+        alt={`Facet Architecture Showcase ${index + 1}`} 
+        class={`hero-img slide-img ${index === 0 ? 'active' : ''}`}
+        widths={[720, 1280, 1920, 2560, 3840]}
+        sizes="100vw"
+        format="avif"
+        quality={100}
+        loading={index === 0 ? "eager" : "lazy"}
+        fetchpriority={index === 0 ? "high" : "low"}
+        decoding="sync"
+      />
+    ))}
   </div>
 
   <h1 id="text-facet" class="title-text text-facet">FACET</h1>
@@ -112,7 +121,51 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
       setInterval(updateClock, 1000);
     }
 
-    // 3. GSAP Timeline Sequence
+    // 3. Ken Burns Moving Image Carousel Loop
+    function startKenBurnsCarousel() {
+      const slides = document.querySelectorAll('.slide-img');
+      if (slides.length <= 1) return;
+
+      let current = 0;
+      
+      // Initial scale motion for first slide
+      gsap.to(slides[0], { scale: 1.15, duration: 7, ease: 'none' });
+
+      setInterval(() => {
+        const next = (current + 1) % slides.length;
+
+        // Reset next slide transform & position behind active slide
+        gsap.set(slides[next], { opacity: 0, scale: 1.0, zIndex: 2 });
+        gsap.set(slides[current], { zIndex: 1 });
+
+        // Fade in next slide with Ken Burns scale motion
+        gsap.to(slides[next], {
+          opacity: 1,
+          duration: 1.8,
+          ease: 'power2.inOut'
+        });
+
+        gsap.to(slides[next], {
+          scale: 1.15,
+          duration: 7,
+          ease: 'none'
+        });
+
+        // Fade out previous slide
+        gsap.to(slides[current], {
+          opacity: 0,
+          duration: 1.8,
+          ease: 'power2.inOut',
+          onComplete: () => {
+            gsap.set(slides[current], { scale: 1.0 });
+          }
+        });
+
+        current = next;
+      }, 5500); // Transitions every 5.5s
+    }
+
+    // 4. GSAP Intro Timeline Sequence
     const logoCenter = document.getElementById('logo-center');
     const textFacet = document.getElementById('text-facet');
     const textArchitecture = document.getElementById('text-architecture');
@@ -125,7 +178,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     const isMobile = window.innerWidth <= 768;
 
     if (isMobile) {
-      // MOBILE TIMELINE SEQUENCE
       gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
       gsap.set([textFacet, textArchitecture], { opacity: 0 });
       gsap.set(clock, { opacity: 0, y: 15 });
@@ -136,7 +188,10 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
       textArchitecture.style.visibility = 'visible';
       clock.style.visibility = 'visible';
 
-      const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
+      const tl = gsap.timeline({ 
+        defaults: { ease: 'power3.inOut' },
+        onComplete: startKenBurnsCarousel
+      });
 
       tl.to(logoCenter, {
           top: '-60px',
@@ -167,7 +222,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         }, '-=0.6');
 
     } else {
-      // DESKTOP TIMELINE SEQUENCE (UNCHANGED)
       const startX = window.innerWidth / 2;
       const startY = window.innerHeight / 2;
 
@@ -185,7 +239,10 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
       const facetWidth = textFacet.offsetWidth;
       const architectureX = frameBounds.left + facetWidth + 20;
 
-      const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
+      const tl = gsap.timeline({ 
+        defaults: { ease: 'power3.inOut' },
+        onComplete: startKenBurnsCarousel 
+      });
 
       tl.to(logoCenter, {
           top: '-122px',
@@ -345,11 +402,20 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     display: block;
   }
 
-  .hero-img {
+  .slide-img {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+
+  .slide-img.active {
+    opacity: 1;
   }
 
   @media (max-width: 768px) {
