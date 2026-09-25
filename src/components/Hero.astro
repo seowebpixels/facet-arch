@@ -2,13 +2,13 @@
 import { Image, getImage } from 'astro:assets';
 import heroLogoImg from '../assets/facet-hero-logo.avif';
 
-// Import all 4 Hero showcase images
+// Import verified showcase images
 import resHeroImg from '../assets/res-eoa-1597.avif';
 import resBlannImg from '../assets/res-blann.avif';
-import ascotManorImg from '../assets/Ascot Manor.jpg';
+import ascotManorImg from '../assets/dev-ascot-manor.avif';
 import intStarckImg from '../assets/int-starck.avif';
 
-const heroImages = [resHeroImg, resBlannImg, ascotManorImg, intStarckImg];
+const heroImages = [resHeroImg, resBlannImg, intStarckImg];
 
 const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 720, height: 480, quality: 100 });
 ---
@@ -128,17 +128,14 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
       let current = 0;
       
-      // Initial scale motion for first slide
       gsap.to(slides[0], { scale: 1.15, duration: 7, ease: 'none' });
 
       setInterval(() => {
         const next = (current + 1) % slides.length;
 
-        // Reset next slide transform & position behind active slide
         gsap.set(slides[next], { opacity: 0, scale: 1.0, zIndex: 2 });
         gsap.set(slides[current], { zIndex: 1 });
 
-        // Fade in next slide with Ken Burns scale motion
         gsap.to(slides[next], {
           opacity: 1,
           duration: 1.8,
@@ -151,7 +148,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           ease: 'none'
         });
 
-        // Fade out previous slide
         gsap.to(slides[current], {
           opacity: 0,
           duration: 1.8,
@@ -162,7 +158,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         });
 
         current = next;
-      }, 5500); // Transitions every 5.5s
+      }, 5500);
     }
 
     // 4. GSAP Intro Timeline Sequence
