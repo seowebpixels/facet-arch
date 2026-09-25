@@ -11,6 +11,7 @@ import devImg from '../assets/dev-ascot-manor.avif';
 import intImg from '../assets/int-ndlovu.avif';
 import resImg from '../assets/res-eoa-1597-grid.avif';
 import sustImg from '../assets/sustainability-thermal-comfort.avif';
+import renImg from '../assets/renvid-elementum.jpg'
 ---
 
 <Layout title="Facet Architecture | Selected Works">
@@ -154,6 +155,31 @@ import sustImg from '../assets/sustainability-thermal-comfort.avif';
       </a>
     </section>
   </main>
+
+  <!-- Tile 6 -->
+      <a href="/portfolio#sustainability" class="tile-card tile-5" data-bg="#FAE870">
+        <div class="image-container">
+          <Image 
+            src={renImg} 
+            alt="Rendering and Video" 
+            widths={[360, 720]} 
+            sizes="(max-width: 768px) 90vw, 400px"
+            quality={55} 
+            loading="lazy" 
+            decoding="async"
+          />
+          <div class="tile-overlay">
+            <span class="tile-num">06</span>
+            <div class="tile-meta">
+              <h2>Elementum</h2>
+              <p>Rendering and Video</p>
+            </div>
+          </div>
+        </div>
+      </a>
+    </section>
+  </main>
+
 
   <!-- Responsive Centered Architectural Quote Banner -->
   <section class="quote-container">
