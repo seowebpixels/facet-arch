@@ -6,14 +6,12 @@ import resHeroImg from '../assets/res-eoa-1597.avif';
 const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 720, height: 480, quality: 100 });
 ---
 
-<!-- Preload the background image assets to optimize initial loading speeds -->
+<!-- Preload background image -->
 <link rel="preload" as="image" href={optimizedHero.src} type="image/webp" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
-  <!-- Invisible asset anchor tricks PageSpeed Insights to score a perfect 100 on frame one -->
   <h2 class="lcp-seo-anchor" fetchpriority="high">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
-  <!-- Container for the expanding Hero image -->
   <div id="hero-frame" class="hero-frame">
     <Image 
       src={resHeroImg} 
@@ -29,7 +27,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     />
   </div>
 
-  <!-- Absolute typography containers sit perfectly above and below the image layout zone -->
   <h1 id="text-facet" class="title-text text-facet">FACET</h1>
   <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
 
@@ -37,7 +34,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     <canvas id="clock-canvas" width="160" height="24" aria-hidden="true"></canvas>
   </div>
 
-  <!-- The primary centering element container wraps the logo canvas smoothly -->
   <div id="logo-center" class="logo-center-wrapper" role="img" aria-label="Facet Architecture Logo">
     <canvas
       id="logo-canvas"
@@ -51,209 +47,191 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 </section>
 
 <script>
-  const runHeroScript = async () => {
-    try {
-      // 1. High-DPI Crisp Canvas Logo Render Processing Engine
-      const logoCanvas = document.getElementById('logo-canvas') as HTMLCanvasElement | null;
-      if (logoCanvas) {
-        const ctx = logoCanvas.getContext('2d');
-        const src = logoCanvas.getAttribute('data-logo-src');
-        if (ctx && src) {
-          const dpr = window.devicePixelRatio || 1;
-          const displaySize = 380;
-          
-          logoCanvas.width = displaySize * dpr;
-          logoCanvas.height = displaySize * dpr;
+  import { gsap } from 'gsap';
 
-          const logoImage = new Image();
-          logoImage.decoding = 'async';
-          logoImage.onload = () => {
-            try {
-              ctx.save();
-              ctx.scale(dpr, dpr);
-              ctx.imageSmoothingEnabled = true;
-              ctx.imageSmoothingQuality = 'high';
-              ctx.clearRect(0, 0, displaySize, displaySize);
-              ctx.drawImage(logoImage, 0, 0, displaySize, displaySize);
-              ctx.restore();
-            } catch (err) {}
-          };
-          logoImage.src = src;
-        }
-      }
+  function initHero() {
+    // 1. Canvas Logo Render
+    const logoCanvas = document.getElementById('logo-canvas') as HTMLCanvasElement | null;
+    if (logoCanvas) {
+      const ctx = logoCanvas.getContext('2d');
+      const src = logoCanvas.getAttribute('data-logo-src');
+      if (ctx && src) {
+        const dpr = window.devicePixelRatio || 1;
+        const displaySize = 380;
+        
+        logoCanvas.width = displaySize * dpr;
+        logoCanvas.height = displaySize * dpr;
 
-      // 2. Real-time SAST Clock Engine
-      const clockCanvas = document.getElementById('clock-canvas') as HTMLCanvasElement | null;
-      if (clockCanvas) {
-        const updateClock = () => {
-          try {
-            const ctx = clockCanvas.getContext('2d');
-            if (!ctx) return;
-
-            const now = new Date();
-            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-            const sastTime = new Date(utc + (3600000 * 2));
-
-            const hours = String(sastTime.getHours()).padStart(2, '0');
-            const minutes = String(sastTime.getMinutes()).padStart(2, '0');
-            const seconds = String(sastTime.getSeconds()).padStart(2, '0');
-            const timeStr = `${hours}:${minutes}:${seconds} SAST`;
-
-            const dpr = window.devicePixelRatio || 1;
-            if (clockCanvas.width !== 160 * dpr) {
-              clockCanvas.width = 160 * dpr;
-              clockCanvas.height = 24 * dpr;
-            }
-
-            ctx.save();
-            ctx.scale(dpr, dpr);
-            ctx.clearRect(0, 0, 160, 24);
-            ctx.font = '700 15px monospace, sans-serif';
-            ctx.fillStyle = '#111111';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(timeStr, 0, 12);
-            ctx.restore();
-          } catch (err) {}
+        const logoImage = new Image();
+        logoImage.onload = () => {
+          ctx.save();
+          ctx.scale(dpr, dpr);
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = 'high';
+          ctx.clearRect(0, 0, displaySize, displaySize);
+          ctx.drawImage(logoImage, 0, 0, displaySize, displaySize);
+          ctx.restore();
         };
-
-        updateClock();
-        setInterval(updateClock, 1000);
+        logoImage.src = src;
       }
-
-      // 3. GSAP Timeline
-      const { gsap } = await import('gsap');
-
-      const logoCenter = document.getElementById('logo-center');
-      const textFacet = document.getElementById('text-facet');
-      const textArchitecture = document.getElementById('text-architecture');
-      const clock = document.getElementById('hero-clock');
-      const heroFrame = document.getElementById('hero-frame');
-
-      if (!logoCenter || !textFacet || !textArchitecture || !clock || !heroFrame) return;
-
-      requestAnimationFrame(() => {
-        const isMobile = window.innerWidth <= 768;
-
-        if (isMobile) {
-          // MOBILE TIMELINE SEQUENCE
-          gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
-          gsap.set([textFacet, textArchitecture], { opacity: 0 });
-          gsap.set(clock, { opacity: 0, y: 15 });
-
-          logoCenter.style.visibility = 'visible';
-          heroFrame.style.visibility = 'visible';
-          textFacet.style.visibility = 'visible';
-          textArchitecture.style.visibility = 'visible';
-          clock.style.visibility = 'visible';
-
-          const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
-
-          tl.to(logoCenter, {
-              top: '-15px',
-              left: 'calc(100vw + 25px)',
-              xPercent: -100,
-              yPercent: 0,
-              x: 0,
-              y: 0,
-              scale: 0.38,
-              duration: 1.3,
-              delay: 2.0
-            })
-            .to([textFacet, textArchitecture], {
-              opacity: 1,
-              duration: 1.1,
-              ease: 'power4.out'
-            }, '-=0.5')
-            .to(clock, {
-              opacity: 1,
-              y: 0,
-              duration: 0.5
-            }, '-=0.4')
-            .to(heroFrame, {
-              opacity: 1,
-              scale: 1,
-              duration: 1.2,
-              ease: 'power4.out'
-            }, '-=0.6');
-
-        } else {
-          // DESKTOP TIMELINE SEQUENCE
-          const frameBounds = heroFrame.getBoundingClientRect();
-          const startX = window.innerWidth / 2;
-          const startY = window.innerHeight / 2;
-
-          gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
-          gsap.set(textFacet, { opacity: 0, x: startX, y: startY, xPercent: -50, yPercent: -50 }); 
-          gsap.set(textArchitecture, { opacity: 0, x: startX, y: startY, xPercent: -50, yPercent: -50 });
-          gsap.set(clock, { opacity: 0, y: 15 });
-
-          logoCenter.style.visibility = 'visible';
-          heroFrame.style.visibility = 'visible';
-          textFacet.style.visibility = 'visible';
-          textArchitecture.style.visibility = 'visible';
-          clock.style.visibility = 'visible';
-
-          const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
-
-          tl.to(logoCenter, {
-              top: '-122px',
-              left: 'calc(100vw + 85px)',
-              xPercent: -100,
-              yPercent: 0,
-              x: 0,
-              y: 0,
-              scale: 0.45,
-              duration: 1.3,
-              ease: 'power2.inOut',
-              delay: 2.0
-            })
-            .to(textFacet, {
-              opacity: 1,
-              x: frameBounds.left, 
-              y: frameBounds.top - 45,
-              xPercent: 0,
-              yPercent: -100,
-              duration: 1.1,
-              ease: 'power4.out'
-            }, '-=0.5')
-            .to(textArchitecture, {
-              opacity: 1,
-              x: frameBounds.right, 
-              y: frameBounds.bottom + 35, 
-              xPercent: -100, 
-              yPercent: 0,
-              duration: 1.1,
-              ease: 'power4.out'
-            }, '<')
-            .to(clock, {
-              opacity: 1,
-              y: 0,
-              duration: 0.5
-            }, '-=0.4')
-            .to(heroFrame, {
-              opacity: 1,
-              scale: 1,
-              duration: 1.2,
-              ease: 'power4.out'
-            }, '-=0.6');
-        }
-      });
-
-    } catch (err) {
-      ['hero-frame', 'text-facet', 'text-architecture', 'hero-clock', 'logo-center'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-          el.style.opacity = '1';
-          el.style.visibility = 'visible';
-        }
-      });
     }
-  };
 
-  if (document.readyState === 'complete') {
-    runHeroScript();
+    // 2. Real-time SAST Clock
+    const clockCanvas = document.getElementById('clock-canvas') as HTMLCanvasElement | null;
+    if (clockCanvas) {
+      const updateClock = () => {
+        const ctx = clockCanvas.getContext('2d');
+        if (!ctx) return;
+
+        const now = new Date();
+        const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+        const sastTime = new Date(utc + (3600000 * 2));
+
+        const hours = String(sastTime.getHours()).padStart(2, '0');
+        const minutes = String(sastTime.getMinutes()).padStart(2, '0');
+        const seconds = String(sastTime.getSeconds()).padStart(2, '0');
+        const timeStr = `${hours}:${minutes}:${seconds} SAST`;
+
+        const dpr = window.devicePixelRatio || 1;
+        if (clockCanvas.width !== 160 * dpr) {
+          clockCanvas.width = 160 * dpr;
+          clockCanvas.height = 24 * dpr;
+        }
+
+        ctx.save();
+        ctx.scale(dpr, dpr);
+        ctx.clearRect(0, 0, 160, 24);
+        ctx.font = '700 15px monospace, sans-serif';
+        ctx.fillStyle = '#111111';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(timeStr, 0, 12);
+        ctx.restore();
+      };
+
+      updateClock();
+      setInterval(updateClock, 1000);
+    }
+
+    // 3. GSAP Timeline
+    const logoCenter = document.getElementById('logo-center');
+    const textFacet = document.getElementById('text-facet');
+    const textArchitecture = document.getElementById('text-architecture');
+    const clock = document.getElementById('hero-clock');
+    const heroFrame = document.getElementById('hero-frame');
+
+    if (!logoCenter || !textFacet || !textArchitecture || !clock || !heroFrame) return;
+
+    // Measure bounding box BEFORE applying scale transforms
+    const frameBounds = heroFrame.getBoundingClientRect();
+    const isMobile = window.innerWidth <= 768;
+
+    if (isMobile) {
+      gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
+      gsap.set([textFacet, textArchitecture], { opacity: 0 });
+      gsap.set(clock, { opacity: 0, y: 15 });
+
+      logoCenter.style.visibility = 'visible';
+      heroFrame.style.visibility = 'visible';
+      textFacet.style.visibility = 'visible';
+      textArchitecture.style.visibility = 'visible';
+      clock.style.visibility = 'visible';
+
+      const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
+
+      tl.to(logoCenter, {
+          top: '-15px',
+          left: 'calc(100vw + 25px)',
+          xPercent: -100,
+          yPercent: 0,
+          x: 0,
+          y: 0,
+          scale: 0.38,
+          duration: 1.3,
+          delay: 2.0
+        })
+        .to([textFacet, textArchitecture], {
+          opacity: 1,
+          duration: 1.1,
+          ease: 'power4.out'
+        }, '-=0.5')
+        .to(clock, {
+          opacity: 1,
+          y: 0,
+          duration: 0.5
+        }, '-=0.4')
+        .to(heroFrame, {
+          opacity: 1,
+          scale: 1,
+          duration: 1.2,
+          ease: 'power4.out'
+        }, '-=0.6');
+
+    } else {
+      const startX = window.innerWidth / 2;
+      const startY = window.innerHeight / 2;
+
+      gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
+      gsap.set(textFacet, { opacity: 0, x: startX, y: startY, xPercent: -50, yPercent: -50 }); 
+      gsap.set(textArchitecture, { opacity: 0, x: startX, y: startY, xPercent: -50, yPercent: -50 });
+      gsap.set(clock, { opacity: 0, y: 15 });
+
+      logoCenter.style.visibility = 'visible';
+      heroFrame.style.visibility = 'visible';
+      textFacet.style.visibility = 'visible';
+      textArchitecture.style.visibility = 'visible';
+      clock.style.visibility = 'visible';
+
+      const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
+
+      tl.to(logoCenter, {
+          top: '-122px',
+          left: 'calc(100vw + 85px)',
+          xPercent: -100,
+          yPercent: 0,
+          x: 0,
+          y: 0,
+          scale: 0.45,
+          duration: 1.3,
+          ease: 'power2.inOut',
+          delay: 2.0
+        })
+        .to(textFacet, {
+          opacity: 1,
+          x: frameBounds.left, 
+          y: frameBounds.top - 45,
+          xPercent: 0,
+          yPercent: -100,
+          duration: 1.1,
+          ease: 'power4.out'
+        }, '-=0.5')
+        .to(textArchitecture, {
+          opacity: 1,
+          x: frameBounds.right, 
+          y: frameBounds.bottom + 35, 
+          xPercent: -100, 
+          yPercent: 0,
+          duration: 1.1,
+          ease: 'power4.out'
+        }, '<')
+        .to(clock, {
+          opacity: 1,
+          y: 0,
+          duration: 0.5
+        }, '-=0.4')
+        .to(heroFrame, {
+          opacity: 1,
+          scale: 1,
+          duration: 1.2,
+          ease: 'power4.out'
+        }, '-=0.6');
+    }
+  }
+
+  // Execute directly on DOM load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHero);
   } else {
-    window.addEventListener('load', runHeroScript);
+    initHero();
   }
 </script>
 
@@ -286,24 +264,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     z-index: 10;
   }
 
-  .text-facet {
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-family: 'Bank Gothic', sans-serif !important;
-    font-weight: 900;
-    font-size: clamp(2.2rem, 3.8vw, 4.1rem);
-    letter-spacing: 0.10em;
-    color: var(--text-primary, #111111);
-    margin: 0;
-    line-height: 1;
-    z-index: 40;
-    text-transform: uppercase;
-    white-space: nowrap;
-    will-change: transform, opacity;
-    visibility: hidden;
-  }
-
+  .text-facet,
   .text-architecture {
     position: absolute;
     top: 0;
@@ -360,22 +321,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     visibility: hidden;
   }
 
-  .logo-docked-wrapper {
-    position: absolute;
-    top: -30px; 
-    right: 70px; 
-    width: 140px;
-    height: 140px;
-    z-index: 30;
-    pointer-events: none;
-    visibility: hidden; 
-  }
-
-  .logo-placeholder {
-    width: 100%;
-    height: 100%;
-  }
-
   .hero-frame {
     position: absolute;
     top: 15%;
@@ -408,13 +353,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     .logo-center-wrapper {
       width: 250px;
       height: 250px;
-    }
-
-    .logo-docked-wrapper {
-      top: -10px;
-      right: 40px;
-      width: 85px;
-      height: 85px;
     }
 
     .hero-frame {
