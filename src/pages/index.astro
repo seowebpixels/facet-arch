@@ -11,7 +11,7 @@ import devImg from '../assets/dev-ascot-manor.avif';
 import intImg from '../assets/int-ndlovu.avif';
 import resImg from '../assets/res-eoa-1597-grid.avif';
 import sustImg from '../assets/sustainability-thermal-comfort.avif';
-import renImg from '../assets/renvid-elementum.jpg'
+import renImg from '../assets/renvid-elementum.jpg';
 ---
 
 <Layout title="Facet Architecture | Selected Works">
@@ -35,7 +35,7 @@ import renImg from '../assets/renvid-elementum.jpg'
         <div class="legend-item" data-index="2"><span class="legend-num">03</span> Ndlovu Interior</div>
         <div class="legend-item" data-index="3"><span class="legend-num">04</span> EOA Residence</div>
         <div class="legend-item" data-index="4"><span class="legend-num">05</span> Thermal Comfort Study</div>
-        <div class="legend-item" data-index="4"><span class="legend-num">06</span> Elementum</div>
+        <div class="legend-item" data-index="5"><span class="legend-num">06</span> Elementum</div>
       </div>
     </section>
 
@@ -156,7 +156,7 @@ import renImg from '../assets/renvid-elementum.jpg'
       </a>
 
       <!-- Tile 6 -->
-      <a href="/portfolio#sustainability" class="tile-card tile-5" data-bg="#FAE870">
+      <a href="/portfolio#rendering" class="tile-card tile-6" data-bg="#FAE870">
         <div class="image-container">
           <Image 
             src={renImg} 
@@ -341,7 +341,7 @@ import renImg from '../assets/renvid-elementum.jpg'
       width: 60%;
       position: relative;
       display: block;
-      height: 1450px;
+      height: 1720px; /* Expanded height to fit 6 staggered tiles */
     }
   }
 
@@ -426,6 +426,7 @@ import renImg from '../assets/renvid-elementum.jpg'
     .tile-3 { top: 500px; left: 25%; z-index: 3; }
     .tile-4 { top: 760px; left: 5%; z-index: 4; }
     .tile-5 { top: 980px; left: 42%; z-index: 5; }
+    .tile-6 { top: 1240px; left: 18%; z-index: 6; }
   }
 
   /* Base Quote Container Styles */
