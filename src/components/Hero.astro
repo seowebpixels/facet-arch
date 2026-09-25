@@ -60,7 +60,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         const src = logoCanvas.getAttribute('data-logo-src');
         if (ctx && src) {
           const dpr = window.devicePixelRatio || 1;
-          const displaySize = 380; // Crisp high-res canvas frame
+          const displaySize = 380;
           
           logoCanvas.width = displaySize * dpr;
           logoCanvas.height = displaySize * dpr;
@@ -120,7 +120,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         setInterval(updateClock, 1000);
       }
 
-      // 3. True Async Loading isolates dependency trees from blocking critical paths
+      // 3. GSAP Timeline
       const { gsap } = await import('gsap');
 
       const logoCenter = document.getElementById('logo-center');
@@ -149,10 +149,9 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
           tl.to(logoCenter, {
-              top: '15px',
-              left: 'auto',
-              right: '15px',
-              xPercent: 0,
+              top: '5px',
+              left: 'calc(100vw - 15px)',
+              xPercent: -100,
               yPercent: 0,
               x: 0,
               y: 0,
@@ -196,12 +195,11 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
           const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
-          // Direct right/top positioning pins logo safely in corner on refresh and window resize
+          // Straight diagonal path to top-right corner, aligning top of logo with top of FACET text
           tl.to(logoCenter, {
-              top: '25px',
-              left: 'auto',
-              right: '20px',
-              xPercent: 0,
+              top: '0px', // Lifted higher to align directly with FACET text
+              left: 'calc(100vw - 15px)',
+              xPercent: -100,
               yPercent: 0,
               x: 0,
               y: 0,
@@ -359,8 +357,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     justify-content: center;
     z-index: 99999;
     pointer-events: none;
-    transform-origin: top right;
-    will-change: transform, top, left, right;
+    will-change: transform, top, left;
     visibility: hidden;
   }
 
