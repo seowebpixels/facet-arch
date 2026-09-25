@@ -2,13 +2,13 @@
 import { Image, getImage } from 'astro:assets';
 import heroLogoImg from '../assets/facet-hero-logo.avif';
 
-// Import verified showcase images
+// Import showcase images
 import resHeroImg from '../assets/res-eoa-1597.avif';
 import resBlannImg from '../assets/res-blann.avif';
 import ascotManorImg from '../assets/dev-ascot-manor.avif';
 import intStarckImg from '../assets/int-starck.avif';
 
-const heroImages = [resHeroImg, resBlannImg, intStarckImg];
+const heroImages = [resHeroImg, resBlannImg, ascotManorImg, intStarckImg];
 
 const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 720, height: 480, quality: 100 });
 ---
@@ -19,7 +19,8 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 <section id="hero-stage" class="stage-container">
   <h2 class="lcp-seo-anchor" fetchpriority="high">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
-  <div id="hero-frame" class="hero-frame">
+  <!-- Fullscreen Container for Ken Burns Slides -->
+  <div id="fullscreen-bg" class="fullscreen-bg">
     {heroImages.map((img, index) => (
       <Image 
         src={img} 
@@ -28,12 +29,28 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         widths={[720, 1280, 1920, 2560, 3840]}
         sizes="100vw"
         format="avif"
-        quality={100}
+        quality={90}
         loading={index === 0 ? "eager" : "lazy"}
         fetchpriority={index === 0 ? "high" : "low"}
-        decoding="sync"
+        decoding="async"
       />
     ))}
+  </div>
+
+  <div id="hero-frame" class="hero-frame">
+    <!-- Initial Intro Focal Frame -->
+    <Image 
+      src={resHeroImg} 
+      alt="Facet Architecture Initial Hero" 
+      class="hero-img intro-frame-img"
+      widths={[720, 1280, 1920]}
+      sizes="76vw"
+      format="avif"
+      quality={100}
+      loading="eager"
+      fetchpriority="high"
+      decoding="sync"
+    />
   </div>
 
   <h1 id="text-facet" class="title-text text-facet">FACET</h1>
@@ -59,6 +76,9 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
   import { gsap } from 'gsap';
 
   function initHero() {
+    // Force GPU Acceleration globally in GSAP
+    gsap.config({ force3D: true });
+
     // 1. Canvas Logo Render Engine
     const logoCanvas = document.getElementById('logo-canvas') as HTMLCanvasElement | null;
     if (logoCanvas) {
@@ -121,47 +141,87 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
       setInterval(updateClock, 1000);
     }
 
-    // 3. Ken Burns Moving Image Carousel Loop
+    // 3. Smooth Fullscreen Ken Burns + Sideways Pan Carousel
     function startKenBurnsCarousel() {
+      const fullscreenBg = document.getElementById('fullscreen-bg');
+      const heroFrame = document.getElementById('hero-frame');
       const slides = document.querySelectorAll('.slide-img');
-      if (slides.length <= 1) return;
+
+      if (!fullscreenBg || !heroFrame || slides.length === 0) return;
+
+      // Smoothly transition background from inset frame to full viewport
+      gsap.to(fullscreenBg, {
+        opacity: 1,
+        duration: 1.5,
+        ease: 'power2.inOut'
+      });
+
+      // Fade out initial bordered frame
+      gsap.to(heroFrame, {
+        opacity: 0,
+        duration: 1.2,
+        ease: 'power2.inOut'
+      });
 
       let current = 0;
       
-      gsap.to(slides[0], { scale: 1.15, duration: 7, ease: 'none' });
+      // Pan directions alternating across slides
+      const directions = [
+        { xStart: -25, xEnd: 25, scaleStart: 1.05, scaleEnd: 1.18 },
+        { xStart: 25, xEnd: -25, scaleStart: 1.18, scaleEnd: 1.05 },
+        { xStart: -20, xEnd: 20, scaleStart: 1.08, scaleEnd: 1.20 },
+        { xStart: 20, xEnd: -20, scaleStart: 1.15, scaleEnd: 1.05 }
+      ];
+
+      // Initial Pan / Zoom on first slide
+      gsap.fromTo(slides[0], 
+        { x: directions[0].xStart, scale: directions[0].scaleStart },
+        { x: directions[0].xEnd, scale: directions[0].scaleEnd, duration: 7.5, ease: 'none', force3D: true }
+      );
 
       setInterval(() => {
         const next = (current + 1) % slides.length;
+        const dir = directions[next % directions.length];
 
-        gsap.set(slides[next], { opacity: 0, scale: 1.0, zIndex: 2 });
+        // Prepare next slide position & depth
+        gsap.set(slides[next], { 
+          opacity: 0, 
+          x: dir.xStart, 
+          scale: dir.scaleStart, 
+          zIndex: 2 
+        });
         gsap.set(slides[current], { zIndex: 1 });
 
+        // Fade in next slide smoothly
         gsap.to(slides[next], {
           opacity: 1,
-          duration: 1.8,
-          ease: 'power2.inOut'
+          duration: 2.0,
+          ease: 'power2.inOut',
+          force3D: true
         });
 
+        // Continuous horizontal panning and zoom
         gsap.to(slides[next], {
-          scale: 1.15,
-          duration: 7,
-          ease: 'none'
+          x: dir.xEnd,
+          scale: dir.scaleEnd,
+          duration: 7.5,
+          ease: 'none',
+          force3D: true
         });
 
+        // Crossfade out active slide
         gsap.to(slides[current], {
           opacity: 0,
-          duration: 1.8,
+          duration: 2.0,
           ease: 'power2.inOut',
-          onComplete: () => {
-            gsap.set(slides[current], { scale: 1.0 });
-          }
+          force3D: true
         });
 
         current = next;
-      }, 5500);
+      }, 5800);
     }
 
-    // 4. GSAP Intro Timeline Sequence
+    // 4. Primary GSAP Intro Sequence
     const logoCenter = document.getElementById('logo-center');
     const textFacet = document.getElementById('text-facet');
     const textArchitecture = document.getElementById('text-architecture');
@@ -198,7 +258,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           y: 0,
           scale: 0.50,
           duration: 1.3,
-          delay: 2.0
+          delay: 1.8
         })
         .to([textFacet, textArchitecture], {
           opacity: 1,
@@ -250,7 +310,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           scale: 0.45,
           duration: 1.3,
           ease: 'power2.inOut',
-          delay: 2.0
+          delay: 1.8
         })
         .to(textFacet, {
           opacity: 1,
@@ -320,6 +380,19 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     z-index: 10;
   }
 
+  /* Fullscreen background sequence layer */
+  .fullscreen-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 5;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
   .text-facet,
   .text-architecture {
     position: absolute;
@@ -377,6 +450,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     visibility: hidden;
   }
 
+  /* Initial Intro Center Frame */
   .hero-frame {
     position: absolute;
     top: 15%;
@@ -398,16 +472,24 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     display: block;
   }
 
-  .slide-img {
-    position: absolute;
-    top: 0;
-    left: 0;
+  .intro-frame-img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
+  }
+
+  .slide-img {
+    position: absolute;
+    top: -5%;
+    left: -5%;
+    width: 110vw;
+    height: 110vh;
     object-fit: cover;
     display: block;
     opacity: 0;
     will-change: transform, opacity;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
   }
 
   .slide-img.active {
