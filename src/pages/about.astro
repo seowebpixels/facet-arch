@@ -9,7 +9,7 @@ import fredaImg from '../assets/freda-esterhuyse-professional-archictect.avif';
 import katlegoImg from '../assets/katlego-ramokoka-candidate-architect.avif';
 import jacquesImg from '../assets/jacques-de-beer-candidate-architect.avif';
 import wernerImg from '../assets/werner-de-klerk-candidate-architect.avif';
-import smokeyImg from '../assets/smokey.avif'
+import smokeyImg from '../assets/smokey.avif';
 
 const teamMembers = [
   {
@@ -43,10 +43,10 @@ const teamMembers = [
     eager: false,
   },
   {
-  name: 'Smokey', // or whatever their name is!
-  role: 'Chief Purr-chitect',
-  image: smokeyImg,
-  eager:  false,
+    name: 'Smokey',
+    role: 'Chief Purr-chitect',
+    image: smokeyImg,
+    eager: false,
   }
 ];
 ---
@@ -68,7 +68,7 @@ const teamMembers = [
     <section class="pillars-section">
       <div class="section-header">
         <h2 class="section-title">Core Disciplines</h2>
-        <p class="section-desc">Four distinct capabilities bound by a unified design philosophy.</p>
+        <p class="section-desc">Five distinct capabilities bound by a unified design philosophy.</p>
       </div>
 
       <div class="pillars-grid">
@@ -107,20 +107,17 @@ const teamMembers = [
             Designing resilient regional developments across South Africa and the African continent. We perform deep contextual research to build vibrant environments, specialized civil structures, substations, and community master plans.
           </p>
         </article>
-      </div>
-    </section>
 
-    <!-- Pillar 5 -->
+        <!-- Pillar 5 -->
         <article class="pillar-card">
           <span class="pillar-num">05</span>
           <h3 class="pillar-title">Rendering and Video Production</h3>
           <p class="pillar-text">
-            Through high-fidelity rendering, cinematic video production, and tailored marketing materials, we translate architectural concepts into immersive visual experiences before any construction begins. 
+            Through high-fidelity rendering, cinematic video production, and tailored marketing materials, we translate architectural concepts into immersive visual experiences before any construction begins.
           </p>
         </article>
       </div>
     </section>
-
 
     <!-- Team Showcase Section -->
     <section class="team-section">
@@ -131,24 +128,24 @@ const teamMembers = [
 
       <div class="team-grid">
         {teamMembers.map((member) => (
-  <article class="team-card">
-    <div class="image-wrapper">
-      <img
-        src={member.image.src}
-        alt={`${member.name} - ${member.role} at Facet Architecture`}
-        width="450"
-        height="600"
-        loading={member.eager ? "eager" : "lazy"}
-        decoding="async"
-        class="team-img"
-      />
-    </div>
-    <div class="team-meta">
-      <h3 class="member-name">{member.name}</h3>
-      <p class="member-role">{member.role}</p>
-    </div>
-  </article>
-))}
+          <article class="team-card">
+            <div class="image-wrapper">
+              <img
+                src={member.image.src}
+                alt={`${member.name} - ${member.role} at Facet Architecture`}
+                width="450"
+                height="600"
+                loading={member.eager ? "eager" : "lazy"}
+                decoding="async"
+                class="team-img"
+              />
+            </div>
+            <div class="team-meta">
+              <h3 class="member-name">{member.name}</h3>
+              <p class="member-role">{member.role}</p>
+            </div>
+          </article>
+        ))}
       </div>
     </section>
   </main>
@@ -351,4 +348,4 @@ const teamMembers = [
       gap: 70px;
     }
   }
-</style>+
+</style>
