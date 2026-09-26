@@ -149,14 +149,12 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
       if (!fullscreenBg || !heroFrame || slides.length === 0) return;
 
-      // Smoothly transition background from inset frame to full viewport
       gsap.to(fullscreenBg, {
         opacity: 1,
         duration: 1.5,
         ease: 'power2.inOut'
       });
 
-      // Fade out initial bordered frame
       gsap.to(heroFrame, {
         opacity: 0,
         duration: 1.2,
@@ -165,7 +163,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
       let current = 0;
       
-      // Pan directions alternating across slides
       const directions = [
         { xStart: -25, xEnd: 25, scaleStart: 1.05, scaleEnd: 1.18 },
         { xStart: 25, xEnd: -25, scaleStart: 1.18, scaleEnd: 1.05 },
@@ -173,7 +170,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         { xStart: 20, xEnd: -20, scaleStart: 1.15, scaleEnd: 1.05 }
       ];
 
-      // Initial Pan / Zoom on first slide
       gsap.fromTo(slides[0], 
         { x: directions[0].xStart, scale: directions[0].scaleStart },
         { x: directions[0].xEnd, scale: directions[0].scaleEnd, duration: 7.5, ease: 'none', force3D: true }
@@ -183,7 +179,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         const next = (current + 1) % slides.length;
         const dir = directions[next % directions.length];
 
-        // Prepare next slide position & depth
         gsap.set(slides[next], { 
           opacity: 0, 
           x: dir.xStart, 
@@ -192,7 +187,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         });
         gsap.set(slides[current], { zIndex: 1 });
 
-        // Fade in next slide smoothly
         gsap.to(slides[next], {
           opacity: 1,
           duration: 2.0,
@@ -200,7 +194,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           force3D: true
         });
 
-        // Continuous horizontal panning and zoom
         gsap.to(slides[next], {
           x: dir.xEnd,
           scale: dir.scaleEnd,
@@ -209,7 +202,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           force3D: true
         });
 
-        // Crossfade out active slide
         gsap.to(slides[current], {
           opacity: 0,
           duration: 2.0,
@@ -249,38 +241,22 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         onComplete: startKenBurnsCarousel
       });
 
-      // Locate this block in your GSAP timeline inside <script> in Hero.astro:
-
-tl.to(logoCenter, {
-    top: '135px', // Changed from '-20px': brings the top-right logo clear below the 120px header
-    left: 'calc(100vw - 40px)', // Aligns it to the top-right corner safely within screen view
-    xPercent: -100,
-    yPercent: 0,
-    x: 0,
-    y: 0,
-    scale: 0.45,
-    duration: 1.3,
-    ease: 'power2.inOut',
-    delay: 1.8
-  })
-  .to(textFacet, {
-    opacity: 1,
-    x: frameBounds.left, 
-    y: 135, // Changed from 'frameBounds.top - 45': forces text to sit at 135px from top
-    xPercent: 0,
-    yPercent: 0,
-    duration: 1.1,
-    ease: 'power4.out'
-  }, '-=0.5')
-  .to(textArchitecture, {
-    opacity: 1,
-    x: architectureX,
-    y: 135, // Changed from 'frameBounds.top - 45': aligns seamlessly with FACET
-    xPercent: 0,
-    yPercent: 0,
-    duration: 1.1,
-    ease: 'power4.out'
-  }, '-=0.5')
+      tl.to(logoCenter, {
+          top: '110px',
+          left: '50%',
+          xPercent: -50,
+          yPercent: 0,
+          x: 0,
+          y: 0,
+          scale: 0.50,
+          duration: 1.3,
+          delay: 1.8
+        })
+        .to([textFacet, textArchitecture], {
+          opacity: 1,
+          duration: 1.1,
+          ease: 'power4.out'
+        }, '-=0.5')
         .to(clock, {
           opacity: 1,
           y: 0,
@@ -294,6 +270,7 @@ tl.to(logoCenter, {
         }, '-=0.6');
 
     } else {
+      /* DESKTOP BRANCH */
       const startX = window.innerWidth / 2;
       const startY = window.innerHeight / 2;
 
@@ -311,14 +288,17 @@ tl.to(logoCenter, {
       const facetWidth = textFacet.offsetWidth;
       const architectureX = frameBounds.left + facetWidth + 20;
 
+      // Target Y-coordinate safely below the 120px menu bar
+      const targetY = Math.max(frameBounds.top - 45, 145);
+
       const tl = gsap.timeline({ 
         defaults: { ease: 'power3.inOut' },
         onComplete: startKenBurnsCarousel 
       });
 
       tl.to(logoCenter, {
-          top: '-20px', // Dropped down from -65px so it lands completely clear below the 80px menu bar
-          left: 'calc(100vw + 85px)',
+          top: '140px', // Places logo cleanly right below the 120px header
+          left: 'calc(100vw - 60px)',
           xPercent: -100,
           yPercent: 0,
           x: 0,
@@ -331,18 +311,18 @@ tl.to(logoCenter, {
         .to(textFacet, {
           opacity: 1,
           x: frameBounds.left, 
-          y: frameBounds.top - 45,
+          y: targetY, // Positioned safely at 145px top
           xPercent: 0,
-          yPercent: -100,
+          yPercent: 0,
           duration: 1.1,
           ease: 'power4.out'
         }, '-=0.5')
         .to(textArchitecture, {
           opacity: 1,
           x: architectureX,
-          y: frameBounds.top - 45,
+          y: targetY, // Aligns seamlessly next to FACET
           xPercent: 0,
-          yPercent: -100,
+          yPercent: 0,
           duration: 1.1,
           ease: 'power4.out'
         }, '<')
@@ -368,18 +348,6 @@ tl.to(logoCenter, {
 </script>
 
 <style>
-.hero-section {
-  /* 120px header + 20px-40px spacing */
-  padding-top: 150px; 
-}
-
-.hero-logo-container {
-  position: absolute;
-  top: 140px; /* Increased from 0/top-aligned so it clears the 120px header */
-  right: 40px;
-  z-index: 10;
-}
-
   .lcp-seo-anchor {
     position: absolute;
     top: 50%;
@@ -408,7 +376,6 @@ tl.to(logoCenter, {
     z-index: 10;
   }
 
-  /* Fullscreen background sequence layer */
   .fullscreen-bg {
     position: absolute;
     top: 0;
@@ -478,13 +445,12 @@ tl.to(logoCenter, {
     visibility: hidden;
   }
 
-  /* Initial Intro Center Frame */
   .hero-frame {
     position: absolute;
-    top: 15%;
+    top: 18%; /* Shifted down slightly to leave generous space for the title text above it */
     left: 12%;
     width: 76vw;
-    height: 70vh;
+    height: 67vh;
     z-index: 20;
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
