@@ -21,8 +21,8 @@ const navItems = [
         src={logoImg} 
         alt="Facet Architecture Logo" 
         class="site-logo"
-        width={320}
-        height={100}
+        width={240}
+        height={80}
         loading="eager"
         decoding="sync"
       />
@@ -76,15 +76,15 @@ const navItems = [
     box-sizing: border-box;
   }
 
-  /* Expanded height to prevent logo clipping & increase menu bar size */
+  /* Maintained standard header height */
   .header-inner {
     max-width: 1800px;
     margin: 0 auto;
-    height: 110px;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 40px;
+    padding: 0 30px;
     box-sizing: border-box;
   }
 
@@ -101,8 +101,9 @@ const navItems = [
     transform: scale(1.02);
   }
 
+  /* Scaled down logo height so it never touches the header edges */
   .site-logo {
-    height: clamp(55px, 5.5vw, 75px);
+    height: clamp(38px, 4vw, 48px);
     width: auto;
     display: block;
     object-fit: contain;
@@ -123,7 +124,7 @@ const navItems = [
 
   .nav-text {
     font-family: 'Bank Gothic', 'BankGothic', sans-serif, system-ui;
-    font-size: clamp(1rem, 1.3vw, 1.25rem);
+    font-size: clamp(0.95rem, 1.2vw, 1.15rem);
     color: #ffffff;
     letter-spacing: 2.5px;
     text-transform: uppercase;
@@ -179,10 +180,10 @@ const navItems = [
   .mobile-menu-drawer {
     display: none;
     position: fixed;
-    top: 110px;
+    top: 80px;
     left: 0;
     width: 100vw;
-    height: calc(100vh - 110px);
+    height: calc(100vh - 80px);
     background-color: #2e343b;
     padding: 40px 32px;
     box-sizing: border-box;
@@ -223,7 +224,7 @@ const navItems = [
     }
 
     .site-logo {
-      height: 48px;
+      height: 40px;
     }
 
     .desktop-nav {
