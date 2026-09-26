@@ -12,13 +12,30 @@ const currentYear = new Date().getFullYear();
       <div class="cta-action">
         <a href="mailto:info&#64;facetarch&#46;com" class="cta-btn" aria-label="Initiate consultation via email">INITIATE CONSULTATION &rarr;</a>
         
-        <!-- Social Media Links -->
-        <div class="social-links">
-          <a href="https://www.instagram.com/facetarchitecture_za?igsh=YTF3MjJmOW92cW5y&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
-          <span class="social-sep">//</span>
-          <a href="https://www.facebook.com/facetarchitecture/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">FB</a>
-          <span class="social-sep">//</span>
-          <a href="https://www.linkedin.com/in/warren-green-a5674927/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">LI</a>
+        <!-- Social Media Icons -->
+        <div class="social-icons">
+          <!-- Instagram -->
+          <a href="https://www.instagram.com/facetarchitecture_za?igsh=YTF3MjJmOW92cW5y&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </a>
+          <!-- Facebook -->
+          <a href="https://www.facebook.com/facetarchitecture/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+            </svg>
+          </a>
+          <!-- LinkedIn -->
+          <a href="https://www.linkedin.com/in/warren-green-a5674927/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+              <rect x="2" y="9" width="4" height="12"></rect>
+              <circle cx="4" cy="4" r="2"></circle>
+            </svg>
+          </a>
         </div>
       </div>
     </div>
@@ -61,7 +78,6 @@ const currentYear = new Date().getFullYear();
   .home-matched-footer .cta-section {
     max-width: 1400px;
     margin: 0 auto;
-    /* Adjusted padding-bottom to ensure exact 35px clearance above the divider line */
     padding-bottom: 35px;
   }
 
@@ -126,32 +142,28 @@ const currentYear = new Date().getFullYear();
     outline-offset: 3px;
   }
 
-  /* Social Links Container below CTA Button */
-  .home-matched-footer .social-links {
+  /* Social Media Icons Styling */
+  .home-matched-footer .social-icons {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 18px;
     margin-top: 18px;
-    font-size: 0.75rem;
-    letter-spacing: 2px;
-    font-weight: 600;
   }
 
-  .home-matched-footer .social-links a {
+  .home-matched-footer .social-icons a {
     color: #ffffff !important;
-    text-decoration: none;
-    transition: color 0.2s ease, text-shadow 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.85;
+    transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
   }
 
-  .home-matched-footer .social-links a:hover,
-  .home-matched-footer .social-links a:focus-visible {
+  .home-matched-footer .social-icons a:hover,
+  .home-matched-footer .social-icons a:focus-visible {
+    opacity: 1;
     color: #00ffc8 !important;
-    text-shadow: 0 0 4px rgba(0, 255, 200, 0.6);
-  }
-
-  .home-matched-footer .social-sep {
-    color: rgba(255, 255, 255, 0.4);
-    font-size: 0.7rem;
+    transform: translateY(-2px);
   }
 
   .home-matched-footer .footer-divider {
@@ -233,7 +245,7 @@ const currentYear = new Date().getFullYear();
       letter-spacing: 2px !important;
     }
 
-    .home-matched-footer .social-links {
+    .home-matched-footer .social-icons {
       margin-top: 16px !important;
     }
 
