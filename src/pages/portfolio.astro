@@ -76,6 +76,9 @@ import sustElectricity from '../assets/sustainability-electricity.avif';
 import sustThermalComfort from '../assets/sustainability-thermal-comfort.avif';
 import sustWater from '../assets/sustainability-water.avif';
 
+// Rendering Asset Placeholder
+import renImg from '../assets/renvid-elementum.jpg';
+
 const portfolioData = [
   {
     id: 'commercial',
@@ -173,6 +176,14 @@ const portfolioData = [
       { name: 'ELECTRICITY INTEGRATION', img: sustElectricity },
       { name: 'WATER HARVESTING SYSTEM', img: sustWater }
     ]
+  },
+  {
+    id: 'rendering',
+    title: 'RENDERING',
+    num: '06',
+    items: [
+      { name: 'ELEMENTUM RENDERING', img: renImg }
+    ]
   }
 ];
 ---
@@ -204,8 +215,8 @@ const portfolioData = [
         <!-- Horizontal Scroll Track -->
         <div class="scroll-rail-wrapper">
           <div class="scroll-rail scroll-container">
-            {cat.items.map((item) => (
-              <div class="portfolio-card cad-trigger" data-fullsrc={item.img.src} data-caption={item.name}>
+            {cat.items.map((item, itemIdx) => (
+              <div class="portfolio-card cad-trigger" data-fullsrc={item.img.src} data-caption={item.name} data-index={itemIdx}>
                 <div class="card-frame">
                   <Image 
                     src={item.img} 
@@ -241,6 +252,9 @@ const portfolioData = [
   <!-- Lightbox Modal Structure -->
   <div id="lightbox-modal" class="lightbox-modal">
     <button class="lightbox-close" id="lightbox-close">&times; CLOSE</button>
+    <button class="lightbox-arrow prev" id="lightbox-prev">&lt;</button>
+    <button class="lightbox-arrow next" id="lightbox-next">&gt;</button>
+
     <div class="lightbox-content">
       <div id="lightbox-img-layer" class="lightbox-img-layer"></div>
       <div class="lightbox-shield"></div>
@@ -308,33 +322,10 @@ const portfolioData = [
     scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.1) !important;
   }
 
-  /* Mobile Custom Touch Indicator */
-  @media (hover: none), (pointer: coarse) {
-    .scroll-container {
-      scrollbar-width: none !important;
-      -ms-overflow-style: none !important;
-    }
-
-    .scroll-container::-webkit-scrollbar {
-      display: none !important;
-      width: 0 !important;
-      height: 0 !important;
-    }
-
-    .mobile-only-indicator {
-      display: block;
-    }
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .mobile-only-indicator {
-      display: none !important;
-    }
-  }
-
+  /* Fixed Navigation Position */
   .portfolio-nav {
     position: fixed;
-    top: 90px;
+    top: 80px;
     left: 0;
     width: 100%;
     z-index: 100;
@@ -474,38 +465,6 @@ const portfolioData = [
     }
   }
 
-  .custom-scrollbar-track {
-    width: 100%;
-    max-width: 1400px;
-    margin: 6px auto 0;
-    height: 12px;
-    padding: 3px 0;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 3px;
-    position: relative;
-    overflow: hidden;
-    touch-action: none;
-    box-sizing: border-box;
-  }
-
-  .custom-scrollbar-thumb {
-    height: 100%;
-    width: 25%;
-    background: #00ffc8;
-    border-radius: 2px;
-    box-shadow: 0 0 6px rgba(0, 255, 200, 0.6);
-    position: absolute;
-    left: 0;
-    top: 0;
-    transition: transform 0.05s ease-out;
-    touch-action: none;
-    cursor: grab;
-  }
-
-  .custom-scrollbar-thumb:active {
-    cursor: grabbing;
-  }
-
   .card-frame {
     position: relative;
     width: 100%;
@@ -523,13 +482,6 @@ const portfolioData = [
     filter: grayscale(100%) contrast(110%);
     transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease;
     display: block;
-  }
-
-  .card-shield {
-    position: absolute;
-    inset: 0;
-    z-index: 5;
-    background: transparent;
   }
 
   .card-caption h3 {
@@ -557,22 +509,13 @@ const portfolioData = [
     filter: grayscale(0%) contrast(100%);
   }
 
-  .cad-trigger:hover .cad-grid-layer {
-    opacity: 0;
-  }
-
   .portfolio-spacer-gap {
     height: 40px;
     background-color: #2a2f35;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  @media (max-width: 899px) {
-    .portfolio-stage {
-      padding-top: 165px;
-    }
-  }
-
+  /* Lightbox Styling Updates */
   .lightbox-modal {
     display: none;
     position: fixed;
@@ -592,9 +535,8 @@ const portfolioData = [
 
   .lightbox-close {
     position: absolute;
-    top: 24px;
-    left: 24px;
-    right: auto;
+    top: 150px;
+    right: 32px;
     background: none;
     border: 1px solid #00ffc8;
     color: #00ffc8;
@@ -604,6 +546,33 @@ const portfolioData = [
     cursor: pointer;
     text-transform: uppercase;
     z-index: 1010;
+  }
+
+  .lightbox-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid #00ffc8;
+    color: #00ffc8;
+    font-size: 1.5rem;
+    padding: 12px 18px;
+    cursor: pointer;
+    z-index: 1010;
+    transition: background 0.3s ease;
+  }
+
+  .lightbox-arrow:hover {
+    background: #00ffc8;
+    color: #111111;
+  }
+
+  .lightbox-arrow.prev {
+    left: 24px;
+  }
+
+  .lightbox-arrow.next {
+    right: 24px;
   }
 
   .lightbox-content {
@@ -620,14 +589,7 @@ const portfolioData = [
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-  }
-
-  .lightbox-shield {
-    position: absolute;
-    inset: 0;
-    z-index: 1005;
-    background: transparent;
+    border: none !important;
   }
 
   .lightbox-caption {
@@ -642,86 +604,17 @@ const portfolioData = [
 </style>
 
 <script>
-  const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+  let currentCategoryCards: HTMLElement[] = [];
+  let currentActiveIndex = 0;
 
-  const initCustomScrollbars = () => {
-    if (!isTouchDevice) return;
+  const modal = document.getElementById('lightbox-modal');
+  const modalImgLayer = document.getElementById('lightbox-img-layer') as HTMLElement;
+  const modalCaption = document.getElementById('lightbox-caption');
+  const modalClose = document.getElementById('lightbox-close');
+  const modalPrev = document.getElementById('lightbox-prev');
+  const modalNext = document.getElementById('lightbox-next');
 
-    const containers = document.querySelectorAll('.scroll-container');
-
-    containers.forEach((container) => {
-      const parent = container.parentElement;
-      if (!parent) return;
-
-      const track = parent.querySelector('.custom-scrollbar-track') as HTMLElement;
-      const thumb = parent.querySelector('.custom-scrollbar-thumb') as HTMLElement;
-
-      if (!track || !thumb) return;
-
-      let isDragging = false;
-      let startX = 0;
-      let initialScrollLeft = 0;
-
-      const updateThumb = () => {
-        if (isDragging) return;
-        const scrollWidth = container.scrollWidth - container.clientWidth;
-        if (scrollWidth <= 0) {
-          track.style.display = 'none';
-          return;
-        }
-
-        track.style.display = 'block';
-        const scrollRatio = container.scrollLeft / scrollWidth;
-        const availableWidth = track.clientWidth - thumb.clientWidth;
-        const translateX = scrollRatio * availableWidth;
-
-        thumb.style.transform = `translateX(${translateX}px)`;
-      };
-
-      const onTouchStart = (e: TouchEvent) => {
-        isDragging = true;
-        startX = e.touches[0].clientX;
-        initialScrollLeft = container.scrollLeft;
-        thumb.style.transition = 'none';
-      };
-
-      const onTouchMove = (e: TouchEvent) => {
-        if (!isDragging) return;
-        e.preventDefault();
-
-        const currentX = e.touches[0].clientX;
-        const deltaX = currentX - startX;
-
-        const availableWidth = track.clientWidth - thumb.clientWidth;
-        const scrollableWidth = container.scrollWidth - container.clientWidth;
-
-        if (availableWidth <= 0 || scrollableWidth <= 0) return;
-
-        const scrollRatio = deltaX / availableWidth;
-        container.scrollLeft = initialScrollLeft + scrollRatio * scrollableWidth;
-
-        const currentScrollRatio = container.scrollLeft / scrollableWidth;
-        const translateX = currentScrollRatio * availableWidth;
-        thumb.style.transform = `translateX(${translateX}px)`;
-      };
-
-      const onTouchEnd = () => {
-        if (!isDragging) return;
-        isDragging = false;
-        thumb.style.transition = 'transform 0.05s ease-out';
-      };
-
-      thumb.addEventListener('touchstart', onTouchStart, { passive: false });
-      window.addEventListener('touchmove', onTouchMove, { passive: false });
-      window.addEventListener('touchend', onTouchEnd);
-      window.addEventListener('touchcancel', onTouchEnd);
-
-      container.addEventListener('scroll', updateThumb, { passive: true });
-      window.addEventListener('resize', updateThumb);
-      updateThumb();
-    });
-  };
-
+  // Activate Category Panel
   const navBtns = document.querySelectorAll('.nav-btn');
   const panels = document.querySelectorAll('.category-panel');
 
@@ -736,17 +629,15 @@ const portfolioData = [
       targetBtn.classList.add('active');
       targetPanel.classList.add('active');
 
-      if (isTouchDevice) {
-        setTimeout(initCustomScrollbars, 50);
-      }
+      currentCategoryCards = Array.from(targetPanel.querySelectorAll('.portfolio-card'));
     }
   }
 
   const currentHash = window.location.hash.replace('#', '');
   if (currentHash) {
     activateCategory(currentHash);
-  } else if (isTouchDevice) {
-    initCustomScrollbars();
+  } else {
+    activateCategory('commercial');
   }
 
   navBtns.forEach((btn) => {
@@ -759,23 +650,47 @@ const portfolioData = [
     });
   });
 
-  const modal = document.getElementById('lightbox-modal');
-  const modalImgLayer = document.getElementById('lightbox-img-layer') as HTMLElement;
-  const modalCaption = document.getElementById('lightbox-caption');
-  const modalClose = document.getElementById('lightbox-close');
-
-  const cards = document.querySelectorAll('.portfolio-card');
-  cards.forEach((card) => {
-    card.addEventListener('click', () => {
-      const fullSrc = card.getAttribute('data-fullsrc');
-      const caption = card.getAttribute('data-caption');
-
-      if (modal && modalImgLayer && modalCaption && fullSrc) {
-        modalImgLayer.style.backgroundImage = `url('${fullSrc}')`;
-        modalCaption.textContent = caption || '';
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
+  // Enable Sideways Wheel Scroll for Image Category Tracks
+  document.querySelectorAll('.scroll-rail').forEach((rail) => {
+    rail.addEventListener('wheel', (e) => {
+      const wheelEvent = e as WheelEvent;
+      if (wheelEvent.deltaY !== 0) {
+        e.preventDefault();
+        rail.scrollLeft += wheelEvent.deltaY;
       }
+    }, { passive: false });
+  });
+
+  // Lightbox Navigation Functions
+  function updateLightboxImage(index: number) {
+    if (!currentCategoryCards.length) return;
+    if (index < 0) index = currentCategoryCards.length - 1;
+    if (index >= currentCategoryCards.length) index = 0;
+
+    currentActiveIndex = index;
+    const card = currentCategoryCards[currentActiveIndex];
+    const fullSrc = card.getAttribute('data-fullsrc');
+    const caption = card.getAttribute('data-caption');
+
+    if (modalImgLayer && modalCaption && fullSrc) {
+      modalImgLayer.style.backgroundImage = `url('${fullSrc}')`;
+      modalCaption.textContent = caption || '';
+    }
+  }
+
+  // Open Lightbox
+  document.querySelectorAll('.category-panel').forEach((panel) => {
+    const cards = panel.querySelectorAll('.portfolio-card');
+    cards.forEach((card, idx) => {
+      card.addEventListener('click', () => {
+        currentCategoryCards = Array.from(cards) as HTMLElement[];
+        currentActiveIndex = idx;
+        updateLightboxImage(currentActiveIndex);
+        if (modal) {
+          modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      });
     });
   });
 
@@ -786,13 +701,24 @@ const portfolioData = [
     }
   };
 
-  if (modalClose && modal) {
-    modalClose.addEventListener('click', closeModal);
+  if (modalClose) modalClose.addEventListener('click', closeModal);
+  if (modalPrev) modalPrev.addEventListener('click', () => updateLightboxImage(currentActiveIndex - 1));
+  if (modalNext) modalNext.addEventListener('click', () => updateLightboxImage(currentActiveIndex + 1));
 
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
+  // Global Key Down Handler (Esc -> Home Page, Arrow Keys -> Next/Prev Image)
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (modal && modal.classList.contains('active')) {
         closeModal();
+      } else {
+        window.location.href = '/';
       }
-    });
-  }
+    } else if (modal && modal.classList.contains('active')) {
+      if (e.key === 'ArrowRight') {
+        updateLightboxImage(currentActiveIndex + 1);
+      } else if (e.key === 'ArrowLeft') {
+        updateLightboxImage(currentActiveIndex - 1);
+      }
+    }
+  });
 </script>
