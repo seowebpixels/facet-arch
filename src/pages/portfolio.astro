@@ -322,19 +322,19 @@ const portfolioData = [
     scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.1) !important;
   }
 
-  /* Fixed Navigation Position */
-  .portfolio-nav {
-    position: fixed;
-    top: 80px;
-    left: 0;
-    width: 100%;
-    z-index: 100;
-    padding: 12px 24px;
-    background: rgba(17, 17, 17, 0.95);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    box-sizing: border-box;
-  }
+ /* Fixed Navigation Position */
+.portfolio-nav {
+  position: fixed;
+  top: 100px; /* Increased from 80px to push below main menu */
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  padding: 12px 24px;
+  background: rgba(17, 17, 17, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  box-sizing: border-box;
+}
 
   .nav-track {
     display: flex;
@@ -398,12 +398,12 @@ const portfolioData = [
   }
 
   .portfolio-stage {
-    padding-top: 170px;
-    min-height: auto;
-    height: auto !important;
-    overflow: visible !important;
-    position: relative;
-  }
+  padding-top: 230px; /* Increased from 170px to give content breathing room */
+  min-height: auto;
+  height: auto !important;
+  overflow: visible !important;
+  position: relative;
+}
 
   .category-panel {
     display: none;
