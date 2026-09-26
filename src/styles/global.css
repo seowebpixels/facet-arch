@@ -136,4 +136,8 @@ cite.quote-cite[data-astro-cid-lcdefpme],
   .right-grid-col .tile-meta {
     order: -1 !important;
   }
+
+  html {
+  scroll-behavior: smooth;
+}
 }
