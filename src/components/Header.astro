@@ -15,14 +15,12 @@ const navItems = [
 
 <header class="site-header">
   <div class="header-inner">
-    <!-- Top Left Logo -->
+    <!-- Top Left Logo Container -->
     <a href="/" class="logo-link" aria-label="Facet Architecture Home">
       <Image 
         src={logoImg} 
         alt="Facet Architecture Logo" 
         class="site-logo"
-        width={600}
-        height={200}
         loading="eager"
         decoding="sync"
       />
@@ -76,7 +74,7 @@ const navItems = [
     box-sizing: border-box;
   }
 
-  /* Your preferred 120px menu bar height */
+  /* Maintained your 120px menu row height */
   .header-inner {
     max-width: 1800px;
     margin: 0 auto;
@@ -88,24 +86,25 @@ const navItems = [
     box-sizing: border-box;
   }
 
-  /* Top Left Logo Container */
+  /* Anchor wrapper takes up height cleanly without clipping overflow */
   .logo-link {
     display: flex;
     align-items: center;
     text-decoration: none;
     transition: transform 0.3s ease;
     height: 100%;
+    overflow: visible;
   }
 
   .logo-link:hover {
     transform: scale(1.02);
   }
 
-  /* Ensures full image visibility without cropping */
+  /* Fixed height constraint while letting width auto-scale naturally */
   .site-logo {
-    height: 80px;
+    height: 60px;
     width: auto;
-    max-height: 80%;
+    max-height: 70%;
     display: block;
     object-fit: contain;
   }
@@ -225,7 +224,7 @@ const navItems = [
     }
 
     .site-logo {
-      height: 55px;
+      height: 45px;
     }
 
     .desktop-nav {
