@@ -297,13 +297,14 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
       });
 
       tl.to(logoCenter, {
-  top: '125px',                     // 120px header height + 5px gap
-  left: 'calc(100vw - 5px)',        // Pin directly 5px from the right screen edge
-  xPercent: -100,                   // Pull the entire 380px width back to the left of that point
+  top: '125px',                     // 120px header + 5px spacing
+  left: '100vw',                    // Anchor to edge of screen
+  xPercent: -100,                   // Shift back by full element width
+  x: -5,                            // Pull back 5px from edge
   yPercent: 0,
-  x: 0,
   y: 0,
-  scale: 0.35,                      // Scaled size (~133px) fits cleanly inside the gap
+  scale: 0.35,
+  transformOrigin: 'top left',      // Fix origin shift during scale transform
   duration: 1.3,
   ease: 'power2.inOut',
   delay: 1.8
