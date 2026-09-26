@@ -18,18 +18,13 @@ const navItems = [
     <!-- Top Left Logo Container -->
     <a href="/" class="logo-link" aria-label="Facet Architecture Home">
       <Image 
-  src={logoImg} 
-  alt="Facet Architecture Logo" 
-  class="site-logo"
-  width={1200}
-  height={510}
-  quality={100}
-  format="png"
-  loading="eager"
-  decoding="sync"
-/>
-    </a>
-
+    src={logoImg} 
+    alt="Facet Architecture Logo" 
+    class="site-logo"
+    loading="eager"
+    decoding="sync"
+  />
+</a>
     <!-- Top Right Nav Row (Desktop) -->
     <nav class="desktop-nav">
       {navItems.map((item) => {
@@ -95,7 +90,6 @@ const navItems = [
     display: flex;
     align-items: center;
     text-decoration: none;
-    transition: transform 0.3s ease;
     height: 100%;
     overflow: visible;
   }
@@ -104,11 +98,11 @@ const navItems = [
     transform: scale(1.02);
   }
 
-  /* Fixed height constraint while letting width auto-scale naturally */
+  /* Controls logo height while preserving all graphic elements */
   .site-logo {
-    height: 70px;
-    width: auto;
-    max-height: none; /* Removes the 120px height cap */
+    height: 85px; /* Adjust this value up/down to scale the entire logo */
+    width: auto; /* Keeps original proportions intact */
+    max-height: 80%; /* Leaves breathing room top & bottom inside 120px header */
     display: block;
     object-fit: contain;
   }
