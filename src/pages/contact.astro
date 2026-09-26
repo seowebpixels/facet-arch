@@ -107,9 +107,16 @@ const WEB3FORMS_ACCESS_KEY = "5809f663-d9b7-4c8e-8269-ae38456c0f05";
 
 <div class="field-row">
     <div class="field-group">
-      <label for="budget">ESTIMATED BUDGET</label>
-      <input type="text" id="budget" name="budget" placeholder="e.g. R2.5M or Flexible" />
-    </div>
+  <label for="budget">ESTIMATED BUDGET</label>
+  <input 
+    type="text" 
+    id="budget" 
+    name="budget" 
+    inputmode="numeric" 
+    placeholder="e.g. 2500000" 
+  />
+  <span id="budget-error" class="error-message">Numerical values only (numbers, commas, or decimals)</span>
+</div>
   </div>
 
           <div class="field-group">
@@ -133,7 +140,7 @@ const WEB3FORMS_ACCESS_KEY = "5809f663-d9b7-4c8e-8269-ae38456c0f05";
           <span class="success-sub">TRANSMISSION CONFIRMED</span>
           <h2 class="success-title">INQUIRY RECEIVED</h2>
           <p class="success-desc">
-            Thank you for reaching out. Your project details have been successfully transmitted to <strong>Warren Green</strong> and the studio team at <strong>Facet Architecture</strong>.
+            Thank you for reaching out. Your project details have been successfully transmitted to the studio team at <strong>Facet Architecture</strong>.
           </p>
           <div class="success-footer">
             <p>EXPECTED RESPONSE TIME: <strong>WITHIN 24 HOURS</strong></p>
