@@ -21,8 +21,8 @@ const navItems = [
         src={logoImg} 
         alt="Facet Architecture Logo" 
         class="site-logo"
-        width={260}
-        height={80}
+        width={320}
+        height={100}
         loading="eager"
         decoding="sync"
       />
@@ -71,28 +71,30 @@ const navItems = [
     left: 0;
     width: 100vw;
     z-index: 2147483646;
-    background-color: #2e343b; /* Dark charcoal grey background */
+    background-color: #2e343b; /* Charcoal grey */
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     box-sizing: border-box;
   }
 
+  /* Expanded height to prevent logo clipping & increase menu bar size */
   .header-inner {
-    max-width: 1600px;
+    max-width: 1800px;
     margin: 0 auto;
-    height: 80px;
+    height: 110px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 32px;
+    padding: 0 40px;
     box-sizing: border-box;
   }
 
-  /* Top Left Logo */
+  /* Top Left Logo Container */
   .logo-link {
     display: flex;
     align-items: center;
     text-decoration: none;
     transition: transform 0.3s ease;
+    overflow: visible;
   }
 
   .logo-link:hover {
@@ -100,7 +102,7 @@ const navItems = [
   }
 
   .site-logo {
-    height: clamp(40px, 4vw, 52px);
+    height: clamp(55px, 5.5vw, 75px);
     width: auto;
     display: block;
     object-fit: contain;
@@ -110,20 +112,20 @@ const navItems = [
   .desktop-nav {
     display: flex;
     align-items: center;
-    gap: clamp(20px, 3vw, 42px);
+    gap: clamp(24px, 3.5vw, 52px);
   }
 
   .nav-link {
     position: relative;
     text-decoration: none;
-    padding: 6px 0;
+    padding: 8px 0;
   }
 
   .nav-text {
     font-family: 'Bank Gothic', 'BankGothic', sans-serif, system-ui;
-    font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+    font-size: clamp(1rem, 1.3vw, 1.25rem);
     color: #ffffff;
-    letter-spacing: 2px;
+    letter-spacing: 2.5px;
     text-transform: uppercase;
     transition: color 0.3s ease;
   }
@@ -156,8 +158,8 @@ const navItems = [
     display: none;
     flex-direction: column;
     justify-content: space-between;
-    width: 30px;
-    height: 20px;
+    width: 32px;
+    height: 22px;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -177,10 +179,10 @@ const navItems = [
   .mobile-menu-drawer {
     display: none;
     position: fixed;
-    top: 80px;
+    top: 110px;
     left: 0;
     width: 100vw;
-    height: calc(100vh - 80px);
+    height: calc(100vh - 110px);
     background-color: #2e343b;
     padding: 40px 32px;
     box-sizing: border-box;
@@ -217,7 +219,11 @@ const navItems = [
   @media (max-width: 899px) {
     .header-inner {
       padding: 0 20px;
-      height: 70px;
+      height: 80px;
+    }
+
+    .site-logo {
+      height: 48px;
     }
 
     .desktop-nav {
@@ -230,12 +236,12 @@ const navItems = [
 
     .mobile-menu-drawer {
       display: block;
-      top: 70px;
-      height: calc(100vh - 70px);
+      top: 80px;
+      height: calc(100vh - 80px);
     }
 
     .mobile-toggle[aria-expanded="true"] .line-1 {
-      transform: translateY(9px) rotate(45deg);
+      transform: translateY(10px) rotate(45deg);
     }
 
     .mobile-toggle[aria-expanded="true"] .line-2 {
@@ -243,7 +249,7 @@ const navItems = [
     }
 
     .mobile-toggle[aria-expanded="true"] .line-3 {
-      transform: translateY(-9px) rotate(-45deg);
+      transform: translateY(-10px) rotate(-45deg);
     }
   }
 </style>
