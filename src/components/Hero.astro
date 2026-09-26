@@ -352,6 +352,18 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 </script>
 
 <style>
+.hero-section {
+  /* 120px header + 20px-40px spacing */
+  padding-top: 150px; 
+}
+
+.hero-logo-container {
+  position: absolute;
+  top: 140px; /* Increased from 0/top-aligned so it clears the 120px header */
+  right: 40px;
+  z-index: 10;
+}
+
   .lcp-seo-anchor {
     position: absolute;
     top: 50%;
