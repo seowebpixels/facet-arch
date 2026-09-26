@@ -21,8 +21,8 @@ const navItems = [
         src={logoImg} 
         alt="Facet Architecture Logo" 
         class="site-logo"
-        width={240}
-        height={80}
+        width={600}
+        height={200}
         loading="eager"
         decoding="sync"
       />
@@ -76,7 +76,7 @@ const navItems = [
     box-sizing: border-box;
   }
 
-  /* Maintained standard header height */
+  /* Your preferred 120px menu bar height */
   .header-inner {
     max-width: 1800px;
     margin: 0 auto;
@@ -84,7 +84,7 @@ const navItems = [
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 30px;
+    padding: 0 40px;
     box-sizing: border-box;
   }
 
@@ -94,17 +94,18 @@ const navItems = [
     align-items: center;
     text-decoration: none;
     transition: transform 0.3s ease;
-    overflow: visible;
+    height: 100%;
   }
 
   .logo-link:hover {
     transform: scale(1.02);
   }
 
-  /* Scaled down logo height so it never touches the header edges */
+  /* Ensures full image visibility without cropping */
   .site-logo {
-    height: clamp(38px, 4vw, 48px);
+    height: 80px;
     width: auto;
+    max-height: 80%;
     display: block;
     object-fit: contain;
   }
@@ -124,7 +125,7 @@ const navItems = [
 
   .nav-text {
     font-family: 'Bank Gothic', 'BankGothic', sans-serif, system-ui;
-    font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+    font-size: clamp(1rem, 1.3vw, 1.25rem);
     color: #ffffff;
     letter-spacing: 2.5px;
     text-transform: uppercase;
@@ -180,10 +181,10 @@ const navItems = [
   .mobile-menu-drawer {
     display: none;
     position: fixed;
-    top: 80px;
+    top: 120px;
     left: 0;
     width: 100vw;
-    height: calc(100vh - 80px);
+    height: calc(100vh - 120px);
     background-color: #2e343b;
     padding: 40px 32px;
     box-sizing: border-box;
@@ -220,11 +221,11 @@ const navItems = [
   @media (max-width: 899px) {
     .header-inner {
       padding: 0 20px;
-      height: 80px;
+      height: 90px;
     }
 
     .site-logo {
-      height: 40px;
+      height: 55px;
     }
 
     .desktop-nav {
@@ -237,8 +238,8 @@ const navItems = [
 
     .mobile-menu-drawer {
       display: block;
-      top: 80px;
-      height: calc(100vh - 80px);
+      top: 90px;
+      height: calc(100vh - 90px);
     }
 
     .mobile-toggle[aria-expanded="true"] .line-1 {
