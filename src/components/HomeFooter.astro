@@ -85,6 +85,22 @@ const currentYear = new Date().getFullYear();
       </div>
     </div>
 
+    <!-- Accreditations Row -->
+    <div class="accreditations-bar">
+      <span class="accreditations-header">ACCREDITATIONS & AFFILIATIONS</span>
+      <div class="accreditations-list">
+        <span>SACAP</span>
+        <span class="divider">|</span>
+        <span>SAIA</span>
+        <span class="divider">|</span>
+        <span>SAIAT</span>
+        <span class="divider">|</span>
+        <span>LEED</span>
+        <span class="divider">|</span>
+        <span>EDGE</span>
+      </div>
+    </div>
+
     <!-- Copyright Base -->
     <div class="footer-base">
       <p class="footer-line copyright-line">&copy; {currentYear} FACET ARCHITECTURE</p>
@@ -159,6 +175,42 @@ const currentYear = new Date().getFullYear();
     transform: translateY(-2px) !important;
   }
 
+  /* Accreditations Bar */
+  .home-footer-main .accreditations-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .home-footer-main .accreditations-header {
+    font-size: 11px;
+    font-family: monospace;
+    letter-spacing: 0.2em;
+    color: #00FFC8;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .home-footer-main .accreditations-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+    font-family: monospace;
+    letter-spacing: 0.15em;
+    color: #FFFFFF;
+    font-weight: 600;
+  }
+
+  .home-footer-main .accreditations-list .divider {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
   .home-footer-main .footer-base {
     display: flex;
     justify-content: space-between;
@@ -194,7 +246,7 @@ const currentYear = new Date().getFullYear();
     -webkit-text-stroke: 0.4px #FFFFFF;
     outline: none !important;
   }
-  
+
   @media (max-width: 899px) {
     .home-footer-main .cta-content {
       flex-direction: column !important;
@@ -230,6 +282,13 @@ const currentYear = new Date().getFullYear();
 
     .home-footer-main .social-icons {
       margin-top: 16px !important;
+    }
+
+    .home-footer-main .accreditations-bar {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
     }
 
     .home-footer-main .footer-base {

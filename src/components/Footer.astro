@@ -2,265 +2,132 @@
 const currentYear = new Date().getFullYear();
 ---
 
-<footer class="home-matched-footer" role="contentinfo">
-  <div class="cta-section">
-    <div class="cta-content">
-      <div class="cta-text">
-        <span class="cta-sub">NEXT STEPS</span>
-        <h2 class="cta-heading">HAVE A PROJECT IN MIND?</h2>
-      </div>
-      <div class="cta-action">
-        <a href="/contact#contact-section" class="cta-btn" aria-label="Initiate consultation via email">INITIATE CONSULTATION &rarr;</a>
-        
-        <!-- Social Media Icons -->
-        <div class="social-icons">
-          <!-- Instagram -->
-          <a href="https://www.instagram.com/facetarchitecture_za?igsh=YTF3MjJmOW92cW5y&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-            </svg>
-          </a>
-          <!-- Facebook -->
-          <a href="https://www.facebook.com/facetarchitecture/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-            </svg>
-          </a>
-          <!-- LinkedIn -->
-          <a href="https://www.linkedin.com/in/warren-green-a5674927/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-              <rect x="2" y="9" width="4" height="12"></rect>
-              <circle cx="4" cy="4" r="2"></circle>
-            </svg>
-          </a>
-        </div>
+<footer class="site-footer" style="width: 100%; background-color: #111418; color: #FFFFFF; padding: 60px 24px 40px; box-sizing: border-box;" role="contentinfo">
+  <div style="max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px;">
+    
+    <!-- Accreditations Row -->
+    <div class="accreditations-bar">
+      <span class="accreditations-header">ACCREDITATIONS & AFFILIATIONS</span>
+      <div class="accreditations-list">
+        <span>SACAP</span>
+        <span class="divider">|</span>
+        <span>SAIA</span>
+        <span class="divider">|</span>
+        <span>SAIAT</span>
+        <span class="divider">|</span>
+        <span>LEED</span>
+        <span class="divider">|</span>
+        <span>EDGE</span>
       </div>
     </div>
-  </div>
 
-  <div class="footer-divider" role="separator"></div>
+    <!-- Copyright Base -->
+    <div class="footer-base">
+      <p class="footer-line copyright-line">&copy; {currentYear} FACET ARCHITECTURE</p>
+      <p class="footer-line rights-line">ALL RIGHTS RESERVED</p>
+      <p class="footer-line credits-line">
+        DESIGNED BY&nbsp;<a 
+          href="https://webdesignpros.co.za" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="wdp-link"
+          aria-label="Designed by Web Design Pros (opens in a new tab)"
+        >WEB DESIGN PROS</a>
+      </p>
+    </div>
 
-  <div class="footer-base">
-    <p class="footer-line copyright-line">&copy; {currentYear} FACET ARCHITECTURE</p>
-    <p class="footer-line rights-line">ALL RIGHTS RESERVED</p>
-    <p class="footer-line credits-line">
-      DESIGNED BY&nbsp;<a 
-        href="https://webdesignpros.co.za" 
-        target="_blank" 
-        rel="noopener noreferrer" 
-        class="wdp-link"
-        aria-label="Designed by Web Design Pros (opens in a new tab)"
-      >WEB DESIGN PROS</a>
-    </p>
   </div>
 </footer>
 
 <style is:global>
-  footer.home-matched-footer,
-  .home-matched-footer {
-    background-color: #111418 !important;
-    color: #ffffff !important;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
-    padding: 60px 24px 40px !important;
-    box-sizing: border-box;
-    width: 100% !important;
-    position: relative !important;
-    z-index: 10 !important;
-    margin-top: 40px !important;
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-  }
-
-  .home-matched-footer .cta-section {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding-bottom: 35px;
-  }
-
-  .home-matched-footer .cta-content {
+  .site-footer .accreditations-bar {
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     justify-content: space-between;
-    align-items: flex-end;
+    gap: 16px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   }
 
-  .home-matched-footer .cta-sub {
-    display: block;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
-    font-size: 0.75rem;
-    color: #ffffff !important;
-    letter-spacing: 2px;
+  .site-footer .accreditations-header {
+    font-size: 11px;
+    font-family: monospace;
+    letter-spacing: 0.2em;
+    color: #00FFC8;
     text-transform: uppercase;
-    margin-bottom: 10px;
-    font-weight: 600 !important;
-    opacity: 1 !important;
+    font-weight: 700;
   }
 
-  .home-matched-footer .cta-heading {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
-    font-size: 1.3rem !important;
-    color: #ffffff !important;
-    font-weight: 600 !important;
-    letter-spacing: 2px;
-    margin: 0;
-    text-transform: uppercase;
-    opacity: 1 !important;
-  }
-
-  .home-matched-footer .cta-action {
+  .site-footer .accreditations-list {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  }
-
-  .home-matched-footer .cta-btn {
-    display: inline-flex;
+    flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
-    min-height: 44px;
-    padding: 10px 22px;
-    border: 2px solid #ffffff !important;
-    background-color: transparent;
-    color: #ffffff !important;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
-    font-size: 0.75rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-decoration: none;
-    font-weight: 600 !important;
-    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    gap: 16px;
+    font-size: 12px;
+    font-family: monospace;
+    letter-spacing: 0.15em;
+    color: #FFFFFF;
+    font-weight: 600;
   }
 
-  .home-matched-footer .cta-btn:hover,
-  .home-matched-footer .cta-btn:focus-visible {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-    outline: 3px solid #ffffff;
-    outline-offset: 3px;
+  .site-footer .accreditations-list .divider {
+    color: rgba(255, 255, 255, 0.3);
   }
 
-  /* Social Icons */
-  .home-matched-footer .social-icons {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    margin-top: 18px;
-  }
-
-  .home-matched-footer .social-icons a {
-    color: #ffffff !important;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.85;
-    transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
-  }
-
-  .home-matched-footer .social-icons a:hover,
-  .home-matched-footer .social-icons a:focus-visible {
-    opacity: 1;
-    color: #00ffc8 !important;
-    transform: translateY(-2px);
-  }
-
-  .home-matched-footer .footer-divider {
-    max-width: 1400px;
-    margin: 0 auto 24px;
-    height: 1px;
-    background-color: #ffffff !important;
-    opacity: 0.8 !important;
-  }
-
-  .home-matched-footer .footer-base {
-    max-width: 1400px;
-    margin: 0 auto;
+  .site-footer .footer-base {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.75rem;
-    color: #ffffff !important;
-    letter-spacing: 1.8px;
-    text-transform: uppercase;
-    font-weight: 500 !important;
-    opacity: 1 !important;
+    font-size: 11px;
+    color: #FFFFFF !important;
+    font-family: monospace;
+    letter-spacing: 0.2em;
+    gap: 16px;
+    width: 100%;
   }
 
-  .home-matched-footer .footer-line {
+  .site-footer .footer-line {
     margin: 0;
-    color: #ffffff !important;
-    opacity: 1 !important;
+    color: #FFFFFF !important;
   }
 
-  .home-matched-footer .wdp-link {
+  .site-footer .wdp-link {
     display: inline-block;
-    color: #ffffff !important;
-    font-weight: 500;
+    padding: 2px 0;
+    color: #FFFFFF !important;
+    font-weight: 400 !important;
     text-decoration: none !important;
-    opacity: 1 !important;
-    transition: font-weight 0.2s ease, transform 0.2s ease;
+    outline: none !important;
+    transition: font-weight 0.15s ease, opacity 0.15s ease;
   }
 
-  .home-matched-footer .wdp-link:hover,
-  .home-matched-footer .wdp-link:focus-visible {
-    color: #ffffff !important;
-    font-weight: 800 !important;
+  .site-footer .wdp-link:hover,
+  .site-footer .wdp-link:focus-visible {
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    -webkit-text-stroke: 0.4px #FFFFFF;
     outline: none !important;
   }
 
   @media (max-width: 899px) {
-    .home-matched-footer .cta-content {
-      flex-direction: column !important;
-      align-items: flex-start !important;
-      gap: 20px !important;
+    .site-footer .accreditations-bar {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
     }
 
-    .home-matched-footer .cta-text {
-      width: 100% !important;
-    }
-
-    .home-matched-footer .cta-heading {
-      font-size: clamp(1rem, 4.8vw, 1.3rem) !important;
-      white-space: nowrap !important;
-      letter-spacing: 1.5px !important;
-      line-height: 1.2 !important;
-    }
-
-    .home-matched-footer .cta-action {
-      width: 100% !important;
-      align-items: flex-start !important;
-    }
-
-    .home-matched-footer .cta-btn {
-      display: flex !important;
-      width: 100% !important;
-      text-align: center !important;
-      box-sizing: border-box !important;
-      padding: 12px 16px !important;
-      font-size: 0.75rem !important;
-      letter-spacing: 2px !important;
-    }
-
-    .home-matched-footer .social-icons {
-      margin-top: 16px !important;
-    }
-
-    .home-matched-footer .footer-base {
+    .site-footer .footer-base {
       flex-direction: column !important;
       align-items: center !important;
       text-align: center !important;
       gap: 8px !important;
     }
 
-    .home-matched-footer .footer-line {
+    .site-footer .footer-line {
       white-space: nowrap !important;
       line-height: 1.6 !important;
-    }
-
-    .home-matched-footer .credits-line {
-      margin-top: 0.5rem !important;
     }
   }
 </style>
