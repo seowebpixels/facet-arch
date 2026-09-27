@@ -19,7 +19,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 <section id="hero-stage" class="stage-container">
   <h2 class="lcp-seo-anchor" fetchpriority="high">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
-  <!-- Fixed native position at top: 15px, left: 15px -->
+  <!-- Persistent Text Container Positioned at Top Left -->
   <div id="hero-text-container" class="hero-text-container">
     <h1 id="text-facet" class="title-text text-facet">FACET</h1>
     <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
@@ -225,10 +225,10 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
     const isMobile = window.innerWidth <= 768;
 
-    // Shift text from top-left (15px, 15px) to viewport center using pure relative CSS units
+    // Set initial centered state using pure GSAP string translations
     gsap.set(heroTextContainer, {
-      x: 'calc(50vw - 15px)',
-      y: 'calc(50vh - 15px)',
+      x: '50vw',
+      y: '50vh',
       xPercent: -50,
       yPercent: -50,
       opacity: 0
@@ -257,13 +257,11 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
       });
 
       tl
-        // 1. Fade in text in center
         .to(heroTextContainer, {
           opacity: 1,
           duration: 0.8,
-          delay: 1.0
+          delay: 0.8
         })
-        // 2. Animate text back to native position (x: 0, y: 0, xPercent: 0, yPercent: 0)
         .to(logoCenter, {
           top: '130px',
           left: 'calc(100vw - 75px)',
@@ -279,7 +277,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           yPercent: 0,
           duration: 1.2
         }, '<')
-        // 3. Reveal clock & hero frame
         .to(clock, {
           opacity: 1,
           y: 0,
@@ -310,7 +307,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
       tl.to(heroTextContainer, {
         opacity: 1,
         duration: 0.8,
-        delay: 1.0
+        delay: 0.8
       })
       .to(logoCenter, {
         top: '90px',
@@ -394,10 +391,9 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     pointer-events: none;
   }
 
-  /* Native base position is 15px from top and 15px from left */
   .hero-text-container {
     position: absolute;
-    top: 15px;
+    top: 60px;
     left: 15px;
     z-index: 999999;
     display: flex;
