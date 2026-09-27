@@ -19,10 +19,16 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 <section id="hero-stage" class="stage-container">
   <h2 class="lcp-seo-anchor" fetchpriority="high">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
-  <!-- Persistent Text Container starts centered via CSS -->
+  <!-- 1. Intro Center Text (Fades out during intro) -->
+  <div id="intro-text-center" class="intro-text-center">
+    <span class="title-text text-facet">FACET</span>
+    <span class="title-text text-architecture">ARCHITECTURE</span>
+  </div>
+
+  <!-- 2. Permanent Top-Left Header Text (Fades in and stays visible permanently at z-index 999999) -->
   <div id="hero-text-container" class="hero-text-container">
-    <h1 id="text-facet" class="title-text text-facet">FACET</h1>
-    <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
+    <h1 class="title-text text-facet">FACET</h1>
+    <h1 class="title-text text-architecture">ARCHITECTURE</h1>
   </div>
 
   <!-- Fullscreen Container for Ken Burns Slides -->
@@ -217,15 +223,17 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
     // 4. Primary GSAP Intro Sequence
     const logoCenter = document.getElementById('logo-center');
+    const introTextCenter = document.getElementById('intro-text-center');
     const heroTextContainer = document.getElementById('hero-text-container');
     const clock = document.getElementById('hero-clock');
     const heroFrame = document.getElementById('hero-frame');
 
-    if (!logoCenter || !heroTextContainer || !clock || !heroFrame) return;
+    if (!logoCenter || !introTextCenter || !heroTextContainer || !clock || !heroFrame) return;
 
     const isMobile = window.innerWidth <= 768;
 
-    // Reset initial text opacity
+    // Set initial opacities
+    gsap.set(introTextCenter, { opacity: 0 });
     gsap.set(heroTextContainer, { opacity: 0 });
 
     if (isMobile) {
@@ -242,6 +250,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
       logoCenter.style.visibility = 'visible';
       heroFrame.style.visibility = 'visible';
+      introTextCenter.style.visibility = 'visible';
       heroTextContainer.style.visibility = 'visible';
       clock.style.visibility = 'visible';
 
@@ -251,11 +260,13 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
       });
 
       tl
-        .to(heroTextContainer, {
+        // 1. Reveal center text
+        .to(introTextCenter, {
           opacity: 1,
           duration: 0.8,
           delay: 0.8
         })
+        // 2. Animate logo away, crossfade center text into top-left permanent text
         .to(logoCenter, {
           top: '130px',
           left: 'calc(100vw - 75px)',
@@ -264,13 +275,15 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           scale: 0.32,
           duration: 1.2
         })
-        .to(heroTextContainer, {
-          top: '15px',
-          left: '15px',
-          xPercent: 0,
-          yPercent: 0,
-          duration: 1.2
+        .to(introTextCenter, {
+          opacity: 0,
+          duration: 0.6
         }, '<')
+        .to(heroTextContainer, {
+          opacity: 1,
+          duration: 0.8
+        }, '-=0.4')
+        // 3. Reveal clock & hero frame
         .to(clock, {
           opacity: 1,
           y: 0,
@@ -290,6 +303,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
       logoCenter.style.visibility = 'visible';
       heroFrame.style.visibility = 'visible';
+      introTextCenter.style.visibility = 'visible';
       heroTextContainer.style.visibility = 'visible';
       clock.style.visibility = 'visible';
 
@@ -298,42 +312,46 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         onComplete: startKenBurnsCarousel 
       });
 
-      tl.to(heroTextContainer, {
-        opacity: 1,
-        duration: 0.8,
-        delay: 0.8
-      })
-      .to(logoCenter, {
-        top: '90px',
-        left: '100vw', 
-        xPercent: -90, 
-        x: 130,
-        yPercent: 0,
-        y: 0,
-        scale: 0.55,
-        transformOrigin: 'top left',
-        duration: 1.2,
-        ease: 'power2.inOut'
-      })
-      .to(heroTextContainer, {
-        top: '15px',
-        left: '15px',
-        xPercent: 0,
-        yPercent: 0,
-        duration: 1.2,
-        ease: 'power4.out'
-      }, '<')
-      .to(clock, {
-        opacity: 1,
-        y: 0,
-        duration: 0.5
-      }, '-=0.4')
-      .to(heroFrame, {
-        opacity: 1,
-        scale: 1,
-        duration: 1.2,
-        ease: 'power4.out'
-      }, '-=0.6');
+      tl
+        // 1. Reveal center text
+        .to(introTextCenter, {
+          opacity: 1,
+          duration: 0.8,
+          delay: 0.8
+        })
+        // 2. Move logo, crossfade text smoothly
+        .to(logoCenter, {
+          top: '90px',
+          left: '100vw', 
+          xPercent: -90, 
+          x: 130,
+          yPercent: 0,
+          y: 0,
+          scale: 0.55,
+          transformOrigin: 'top left',
+          duration: 1.2,
+          ease: 'power2.inOut'
+        })
+        .to(introTextCenter, {
+          opacity: 0,
+          duration: 0.6
+        }, '<')
+        .to(heroTextContainer, {
+          opacity: 1,
+          duration: 0.8
+        }, '-=0.4')
+        // 3. Reveal clock & hero frame
+        .to(clock, {
+          opacity: 1,
+          y: 0,
+          duration: 0.5
+        }, '-=0.4')
+        .to(heroFrame, {
+          opacity: 1,
+          scale: 1,
+          duration: 1.2,
+          ease: 'power4.out'
+        }, '-=0.6');
     }
   }
 
@@ -385,18 +403,31 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     pointer-events: none;
   }
 
-  /* Text Container natively centered in CSS */
-  .hero-text-container {
+  /* 1. Intro Center Text Container */
+  .intro-text-center {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    z-index: 999998;
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    white-space: nowrap;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  /* 2. Permanent Top-Left Text Container */
+  .hero-text-container {
+    position: absolute;
+    top: 15px;
+    left: 15px;
     z-index: 999999;
     display: flex;
     flex-direction: row;
     gap: 12px;
     white-space: nowrap;
-    will-change: top, left, transform, opacity;
     visibility: hidden;
     pointer-events: none;
   }
@@ -511,6 +542,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
       border-radius: 0;
     }
 
+    .intro-text-center,
     .hero-text-container {
       gap: 6px;
     }
