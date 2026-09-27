@@ -340,6 +340,15 @@ const portfolioData = [
     box-sizing: border-box;
   }
 
+  /* In Header.astro or portfolio.astro global header styles */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000 !important; /* Ensures header menu button stays above fixed portfolio category bar */
+}
+
   .nav-track {
     display: flex;
     flex-wrap: nowrap;
