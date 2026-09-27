@@ -19,7 +19,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 <section id="hero-stage" class="stage-container">
   <h2 class="lcp-seo-anchor" fetchpriority="high">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
-  <!-- Single persistent Header Text Element -->
+  <!-- Persistent Header Text Element -->
   <div id="hero-text-container" class="hero-text-container">
     <h1 id="text-facet" class="title-text text-facet">FACET</h1>
     <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
@@ -225,12 +225,15 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
     const isMobile = window.innerWidth <= 768;
 
-    // Calculate exact center pixel offsets based on viewport dimensions
+    // Calculate exact center pixel offsets based on target CSS position (top: 85px/75px, left: 20px/15px)
     const rect = heroTextContainer.getBoundingClientRect();
-    const centerXOffset = (window.innerWidth / 2) - (rect.width / 2) - 15;
-    const centerYOffset = (window.innerHeight / 2) - (rect.height / 2) - 15;
+    const targetTop = isMobile ? 75 : 85;
+    const targetLeft = isMobile ? 15 : 20;
 
-    // Set initial centered state using exact x/y pixel offsets relative to top:15px; left:15px
+    const centerXOffset = (window.innerWidth / 2) - (rect.width / 2) - targetLeft;
+    const centerYOffset = (window.innerHeight / 2) - (rect.height / 2) - targetTop;
+
+    // Set initial centered state relative to target top/left position
     gsap.set(heroTextContainer, {
       x: centerXOffset,
       y: centerYOffset,
@@ -266,7 +269,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           duration: 0.8,
           delay: 0.8
         })
-        // 2. Animate text to top-left (x: 0, y: 0) while moving logo
+        // 2. Animate text to top-left below navbar (x: 0, y: 0) while moving logo
         .to(logoCenter, {
           top: '130px',
           left: 'calc(100vw - 75px)',
@@ -316,7 +319,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           duration: 0.8,
           delay: 0.8
         })
-        // 2. Animate text to top-left (x: 0, y: 0) while moving logo
+        // 2. Animate text to top-left below navbar (x: 0, y: 0) while moving logo
         .to(logoCenter, {
           top: '90px',
           left: '100vw', 
@@ -398,11 +401,11 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     pointer-events: none;
   }
 
-  /* Single text container fixed at top: 15px; left: 15px */
+  /* Single text container positioned below navbar height */
   .hero-text-container {
     position: absolute;
-    top: 15px;
-    left: 15px;
+    top: 85px;
+    left: 20px;
     z-index: 999999;
     display: flex;
     flex-direction: row;
@@ -524,6 +527,8 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     }
 
     .hero-text-container {
+      top: 75px;
+      left: 15px;
       gap: 6px;
     }
 
