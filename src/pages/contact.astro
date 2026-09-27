@@ -94,7 +94,6 @@ const WEB3FORMS_ACCESS_KEY = "5809f663-d9b7-4c8e-8269-ae38456c0f05";
 
             <div class="field-group">
               <label for="project_type">PROJECT TYPE</label>
-
               <select id="project_type" name="project_type">
                 <option value="Luxury Residential">Luxury Residential</option>
                 <option value="Commercial Development">Commercial Development</option>
@@ -105,19 +104,19 @@ const WEB3FORMS_ACCESS_KEY = "5809f663-d9b7-4c8e-8269-ae38456c0f05";
             </div>
           </div>
 
-<div class="field-row">
-    <div class="field-group">
-  <label for="budget">ESTIMATED BUDGET</label>
-  <input 
-    type="text" 
-    id="budget" 
-    name="budget" 
-    inputmode="numeric" 
-    placeholder="e.g. 2500000" 
-  />
-  <span id="budget-error" class="error-message">Numerical values only</span>
-</div>
-  </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label for="budget">ESTIMATED BUDGET</label>
+              <input 
+                type="text" 
+                id="budget" 
+                name="budget" 
+                inputmode="numeric" 
+                placeholder="e.g. 2500000" 
+              />
+              <span id="budget-error" class="error-message">NUMERICAL VALUES ONLY</span>
+            </div>
+          </div>
 
           <div class="field-group">
             <label for="message">PROJECT BRIEF / DETAILS *</label>
@@ -147,7 +146,7 @@ const WEB3FORMS_ACCESS_KEY = "5809f663-d9b7-4c8e-8269-ae38456c0f05";
           </div>
         </div>
 
-        <!-- Social Icons: Positioned 75px below the form container and right-aligned with it -->
+        <!-- Social Icons: Positioned 75px below the form container and left-aligned with it -->
         <div class="contact-social-bar">
           <a href="https://www.instagram.com/facetarchitecture_za?igsh=YTF3MjJmOW92cW5y&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -337,6 +336,25 @@ const WEB3FORMS_ACCESS_KEY = "5809f663-d9b7-4c8e-8269-ae38456c0f05";
     background: rgba(0, 0, 0, 0.4);
   }
 
+  /* Budget Validation Styling */
+  .field-group input.input-error {
+    border-color: #00ffc8 !important;
+    box-shadow: 0 0 8px rgba(0, 255, 200, 0.3);
+  }
+
+  .error-message {
+    display: none;
+    font-family: 'Bank Gothic', 'BankGothic', sans-serif, system-ui;
+    font-size: 0.7rem;
+    color: #00ffc8;
+    letter-spacing: 1.5px;
+    margin-top: 4px;
+  }
+
+  .error-message.show {
+    display: block;
+  }
+
   .submit-button {
     display: flex;
     align-items: center;
@@ -432,7 +450,7 @@ const WEB3FORMS_ACCESS_KEY = "5809f663-d9b7-4c8e-8269-ae38456c0f05";
     margin: 0;
   }
 
-  /* Social Icons: 75px spacing below the form, right-aligned to match the box edge */
+  /* Social Icons: 75px spacing below the form, left-aligned to match the box edge */
   .contact-social-bar {
     display: flex;
     align-items: center;
@@ -470,8 +488,8 @@ const WEB3FORMS_ACCESS_KEY = "5809f663-d9b7-4c8e-8269-ae38456c0f05";
   }
 
   html {
-  scroll-behavior: smooth;
-}
+    scroll-behavior: smooth;
+  }
 </style>
 
 <script>
@@ -479,11 +497,42 @@ const WEB3FORMS_ACCESS_KEY = "5809f663-d9b7-4c8e-8269-ae38456c0f05";
     const form = document.getElementById('contact-form') as HTMLFormElement | null;
     const successCard = document.getElementById('success-card');
     const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
+    const budgetInput = document.getElementById('budget') as HTMLInputElement | null;
+    const budgetError = document.getElementById('budget-error');
 
     if (!form || !successCard || !submitBtn) return;
 
+    // Real-time numeric enforcement
+    if (budgetInput && budgetError) {
+      budgetInput.addEventListener('input', () => {
+        const rawValue = budgetInput.value;
+        // Strip out anything that is NOT a digit, space, comma, or period
+        const cleanedValue = rawValue.replace(/[^0-9\s.,]/g, '');
+
+        if (rawValue !== cleanedValue) {
+          // Non-numeric key attempt detected
+          budgetInput.value = cleanedValue;
+          budgetInput.classList.add('input-error');
+          budgetError.classList.add('show');
+        } else {
+          budgetInput.classList.remove('input-error');
+          budgetError.classList.remove('show');
+        }
+      });
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      // Final check prior to submission
+      if (budgetInput && budgetInput.value.trim() !== '') {
+        if (/[^0-9\s.,]/.test(budgetInput.value)) {
+          budgetInput.classList.add('input-error');
+          budgetError?.classList.add('show');
+          budgetInput.focus();
+          return;
+        }
+      }
 
       // UI Feedback while sending
       const btnText = submitBtn.querySelector('.btn-text');
@@ -501,7 +550,6 @@ const WEB3FORMS_ACCESS_KEY = "5809f663-d9b7-4c8e-8269-ae38456c0f05";
         const data = await response.json();
 
         if (data.success) {
-          // Hide Form and Show Custom Success Card
           form.style.display = 'none';
           successCard.style.display = 'flex';
         } else {
