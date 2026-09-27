@@ -225,22 +225,16 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
     const isMobile = window.innerWidth <= 768;
 
-    // Calculate exact center pixel offsets based on target CSS position (top: 85px/75px, left: 20px/15px)
-    const rect = heroTextContainer.getBoundingClientRect();
-    const targetTop = isMobile ? 75 : 85;
-    const targetLeft = isMobile ? 15 : 20;
-
-    const centerXOffset = (window.innerWidth / 2) - (rect.width / 2) - targetLeft;
-    const centerYOffset = (window.innerHeight / 2) - (rect.height / 2) - targetTop;
-
-    // Set initial centered state relative to target top/left position
-    gsap.set(heroTextContainer, {
-      x: centerXOffset,
-      y: centerYOffset,
-      opacity: 0
-    });
-
     if (isMobile) {
+      // Set initial centered state explicitly
+      gsap.set(heroTextContainer, {
+        top: '50%',
+        left: '50%',
+        xPercent: -50,
+        yPercent: -50,
+        opacity: 0
+      });
+
       gsap.set(logoCenter, { 
         top: '50%', 
         left: '50%', 
@@ -269,7 +263,15 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           duration: 0.8,
           delay: 0.8
         })
-        // 2. Animate text to top-left below navbar (x: 0, y: 0) while moving logo
+        // 2. Animate text directly to clear mobile header (105px from top)
+        .to(heroTextContainer, {
+          top: '105px',
+          left: '15px',
+          xPercent: 0,
+          yPercent: 0,
+          duration: 1.2,
+          ease: 'power3.inOut'
+        })
         .to(logoCenter, {
           top: '130px',
           left: 'calc(100vw - 75px)',
@@ -277,12 +279,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           yPercent: -50,
           scale: 0.32,
           duration: 1.2
-        })
-        .to(heroTextContainer, {
-          x: 0,
-          y: 0,
-          duration: 1.2,
-          ease: 'power3.inOut'
         }, '<')
         // 3. Reveal clock & hero frame
         .to(clock, {
@@ -299,6 +295,14 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
     } else {
       /* DESKTOP BRANCH */
+      gsap.set(heroTextContainer, {
+        top: '50%',
+        left: '50%',
+        xPercent: -50,
+        yPercent: -50,
+        opacity: 0
+      });
+
       gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
       gsap.set(clock, { opacity: 0, y: 15 });
 
@@ -319,9 +323,17 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           duration: 0.8,
           delay: 0.8
         })
-        // 2. Animate text to top-left below navbar (x: 0, y: 0) while moving logo
+        // 2. Animate text directly to 20px below header bar (130px from top)
+        .to(heroTextContainer, {
+          top: '130px',
+          left: '30px',
+          xPercent: 0,
+          yPercent: 0,
+          duration: 1.2,
+          ease: 'power3.inOut'
+        })
         .to(logoCenter, {
-          top: '90px',
+          top: '130px',
           left: '100vw', 
           xPercent: -90, 
           x: 130,
@@ -331,12 +343,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           transformOrigin: 'top left',
           duration: 1.2,
           ease: 'power2.inOut'
-        })
-        .to(heroTextContainer, {
-          x: 0,
-          y: 0,
-          duration: 1.2,
-          ease: 'power3.inOut'
         }, '<')
         // 3. Reveal clock & hero frame
         .to(clock, {
@@ -401,17 +407,14 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     pointer-events: none;
   }
 
-  /* Single text container positioned below navbar height */
   .hero-text-container {
     position: absolute;
-    top: 85px;
-    left: 20px;
     z-index: 999999;
     display: flex;
     flex-direction: row;
     gap: 12px;
     white-space: nowrap;
-    will-change: transform, opacity;
+    will-change: transform, top, left, opacity;
     visibility: hidden;
     pointer-events: none;
   }
@@ -468,10 +471,10 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
   .hero-frame {
     position: absolute;
-    top: 18%;
+    top: 22%;
     left: 12%;
     width: 76vw;
-    height: 67vh;
+    height: 65vh;
     z-index: 20;
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
@@ -527,8 +530,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     }
 
     .hero-text-container {
-      top: 75px;
-      left: 15px;
       gap: 6px;
     }
 
