@@ -19,6 +19,18 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 <section id="hero-stage" class="stage-container">
   <h2 class="lcp-seo-anchor" fetchpriority="high">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
+  <!-- Navigation Menu Overlay Container -->
+  <div id="menu-overlay" class="menu-overlay" aria-hidden="true">
+    <div class="menu-content">
+      <nav class="menu-nav">
+        <a href="/">Home</a>
+        <a href="/portfolio">Portfolio</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+      </nav>
+    </div>
+  </div>
+
   <!-- Fullscreen Container for Ken Burns Slides -->
   <div id="fullscreen-bg" class="fullscreen-bg">
     {heroImages.map((img, index) => (
@@ -297,22 +309,22 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
       });
 
       tl.to(logoCenter, {
-  top: '90px',                        // Pulls it higher (closer to the header bar)
-  left: '100vw', 
-  xPercent: -90, 
-  x: 130,                              // Positive value pushes the logo graphics rightward past transparent canvas padding
-  yPercent: 0,
-  y: 0,
-  scale: 0.55,
-  transformOrigin: 'top left',
-  duration: 1.3,
-  ease: 'power2.inOut',
-  delay: 1.8
-})
+        top: '90px',
+        left: '100vw', 
+        xPercent: -90, 
+        x: 130,
+        yPercent: 0,
+        y: 0,
+        scale: 0.55,
+        transformOrigin: 'top left',
+        duration: 1.3,
+        ease: 'power2.inOut',
+        delay: 1.8
+      })
         .to(textFacet, {
           opacity: 1,
           x: frameBounds.left, 
-          y: targetY, // Positioned safely at 145px top
+          y: targetY,
           xPercent: 0,
           yPercent: 0,
           duration: 1.1,
@@ -321,7 +333,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         .to(textArchitecture, {
           opacity: 1,
           x: architectureX,
-          y: targetY, // Aligns seamlessly next to FACET
+          y: targetY,
           xPercent: 0,
           yPercent: 0,
           duration: 1.1,
@@ -349,6 +361,58 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 </script>
 
 <style>
+  /* Base Navigation Overlay Styles */
+  .menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(17, 17, 17, 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 999999;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .menu-content {
+    text-align: center;
+  }
+
+  .menu-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .menu-nav a {
+    font-family: 'Bank Gothic', sans-serif, system-ui;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 900;
+    color: #ffffff;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+
+  .menu-nav a:hover {
+    color: #00E5FF;
+    transform: translateY(-2px);
+  }
+
   .lcp-seo-anchor {
     position: absolute;
     top: 50%;
@@ -431,25 +495,25 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
   }
 
   .logo-center-wrapper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  transform-origin: top left;
-  width: 430px; /* Increased from 380px */
-  height: 430px; /* Increased from 380px */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 99999;
-  pointer-events: none;
-  will-change: transform, top, left;
-  visibility: hidden;
-}
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transform-origin: top left;
+    width: 430px;
+    height: 430px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    pointer-events: none;
+    will-change: transform, top, left;
+    visibility: hidden;
+  }
 
   .hero-frame {
     position: absolute;
-    top: 18%; /* Shifted down slightly to leave generous space for the title text above it */
+    top: 18%;
     left: 12%;
     width: 76vw;
     height: 67vh;

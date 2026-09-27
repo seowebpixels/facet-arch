@@ -134,6 +134,31 @@ const preloadedLogo = await getImage({
     </main>
 
     <script>
+      // Navigation Menu Trigger Logic
+      document.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement | null;
+        if (!target) return;
+
+        const trigger = target.closest('#hero-hamburger, .hamburger-btn, .menu-trigger, [data-menu-trigger]');
+        
+        if (trigger) {
+          e.preventDefault();
+          const overlay = document.getElementById('menu-overlay') || document.querySelector('.menu-overlay');
+          const navDrawer = document.getElementById('nav-drawer') || document.querySelector('.nav-drawer');
+          
+          if (overlay) {
+            overlay.classList.toggle('active');
+            const isOpen = overlay.classList.contains('active');
+            trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            document.body.classList.toggle('menu-open', isOpen);
+          }
+          if (navDrawer) {
+            navDrawer.classList.toggle('active');
+          }
+        }
+      });
+
+      // Context Menu & Content Protection
       document.addEventListener('contextmenu', (e) => e.preventDefault());
       document.addEventListener('keydown', (e) => {
         if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) {
@@ -179,5 +204,14 @@ const preloadedLogo = await getImage({
   a, button, input, textarea, select, .portfolio-card, .cad-trigger,
   .site-header, .menu-box, .menu-box *, .menu-overlay, .menu-overlay * {
     pointer-events: auto !important;
+  }
+
+  /* Ensure active overlay sits above all other page content */
+  .menu-overlay.active,
+  .nav-drawer.active {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 99999 !important;
   }
 </style>
