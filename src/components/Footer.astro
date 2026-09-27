@@ -196,20 +196,18 @@ const currentYear = new Date().getFullYear();
 
   .home-matched-footer .wdp-link {
     display: inline-block;
-    padding: 4px 2px;
     color: #ffffff !important;
-    font-weight: 600 !important;
-    text-decoration: underline;
+    font-weight: 500;
+    text-decoration: none !important;
     opacity: 1 !important;
-    transition: color 0.2s ease, font-weight 0.2s ease, text-shadow 0.2s ease;
+    transition: font-weight 0.2s ease, transform 0.2s ease;
   }
 
   .home-matched-footer .wdp-link:hover,
   .home-matched-footer .wdp-link:focus-visible {
     color: #ffffff !important;
-    text-shadow: 0 0 2px #ffffff;
-    outline: 2px solid #ffffff;
-    outline-offset: 2px;
+    font-weight: 800 !important;
+    outline: none !important;
   }
 
   @media (max-width: 899px) {
