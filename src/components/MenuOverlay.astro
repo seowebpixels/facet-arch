@@ -18,34 +18,30 @@ const menuItems = [
 <div id="menu-overlay" class={`menu-overlay ${isOpen ? 'active' : ''}`}>
   <div class="menu-container">
     
-    <div class="left-grid">
-      
-      <div class="right-nav">
-      <a href="/" class="overlay-logo-link" aria-label="Facet Architecture Home">
-        <img 
-          src={logoImg.src} 
-          alt="Facet Architecture Logo" 
-          class="overlay-logo"
-          width={logoImg.width || 300}
-          height={logoImg.height || 300}
-          loading="eager"
-          decoding="sync"
-        />
-      </a>
+    <a href="/" class="overlay-logo-link" aria-label="Facet Architecture Home">
+      <img 
+        src={logoImg.src} 
+        alt="Facet Architecture Logo" 
+        class="overlay-logo"
+        width={logoImg.width || 300}
+        height={logoImg.height || 300}
+        loading="eager"
+        decoding="sync"
+      />
+    </a>
 
-      <nav class="menu-nav-list">
-        {menuItems.map((item) => (
-          <a href={item.href} class="menu-link" data-link={item.name} data-href={item.href}>
-            <span class="menu-link-text">{item.name}</span>
-            <span class="menu-link-underline"></span>
-          </a>
-        ))}
-      </nav>
+    <nav class="menu-nav-list">
+      {menuItems.map((item) => (
+        <a href={item.href} class="menu-link" data-link={item.name} data-href={item.href}>
+          <span class="menu-link-text">{item.name}</span>
+          <span class="menu-link-underline"></span>
+        </a>
+      ))}
+    </nav>
 
-      <!-- Overlay Bottom Clock -->
-      <div class="overlay-clock-container">
-        <span id="overlay-clock-time" class="overlay-clock-text">00:00:00 GMT+2</span>
-      </div>
+    <!-- Overlay Bottom Clock -->
+    <div class="overlay-clock-container">
+      <span id="overlay-clock-time" class="overlay-clock-text">00:00:00 GMT+2</span>
     </div>
 
   </div>
@@ -60,7 +56,7 @@ const menuItems = [
   .menu-overlay {
     position: fixed;
     inset: 0;
-    z-index: 2147483640; /* Set to maximum layer depth */
+    z-index: 2147483640;
     background-color: #2e343b;
     opacity: 0;
     pointer-events: none;
@@ -71,14 +67,12 @@ const menuItems = [
     overflow: hidden;
   }
 
-  /* Must be defined so clicks work when open */
   .menu-overlay.active {
     opacity: 1 !important;
     pointer-events: auto !important;
     visibility: visible !important;
   }
 
-  /* Ensure child elements inside overlay capture mouse/tap events */
   .menu-overlay.active * {
     pointer-events: auto !important;
   }
@@ -87,183 +81,25 @@ const menuItems = [
     pointer-events: auto !important;
   }
 
+  /* Centered Layout for Logo, Navigation Links, and Clock */
   .menu-container {
     width: 100%;
     height: 100dvh;
-    display: grid;
-    grid-template-columns: 1fr;
-    box-sizing: border-box;
-  }
-
-  @media (min-width: 900px) {
-    .menu-container {
-      grid-template-columns: 55% 45%;
-    }
-  }
-
-  /* Left Grid Layout */
-  .left-grid {
-    display: grid;
-    grid-template-columns: 50% 50%;
-    grid-template-rows: 50% 50%;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
-
-  .grid-tile {
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    text-decoration: none;
-    width: 100%;
-    height: 100%;
-  }
-
-  .tile-featured {
-    grid-column: 1 / -1;
-    grid-row: 1 / 2;
-  }
-
-  .tile-bg {
-    position: absolute;
-    inset: 0;
-    background-size: cover;
-    background-position: center;
-    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-  }
-
-  .tile-featured:hover .tile-bg {
-    transform: scale(1.05);
-  }
-
-  .tile-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.25);
-  }
-
-  .address-darken {
-    background: rgba(0, 0, 0, 0.55);
-  }
-
-  .tile-content {
-    position: relative;
-    z-index: 2;
-    padding: clamp(12px, 3vw, 32px);
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-  }
-
-  /* Featured Project Text */
-  .content-featured {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-end;
-    text-align: right;
-  }
-
-  .featured-label {
-    font-family: 'Bank Gothic', 'BankGothic', sans-serif, system-ui;
-    font-size: clamp(1.2rem, 2.2vw, 2.2rem);
-    color: #ffffff;
-    letter-spacing: 2px;
-    line-height: 1.1;
-    text-transform: uppercase;
-  }
-
-  .project-name {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: clamp(0.85rem, 1.2vw, 1.1rem);
-    color: #ffffff;
-    margin-top: 4px;
-    font-weight: 400;
-  }
-
-  /* Address Tile Layout */
-  .tile-address {
-    grid-column: 1 / 2;
-    grid-row: 2 / 3;
-  }
-
-  .tile-address .tile-bg {
-    filter: grayscale(100%);
-  }
-
-  .content-address {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-end;
-    text-align: left;
-    width: 100%;
-  }
-
-  .address-text {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: clamp(0.7rem, 1vw, 0.95rem);
-    color: #ffffff;
-    line-height: 1.3;
-    margin: 0;
-    font-weight: 400;
-    text-align: left;
-  }
-
-  .telephone-number {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: clamp(0.7rem, 1vw, 0.95rem);
-    color: #ffffff;
-    line-height: 1.3;
-    margin: 0.6rem 0 0 0;
-    padding: 0;
-    font-weight: 400;
-    text-align: left;
-  }
-
-  /* SACAP Logo Tile Fix */
-  .tile-logo {
-    grid-column: 2 / 3;
-    grid-row: 2 / 3;
-    background-color: #f36c21;
-    padding: 0;
-    margin: 0;
-    display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    height: 100%;
-  }
-
-  .sacap-logo-img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    padding: 8%;
-    box-sizing: border-box;
-    display: block;
-    margin: 0;
-    border: none;
-  }
-
-  /* Right Navigation Area - Desktop Default */
-  .right-nav {
     position: relative;
-    display: flex;
-    align-items: center;
-    padding: 0 40px 0 10%;
-    background-color: #2e343b;
-    height: 100%;
     box-sizing: border-box;
+    padding: 20px;
   }
 
-  /* Overlay White Logo Placement - Desktop default pinned to the RIGHT */
+  /* Overlay White Logo */
   .overlay-logo-link {
     position: absolute;
-    top: -16px;
-    right: 20px;
-    left: auto;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 10;
     display: flex;
     align-items: center;
@@ -271,15 +107,17 @@ const menuItems = [
   }
 
   .overlay-logo {
-    height: clamp(125px, 14vw, 155px);
+    height: clamp(100px, 12vw, 140px);
     width: auto;
     display: block;
   }
 
+  /* Navigation Links Stack */
   .menu-nav-list {
     display: flex;
     flex-direction: column;
-    gap: clamp(16px, 3vh, 36px);
+    align-items: center;
+    gap: clamp(20px, 4vh, 40px);
   }
 
   .menu-link {
@@ -292,7 +130,7 @@ const menuItems = [
 
   .menu-link-text {
     font-family: 'Bank Gothic', 'BankGothic', sans-serif, system-ui;
-    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    font-size: clamp(2rem, 5vw, 3.5rem);
     color: #ffffff;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -327,10 +165,10 @@ const menuItems = [
     transform: scaleX(0);
   }
 
-  /* Menu Overlay Bottom Clock Styling */
+  /* Menu Overlay Bottom Clock */
   .overlay-clock-container {
     position: absolute;
-    bottom: 48px;
+    bottom: 40px;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
@@ -339,55 +177,10 @@ const menuItems = [
 
   .overlay-clock-text {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+    font-size: clamp(1rem, 1.8vw, 1.4rem);
     color: #ffffff;
     letter-spacing: 2px;
     opacity: 0.9;
-  }
-
-  /* Mobile Specific Layout Adjustments */
-  @media (max-width: 899px) {
-    .menu-overlay {
-      overflow-y: auto;
-    }
-    .menu-container {
-      height: auto;
-      min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
-    }
-    .left-grid {
-      height: 42vh;
-      flex-shrink: 0;
-    }
-    .right-nav {
-      padding: 16px 24px 48px 24px;
-      flex-grow: 1;
-      align-items: flex-start;
-    }
-    /* Logo moved up another 15px */
-    .overlay-logo-link {
-      top: -18px;
-      left: 20px;
-      right: auto;
-    }
-    /* Logo size increased by 20px */
-    .overlay-logo {
-      height: clamp(145px, 22vw, 165px);
-    }
-    /* Menu items moved up by 15px */
-    .menu-nav-list {
-      margin-top: 0;
-      padding-top: 105px;
-      gap: clamp(6px, 1.5vh, 26px);
-    }
-    .menu-link-text {
-      font-size: clamp(2rem, 7vw, 2.8rem);
-    }
-    /* Clock left right where it was */
-    .overlay-clock-container {
-      bottom: 40px;
-    }
   }
 </style>
 
@@ -425,7 +218,7 @@ const menuItems = [
   function initMenuOverlay() {
     renderClockTime();
 
-    const links = document.querySelectorAll<HTMLAnchorElement>('.menu-link, .grid-tile');
+    const links = document.querySelectorAll<HTMLAnchorElement>('.menu-link');
     if (!links.length) return;
 
     const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
