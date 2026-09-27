@@ -19,6 +19,12 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 <section id="hero-stage" class="stage-container">
   <h2 class="lcp-seo-anchor" fetchpriority="high">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
+  <!-- Persistent Text Container Positioned at Top -->
+  <div id="hero-text-container" class="hero-text-container">
+    <h1 id="text-facet" class="title-text text-facet">FACET</h1>
+    <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
+  </div>
+
   <!-- Fullscreen Container for Ken Burns Slides -->
   <div id="fullscreen-bg" class="fullscreen-bg">
     {heroImages.map((img, index) => (
@@ -66,12 +72,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
       data-logo-src={heroLogoImg.src}
       aria-hidden="true"
     ></canvas>
-  </div>
-
-  <!-- Persistent Text Container Positioned Highest in Stacking Context -->
-  <div id="hero-text-container" class="hero-text-container">
-    <h1 id="text-facet" class="title-text text-facet">FACET</h1>
-    <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
   </div>
 </section>
 
@@ -235,12 +235,12 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         scale: 0.75 
       });
 
-      // Position text container initially in the center screen
+      // Start centered
       gsap.set(heroTextContainer, {
         top: '50%',
         left: '50%',
         xPercent: -50,
-        yPercent: 40,
+        yPercent: -50,
         opacity: 0
       });
 
@@ -254,36 +254,32 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
       const tl = gsap.timeline({ 
         defaults: { ease: 'power3.inOut' },
-        onComplete: () => {
-          // Lock inline styles explicitly on completion
-          gsap.set(heroTextContainer, { clearProps: 'xPercent,yPercent' });
-          heroTextContainer.classList.add('locked-mobile');
-          startKenBurnsCarousel();
-        }
+        onComplete: startKenBurnsCarousel
       });
 
       tl
-        // 1. Reveal text in center ~1.5s after logo appears
+        // 1. Reveal text in center
         .to(heroTextContainer, {
           opacity: 1,
           duration: 0.8,
-          delay: 1.5
+          delay: 1.0
         })
-        // 2. Trajectory: Logo moves to top right, Text moves to top left
+        // 2. Trajectory: Move directly to top (15px from top, 15px from left)
         .to(logoCenter, {
           top: '130px',
           left: 'calc(100vw - 75px)',
           xPercent: -50,
           yPercent: -50,
           scale: 0.32,
-          duration: 1.3
+          duration: 1.2
         })
         .to(heroTextContainer, {
-          top: '75px',
+          top: '15px',
           left: '15px',
           xPercent: 0,
           yPercent: 0,
-          duration: 1.3
+          clearProps: 'transform',
+          duration: 1.2
         }, '<')
         // 3. Reveal clock & hero image frame
         .to(clock, {
@@ -300,15 +296,12 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
     } else {
       /* DESKTOP BRANCH */
-      const frameBounds = heroFrame.getBoundingClientRect();
-      const targetY = Math.max(frameBounds.top - 45, 145);
-
       gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
       gsap.set(heroTextContainer, { 
         top: '50%', 
         left: '50%', 
         xPercent: -50, 
-        yPercent: 50, 
+        yPercent: -50, 
         opacity: 0 
       });
       gsap.set(clock, { opacity: 0, y: 15 });
@@ -326,7 +319,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
       tl.to(heroTextContainer, {
         opacity: 1,
         duration: 0.8,
-        delay: 1.5
+        delay: 1.0
       })
       .to(logoCenter, {
         top: '90px',
@@ -337,15 +330,16 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         y: 0,
         scale: 0.55,
         transformOrigin: 'top left',
-        duration: 1.3,
+        duration: 1.2,
         ease: 'power2.inOut'
       })
       .to(heroTextContainer, {
-        top: `${targetY}px`,
-        left: `${frameBounds.left}px`,
+        top: '15px',
+        left: '15px',
         xPercent: 0,
         yPercent: 0,
-        duration: 1.1,
+        clearProps: 'transform',
+        duration: 1.2,
         ease: 'power4.out'
       }, '<')
       .to(clock, {
@@ -412,8 +406,8 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
   .hero-text-container {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 15px;
+    left: 15px;
     z-index: 999999;
     display: flex;
     flex-direction: row;
@@ -424,22 +418,13 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     pointer-events: none;
   }
 
-  .hero-text-container.locked-mobile {
-    position: fixed !important;
-    top: 75px !important;
-    left: 15px !important;
-    transform: none !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-  }
-
   .text-facet,
   .text-architecture {
     font-family: 'Bank Gothic', sans-serif !important;
     font-weight: 900;
-    font-size: clamp(2.2rem, 3.8vw, 4.1rem);
+    font-size: clamp(1.2rem, 3.8vw, 4.1rem);
     letter-spacing: 0.10em;
-    color: var(--text-primary, #111111);
+    color: #111111;
     margin: 0;
     line-height: 1;
     text-transform: uppercase;
