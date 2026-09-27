@@ -554,4 +554,41 @@ import renImg from '../assets/renvid-elementum.jpg';
   }, observerOptions);
 
   tiles.forEach((tile) => observer.observe(tile));
+
+  // Navigation Menu Handler
+  function initMenuToggle() {
+    const hamburgerBtn = document.querySelector('.hamburger-btn') || document.getElementById('hero-hamburger');
+    const overlay = document.getElementById('menu-overlay') || document.querySelector('.menu-overlay');
+
+    if (!hamburgerBtn) return;
+
+    hamburgerBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const overlayEl = overlay || document.getElementById('menu-overlay') || document.querySelector('.menu-overlay');
+      if (overlayEl) {
+        const isActive = overlayEl.classList.contains('active');
+        if (isActive) {
+          overlayEl.classList.remove('active');
+          hamburgerBtn.setAttribute('aria-expanded', 'false');
+          document.body.classList.remove('menu-open');
+          document.body.style.overflow = '';
+        } else {
+          overlayEl.classList.add('active');
+          hamburgerBtn.setAttribute('aria-expanded', 'true');
+          document.body.classList.add('menu-open');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMenuToggle);
+  } else {
+    initMenuToggle();
+  }
+
+  document.addEventListener('astro:page-load', initMenuToggle);
 </script>
