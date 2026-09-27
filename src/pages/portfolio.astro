@@ -1,4 +1,5 @@
 ---
+/* src/pages/portfolio.astro */
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -193,7 +194,7 @@ const portfolioData = [
   <nav class="portfolio-nav">
     <div class="nav-track scroll-container">
       {portfolioData.map((cat, idx) => (
-        <button class={`nav-btn ${idx === 0 ? 'active' : ''}`} data-category={cat.id}>
+        <button type="button" class={`nav-btn ${idx === 0 ? 'active' : ''}`} data-category={cat.id}>
           <span class="nav-num">{cat.num}</span>
           <span class="nav-title">{cat.title}</span>
         </button>
@@ -282,16 +283,15 @@ const portfolioData = [
     height: auto !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
-    -webkit-touch-callout: none !important;
-    -webkit-user-select: none !important;
-    user-select: none !important;
   }
 
+  /* Universal Horizontal Scrolling Rule for Mobile & Desktop */
   .scroll-container {
     overflow-x: auto !important;
     overflow-y: hidden !important;
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-x;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x pan-y !important;
+    overscroll-behavior-x: contain;
   }
 
   /* Desktop Explicit Scrollbar Styling */
@@ -320,19 +320,19 @@ const portfolioData = [
     scrollbar-color: #00ffc8 rgba(255, 255, 255, 0.1) !important;
   }
 
- /* Fixed Navigation Position */
-.portfolio-nav {
-  position: fixed;
-  top: 120px; /* Increased from 100px to push below main menu */
-  left: 0;
-  width: 100%;
-  z-index: 100;
-  padding: 12px 24px;
-  background: rgba(17, 17, 17, 0.95);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  box-sizing: border-box;
-}
+  /* Fixed Navigation Position */
+  .portfolio-nav {
+    position: fixed;
+    top: 100px;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 12px 24px;
+    background: rgba(17, 17, 17, 0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    box-sizing: border-box;
+  }
 
   .nav-track {
     display: flex;
@@ -341,6 +341,7 @@ const portfolioData = [
     max-width: 1400px;
     margin: 0 auto;
     padding-bottom: 8px;
+    width: 100%;
   }
 
   .nav-btn {
@@ -358,6 +359,7 @@ const portfolioData = [
     padding: 6px 0 10px;
     white-space: nowrap;
     flex-shrink: 0;
+    touch-action: manipulation;
   }
 
   .nav-btn::after {
@@ -396,12 +398,12 @@ const portfolioData = [
   }
 
   .portfolio-stage {
-  padding-top: 250px; /* Increased from 170px to give content breathing room */
-  min-height: auto;
-  height: auto !important;
-  overflow: visible !important;
-  position: relative;
-}
+    padding-top: 250px;
+    min-height: auto;
+    height: auto !important;
+    overflow: visible !important;
+    position: relative;
+  }
 
   .category-panel {
     display: none;
@@ -445,7 +447,7 @@ const portfolioData = [
     gap: 24px;
     padding-bottom: 20px;
     scroll-behavior: smooth;
-    overflow-x: scroll !important;
+    overflow-x: auto !important;
   }
 
   .portfolio-card {
@@ -460,6 +462,31 @@ const portfolioData = [
   @media (min-width: 768px) {
     .portfolio-card {
       width: 440px;
+    }
+  }
+
+  /* Mobile Specific Layout Polish */
+  @media (max-width: 767px) {
+    .portfolio-nav {
+      top: 80px;
+      padding: 10px 16px;
+    }
+
+    .portfolio-stage {
+      padding-top: 190px;
+    }
+
+    .nav-track {
+      gap: 18px;
+    }
+
+    .nav-btn {
+      padding: 8px 10px;
+    }
+
+    .scroll-rail::-webkit-scrollbar,
+    .nav-track::-webkit-scrollbar {
+      height: 4px !important;
     }
   }
 
@@ -628,6 +655,9 @@ const portfolioData = [
       targetPanel.classList.add('active');
 
       currentCategoryCards = Array.from(targetPanel.querySelectorAll('.portfolio-card'));
+
+      // Center active tab into view smoothly on mobile
+      targetBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
   }
 
@@ -639,16 +669,20 @@ const portfolioData = [
   }
 
   navBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       const targetCat = btn.getAttribute('data-category');
       if (targetCat) {
         activateCategory(targetCat);
-        history.replaceState(null, '', `#${targetCat}`);
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, '', `#${targetCat}`);
+        }
       }
     });
   });
 
-  // Enable Sideways Wheel Scroll for Image Category Tracks
+  // Enable Sideways Wheel Scroll for Desktop Tracks
   document.querySelectorAll('.scroll-rail').forEach((rail) => {
     rail.addEventListener('wheel', (e) => {
       const wheelEvent = e as WheelEvent;
@@ -703,14 +737,10 @@ const portfolioData = [
   if (modalPrev) modalPrev.addEventListener('click', () => updateLightboxImage(currentActiveIndex - 1));
   if (modalNext) modalNext.addEventListener('click', () => updateLightboxImage(currentActiveIndex + 1));
 
-  // Global Key Down Handler (Esc -> Home Page, Arrow Keys -> Next/Prev Image)
+  // Global Key Down Handler: Escape key only closes lightbox if active
   window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      if (modal && modal.classList.contains('active')) {
-        closeModal();
-      } else {
-        window.location.href = '/';
-      }
+    if (e.key === 'Escape' && modal && modal.classList.contains('active')) {
+      closeModal();
     } else if (modal && modal.classList.contains('active')) {
       if (e.key === 'ArrowRight') {
         updateLightboxImage(currentActiveIndex + 1);
