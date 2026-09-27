@@ -30,7 +30,7 @@ const WEB3FORMS_ACCESS_KEY = "5809f663-d9b7-4c8e-8269-ae38456c0f05";
           <div class="detail-item">
             <span class="detail-label">DIRECT CONTACT</span>
             <a href="tel:+27609960690" class="detail-value">+27 60 996 0690</a>
-            <a href="mailto:info&#64;facetarch&#46;com">warren&#64;facetarch&#46;com</a>
+            <a href="mailto:info&#64;facetarch&#46;com" class="detail-value contact-email">warren&#64;facetarch&#46;com</a>
           </div>
 
           <div class="detail-item">
@@ -251,10 +251,19 @@ const WEB3FORMS_ACCESS_KEY = "5809f663-d9b7-4c8e-8269-ae38456c0f05";
   .detail-value {
     font-family: system-ui, -apple-system, sans-serif;
     font-size: 1.1rem;
-    color: #ffffff;
+    color: #00ffc8;
     text-decoration: none;
     line-height: 1.4;
     display: block;
+    transition: opacity 0.2s ease;
+  }
+
+  .detail-value:hover {
+    opacity: 0.85;
+  }
+
+  .detail-item a.detail-value {
+    color: #00ffc8 !important;
   }
 
   .text-accent {
@@ -263,6 +272,7 @@ const WEB3FORMS_ACCESS_KEY = "5809f663-d9b7-4c8e-8269-ae38456c0f05";
 
   .address-block {
     font-style: normal;
+    color: #ffffff;
   }
 
   /* Map Container */
