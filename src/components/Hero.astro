@@ -53,8 +53,10 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     />
   </div>
 
-  <h1 id="text-facet" class="title-text text-facet">FACET</h1>
-  <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
+  <div class="mobile-text-wrapper">
+    <h1 id="text-facet" class="title-text text-facet">FACET</h1>
+    <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
+  </div>
 
   <div id="hero-clock" class="hero-clock">
     <canvas id="clock-canvas" width="160" height="24" aria-hidden="true"></canvas>
@@ -225,17 +227,17 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     const isMobile = window.innerWidth <= 768;
 
     if (isMobile) {
-      // Mobile setup: Logo starts centered on screen
+      // Mobile setup: Logo starts strictly in center screen
       gsap.set(logoCenter, { 
         top: '50%', 
         left: '50%', 
         xPercent: -50, 
         yPercent: -50, 
-        scale: 0.85 
+        scale: 0.75 
       });
 
       gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
-      gsap.set([textFacet, textArchitecture], { opacity: 0 });
+      gsap.set([textFacet, textArchitecture], { opacity: 0, y: 10 });
       gsap.set(clock, { opacity: 0, y: 15 });
 
       logoCenter.style.visibility = 'visible';
@@ -249,21 +251,20 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         onComplete: startKenBurnsCarousel
       });
 
-      // Animate logo to TOP RIGHT corner, then reveal text & frame
+      // Animate logo to TOP RIGHT corner and slightly lower (~115px down)
       tl.to(logoCenter, {
-          top: '75px',
-          left: '100vw',
-          xPercent: -100,
-          yPercent: 0,
-          x: -15,
-          y: 0,
-          scale: 0.35,
+          top: '115px',
+          left: 'calc(100vw - 75px)',
+          xPercent: -50,
+          yPercent: -50,
+          scale: 0.32,
           duration: 1.3,
           delay: 1.8
         })
         .to([textFacet, textArchitecture], {
           opacity: 1,
-          duration: 1.1,
+          y: 0,
+          duration: 1.0,
           ease: 'power4.out'
         }, '-=0.5')
         .to(clock, {
@@ -496,7 +497,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    transform-origin: top left;
     width: 430px;
     height: 430px;
     display: flex;
@@ -553,6 +553,10 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     opacity: 1;
   }
 
+  .mobile-text-wrapper {
+    display: contents;
+  }
+
   @media (max-width: 768px) {
     .logo-center-wrapper {
       width: 280px;
@@ -560,7 +564,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     }
 
     .hero-frame {
-      top: 170px;
+      top: 190px;
       left: 0;
       width: 100vw;
       height: 45vh;
@@ -568,23 +572,26 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
       border-radius: 0;
     }
 
-    .text-facet {
-      top: 75px;
-      left: 15px;
-      font-size: clamp(1.2rem, 4.5vw, 1.8rem);
-      font-weight: 900;
-      -webkit-text-stroke: 0.8px #111111;
-    }
-
-    .text-architecture {
+    .mobile-text-wrapper {
       position: absolute;
       top: 75px;
-      left: calc(15px + 5.2em);
-      bottom: auto;
-      right: auto;
-      font-size: clamp(1.2rem, 4.5vw, 1.8rem);
+      left: 15px;
+      z-index: 50;
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+    }
+
+    .text-facet,
+    .text-architecture {
+      position: relative !important;
+      top: auto !important;
+      left: auto !important;
+      font-size: clamp(1.1rem, 4.2vw, 1.6rem) !important;
       font-weight: 900;
-      -webkit-text-stroke: 0.8px #111111;
+      color: #111111;
+      line-height: 1;
+      visibility: visible;
     }
 
     .hero-clock {
