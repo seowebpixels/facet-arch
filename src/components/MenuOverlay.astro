@@ -452,10 +452,23 @@ const menuItems = [
     clockEl.textContent = `${timeString} GMT+2`;
   }
 
+  function closeMenuOverlay() {
+    const overlay = document.getElementById('menu-overlay');
+    const heroBtn = document.getElementById('hero-hamburger');
+    const headerBtn = document.getElementById('menu-toggle');
+
+    if (overlay) overlay.classList.remove('active');
+    if (heroBtn) heroBtn.setAttribute('aria-expanded', 'false');
+    if (headerBtn) headerBtn.setAttribute('aria-expanded', 'false');
+
+    document.body.classList.remove('menu-open');
+    document.body.style.overflow = '';
+  }
+
   function initMenuOverlay() {
     renderClockTime();
 
-    const links = document.querySelectorAll<HTMLAnchorElement>('.menu-link');
+    const links = document.querySelectorAll<HTMLAnchorElement>('.menu-link, .grid-tile');
     if (!links.length) return;
 
     const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
@@ -472,7 +485,7 @@ const menuItems = [
 
     links.forEach((link) => {
       const linkName = link.getAttribute('data-link');
-      if (linkName === activeItemName) {
+      if (linkName && linkName === activeItemName) {
         link.classList.add('selected');
       } else {
         link.classList.remove('selected');
@@ -488,6 +501,7 @@ const menuItems = [
         if (linkName) {
           localStorage.setItem('facet_last_menu_item', linkName);
         }
+        closeMenuOverlay();
       });
     });
   }
