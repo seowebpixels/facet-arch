@@ -1,561 +1,557 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Footer from '../components/Footer.astro';
-import MenuOverlay from '../components/MenuOverlay.astro';
-import Preloader from '../components/Preloader.astro';
+import MoodGrid from '../components/MoodGrid.astro';
+import HomeFooter from '../components/HomeFooter.astro';
 import { Image } from 'astro:assets';
+import Hero from '../components/Hero.astro';
 
-// Hero Background & Logo Imports
-import heroBgImage from '../assets/hero-home.avif';
-import logoImg from '../assets/facet-logo-white.avif';
-
-// Commercial Imports
-import commEmeraldResort from '../assets/comm-emerald-resort-hotel.avif';
-import commCarsCoZa from '../assets/comm-cars-co-za.avif';
-import commEcoCityStudRes from '../assets/comm-eco-city-sudent-res.avif';
-
-// Development Imports
-import devHabitatAlpha from '../assets/dev-habitat-alpha.avif';
-import devElementum from '../assets/dev-elementum.avif';
-import devSaronaCityPlan from '../assets/dev-sarona-city-master-plan.avif';
-
-// Interior Imports
-import intNdlovu from '../assets/int-ndlovu.avif';
-import intCrestron from '../assets/int-crestron.avif';
-import intCabanossi from '../assets/int-cabanossi.avif';
-
-// Residential Imports
-import resEoa1597 from '../assets/res-eoa-1597.avif';
-import resThornValley from '../assets/res-thorn-valley.avif';
-import resCopperleaf from '../assets/res-copperleaf.avif';
-
-// Sustainability & Rendering Imports
-import sustThermalComfort from '../assets/sustainability-thermal-comfort.avif';
+// Import featured assets
+import commImg from '../assets/comm-emerald-resort-hotel.avif';
+import devImg from '../assets/dev-ascot-manor.avif';
+import intImg from '../assets/int-ndlovu.avif';
+import resImg from '../assets/res-eoa-1597-grid.avif';
+import sustImg from '../assets/sustainability-thermal-comfort.avif';
 import renImg from '../assets/renvid-elementum.jpg';
-
-const categories = [
-  {
-    id: 'commercial',
-    title: 'COMMERCIAL',
-    num: '01',
-    description: 'Corporate headquarters, retail centers, and educational facilities built for function and identity.',
-    featured: [
-      { name: 'EMERALD RESORT HOTEL', img: commEmeraldResort },
-      { name: 'CARS.CO.ZA HEADQUARTERS', img: commCarsCoZa },
-      { name: 'ECO CITY STUDENT RESIDENCE', img: commEcoCityStudRes }
-    ]
-  },
-  {
-    id: 'development',
-    title: 'DEVELOPMENTS',
-    num: '02',
-    description: 'High-density residential estates, urban master plans, and mixed-use precincts across Africa.',
-    featured: [
-      { name: 'HABITAT ALPHA', img: devHabitatAlpha },
-      { name: 'ELEMENTUM APARTMENTS', img: devElementum },
-      { name: 'SARONA CITY MASTER PLAN', img: devSaronaCityPlan }
-    ]
-  },
-  {
-    id: 'interiors',
-    title: 'INTERIORS',
-    num: '03',
-    description: 'Bespoke interior architecture, custom joinery, and tailored spatial flows for luxury living.',
-    featured: [
-      { name: 'NDLOVU RESIDENCE INTERIOR', img: intNdlovu },
-      { name: 'CRESTRON EXPERIENCE CENTRE', img: intCrestron },
-      { name: 'CABANOSSI RESIDENTIAL SUITE', img: intCabanossi }
-    ]
-  },
-  {
-    id: 'residential',
-    title: 'RESIDENTIAL',
-    num: '04',
-    description: 'Custom private homes designed to harmonize with their surrounding landscape and climate.',
-    featured: [
-      { name: 'EOA 1597 RESIDENCE', img: resEoa1597 },
-      { name: 'THORN VALLEY ESTATE', img: resThornValley },
-      { name: 'COPPERLEAF LUXURY VILLA', img: resCopperleaf }
-    ]
-  },
-  {
-    id: 'sustainability',
-    title: 'SUSTAINABILITY',
-    num: '05',
-    description: 'Passive design strategies, energy modeling, and eco-responsive building technology.',
-    featured: [
-      { name: 'THERMAL COMFORT ANALYSIS', img: sustThermalComfort }
-    ]
-  },
-  {
-    id: 'rendering',
-    title: 'RENDERING',
-    num: '06',
-    description: 'High-fidelity 3D visualization, cinematic walkthroughs, and pre-construction marketing assets.',
-    featured: [
-      { name: 'ELEMENTUM 3D VISUALIZATION', img: renImg }
-    ]
-  }
-];
 ---
 
-<Layout title="Facet Architecture | Home">
-  <Preloader />
+<Layout title="Facet Architecture | Selected Works">
 
-  <!-- Fixed Top Bar & Navigation Header -->
-  <header class="header-trigger-area" id="header-trigger-area">
-    <div class="main-nav">
-      <a href="/" class="logo-link" aria-label="Facet Architecture Home">
-        <Image 
-          src={logoImg} 
-          alt="Facet Architecture Logo" 
-          class="site-logo"
-          loading="eager"
-          decoding="sync"
-        />
+  <Hero />
+
+  <main class="main-wrapper">
+    <!-- Left Column: Sticky Editorial Content -->
+    <section class="left-sticky-col">
+      <div class="brand-intro">
+        <p class="subtitle">SELECTED WORKS</p>
+        <h1 class="headline">Precision in Spatial & Sustainable Design</h1>
+        <p class="philosophy">
+          Facet Architecture transforms complex spatial challenges into contemporary minimalist and innovative sustainable design. Rooted in material clarity and environmental context, our practice explores the interplay between space, movement and aesthetic integrity.
+        </p>
+      </div>
+
+      <div class="index-legend">
+        <div class="legend-item" data-index="0"><span class="legend-num">01</span> Emerald Resort Hotel</div>
+        <div class="legend-item" data-index="1"><span class="legend-num">02</span> Ascot Manor</div>
+        <div class="legend-item" data-index="2"><span class="legend-num">03</span> Ndlovu Interior</div>
+        <div class="legend-item" data-index="3"><span class="legend-num">04</span> EOA Residence</div>
+        <div class="legend-item" data-index="4"><span class="legend-num">05</span> Thermal Comfort Study</div>
+        <div class="legend-item" data-index="5"><span class="legend-num">06</span> Elementum</div>
+      </div>
+    </section>
+
+    <!-- Right Column: Staggered Selected Works Grid -->
+    <section class="right-grid-col">
+      <!-- Tile 1 -->
+      <a href="/portfolio#commercial" class="tile-card tile-1" data-bg="#3A3F47">
+        <div class="image-container">
+          <Image 
+            src={commImg} 
+            alt="Emerald Resort Hotel" 
+            widths={[360, 720]} 
+            sizes="(max-width: 768px) 90vw, 400px" 
+            format="avif"
+            quality={55}
+            loading="eager" 
+            decoding="sync"
+          />
+          <div class="tile-overlay">
+            <span class="tile-num">01</span>
+            <div class="tile-meta">
+              <h2>Emerald Resort Hotel</h2>
+              <p>Commercial Architecture</p>
+            </div>
+          </div>
+        </div>
       </a>
 
-      <!-- Hamburger Menu Button -->
-      <button id="hero-hamburger" class="hamburger-btn" aria-label="Open Navigation Menu" aria-expanded="false">
-        <span class="line line-1"></span>
-        <span class="line line-2"></span>
-        <span class="line line-3"></span>
-      </button>
-    </div>
-  </header>
+      <!-- Tile 2 -->
+      <a href="/portfolio#development" class="tile-card tile-2" data-bg="#5c5e5d">
+        <div class="image-container">
+          <Image 
+            src={devImg} 
+            alt="Ascot Manor" 
+            widths={[360, 720]} 
+            sizes="(max-width: 768px) 90vw, 400px"
+            format="avif"
+            quality={55} 
+            loading="lazy" 
+            decoding="async"
+          />
+          <div class="tile-overlay">
+            <span class="tile-num">02</span>
+            <div class="tile-meta">
+              <h2>Ascot Manor</h2>
+              <p>Development</p>
+            </div>
+          </div>
+        </div>
+      </a>
 
-  <!-- Fullscreen Navigation Menu Drawer -->
-  <MenuOverlay />
+      <!-- Tile 3 -->
+      <a href="/portfolio#interiors" class="tile-card tile-3" data-bg="#BF6363">
+        <div class="image-container">
+          <Image 
+            src={intImg} 
+            alt="Ndlovu Interior Design" 
+            widths={[360, 720]} 
+            sizes="(max-width: 768px) 90vw, 400px"
+            format="avif"
+            quality={55} 
+            loading="lazy" 
+            decoding="async"
+          />
+          <div class="tile-overlay">
+            <span class="tile-num">03</span>
+            <div class="tile-meta">
+              <h2>Ndlovu Residence</h2>
+              <p>Interior Architecture</p>
+            </div>
+          </div>
+        </div>
+      </a>
 
-  <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="hero-bg-wrapper">
-      <Image 
-        src={heroBgImage} 
-        alt="Facet Architecture Hero" 
-        class="hero-bg-img"
-        loading="eager"
-        decoding="sync"
-      />
-      <div class="hero-overlay"></div>
-    </div>
+      <!-- Tile 4 -->
+      <a href="/portfolio#residential" class="tile-card tile-4" data-bg="#8C8275">
+        <div class="image-container">
+          <Image 
+            src={resImg} 
+            alt="EOA Residence" 
+            widths={[360, 720]} 
+            sizes="(max-width: 768px) 90vw, 400px"
+            format="avif" 
+            quality={55}
+            loading="lazy" 
+            decoding="async"
+          />
+          <div class="tile-overlay">
+            <span class="tile-num">04</span>
+            <div class="tile-meta">
+              <h2>EOA 1597</h2>
+              <p>Residential Architecture</p>
+            </div>
+          </div>
+        </div>
+      </a>
 
-    <div class="hero-content">
-      <p class="hero-tagline">FACET ARCHITECTURE</p>
-      <h1 class="hero-title">PRECISION IN ARCHITECTURAL DESIGN</h1>
-      <a href="/portfolio" class="hero-cta">VIEW PORTFOLIO</a>
+      <!-- Tile 5 -->
+      <a href="/portfolio#sustainability" class="tile-card tile-5" data-bg="#E3DFD5">
+        <div class="image-container">
+          <Image 
+            src={sustImg} 
+            alt="Thermal Comfort Sustainability Project" 
+            widths={[360, 720]} 
+            sizes="(max-width: 768px) 90vw, 400px"
+            quality={55} 
+            loading="lazy" 
+            decoding="async"
+          />
+          <div class="tile-overlay">
+            <span class="tile-num">05</span>
+            <div class="tile-meta">
+              <h2>Thermal Comfort</h2>
+              <p>Sustainable Architecture</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Tile 6 -->
+      <a href="/portfolio#rendering" class="tile-card tile-6" data-bg="#FAE870">
+        <div class="image-container">
+          <Image 
+            src={renImg} 
+            alt="Rendering and Video" 
+            widths={[360, 720]} 
+            sizes="(max-width: 768px) 90vw, 400px"
+            quality={55} 
+            loading="lazy" 
+            decoding="async"
+          />
+          <div class="tile-overlay">
+            <span class="tile-num">06</span>
+            <div class="tile-meta">
+              <h2>Elementum</h2>
+              <p>Rendering and Video</p>
+            </div>
+          </div>
+        </div>
+      </a>
+    </section>
+  </main>
+
+
+  <!-- Responsive Centered Architectural Quote Banner -->
+  <section class="quote-container">
+    <div class="quote-inner">
+      <blockquote class="quote-text">
+        “The world is not as it seems, the world is as it is perceived”
+      </blockquote>
+      <cite class="quote-cite">
+        — Warren Green
+      </cite>
     </div>
   </section>
 
-  <!-- Discipline Category Overview Section -->
-  <main class="overview-section">
-    <div class="section-intro">
-      <span class="section-sub">OUR DISCIPLINES</span>
-      <h2 class="section-heading">ARCHITECTURAL DISCIPLINES</h2>
-    </div>
+  <!-- MoodGrid Component -->
+  <MoodGrid />
 
-    <div class="category-list">
-      {categories.map((cat) => (
-        <article class="category-block">
-          <div class="category-header">
-            <span class="cat-num">{cat.num}</span>
-            <div class="cat-titles">
-              <h3 class="cat-title">{cat.title}</h3>
-              <p class="cat-desc">{cat.description}</p>
-            </div>
-            <a href={`/portfolio#${cat.id}`} class="cat-link">EXPLORE {cat.title} &rarr;</a>
-          </div>
-
-          <div class="featured-grid">
-            {cat.featured.map((item) => (
-              <a href={`/portfolio#${cat.id}`} class="featured-card">
-                <div class="card-img-wrap">
-                  <Image 
-                    src={item.img} 
-                    alt={item.name} 
-                    class="card-img"
-                    widths={[300, 500]}
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <div class="card-hover-overlay">
-                    <span class="view-label">VIEW PROJECT</span>
-                  </div>
-                </div>
-                <span class="card-title">{item.name}</span>
-              </a>
-            ))}
-          </div>
-        </article>
-      ))}
-    </div>
-  </main>
-
-  <Footer />
+  <!-- Home Footer Component -->
+  <HomeFooter />
 </Layout>
 
+<!-- Isolated Global Lock Styles for Home Preloader -->
+<style is:global>
+  html.home-preloader-locked,
+  html.home-preloader-locked body {
+    overflow: hidden !important;
+    overflow-y: hidden !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    touch-action: none !important;
+    overscroll-behavior: none !important;
+  }
+
+  html.home-preloader-locked::-webkit-scrollbar,
+  html.home-preloader-locked body::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+</style>
+
 <style>
+  .hero-heading {
+    font-family: 'Bank Gothic', sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  :global(html) {
+    background-color: #2D3239;
+  }
+
   :global(body) {
-    background-color: #2e343b;
-    color: #ffffff;
+    background-color: #2D3239;
+    color: #FFFFFF;
+    transition: background-color 0.8s cubic-bezier(0.25, 1, 0.5, 1);
     margin: 0;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: system-ui, -apple-system, sans-serif;
   }
 
-  /* Fixed Header Bar */
-  .header-trigger-area {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    z-index: 2147483646 !important;
-    background-color: #2e343b;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    box-sizing: border-box;
-    pointer-events: auto !important;
-  }
-
-  .main-nav {
-    max-width: 1800px;
-    margin: 0 auto;
-    height: 120px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 40px;
-    box-sizing: border-box;
-    pointer-events: auto !important;
-  }
-
-  .logo-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    height: 100%;
-    pointer-events: auto !important;
-  }
-
-  .site-logo {
-    height: 175px;
-    width: auto;
-    display: block;
-    object-fit: contain;
-  }
-
-  /* Hamburger Toggle Button */
-  .hamburger-btn {
+  .main-wrapper {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    width: 32px;
-    height: 22px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    z-index: 2147483647 !important;
-    pointer-events: auto !important;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 120px 24px 80px;
+    gap: 40px;
+    background-color: transparent;
   }
 
-  .line {
+  @media (min-width: 900px) {
+    .main-wrapper {
+      flex-direction: row;
+      gap: 60px;
+    }
+  }
+
+  /* Stacking Context Isolation + Opaque Container for Lighthouse Audit Compliance */
+  .left-sticky-col {
     width: 100%;
-    height: 2px;
-    background-color: #ffffff;
-    border-radius: 2px;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-  }
-
-  .hamburger-btn[aria-expanded="true"] .line-1 {
-    transform: translateY(10px) rotate(45deg);
-  }
-
-  .hamburger-btn[aria-expanded="true"] .line-2 {
-    opacity: 0;
-  }
-
-  .hamburger-btn[aria-expanded="true"] .line-3 {
-    transform: translateY(-10px) rotate(-45deg);
-  }
-
-  /* Hero Section */
-  .hero-section {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    min-height: 600px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-top: 120px;
+    padding: 32px;
+    border-radius: 8px;
     box-sizing: border-box;
-  }
-
-  .hero-bg-wrapper {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-  }
-
-  .hero-bg-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
-
-  .hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
-  }
-
-  .hero-content {
+    background-color: #2D3239;
+    color: #FFFFFF;
+    isolation: isolate;
     position: relative;
     z-index: 2;
-    text-align: center;
-    padding: 0 24px;
-    max-width: 900px;
   }
 
-  .hero-tagline {
+  @media (min-width: 900px) {
+    .left-sticky-col {
+      width: 40%;
+      position: sticky;
+      top: 140px;
+      height: fit-content;
+    }
+  }
+
+  .subtitle {
     font-family: 'BankGothic', sans-serif, system-ui;
-    font-size: clamp(0.85rem, 1.5vw, 1.1rem);
-    letter-spacing: 3px;
-    opacity: 0.8;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    color: #FFFFFF;
+    font-weight: 700;
     margin-bottom: 12px;
   }
 
-  .hero-title {
+  .headline {
     font-family: 'BankGothic', sans-serif, system-ui;
-    font-size: clamp(2rem, 5vw, 4rem);
-    line-height: 1.1;
-    margin: 0 0 28px 0;
-    color: #ffffff;
+    font-size: 2.2rem;
+    line-height: 1.2;
+    color: #FFFFFF;
+    margin-bottom: 24px;
   }
 
-  .hero-cta {
-    display: inline-block;
-    padding: 14px 32px;
-    border: 1px solid #00ffc8;
-    color: #00ffc8;
-    text-decoration: none;
-    font-family: 'BankGothic', sans-serif, system-ui;
-    font-size: 0.9rem;
-    letter-spacing: 2px;
-    transition: background-color 0.3s ease, color 0.3s ease;
+  .philosophy {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #FFFFFF;
+    margin-bottom: 40px;
   }
 
-  .hero-cta:hover {
-    background-color: #00ffc8;
-    color: #111111;
-  }
-
-  /* Disciplines Section */
-  .overview-section {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 100px 24px;
-  }
-
-  .section-intro {
-    margin-bottom: 60px;
-  }
-
-  .section-sub {
-    font-family: 'BankGothic', sans-serif, system-ui;
-    font-size: 0.85rem;
-    letter-spacing: 2px;
-    opacity: 0.6;
-    display: block;
-    margin-bottom: 8px;
-  }
-
-  .section-heading {
-    font-family: 'BankGothic', sans-serif, system-ui;
-    font-size: clamp(1.8rem, 4vw, 2.8rem);
-    margin: 0;
-    color: #ffffff;
-  }
-
-  .category-list {
-    display: flex;
-    flex-direction: column;
-    gap: 80px;
-  }
-
-  .category-block {
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
-    padding-top: 40px;
-  }
-
-  .category-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 32px;
-    margin-bottom: 32px;
-    flex-wrap: wrap;
-  }
-
-  .cat-num {
-    font-family: 'BankGothic', sans-serif, system-ui;
-    font-size: 1.2rem;
-    color: #00ffc8;
-    font-weight: bold;
-  }
-
-  .cat-titles {
-    flex: 1;
-    min-width: 260px;
-  }
-
-  .cat-title {
-    font-family: 'BankGothic', sans-serif, system-ui;
-    font-size: 1.6rem;
-    margin: 0 0 8px 0;
-    color: #ffffff;
-  }
-
-  .cat-desc {
-    font-size: 0.95rem;
-    opacity: 0.75;
-    margin: 0;
-    line-height: 1.5;
-  }
-
-  .cat-link {
-    font-family: 'BankGothic', sans-serif, system-ui;
-    font-size: 0.85rem;
-    color: #00ffc8;
-    text-decoration: none;
-    letter-spacing: 1.5px;
-    white-space: nowrap;
-    transition: opacity 0.3s ease;
-  }
-
-  .cat-link:hover {
-    opacity: 0.7;
-  }
-
-  .featured-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 24px;
-  }
-
-  .featured-card {
-    text-decoration: none;
-    color: inherit;
+  .index-legend {
     display: flex;
     flex-direction: column;
     gap: 12px;
   }
 
-  .card-img-wrap {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
-    background-color: #000000;
+  .legend-item {
+    font-family: 'BankGothic', sans-serif, system-ui;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    color: #FFFFFF;
+    transition: transform 0.3s ease;
   }
 
-  .card-img {
+  .legend-num {
+    margin-right: 12px;
+    font-weight: bold;
+    color: #FFFFFF;
+  }
+
+  .legend-item.active {
+    font-weight: 900;
+    color: #FFFFFF;
+    transform: translateX(6px);
+  }
+
+  /* Right Staggered Grid Column */
+  .right-grid-col {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  @media (min-width: 900px) {
+    .right-grid-col {
+      width: 60%;
+      position: relative;
+      display: block;
+      height: 1720px; /* Expanded height to fit 6 staggered tiles */
+    }
+  }
+
+  .tile-card {
+    display: block;
+    text-decoration: none;
+    color: #FFFFFF;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .tile-card:hover {
+    transform: scale(1.02);
+    z-index: 10;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  }
+
+  .image-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+  }
+
+  .image-container img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s ease;
+    display: block;
+    transition: transform 0.6s ease;
   }
 
-  .card-hover-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .view-label {
-    font-family: 'BankGothic', sans-serif, system-ui;
-    font-size: 0.8rem;
-    color: #00ffc8;
-    letter-spacing: 2px;
-    border: 1px solid #00ffc8;
-    padding: 8px 16px;
-  }
-
-  .featured-card:hover .card-img {
+  .tile-card:hover img {
     transform: scale(1.05);
   }
 
-  .featured-card:hover .card-hover-overlay {
-    opacity: 1;
+  .tile-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.4) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    color: #FFFFFF;
   }
 
-  .card-title {
+  .tile-num {
     font-family: 'BankGothic', sans-serif, system-ui;
-    font-size: 0.85rem;
+    font-size: 1.1rem;
+    font-weight: bold;
     letter-spacing: 1px;
-    opacity: 0.9;
+    color: #FFFFFF;
   }
 
-  @media (max-width: 899px) {
-    .main-nav {
-      padding: 0 20px;
-      height: 90px;
+  .tile-meta h2 {
+    font-family: 'BankGothic', sans-serif, system-ui;
+    font-size: 1.3rem;
+    color: #FFFFFF;
+    margin: 0 0 4px 0;
+    font-weight: 700;
+  }
+
+  .tile-meta p {
+    font-size: 0.85rem;
+    margin: 0;
+    color: #FFFFFF;
+  }
+
+  /* Desktop Staggered Overlay Absolute Positions */
+  @media (min-width: 900px) {
+    .tile-card {
+      position: absolute;
+      width: 50%;
     }
 
-    .site-logo {
-      height: 45px;
+    .tile-1 { top: 0; left: 10%; z-index: 1; }
+    .tile-2 { top: 220px; left: 45%; z-index: 2; }
+    .tile-3 { top: 500px; left: 25%; z-index: 3; }
+    .tile-4 { top: 760px; left: 5%; z-index: 4; }
+    .tile-5 { top: 980px; left: 42%; z-index: 5; }
+    .tile-6 { top: 1240px; left: 18%; z-index: 6; }
+  }
+
+  /* Base Quote Container Styles */
+  .quote-container {
+    width: 100%;
+    min-height: 350px;
+    padding: 80px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+    background-color: #E3DFD5;
+    color: #111111;
+  }
+
+  .quote-inner {
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .quote-text {
+    font-size: clamp(24px, 5vw, 50px);
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1.15;
+    letter-spacing: -1px;
+    margin: 0 0 20px 0;
+    font-family: inherit;
+    word-break: normal;
+    overflow-wrap: break-word;
+    color: #111111;
+  }
+
+  .quote-cite {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-style: normal;
+    color: #111111;
+  }
+
+  @media screen and (max-width: 899px) {
+    .quote-container {
+      padding: 40px 16px;
+      overflow: hidden;
+    }
+    
+    .quote-inner {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 0;
     }
 
-    .hero-section {
-      padding-top: 90px;
+    .quote-text {
+      font-size: clamp(1.15rem, 5.5vw, 1.4rem);
+      line-height: 1.35;
+      letter-spacing: 0px;
+      text-align: center;
+      margin: 0 auto 16px auto;
+      width: 100%;
+      display: block;
     }
 
-    .category-header {
-      flex-direction: column;
-      gap: 16px;
+    .quote-cite {
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-align: center;
+      margin: 0 auto;
+      width: 100%;
+      display: block;
     }
   }
 </style>
 
 <script>
-  function bindHomepageMenu() {
-    const heroBtn = document.getElementById('hero-hamburger');
-    const overlay = document.getElementById('menu-overlay');
+  const unlockHomePreloader = () => {
+    document.documentElement.classList.remove('home-preloader-locked');
+    document.body.classList.remove('home-preloader-locked');
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.touchAction = '';
+  };
 
-    if (!heroBtn) return;
+  window.addEventListener('pageshow', unlockHomePreloader);
+  window.addEventListener('load', () => setTimeout(unlockHomePreloader, 800), { once: true });
+  setTimeout(unlockHomePreloader, 1500);
+  window.addEventListener('preloader:complete', unlockHomePreloader, { once: true });
 
-    heroBtn.onclick = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
+  const tiles = document.querySelectorAll('.tile-card');
+  const legendItems = document.querySelectorAll('.legend-item');
 
-      const overlayEl = overlay || document.getElementById('menu-overlay');
-      if (overlayEl) {
-        const isActive = overlayEl.classList.contains('active');
-        if (isActive) {
-          overlayEl.classList.remove('active');
-          heroBtn.setAttribute('aria-expanded', 'false');
-          document.body.classList.remove('menu-open');
-          document.body.style.overflow = '';
-        } else {
-          overlayEl.classList.add('active');
-          heroBtn.setAttribute('aria-expanded', 'true');
-          document.body.classList.add('menu-open');
-          document.body.style.overflow = 'hidden';
+  const observerOptions = {
+    root: null,
+    rootMargin: '-30% 0px -30% 0px',
+    threshold: 0.2
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const target = entry.target as HTMLElement;
+        const bg = target.dataset.bg;
+
+        if (bg) {
+          document.body.style.backgroundColor = bg;
         }
+
+        const tileIndex = Array.from(tiles).indexOf(target);
+        legendItems.forEach((item, idx) => {
+          if (idx === tileIndex) {
+            item.classList.add('active');
+          } else {
+            item.classList.remove('active');
+          }
+        });
       }
-    };
-  }
+    });
+  }, observerOptions);
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', bindHomepageMenu);
-  } else {
-    bindHomepageMenu();
-  }
-
-  document.addEventListener('astro:page-load', bindHomepageMenu);
+  tiles.forEach((tile) => observer.observe(tile));
 </script>
