@@ -2,6 +2,7 @@
 /* src/layouts/Layout.astro */
 import { getImage } from 'astro:assets';
 import Header from '../components/Header.astro';
+import MenuOverlay from '../components/MenuOverlay.astro'; // <--- Added Import
 import Clock from '../components/Clock.astro';
 import '../styles/global.css';
 import heroImg from '../assets/res-eoa-1597.avif';
@@ -24,7 +25,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
 const { pathname } = Astro.url;
 const isHomePage = pathname === '/' || pathname === '';
 
-// Pre-generate the exact AVIF variant for high-priority preloading
 const preloadedLogo = await getImage({
   src: heroLogoImg,
   format: 'avif',
@@ -36,8 +36,7 @@ const preloadedLogo = await getImage({
 <!doctype html>
 <html lang="en">
   <head>
-
-    <!-- Google Tag Manager (Pure Interaction Trigger — No Fallback Timer) -->
+    <!-- Google Tag Manager -->
     <script is:inline>
       (function() {
         var gtmId = 'GTM-NB7RZJ26';
@@ -78,7 +77,6 @@ const preloadedLogo = await getImage({
     <meta name="title" content={title} />
     <meta name="description" content={description} />
 
-    <!-- Preload dynamically calculated logo path -->
     <link 
       rel="preload" 
       as="image" 
@@ -116,16 +114,16 @@ const preloadedLogo = await getImage({
     <meta property="twitter:image" content={new URL(image, Astro.url)} />
   </head>
   <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript
-      ><iframe
+    <noscript>
+      <iframe
         src="https://www.googletagmanager.com/ns.html?id=GTM-NB7RZJ26"
         height="0"
         width="0"
-        style="display:none;visibility:hidden"></iframe></noscript
-    >
+        style="display:none;visibility:hidden"></iframe>
+    </noscript>
 
     <Header />
+    <MenuOverlay /> <!-- <--- Renders menu overlay on all pages -->
 
     {!isHomePage && <Clock />}
     
@@ -134,31 +132,35 @@ const preloadedLogo = await getImage({
     </main>
 
     <script>
-      // Navigation Menu Trigger Logic
+      // Consolidated Menu Trigger Listener
       document.addEventListener('click', (e) => {
         const target = e.target as HTMLElement | null;
         if (!target) return;
 
-        const trigger = target.closest('#hero-hamburger, .hamburger-btn, .menu-trigger, [data-menu-trigger]');
+        const trigger = target.closest('#menu-toggle, #hero-hamburger, .mobile-toggle, .hamburger-btn, .menu-trigger');
         
         if (trigger) {
           e.preventDefault();
-          const overlay = document.getElementById('menu-overlay') || document.querySelector('.menu-overlay');
-          const navDrawer = document.getElementById('nav-drawer') || document.querySelector('.nav-drawer');
+          const overlay = document.getElementById('menu-overlay');
           
           if (overlay) {
-            overlay.classList.toggle('active');
-            const isOpen = overlay.classList.contains('active');
-            trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-            document.body.classList.toggle('menu-open', isOpen);
-          }
-          if (navDrawer) {
-            navDrawer.classList.toggle('active');
+            const isActive = overlay.classList.contains('active');
+            if (isActive) {
+              overlay.classList.remove('active');
+              trigger.setAttribute('aria-expanded', 'false');
+              document.body.classList.remove('menu-open');
+              document.body.style.overflow = '';
+            } else {
+              overlay.classList.add('active');
+              trigger.setAttribute('aria-expanded', 'true');
+              document.body.classList.add('menu-open');
+              document.body.style.overflow = 'hidden';
+            }
           }
         }
       });
 
-      // Context Menu & Content Protection
+      // Protection Scripts
       document.addEventListener('contextmenu', (e) => e.preventDefault());
       document.addEventListener('keydown', (e) => {
         if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) {
@@ -206,12 +208,10 @@ const preloadedLogo = await getImage({
     pointer-events: auto !important;
   }
 
-  /* Ensure active overlay sits above all other page content */
-  .menu-overlay.active,
-  .nav-drawer.active {
+  .menu-overlay.active {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
-    z-index: 99999 !important;
+    z-index: 2147483647 !important;
   }
 </style>
