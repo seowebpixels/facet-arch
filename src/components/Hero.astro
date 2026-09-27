@@ -19,16 +19,10 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 <section id="hero-stage" class="stage-container">
   <h2 class="lcp-seo-anchor" fetchpriority="high">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
-  <!-- 1. Intro Center Text (Fades out during intro) -->
-  <div id="intro-text-center" class="intro-text-center">
-    <span class="title-text text-facet">FACET</span>
-    <span class="title-text text-architecture">ARCHITECTURE</span>
-  </div>
-
-  <!-- 2. Permanent Top-Left Header Text (Fades in and stays visible permanently at z-index 999999) -->
+  <!-- Single persistent Header Text Element -->
   <div id="hero-text-container" class="hero-text-container">
-    <h1 class="title-text text-facet">FACET</h1>
-    <h1 class="title-text text-architecture">ARCHITECTURE</h1>
+    <h1 id="text-facet" class="title-text text-facet">FACET</h1>
+    <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
   </div>
 
   <!-- Fullscreen Container for Ken Burns Slides -->
@@ -223,18 +217,25 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
     // 4. Primary GSAP Intro Sequence
     const logoCenter = document.getElementById('logo-center');
-    const introTextCenter = document.getElementById('intro-text-center');
     const heroTextContainer = document.getElementById('hero-text-container');
     const clock = document.getElementById('hero-clock');
     const heroFrame = document.getElementById('hero-frame');
 
-    if (!logoCenter || !introTextCenter || !heroTextContainer || !clock || !heroFrame) return;
+    if (!logoCenter || !heroTextContainer || !clock || !heroFrame) return;
 
     const isMobile = window.innerWidth <= 768;
 
-    // Set initial opacities
-    gsap.set(introTextCenter, { opacity: 0 });
-    gsap.set(heroTextContainer, { opacity: 0 });
+    // Calculate exact center pixel offsets based on viewport dimensions
+    const rect = heroTextContainer.getBoundingClientRect();
+    const centerXOffset = (window.innerWidth / 2) - (rect.width / 2) - 15;
+    const centerYOffset = (window.innerHeight / 2) - (rect.height / 2) - 15;
+
+    // Set initial centered state using exact x/y pixel offsets relative to top:15px; left:15px
+    gsap.set(heroTextContainer, {
+      x: centerXOffset,
+      y: centerYOffset,
+      opacity: 0
+    });
 
     if (isMobile) {
       gsap.set(logoCenter, { 
@@ -250,7 +251,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
       logoCenter.style.visibility = 'visible';
       heroFrame.style.visibility = 'visible';
-      introTextCenter.style.visibility = 'visible';
       heroTextContainer.style.visibility = 'visible';
       clock.style.visibility = 'visible';
 
@@ -260,13 +260,13 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
       });
 
       tl
-        // 1. Reveal center text
-        .to(introTextCenter, {
+        // 1. Fade in centered text
+        .to(heroTextContainer, {
           opacity: 1,
           duration: 0.8,
           delay: 0.8
         })
-        // 2. Animate logo away, crossfade center text into top-left permanent text
+        // 2. Animate text to top-left (x: 0, y: 0) while moving logo
         .to(logoCenter, {
           top: '130px',
           left: 'calc(100vw - 75px)',
@@ -275,14 +275,12 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           scale: 0.32,
           duration: 1.2
         })
-        .to(introTextCenter, {
-          opacity: 0,
-          duration: 0.6
-        }, '<')
         .to(heroTextContainer, {
-          opacity: 1,
-          duration: 0.8
-        }, '-=0.4')
+          x: 0,
+          y: 0,
+          duration: 1.2,
+          ease: 'power3.inOut'
+        }, '<')
         // 3. Reveal clock & hero frame
         .to(clock, {
           opacity: 1,
@@ -303,7 +301,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
 
       logoCenter.style.visibility = 'visible';
       heroFrame.style.visibility = 'visible';
-      introTextCenter.style.visibility = 'visible';
       heroTextContainer.style.visibility = 'visible';
       clock.style.visibility = 'visible';
 
@@ -313,13 +310,13 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
       });
 
       tl
-        // 1. Reveal center text
-        .to(introTextCenter, {
+        // 1. Fade in centered text
+        .to(heroTextContainer, {
           opacity: 1,
           duration: 0.8,
           delay: 0.8
         })
-        // 2. Move logo, crossfade text smoothly
+        // 2. Animate text to top-left (x: 0, y: 0) while moving logo
         .to(logoCenter, {
           top: '90px',
           left: '100vw', 
@@ -332,14 +329,12 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           duration: 1.2,
           ease: 'power2.inOut'
         })
-        .to(introTextCenter, {
-          opacity: 0,
-          duration: 0.6
-        }, '<')
         .to(heroTextContainer, {
-          opacity: 1,
-          duration: 0.8
-        }, '-=0.4')
+          x: 0,
+          y: 0,
+          duration: 1.2,
+          ease: 'power3.inOut'
+        }, '<')
         // 3. Reveal clock & hero frame
         .to(clock, {
           opacity: 1,
@@ -403,22 +398,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     pointer-events: none;
   }
 
-  /* 1. Intro Center Text Container */
-  .intro-text-center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 999998;
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
-    white-space: nowrap;
-    visibility: hidden;
-    pointer-events: none;
-  }
-
-  /* 2. Permanent Top-Left Text Container */
+  /* Single text container fixed at top: 15px; left: 15px */
   .hero-text-container {
     position: absolute;
     top: 15px;
@@ -428,6 +408,7 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     flex-direction: row;
     gap: 12px;
     white-space: nowrap;
+    will-change: transform, opacity;
     visibility: hidden;
     pointer-events: none;
   }
@@ -542,7 +523,6 @@ const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
       border-radius: 0;
     }
 
-    .intro-text-center,
     .hero-text-container {
       gap: 6px;
     }
