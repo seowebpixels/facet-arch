@@ -1,5 +1,4 @@
 ---
-/* src/pages/portfolio.astro */
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -329,7 +328,7 @@ const portfolioData = [
   /* Fixed Navigation Position */
   .portfolio-nav {
     position: fixed;
-    top: 100px;
+    top: 120px;
     left: 0;
     width: 100%;
     z-index: 100;
@@ -339,15 +338,6 @@ const portfolioData = [
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     box-sizing: border-box;
   }
-
-  /* In Header.astro or portfolio.astro global header styles */
-.site-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000 !important; /* Ensures header menu button stays above fixed portfolio category bar */
-}
 
   .nav-track {
     display: flex;
@@ -535,7 +525,7 @@ const portfolioData = [
     display: none;
     position: fixed;
     inset: 0;
-    z-index: 1000;
+    z-index: 2147483647;
     background: rgba(0, 0, 0, 0.96);
     backdrop-filter: blur(12px);
     flex-direction: column;
@@ -550,7 +540,7 @@ const portfolioData = [
 
   .lightbox-close {
     position: absolute;
-    top: 100px;
+    top: 95px;
     right: 24px;
     background: none;
     border: 1px solid #00ffc8;
@@ -628,7 +618,7 @@ const portfolioData = [
   /* Desktop View Styling Adjustment */
   @media (min-width: 768px) {
     .lightbox-close {
-      top: 150px;
+      top: 160px;
       right: 32px;
     }
 
@@ -667,7 +657,7 @@ const portfolioData = [
   /* Mobile Specific Layout Adjustments */
   @media (max-width: 767px) {
     .portfolio-nav {
-      top: 80px;
+      top: 90px;
       padding: 10px 16px;
     }
 
@@ -688,7 +678,7 @@ const portfolioData = [
       height: 4px !important;
     }
 
-    /* Mobile Lightbox Controls & Aspect Ratio Fix */
+    /* Mobile Lightbox Controls */
     .lightbox-modal {
       padding: 80px 16px 30px 16px !important;
       justify-content: flex-start;
@@ -696,7 +686,7 @@ const portfolioData = [
     }
 
     .lightbox-close {
-      top: 100px;
+      top: 95px;
       right: 16px;
     }
 
@@ -707,7 +697,6 @@ const portfolioData = [
       flex-shrink: 0;
     }
 
-    /* Set to contain so full aspect ratio fits without clipping sides */
     .lightbox-img-layer {
       background-size: contain !important;
       background-position: center !important;

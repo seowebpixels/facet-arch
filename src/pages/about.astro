@@ -173,6 +173,8 @@ const teamMembers = [
     display: flex;
     flex-direction: column;
     gap: 120px;
+    position: relative;
+    z-index: 1;
   }
 
   /* Hero Section */
@@ -344,11 +346,8 @@ const teamMembers = [
 
   @media (max-width: 767px) {
     .about-wrapper {
-      padding-top: 100px;
+      padding-top: 110px;
       gap: 70px;
-      z-index: 1000 !important;
-      pointer-events: auto !important;
     }
   }
 </style>
-

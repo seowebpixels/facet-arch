@@ -18,13 +18,14 @@ const navItems = [
     <!-- Top Left Logo Container -->
     <a href="/" class="logo-link" aria-label="Facet Architecture Home">
       <Image 
-    src={logoImg} 
-    alt="Facet Architecture Logo" 
-    class="site-logo"
-    loading="eager"
-    decoding="sync"
-  />
-</a>
+        src={logoImg} 
+        alt="Facet Architecture Logo" 
+        class="site-logo"
+        loading="eager"
+        decoding="sync"
+      />
+    </a>
+
     <!-- Top Right Nav Row (Desktop) -->
     <nav class="desktop-nav">
       {navItems.map((item) => {
@@ -45,20 +46,6 @@ const navItems = [
       <span class="line line-3"></span>
     </button>
   </div>
-
-  <!-- Mobile Dropdown Drawer -->
-  <div id="mobile-menu" class="mobile-menu-drawer">
-    <nav class="mobile-nav-list">
-      {navItems.map((item) => {
-        const isActive = (item.href === '/' && currentPath === '/') || (item.href !== '/' && currentPath.startsWith(item.href));
-        return (
-          <a href={item.href} class={`mobile-nav-link ${isActive ? 'active' : ''}`}>
-            {item.name}
-          </a>
-        );
-      })}
-    </nav>
-  </div>
 </header>
 
 <style>
@@ -67,13 +54,13 @@ const navItems = [
     top: 0;
     left: 0;
     width: 100vw;
-    z-index: 2147483646;
+    z-index: 2147483646 !important;
     background-color: #2e343b; /* Charcoal grey */
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     box-sizing: border-box;
+    pointer-events: auto !important;
   }
 
-  /* Maintained your 120px menu row height */
   .header-inner {
     max-width: 1800px;
     margin: 0 auto;
@@ -85,7 +72,6 @@ const navItems = [
     box-sizing: border-box;
   }
 
-  /* Anchor wrapper takes up height cleanly without clipping overflow */
   .logo-link {
     display: flex;
     align-items: center;
@@ -98,11 +84,9 @@ const navItems = [
     transform: scale(1.02);
   }
 
-  /* Controls logo height while preserving all graphic elements */
   .site-logo {
-    height: 175px; /* Adjust this value up/down to scale the entire logo */
-    width: auto; /* Keeps original proportions intact */
-    max-height: none
+    height: 175px;
+    width: auto;
     display: block;
     object-fit: contain;
   }
@@ -152,7 +136,7 @@ const navItems = [
     transform-origin: left center;
   }
 
-  /* Mobile Toggle */
+  /* Mobile Toggle Button */
   .mobile-toggle {
     display: none;
     flex-direction: column;
@@ -163,7 +147,8 @@ const navItems = [
     border: none;
     cursor: pointer;
     padding: 0;
-    z-index: 99999;
+    z-index: 2147483647 !important;
+    pointer-events: auto !important;
   }
 
   .line {
@@ -172,47 +157,6 @@ const navItems = [
     background-color: #ffffff;
     border-radius: 2px;
     transition: transform 0.3s ease, opacity 0.3s ease;
-  }
-
-  /* Mobile Drawer */
-  .mobile-menu-drawer {
-    display: none;
-    position: fixed;
-    top: 120px;
-    left: 0;
-    width: 100vw;
-    height: calc(100vh - 120px);
-    background-color: #2e343b;
-    padding: 40px 32px;
-    box-sizing: border-box;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-  }
-
-  .mobile-menu-drawer.open {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .mobile-nav-list {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-  }
-
-  .mobile-nav-link {
-    font-family: 'Bank Gothic', 'BankGothic', sans-serif, system-ui;
-    font-size: 1.8rem;
-    color: #ffffff;
-    text-decoration: none;
-    letter-spacing: 2px;
-    transition: color 0.3s ease;
-  }
-
-  .mobile-nav-link.active,
-  .mobile-nav-link:hover {
-    color: #00ffc8;
   }
 
   @media (max-width: 899px) {
@@ -233,12 +177,6 @@ const navItems = [
       display: flex;
     }
 
-    .mobile-menu-drawer {
-      display: block;
-      top: 90px;
-      height: calc(100vh - 90px);
-    }
-
     .mobile-toggle[aria-expanded="true"] .line-1 {
       transform: translateY(10px) rotate(45deg);
     }
@@ -254,25 +192,39 @@ const navItems = [
 </style>
 
 <script>
-  function initHeader() {
+  function initHeaderToggle() {
     const toggleBtn = document.getElementById('menu-toggle');
-    const drawer = document.getElementById('mobile-menu');
+    const overlay = document.getElementById('menu-overlay');
 
-    if (!toggleBtn || !drawer) return;
+    if (!toggleBtn) return;
 
-    toggleBtn.addEventListener('click', () => {
-      const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
-      toggleBtn.setAttribute('aria-expanded', (!isExpanded).toString());
-      drawer.classList.toggle('open', !isExpanded);
-      document.body.style.overflow = !isExpanded ? 'hidden' : '';
-    });
+    toggleBtn.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const overlayEl = overlay || document.getElementById('menu-overlay');
+      if (overlayEl) {
+        const isActive = overlayEl.classList.contains('active');
+        if (isActive) {
+          overlayEl.classList.remove('active');
+          toggleBtn.setAttribute('aria-expanded', 'false');
+          document.body.classList.remove('menu-open');
+          document.body.style.overflow = '';
+        } else {
+          overlayEl.classList.add('active');
+          toggleBtn.setAttribute('aria-expanded', 'true');
+          document.body.classList.add('menu-open');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+    };
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initHeader);
+    document.addEventListener('DOMContentLoaded', initHeaderToggle);
   } else {
-    initHeader();
+    initHeaderToggle();
   }
 
-  document.addEventListener('astro:page-load', initHeader);
+  document.addEventListener('astro:page-load', initHeaderToggle);
 </script>
