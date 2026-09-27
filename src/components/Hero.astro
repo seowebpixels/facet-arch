@@ -10,11 +10,11 @@ import intStarckImg from '../assets/int-starck.avif';
 
 const heroImages = [resHeroImg, resBlannImg, ascotManorImg, intStarckImg];
 
-const optimizedHero = await getImage({ src: resHeroImg, format: 'webp', width: 720, height: 480, quality: 100 });
+const optimisedHero = await getImage({ src: resHeroImg, format: 'webp', width: 720, height: 480, quality: 100 });
 ---
 
 <!-- Preload main initial image -->
-<link rel="preload" as="image" href={optimizedHero.src} type="image/webp" fetchpriority="high" />
+<link rel="preload" as="image" href={optimisedHero.src} type="image/webp" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
   <h2 class="lcp-seo-anchor" fetchpriority="high">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
