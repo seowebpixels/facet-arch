@@ -679,9 +679,9 @@ const portfolioData = [
       height: 4px !important;
     }
 
-    /* Mobile Lightbox Controls Fix */
+    /* Mobile Lightbox Controls & Aspect Ratio Fix */
     .lightbox-modal {
-      padding: 80px 0 30px 0 !important;
+      padding: 80px 16px 30px 16px !important;
       justify-content: flex-start;
       gap: 15px;
     }
@@ -692,20 +692,21 @@ const portfolioData = [
     }
 
     .lightbox-content {
-      width: 100vw !important;
-      height: 55vh !important;
-      max-width: 100vw !important;
+      width: 100% !important;
+      height: 50vh !important;
+      max-width: 100% !important;
       flex-shrink: 0;
     }
 
+    /* Set to contain so full aspect ratio fits without clipping sides */
     .lightbox-img-layer {
-      background-size: cover !important;
+      background-size: contain !important;
       background-position: center !important;
     }
 
     .lightbox-mobile-controls {
       width: 100%;
-      padding: 0 20px;
+      padding: 0;
       box-sizing: border-box;
       margin-top: 5px;
       gap: 12px;
