@@ -240,7 +240,8 @@ const optimisedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         left: '50%', 
         xPercent: -50, 
         yPercent: -50, 
-        scale: 0.75 
+        scale: 0.75,
+        opacity: 1 
       });
 
       gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
@@ -263,7 +264,7 @@ const optimisedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           duration: 0.8,
           delay: 0.8
         })
-        // 2. Animate text directly to clear mobile header (105px from top)
+        // 2. Animate text to mobile header position & shoot logo completely off-screen right
         .to(heroTextContainer, {
           top: '105px',
           left: '15px',
@@ -274,10 +275,11 @@ const optimisedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         })
         .to(logoCenter, {
           top: '130px',
-          left: 'calc(100vw - 50px)', // Mobile ONLY: shifted 35px right
-          xPercent: -50,
+          left: '125vw',
+          xPercent: 0,
           yPercent: -50,
           scale: 0.32,
+          opacity: 0,
           duration: 1.2
         }, '<')
         // 3. Reveal clock & hero frame
@@ -303,6 +305,15 @@ const optimisedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         opacity: 0
       });
 
+      gsap.set(logoCenter, {
+        top: '50%',
+        left: '50%',
+        xPercent: -50,
+        yPercent: -50,
+        scale: 1,
+        opacity: 1
+      });
+
       gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
       gsap.set(clock, { opacity: 0, y: 15 });
 
@@ -323,7 +334,7 @@ const optimisedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           duration: 0.8,
           delay: 0.8
         })
-        // 2. Animate text directly to 20px below header bar (130px from top)
+        // 2. Animate text to header position & shoot logo completely off-screen right
         .to(heroTextContainer, {
           top: '130px',
           left: '30px',
@@ -334,12 +345,13 @@ const optimisedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         })
         .to(logoCenter, {
           top: '130px',
-          left: '100vw', 
-          xPercent: -90, 
-          x: 130, // DESKTOP RESTORED: untouched original position
+          left: '120vw',
+          xPercent: 0,
+          x: 0,
           yPercent: 0,
           y: 0,
           scale: 0.55,
+          opacity: 0,
           transformOrigin: 'top left',
           duration: 1.2,
           ease: 'power2.inOut'
@@ -465,7 +477,7 @@ const optimisedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     justify-content: center;
     z-index: 99999;
     pointer-events: none;
-    will-change: transform, top, left;
+    will-change: transform, top, left, opacity;
     visibility: hidden;
   }
 
