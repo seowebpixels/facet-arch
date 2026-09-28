@@ -22,20 +22,20 @@ import renImg from '../assets/renvid-elementum.jpg';
     <!-- Left Column: Sticky Editorial Content -->
     <section class="left-sticky-col">
       <div class="brand-intro">
-        <p class="subtitle">SELECTED WORKS</p>
-        <h1 class="headline">Precision in Spatial & Sustainable Design</h1>
-        <p class="philosophy">
+        <p class="subtitle" style="color: #D9DDDC !important;">SELECTED WORKS</p>
+        <h1 class="headline" style="color: #D9DDDC !important;">Precision in Spatial & Sustainable Design</h1>
+        <p class="philosophy" style="color: #FFFFFF !important;">
           Facet Architecture transforms complex spatial challenges into contemporary minimalist and innovative sustainable design. Rooted in material clarity and environmental context, our practice explores the interplay between space, movement and aesthetic integrity.
         </p>
       </div>
 
       <div class="index-legend">
-        <div class="legend-item" data-index="0"><span class="legend-num">01</span> iStore</div>
-        <div class="legend-item" data-index="1"><span class="legend-num">02</span> Kubu</div>
-        <div class="legend-item" data-index="2"><span class="legend-num">03</span> David</div>
-        <div class="legend-item" data-index="3"><span class="legend-num">04</span> EOA Residence</div>
-        <div class="legend-item" data-index="4"><span class="legend-num">05</span> Thermal Comfort Study</div>
-        <div class="legend-item" data-index="5"><span class="legend-num">06</span> Elementum</div>
+        <div class="legend-item" data-index="0" style="color: #D9DDDC !important;"><span class="legend-num" style="color: #D9DDDC !important;">01</span> iStore</div>
+        <div class="legend-item" data-index="1" style="color: #D9DDDC !important;"><span class="legend-num" style="color: #D9DDDC !important;">02</span> Kubu</div>
+        <div class="legend-item" data-index="2" style="color: #D9DDDC !important;"><span class="legend-num" style="color: #D9DDDC !important;">03</span> David</div>
+        <div class="legend-item" data-index="3" style="color: #D9DDDC !important;"><span class="legend-num" style="color: #D9DDDC !important;">04</span> EOA Residence</div>
+        <div class="legend-item" data-index="4" style="color: #D9DDDC !important;"><span class="legend-num" style="color: #D9DDDC !important;">05</span> Thermal Comfort Study</div>
+        <div class="legend-item" data-index="5" style="color: #D9DDDC !important;"><span class="legend-num" style="color: #D9DDDC !important;">06</span> Elementum</div>
       </div>
     </section>
 
@@ -196,7 +196,7 @@ import renImg from '../assets/renvid-elementum.jpg';
   <HomeFooter />
 </Layout>
 
-<!-- Isolated Global Lock Styles for Home Preloader & Forced Text Colors -->
+<!-- Isolated Global Lock Styles -->
 <style is:global>
   html.home-preloader-locked,
   html.home-preloader-locked body {
@@ -213,25 +213,6 @@ import renImg from '../assets/renvid-elementum.jpg';
     display: none !important;
     width: 0 !important;
     height: 0 !important;
-  }
-
-  /* Unscoped Global Overrides for Sticky Column Text */
-  .left-sticky-col .subtitle,
-  .left-sticky-col .headline,
-  .left-sticky-col h1,
-  .left-sticky-col .legend-item,
-  .left-sticky-col .legend-num {
-    color: #D9DDDC !important;
-  }
-
-  .left-sticky-col .philosophy,
-  .left-sticky-col p.philosophy {
-    color: #FFFFFF !important;
-  }
-
-  .left-sticky-col .legend-item.active,
-  .left-sticky-col .legend-item.active .legend-num {
-    color: #FFFFFF !important;
   }
 </style>
 
@@ -332,9 +313,10 @@ import renImg from '../assets/renvid-elementum.jpg';
     font-weight: bold;
   }
 
-  .legend-item.active {
+  .legend-item.active,
+  .legend-item.active .legend-num {
     font-weight: 900;
-    transform: translateX(6px);
+    color: #FFFFFF !important;
   }
 
   /* Right Staggered Grid Column */
@@ -554,8 +536,10 @@ import renImg from '../assets/renvid-elementum.jpg';
         legendItems.forEach((item, idx) => {
           if (idx === tileIndex) {
             item.classList.add('active');
+            (item as HTMLElement).style.setProperty('color', '#FFFFFF', 'important');
           } else {
             item.classList.remove('active');
+            (item as HTMLElement).style.setProperty('color', '#D9DDDC', 'important');
           }
         });
       }
