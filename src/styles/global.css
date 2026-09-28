@@ -8,11 +8,10 @@
   font-display: swap;
 }
 
-/* Nesobrite Font Definitions */
+/* Nesobrite Font Definitions - Corrected Syntax */
 @font-face {
   font-family: 'Nesobrite';
-  src: url('/fonts/Nesobrite Regular.ttf') format('truetype'),
-       url('/fonts/Nesobrite Regular.ttf') format('truetype');
+  src: url('/fonts/Nesobrite Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -20,8 +19,7 @@
 
 @font-face {
   font-family: 'Nesobrite';
-  src: url('/fonts/Nesobrite Bold.ttf') format('truetype'),
-       url('/fonts/Nesobrite Bold.ttf') format('truetype');
+  src: url('/fonts/Nesobrite Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -33,6 +31,27 @@
   --border-dark: #111111;
   --font-heading: 'Bank Gothic', sans-serif;
   --font-body: 'Nesobrite', sans-serif;
+}
+
+/* Base Body Font (Nesobrite) */
+body {
+  font-family: var(--font-body);
+}
+
+/* Explicitly set body paragraph/text tags to Nesobrite */
+p, article, section p, .body-text {
+  font-family: var(--font-body);
+}
+
+/* Force Bank Gothic on Headings, Header, Navigation, Menu Overlay, and Footer */
+h1, h2, h3, h4, h5,
+.heading-bankgothic,
+header, header *,
+nav, nav *,
+.nav-link,
+.menu-overlay, .menu-overlay *,
+footer, footer * {
+  font-family: var(--font-heading) !important;
 }
 
 /* Set default body typography across all text elements */
