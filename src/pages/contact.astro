@@ -10,24 +10,21 @@ const currentYear = new Date().getFullYear();
 const WEB3FORMS_ACCESS_KEY = "5809f663-d9b7-4c8e-8269-ae38456c0f05";
 
 const socialLinks = [
-  { 
-    name: 'Facebook', 
+  {
+    name: 'Facebook',
     href: 'https://www.facebook.com/facetarchitecture',
     icon: 'M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z'
   },
-  { 
-    name: 'Instagram', 
+  {
+    name: 'Instagram',
     href: 'https://www.instagram.com/facetarchitecture_za?igsh=YTF3MjJmOW92cW5y&utm_source=qr',
-    rect: true,
-    circle: true,
-    path: 'M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z'
+    icon: 'M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z'
   },
-  { 
-    name: 'LinkedIn', 
+  {
+    name: 'LinkedIn',
     href: 'https://www.linkedin.com/in/warren-green-a5674927',
-    icon: 'M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z M2 9h4v12H2z',
-    dot: true
-  },
+    icon: 'M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z'
+  }
 ];
 ---
 
@@ -191,39 +188,41 @@ const socialLinks = [
         </div>
       </div>
 
-      <!-- Social Media SVG Icons Row (Right on Desktop / Centered on Mobile) -->
-    <div class="header-socials">
-      {socialLinks.map((social) => (
-        <a 
-          href={social.href} 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          class="social-icon-link"
-          aria-label={`Facet Architecture ${social.name}`}
-        >
-          {social.name === 'Facebook' && (
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-svg">
-              <path d={social.icon}></path>
-            </svg>
-          )}
+      <!-- Social Media SVG Icons Row -->
+<div class="header-socials">
+  {socialLinks.map((social) => (
+    <a
+      href={social.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="social-icon-link"
+      aria-label={`Facet Architecture ${social.name}`}
+      style="color: #ffffff; display: inline-flex; align-items: center;"
+    >
+      {social.name === 'Facebook' && (
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d={social.icon}></path>
+        </svg>
+      )}
 
-          {social.name === 'Instagram' && (
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-svg">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-              <path d={social.path}></path>
-              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-            </svg>
-          )}
+      {social.name === 'Instagram' && (
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+          <path d={social.icon}></path>
+          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+        </svg>
+      )}
 
-          {social.name === 'LinkedIn' && (
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-svg">
-              <path d={social.icon}></path>
-              <circle cx="4" cy="4" r="2"></circle>
-            </svg>
-          )}
-        </a>
-      ))}
-    </div>
+      {social.name === 'LinkedIn' && (
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d={social.icon}></path>
+          <rect x="2" y="9" width="4" height="12"></rect>
+          <circle cx="4" cy="4" r="2"></circle>
+        </svg>
+      )}
+    </a>
+  ))}
+</div>
 
       <!-- Copyright Base -->
       <div class="footer-base">
