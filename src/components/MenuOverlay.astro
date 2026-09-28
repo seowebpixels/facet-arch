@@ -13,23 +13,48 @@ const menuItems = [
   { name: 'ABOUT', href: '/about' },
   { name: 'CONTACT', href: '/contact' },
 ];
+
+const socialLinks = [
+  { name: 'FB', href: 'https://www.facebook.com/facetarchitecture' },
+  { name: 'IG', href: 'https://www.instagram.com/facetarchitecture_za?igsh=YTF3MjJmOW92cW5y&utm_source=qr' },
+  { name: 'LI', href: 'https://www.linkedin.com/in/warren-green-a5674927' },
+];
 ---
 
 <div id="menu-overlay" class={`menu-overlay ${isOpen ? 'active' : ''}`}>
   <div class="menu-container">
     
-    <a href="/" class="overlay-logo-link" aria-label="Facet Architecture Home">
-      <img 
-        src={logoImg.src} 
-        alt="Facet Architecture Logo" 
-        class="overlay-logo"
-        width={logoImg.width || 300}
-        height={logoImg.height || 300}
-        loading="eager"
-        decoding="sync"
-      />
-    </a>
+    <!-- Top Header Bar with Logo and Social Links -->
+    <div class="menu-header-bar">
+      <a href="/" class="overlay-logo-link" aria-label="Facet Architecture Home">
+        <img 
+          src={logoImg.src} 
+          alt="Facet Architecture Logo" 
+          class="overlay-logo"
+          width={logoImg.width || 300}
+          height={logoImg.height || 300}
+          loading="eager"
+          decoding="sync"
+        />
+      </a>
 
+      <!-- Social Media Links (80px from right edge on desktop) -->
+      <div class="menu-socials">
+        {socialLinks.map((social) => (
+          <a 
+            href={social.href} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="social-link"
+            aria-label={`Facet Architecture ${social.name}`}
+          >
+            {social.name}
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Main Centered Navigation Links -->
     <nav class="menu-nav-list">
       {menuItems.map((item) => (
         <a href={item.href} class="menu-link" data-link={item.name} data-href={item.href}>
@@ -81,7 +106,7 @@ const menuItems = [
     pointer-events: auto !important;
   }
 
-  /* Centered Layout for Logo, Navigation Links, and Clock */
+  /* Centered Layout Container */
   .menu-container {
     width: 100%;
     height: 100dvh;
@@ -94,30 +119,70 @@ const menuItems = [
     padding: 20px;
   }
 
+  /* Header Positioning Area */
+  .menu-header-bar {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+
   /* Overlay White Logo */
   .overlay-logo-link {
     position: absolute;
-    top: 30px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 40px;
     z-index: 10;
     display: flex;
     align-items: center;
     text-decoration: none;
+    pointer-events: auto;
   }
 
   .overlay-logo {
-    height: clamp(100px, 12vw, 140px);
+    height: clamp(80px, 10vw, 120px);
     width: auto;
     display: block;
   }
 
-  /* Navigation Links Stack */
+  /* Social Media Row - Positioned 80px from right edge */
+  .menu-socials {
+    position: absolute;
+    right: 80px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: clamp(16px, 2.5vw, 28px);
+    pointer-events: auto;
+  }
+
+  .social-link {
+    font-family: 'Bank Gothic', 'BankGothic', sans-serif, system-ui;
+    font-size: clamp(0.95rem, 1.5vw, 1.2rem);
+    font-weight: 700;
+    color: #ffffff;
+    text-decoration: none;
+    letter-spacing: 2px;
+    transition: color 0.3s ease, transform 0.2s ease, opacity 0.3s ease;
+    opacity: 0.85;
+  }
+
+  .social-link:hover {
+    color: #00ffc8;
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+
+  /* Navigation Links Stack - Perfectly Centered */
   .menu-nav-list {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: clamp(20px, 4vh, 40px);
+    gap: clamp(16px, 3.5vh, 32px);
+    z-index: 5;
   }
 
   .menu-link {
@@ -125,12 +190,12 @@ const menuItems = [
     display: inline-block;
     text-decoration: none;
     width: fit-content;
-    padding-bottom: 6px;
+    padding-bottom: 4px;
   }
 
   .menu-link-text {
     font-family: 'Bank Gothic', 'BankGothic', sans-serif, system-ui;
-    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-size: clamp(1.8rem, 4.5vw, 3.2rem);
     color: #ffffff;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -168,7 +233,7 @@ const menuItems = [
   /* Menu Overlay Bottom Clock */
   .overlay-clock-container {
     position: absolute;
-    bottom: 40px;
+    bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
@@ -177,10 +242,26 @@ const menuItems = [
 
   .overlay-clock-text {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: clamp(1rem, 1.8vw, 1.4rem);
+    font-size: clamp(0.9rem, 1.5vw, 1.2rem);
     color: #ffffff;
     letter-spacing: 2px;
     opacity: 0.9;
+  }
+
+  /* Responsive Adjustments for Mobile Screens */
+  @media (max-width: 768px) {
+    .overlay-logo-link {
+      left: 20px;
+    }
+
+    .menu-socials {
+      right: 25px;
+      gap: 14px;
+    }
+
+    .social-link {
+      font-size: 0.9rem;
+    }
   }
 </style>
 
