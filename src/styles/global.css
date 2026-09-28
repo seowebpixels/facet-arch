@@ -8,17 +8,36 @@
   font-display: swap;
 }
 
+/* Nesobrite Font Definitions */
+@font-face {
+  font-family: 'Nesobrite';
+  src: url('/fonts/Nesobrite-Regular.woff2') format('woff2'),
+       url('/fonts/Nesobrite-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nesobrite';
+  src: url('/fonts/Nesobrite-Bold.woff2') format('woff2'),
+       url('/fonts/Nesobrite-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --bg-concrete: #BEBEBE;
   --text-primary: #111111;
   --border-dark: #111111;
   --font-heading: 'Bank Gothic', sans-serif;
-  --font-body: 'Bank Gothic', sans-serif; /* <--- Updated here */
+  --font-body: 'Nesobrite', sans-serif;
 }
 
-/* Force Bank Gothic on body elements while leaving headings intact */
-body, p, span, li, a, input, textarea, button {
-  font-family: var(--font-heading) !important;
+/* Set default body typography across all text elements */
+body, p, span, li, a, input, textarea, button, td, th, label, select {
+  font-family: var(--font-body) !important;
 }
 
 *, *::before, *::after {
@@ -59,9 +78,9 @@ body.loading-lock {
   -ms-touch-action: auto !important;
 }
 
-/* Global Heading Rules */
-h1, h2, h3, .heading-bankgothic {
-  font-family: 'Bank Gothic', 'BankGothic', sans-serif !important;
+/* Global Heading Rules - Strict Bank Gothic on H1 through H5 */
+h1, h2, h3, h4, h5, .heading-bankgothic {
+  font-family: var(--font-heading) !important;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -138,6 +157,6 @@ cite.quote-cite[data-astro-cid-lcdefpme],
   }
 
   html {
-  scroll-behavior: smooth;
-}
+    scroll-behavior: smooth;
+  }
 }
