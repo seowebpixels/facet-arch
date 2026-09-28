@@ -254,14 +254,14 @@ import renImg from '../assets/renvid-elementum.jpg';
     }
   }
 
-  /* Stacking Context Isolation + Opaque Container for Lighthouse Audit Compliance */
+  /* Left Sticky Box Container */
   .left-sticky-col {
     width: 100%;
     padding: 32px;
     border-radius: 8px;
     box-sizing: border-box;
     background-color: #2D3239;
-    color: #FFFFFF;
+    color: #D9DDDC !important;
     isolation: isolate;
     position: relative;
     z-index: 2;
@@ -280,7 +280,7 @@ import renImg from '../assets/renvid-elementum.jpg';
     font-family: 'BankGothic', sans-serif, system-ui;
     font-size: 0.85rem;
     letter-spacing: 2px;
-    color: #FFFFFF;
+    color: #D9DDDC !important;
     font-weight: 700;
     margin-bottom: 12px;
   }
@@ -289,14 +289,14 @@ import renImg from '../assets/renvid-elementum.jpg';
     font-family: 'BankGothic', sans-serif, system-ui;
     font-size: 2.2rem;
     line-height: 1.2;
-    color: #FFFFFF;
+    color: #D9DDDC !important;
     margin-bottom: 24px;
   }
 
   .philosophy {
     font-size: 1rem;
     line-height: 1.6;
-    color: #FFFFFF;
+    color: #D9DDDC !important;
     margin-bottom: 40px;
   }
 
@@ -310,19 +310,19 @@ import renImg from '../assets/renvid-elementum.jpg';
     font-family: 'BankGothic', sans-serif, system-ui;
     font-size: 0.9rem;
     letter-spacing: 1px;
-    color: #FFFFFF;
-    transition: transform 0.3s ease;
+    color: #D9DDDC !important;
+    transition: transform 0.3s ease, color 0.3s ease;
   }
 
   .legend-num {
     margin-right: 12px;
     font-weight: bold;
-    color: #FFFFFF;
+    color: #D9DDDC !important;
   }
 
   .legend-item.active {
     font-weight: 900;
-    color: #FFFFFF;
+    color: #FFFFFF !important;
     transform: translateX(6px);
   }
 
@@ -339,7 +339,7 @@ import renImg from '../assets/renvid-elementum.jpg';
       width: 60%;
       position: relative;
       display: block;
-      height: 1720px; /* Expanded height to fit 6 staggered tiles */
+      height: 1720px;
     }
   }
 
