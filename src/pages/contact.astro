@@ -152,6 +152,10 @@ const WEB3FORMS_ACCESS_KEY = "5809f663-d9b7-4c8e-8269-ae38456c0f05";
         <!-- Social Icons Component -->
         <SocialLinks />
 
+      </div>
+
+    </div>
+
     <!-- Bottom Bordered Footer Bar -->
     <footer class="contact-footer-bar">
       <!-- Accreditations Row -->
@@ -474,7 +478,8 @@ const WEB3FORMS_ACCESS_KEY = "5809f663-d9b7-4c8e-8269-ae38456c0f05";
     margin: 0;
   }
 
-  .contact-social-bar {
+  /* Global Social Bar Styles (if needed directly) */
+  :global(.contact-social-bar) {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -483,7 +488,7 @@ const WEB3FORMS_ACCESS_KEY = "5809f663-d9b7-4c8e-8269-ae38456c0f05";
     width: 100%;
   }
 
-  .contact-social-bar a {
+  :global(.contact-social-bar a) {
     color: #ffffff;
     display: inline-flex;
     align-items: center;
@@ -492,8 +497,8 @@ const WEB3FORMS_ACCESS_KEY = "5809f663-d9b7-4c8e-8269-ae38456c0f05";
     transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
   }
 
-  .contact-social-bar a:hover,
-  .contact-social-bar a:focus-visible {
+  :global(.contact-social-bar a:hover),
+  :global(.contact-social-bar a:focus-visible) {
     opacity: 1;
     color: #00ffc8;
     transform: translateY(-2px);
