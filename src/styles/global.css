@@ -11,8 +11,8 @@
 /* Nesobrite Font Definitions */
 @font-face {
   font-family: 'Nesobrite';
-  src: url('/fonts/Nesobrite-Regular.woff2') format('woff2'),
-       url('/fonts/Nesobrite-Regular.woff') format('woff');
+  src: url('/fonts/Nesobrite Regular.ttf') format('truetype'),
+       url('/fonts/Nesobrite Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -20,8 +20,8 @@
 
 @font-face {
   font-family: 'Nesobrite';
-  src: url('/fonts/Nesobrite-Bold.woff2') format('woff2'),
-       url('/fonts/Nesobrite-Bold.woff') format('woff');
+  src: url('/fonts/Nesobrite Bold.ttf') format('truetype'),
+       url('/fonts/Nesobrite Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
