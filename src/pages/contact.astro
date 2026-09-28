@@ -40,6 +40,7 @@ const socialLinks = [
       <!-- Left Column: Direct Info & Map -->
       <div class="info-column">
         <div class="header-block">
+          padding-top: 28px
           <h1 class="main-title">START A PROJECT</h1>
           <p class="intro-text">
             Whether you are looking to design a bespoke private residence or a modern commercial development, the Facet Architecture team is ready to realise your vision.
@@ -264,6 +265,14 @@ const socialLinks = [
       grid-template-columns: 45% 55%;
       gap: 80px;
     }
+  }
+
+/* Left Column Styling with Top Padding Alignment */
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding-top: 28px; /* Drops "START A PROJECT" down to align with form card */
   }
 
   /* Right Column Container - Shifted down 40px vertically */
