@@ -39,7 +39,7 @@ const navItems = [
       })}
     </nav>
 
-    <!-- Mobile Menu Toggle Button -->
+    <!-- Navigation Menu Toggle Button (Visible across all screens) -->
     <button id="menu-toggle" class="mobile-toggle" aria-label="Toggle Navigation Menu" aria-expanded="false">
       <span class="line line-1"></span>
       <span class="line line-2"></span>
@@ -136,9 +136,9 @@ const navItems = [
     transform-origin: left center;
   }
 
-  /* Mobile Toggle Button */
+  /* Toggle Button (Always Available) */
   .mobile-toggle {
-    display: none;
+    display: flex;
     flex-direction: column;
     justify-content: space-between;
     width: 32px;
@@ -159,6 +159,18 @@ const navItems = [
     transition: transform 0.3s ease, opacity 0.3s ease;
   }
 
+  .mobile-toggle[aria-expanded="true"] .line-1 {
+    transform: translateY(10px) rotate(45deg);
+  }
+
+  .mobile-toggle[aria-expanded="true"] .line-2 {
+    opacity: 0;
+  }
+
+  .mobile-toggle[aria-expanded="true"] .line-3 {
+    transform: translateY(-10px) rotate(-45deg);
+  }
+
   @media (max-width: 899px) {
     .header-inner {
       padding: 0 20px;
@@ -171,22 +183,6 @@ const navItems = [
 
     .desktop-nav {
       display: none;
-    }
-
-    .mobile-toggle {
-      display: flex;
-    }
-
-    .mobile-toggle[aria-expanded="true"] .line-1 {
-      transform: translateY(10px) rotate(45deg);
-    }
-
-    .mobile-toggle[aria-expanded="true"] .line-2 {
-      opacity: 0;
-    }
-
-    .mobile-toggle[aria-expanded="true"] .line-3 {
-      transform: translateY(-10px) rotate(-45deg);
     }
   }
 </style>

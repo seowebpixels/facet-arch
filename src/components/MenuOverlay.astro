@@ -24,7 +24,7 @@ const socialLinks = [
 <div id="menu-overlay" class={`menu-overlay ${isOpen ? 'active' : ''}`}>
   <div class="menu-container">
     
-    <!-- Top Header Bar with Logo and Social Links -->
+    <!-- Top Header Bar inside Overlay -->
     <div class="menu-header-bar">
       <a href="/" class="overlay-logo-link" aria-label="Facet Architecture Home">
         <img 
@@ -38,7 +38,7 @@ const socialLinks = [
         />
       </a>
 
-      <!-- Social Media Links (80px from right edge on desktop) -->
+      <!-- Social Media Links (Fixed 80px from the right edge) -->
       <div class="menu-socials">
         {socialLinks.map((social) => (
           <a 
@@ -106,7 +106,7 @@ const socialLinks = [
     pointer-events: auto !important;
   }
 
-  /* Centered Layout Container */
+  /* Centered Main Layout Container */
   .menu-container {
     width: 100%;
     height: 100dvh;
@@ -119,15 +119,14 @@ const socialLinks = [
     padding: 20px;
   }
 
-  /* Header Positioning Area */
+  /* Top Bar Positioning */
   .menu-header-bar {
     position: absolute;
-    top: 30px;
+    top: 40px;
     left: 0;
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     pointer-events: none;
   }
 
@@ -143,12 +142,12 @@ const socialLinks = [
   }
 
   .overlay-logo {
-    height: clamp(80px, 10vw, 120px);
+    height: clamp(60px, 8vw, 100px);
     width: auto;
     display: block;
   }
 
-  /* Social Media Row - Positioned 80px from right edge */
+  /* Social Media Row - 80px from right edge */
   .menu-socials {
     position: absolute;
     right: 80px;
@@ -157,11 +156,12 @@ const socialLinks = [
     align-items: center;
     gap: clamp(16px, 2.5vw, 28px);
     pointer-events: auto;
+    z-index: 10;
   }
 
   .social-link {
     font-family: 'Bank Gothic', 'BankGothic', sans-serif, system-ui;
-    font-size: clamp(0.95rem, 1.5vw, 1.2rem);
+    font-size: clamp(1rem, 1.4vw, 1.25rem);
     font-weight: 700;
     color: #ffffff;
     text-decoration: none;
@@ -176,7 +176,7 @@ const socialLinks = [
     transform: translateY(-2px);
   }
 
-  /* Navigation Links Stack - Perfectly Centered */
+  /* Navigation Links Stack - Centered */
   .menu-nav-list {
     display: flex;
     flex-direction: column;
@@ -230,7 +230,7 @@ const socialLinks = [
     transform: scaleX(0);
   }
 
-  /* Menu Overlay Bottom Clock */
+  /* Bottom Clock Display */
   .overlay-clock-container {
     position: absolute;
     bottom: 30px;
@@ -248,7 +248,7 @@ const socialLinks = [
     opacity: 0.9;
   }
 
-  /* Responsive Adjustments for Mobile Screens */
+  /* Mobile Adjustments */
   @media (max-width: 768px) {
     .overlay-logo-link {
       left: 20px;
@@ -285,11 +285,9 @@ const socialLinks = [
 
   function closeMenuOverlay() {
     const overlay = document.getElementById('menu-overlay');
-    const heroBtn = document.getElementById('hero-hamburger');
     const headerBtn = document.getElementById('menu-toggle');
 
     if (overlay) overlay.classList.remove('active');
-    if (heroBtn) heroBtn.setAttribute('aria-expanded', 'false');
     if (headerBtn) headerBtn.setAttribute('aria-expanded', 'false');
 
     document.body.classList.remove('menu-open');
