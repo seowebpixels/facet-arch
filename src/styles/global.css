@@ -178,4 +178,22 @@ cite.quote-cite[data-astro-cid-lcdefpme],
   html {
     scroll-behavior: smooth;
   }
+
+  /* Lock Bank Gothic on Header, Navigation, and Footer elements */
+header,
+header a,
+header span,
+header button,
+nav,
+nav a,
+nav span,
+footer,
+footer a,
+footer span,
+footer p,
+.nav-link,
+.menu-overlay,
+.menu-overlay a {
+  font-family: var(--font-heading) !important;
+}
 }
