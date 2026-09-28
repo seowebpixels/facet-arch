@@ -196,7 +196,7 @@ import renImg from '../assets/renvid-elementum.jpg';
   <HomeFooter />
 </Layout>
 
-<!-- Isolated Global Lock Styles for Home Preloader -->
+<!-- Isolated Global Lock Styles for Home Preloader & Forced Text Colors -->
 <style is:global>
   html.home-preloader-locked,
   html.home-preloader-locked body {
@@ -213,6 +213,25 @@ import renImg from '../assets/renvid-elementum.jpg';
     display: none !important;
     width: 0 !important;
     height: 0 !important;
+  }
+
+  /* Unscoped Global Overrides for Sticky Column Text */
+  .left-sticky-col .subtitle,
+  .left-sticky-col .headline,
+  .left-sticky-col h1,
+  .left-sticky-col .legend-item,
+  .left-sticky-col .legend-num {
+    color: #D9DDDC !important;
+  }
+
+  .left-sticky-col .philosophy,
+  .left-sticky-col p.philosophy {
+    color: #FFFFFF !important;
+  }
+
+  .left-sticky-col .legend-item.active,
+  .left-sticky-col .legend-item.active .legend-num {
+    color: #FFFFFF !important;
   }
 </style>
 
@@ -278,7 +297,6 @@ import renImg from '../assets/renvid-elementum.jpg';
     font-family: 'BankGothic', sans-serif, system-ui;
     font-size: 0.85rem;
     letter-spacing: 2px;
-    color: #D9DDDC !important;
     font-weight: 700;
     margin-bottom: 12px;
   }
@@ -287,14 +305,12 @@ import renImg from '../assets/renvid-elementum.jpg';
     font-family: 'BankGothic', sans-serif, system-ui;
     font-size: 2.2rem;
     line-height: 1.2;
-    color: #D9DDDC !important;
     margin-bottom: 24px;
   }
 
   .philosophy {
     font-size: 1rem;
     line-height: 1.6;
-    color: #FFFFFF !important;
     margin-bottom: 40px;
   }
 
@@ -308,19 +324,16 @@ import renImg from '../assets/renvid-elementum.jpg';
     font-family: 'BankGothic', sans-serif, system-ui;
     font-size: 0.9rem;
     letter-spacing: 1px;
-    color: #D9DDDC !important;
     transition: transform 0.3s ease, color 0.3s ease;
   }
 
   .legend-num {
     margin-right: 12px;
     font-weight: bold;
-    color: #D9DDDC !important;
   }
 
   .legend-item.active {
     font-weight: 900;
-    color: #FFFFFF !important;
     transform: translateX(6px);
   }
 
