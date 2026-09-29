@@ -35,146 +35,22 @@ const socialLinks = [
   />
 
   <main class="contact-page" id="contact-section">
-  <div class="contact-container">
-    
-    <!-- LEFT COLUMN (Desktop) -->
-    <div class="info-column">
-      <div class="header-block">
-        <h1 class="main-title">START A PROJECT</h1>
-        <p class="intro-text">
-          Whether you are looking to design a bespoke private residence or a modern commercial development, the Facet Architecture team is ready to realise your vision.
-        </p>
-      </div>
-
-      <div class="details-list">
-        <div class="detail-item">
-          <span class="detail-label">DIRECT CONTACT</span>
-          <a href="tel:+27609960690" class="detail-value">+27 60 996 0690</a>
-          <a href="mailto:warren@facetarch.com" class="detail-value contact-email">warren@facetarch.com</a>
-        </div>
-
-        <div class="detail-item">
-          <span class="detail-label">STUDIO ADDRESS</span>
-          <address class="detail-value address-block">
-            118 Kastaiing Street,<br />
-            Weltevredenpark,<br />
-            Johannesburg, South Africa,<br />
-            1709
-          </address>
-        </div>
-
-        <div class="detail-item">
-          <span class="detail-label">LEADERSHIP</span>
-          <p class="detail-value">Warren Green — Founder & Director</p>
-        </div>
-      </div>
-
-      <!-- Embedded Google Map -->
-      <div class="map-wrapper">
-        <iframe
-          title="Facet Architecture Location"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3582.358241088732!2d27.923221!3d-26.1268!2m3!1f0!0f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e957593c6f4fb5b%3A0x289f648601c2438c!2s118%20Kastaiing%20St%2C%20Weltevredenpark%2C%20Roodepoort%2C%201709!5e0!3m2!1sen!2sza!4v1700000000000!5m2!1sen!2sza"
-          width="100%"
-          height="100%"
-          style="border:0;"
-          allowfullscreen=""
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-        ></iframe>
-      </div>
-    </div>
-
-    <!-- RIGHT COLUMN (Desktop) -->
-    <div class="form-column">
+    <div class="contact-container">
       
-      <!-- Web3Forms Form -->
-      <form id="contact-form" class="contact-form" action="https://api.web3forms.com/submit" method="POST">
-        <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
-        <input type="hidden" name="subject" value="New Architectural Inquiry - Facet Architecture" />
-        <input type="hidden" name="from_name" value="Facet Architecture Website" />
-        <input type="checkbox" name="botcheck" class="hidden-field" style="display:none" />
-
-        <div class="field-row">
-          <div class="field-group">
-            <label for="name">YOUR NAME *</label>
-            <input type="text" id="name" name="name" required placeholder="e.g. John Doe" />
-          </div>
-
-          <div class="field-group">
-            <label for="email">EMAIL ADDRESS *</label>
-            <input type="email" id="email" name="email" required placeholder="john@example.com" />
-          </div>
+      <!-- LEFT COLUMN (Desktop) -->
+      <div class="info-column">
+        <div class="header-block">
+          <h1 class="main-title">START A PROJECT</h1>
+          <p class="intro-text">
+            Whether you are looking to design a bespoke private residence or a modern commercial development, the Facet Architecture team is ready to realise your vision.
+          </p>
         </div>
 
-        <div class="field-row">
-          <div class="field-group">
-            <label for="phone">PHONE NUMBER *</label>
-            <input type="tel" id="phone" name="phone" required placeholder="+27 82 000 0000" />
-          </div>
-
-          <div class="field-group">
-            <label for="project_type">PROJECT TYPE</label>
-            <select id="project_type" name="project_type">
-              <option value="Luxury Residential">Luxury Residential</option>
-              <option value="Commercial Development">Commercial Development</option>
-              <option value="Master Planning">Master Planning</option>
-              <option value="Architectural Consulting">Architectural Consulting</option>
-              <option value="Other Inquiry">Other Inquiry</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="field-row">
-          <div class="field-group">
-            <label for="budget">ESTIMATED BUDGET</label>
-            <input 
-              type="text" 
-              id="budget" 
-              name="budget" 
-              inputmode="numeric" 
-              placeholder="e.g. 2500000" 
-            />
-            <span id="budget-error" class="error-message">NUMERICAL VALUES ONLY</span>
-          </div>
-        </div>
-
-        <div class="field-group">
-          <label for="message">PROJECT BRIEF / DETAILS *</label>
-          <textarea id="message" name="message" rows="5" required placeholder="Tell us about the site location, estimated square footage, or architectural vision..."></textarea>
-        </div>
-
-        <button type="submit" id="submit-btn" class="submit-button">
-          <span class="btn-text">TRANSMIT INQUIRY</span>
-          <span class="btn-arrow">→</span>
-        </button>
-      </form>
-
-      <!-- Custom Success Card -->
-      <div id="success-card" class="success-card">
-        <div class="success-icon-badge">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-        </div>
-        <span class="success-sub">TRANSMISSION CONFIRMED</span>
-        <h2 class="success-title">INQUIRY RECEIVED</h2>
-        <p class="success-desc">
-          Thank you for reaching out. Your project details have been successfully transmitted to the studio team at <strong>Facet Architecture</strong>.
-        </p>
-        <div class="success-footer">
-          <p>EXPECTED RESPONSE TIME: <strong>WITHIN 24 HOURS</strong></p>
-        </div>
-      </div>
-
-    </div> <!-- /form-column -->
-
-  </div> <!-- /contact-container -->
-
-    <div class="details-list">
+        <div class="details-list">
           <div class="detail-item">
             <span class="detail-label">DIRECT CONTACT</span>
             <a href="tel:+27609960690" class="detail-value">+27 60 996 0690</a>
-            <a href="mailto:info&#64;facetarch&#46;com" class="detail-value contact-email">warren&#64;facetarch&#46;com</a>
+            <a href="mailto:warren@facetarch.com" class="detail-value contact-email">warren@facetarch.com</a>
           </div>
 
           <div class="detail-item">
@@ -208,6 +84,92 @@ const socialLinks = [
         </div>
       </div>
 
+      <!-- RIGHT COLUMN (Desktop) -->
+      <div class="form-column">
+        
+        <!-- Web3Forms Form -->
+        <form id="contact-form" class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+          <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
+          <input type="hidden" name="subject" value="New Architectural Inquiry - Facet Architecture" />
+          <input type="hidden" name="from_name" value="Facet Architecture Website" />
+          <input type="checkbox" name="botcheck" class="hidden-field" style="display:none" />
+
+          <div class="field-row">
+            <div class="field-group">
+              <label for="name">YOUR NAME *</label>
+              <input type="text" id="name" name="name" required placeholder="e.g. John Doe" />
+            </div>
+
+            <div class="field-group">
+              <label for="email">EMAIL ADDRESS *</label>
+              <input type="email" id="email" name="email" required placeholder="john@example.com" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label for="phone">PHONE NUMBER *</label>
+              <input type="tel" id="phone" name="phone" required placeholder="+27 82 000 0000" />
+            </div>
+
+            <div class="field-group">
+              <label for="project_type">PROJECT TYPE</label>
+              <select id="project_type" name="project_type">
+                <option value="Luxury Residential">Luxury Residential</option>
+                <option value="Commercial Development">Commercial Development</option>
+                <option value="Master Planning">Master Planning</option>
+                <option value="Architectural Consulting">Architectural Consulting</option>
+                <option value="Other Inquiry">Other Inquiry</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label for="budget">ESTIMATED BUDGET</label>
+              <input 
+                type="text" 
+                id="budget" 
+                name="budget" 
+                inputmode="numeric" 
+                placeholder="e.g. 2500000" 
+              />
+              <span id="budget-error" class="error-message">NUMERICAL VALUES ONLY</span>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="message">PROJECT BRIEF / DETAILS *</label>
+            <textarea id="message" name="message" rows="5" required placeholder="Tell us about the site location, estimated square footage, or architectural vision..."></textarea>
+          </div>
+
+          <button type="submit" id="submit-btn" class="submit-button">
+            <span class="btn-text">TRANSMIT INQUIRY</span>
+            <span class="btn-arrow">→</span>
+          </button>
+        </form>
+
+        <!-- Custom Success Card -->
+        <div id="success-card" class="success-card">
+          <div class="success-icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <span class="success-sub">TRANSMISSION CONFIRMED</span>
+          <h2 class="success-title">INQUIRY RECEIVED</h2>
+          <p class="success-desc">
+            Thank you for reaching out. Your project details have been successfully transmitted to the studio team at <strong>Facet Architecture</strong>.
+          </p>
+          <div class="success-footer">
+            <p>EXPECTED RESPONSE TIME: <strong>WITHIN 24 HOURS</strong></p>
+          </div>
+        </div>
+
+      </div> <!-- /form-column -->
+
+    </div> <!-- /contact-container -->
+
     <!-- Bottom Bordered Footer Bar -->
     <footer class="contact-footer-bar">
       <!-- Accreditations Row -->
@@ -227,40 +189,40 @@ const socialLinks = [
       </div>
 
       <!-- Social Media SVG Icons Row -->
-<div class="header-socials" style="display: flex; align-items: center; gap: 1.25rem;">
-  {socialLinks.map((social) => (
-    <a
-      href={social.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="social-icon-link"
-      aria-label={`Facet Architecture ${social.name}`}
-      style="color: #ffffff; display: inline-flex; align-items: center;"
-    >
-      {social.name === 'Facebook' && (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d={social.icon}></path>
-        </svg>
-      )}
+      <div class="header-socials" style="display: flex; align-items: center; gap: 1.25rem;">
+        {socialLinks.map((social) => (
+          <a
+            href={social.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-icon-link"
+            aria-label={`Facet Architecture ${social.name}`}
+            style="color: #ffffff; display: inline-flex; align-items: center;"
+          >
+            {social.name === 'Facebook' && (
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d={social.icon}></path>
+              </svg>
+            )}
 
-      {social.name === 'Instagram' && (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-          <path d={social.icon}></path>
-          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-        </svg>
-      )}
+            {social.name === 'Instagram' && (
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d={social.icon}></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            )}
 
-      {social.name === 'LinkedIn' && (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d={social.icon}></path>
-          <rect x="2" y="9" width="4" height="12"></rect>
-          <circle cx="4" cy="4" r="2"></circle>
-        </svg>
-      )}
-    </a>
-  ))}
-</div>
+            {social.name === 'LinkedIn' && (
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d={social.icon}></path>
+                <rect x="2" y="9" width="4" height="12"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+              </svg>
+            )}
+          </a>
+        ))}
+      </div>
 
       <!-- Copyright Base -->
       <div class="footer-base">
@@ -298,42 +260,36 @@ const socialLinks = [
   }
 
   /* Mobile Stack Reordering */
-@media (max-width: 1023px) {
-  .contact-container {
-    display: flex;
-    flex-direction: column;
-  }
+  @media (max-width: 1023px) {
+    .contact-container {
+      display: flex;
+      flex-direction: column;
+    }
 
-  .info-column {
-    display: flex;
-    flex-direction: column;
-  }
+    .info-column {
+      display: flex;
+      flex-direction: column;
+    }
 
-  /* Order sequence on mobile:
-     1. Heading & Paragraph
-     2. Form Column
-     3. Direct Contact, Address, Leadership
-     4. Google Map
-  */
-  .header-block {
-    order: 1;
-  }
+    .header-block {
+      order: 1;
+    }
 
-  .form-column {
-    order: 2;
-    transform: none; /* Remove desktop offset on mobile */
-    margin-right: 0;
-  }
+    .form-column {
+      order: 2;
+      transform: none;
+      margin-right: 0;
+    }
 
-  .details-list {
-    order: 3;
-    margin-top: 40px;
-  }
+    .details-list {
+      order: 3;
+      margin-top: 40px;
+    }
 
-  .map-wrapper {
-    order: 4;
+    .map-wrapper {
+      order: 4;
+    }
   }
-}
 
   @media (min-width: 1024px) {
     .contact-container {
@@ -342,15 +298,15 @@ const socialLinks = [
     }
   }
 
-/* Left Column Styling with Top Padding Alignment */
+  /* Left Column Styling with Top Padding Alignment */
   .contact-info {
     display: flex;
     flex-direction: column;
     gap: 28px;
-    padding-top: 28px; /* Drops "START A PROJECT" down to align with form card */
+    padding-top: 28px;
   }
 
-  /* Right Column Container - Shifted down 40px vertically */
+  /* Right Column Container */
   .form-column {
     margin-right: 15px;
     transform: translateY(40px);
