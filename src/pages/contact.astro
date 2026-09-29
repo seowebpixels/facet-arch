@@ -7,7 +7,7 @@ import SEO from '../components/SEO.astro';
 const currentYear = new Date().getFullYear();
 
 // Replace with Warren's Web3Forms Access Key from web3forms.com
-const WEB3FORMS_ACCESS_KEY = "5809f663-d9b7-4c8e-8269-ae38456c0f05";
+const WEB3FORMS_ACCESS_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
 const socialLinks = [
   {
@@ -37,7 +37,7 @@ const socialLinks = [
   <main class="contact-page" id="contact-section">
     <div class="contact-container">
       
-      <!-- LEFT COLUMN (Desktop) -->
+      <!-- LEFT COLUMN -->
       <div class="info-column">
         <div class="header-block">
           <h1 class="main-title">START A PROJECT</h1>
@@ -84,7 +84,7 @@ const socialLinks = [
         </div>
       </div>
 
-      <!-- RIGHT COLUMN (Desktop) -->
+      <!-- RIGHT COLUMN -->
       <div class="form-column">
         
         <!-- Web3Forms Form -->
@@ -259,18 +259,24 @@ const socialLinks = [
     gap: 60px;
   }
 
-  /* Mobile Stack Reordering */
+  /* Mobile Stack Reordering (< 1024px) */
   @media (max-width: 1023px) {
     .contact-container {
       display: flex;
       flex-direction: column;
+      gap: 32px;
     }
 
     .info-column {
-      display: flex;
-      flex-direction: column;
+      display: contents; /* Allows child elements to be ordered seamlessly inside contact-container */
     }
 
+    /* Order Sequence on Mobile:
+       1. Heading & Intro Paragraph
+       2. Form Column
+       3. Contact Details List (Direct Contact, Studio Address, Leadership)
+       4. Google Map Wrapper
+    */
     .header-block {
       order: 1;
     }
@@ -283,7 +289,8 @@ const socialLinks = [
 
     .details-list {
       order: 3;
-      margin-top: 40px;
+      margin-top: 10px;
+      margin-bottom: 20px;
     }
 
     .map-wrapper {
@@ -296,6 +303,11 @@ const socialLinks = [
       grid-template-columns: 45% 55%;
       gap: 80px;
     }
+
+    .info-column {
+      display: flex;
+      flex-direction: column;
+    }
   }
 
   /* Left Column Styling with Top Padding Alignment */
@@ -306,12 +318,14 @@ const socialLinks = [
     padding-top: 28px;
   }
 
-  /* Right Column Container */
-  .form-column {
-    margin-right: 15px;
-    transform: translateY(40px);
-    display: flex;
-    flex-direction: column;
+  /* Right Column Container - Shifted down 40px vertically on Desktop */
+  @media (min-width: 1024px) {
+    .form-column {
+      margin-right: 15px;
+      transform: translateY(40px);
+      display: flex;
+      flex-direction: column;
+    }
   }
 
   /* Header & Info Styling */
@@ -336,7 +350,7 @@ const socialLinks = [
     color: #a0a6b0;
     line-height: 1.6;
     font-size: 1.05rem;
-    margin-bottom: 40px;
+    margin-bottom: 24px;
   }
 
   .details-list {
