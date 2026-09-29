@@ -464,7 +464,28 @@ import renImg from '../assets/renvid-elementum.jpg';
     color: #111111;
   }
 
-  @media screen and (max-width: 899px) {
+  /* Mobile Tweaks */
+  @media (max-width: 899px) {
+    .main-wrapper {
+      padding: 100px 16px 60px;
+    }
+
+    .left-sticky-col {
+      padding: 24px 18px;
+      background-color: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .headline {
+      font-size: 1.55rem !important;
+      letter-spacing: -0.5px !important;
+      line-height: 1.25;
+      word-break: break-word;
+    }
+
     .quote-container {
       padding: 40px 16px;
       overflow: hidden;
