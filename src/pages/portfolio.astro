@@ -585,7 +585,7 @@ const portfolioData = [
     position: relative;
     width: 100%;
     height: 100%;
-    max-width: 90vw;
+    max-width: 85vw;
     max-height: 70vh;
     display: flex;
     justify-content: center;
@@ -603,13 +603,15 @@ const portfolioData = [
     overflow: hidden;
   }
 
-  /* Full Uncropped Video Aspect Ratio */
-  .lightbox-video-player {
-    width: 100% !important;
-    height: 100% !important;
+  /* CRITICAL UN-ZOOM OVERRIDE FOR LIGHTBOX MEDIA */
+  :global(#lightbox-img-layer img),
+  :global(#lightbox-img-layer video),
+  :global(.lightbox-video-player) {
+    width: auto !important;
+    height: auto !important;
     max-width: 100% !important;
-    max-height: 70vh !important;
-    object-fit: contain !important; /* CRITICAL: Un-zooms video and displays full scene aspect ratio */
+    max-height: 100% !important;
+    object-fit: contain !important; /* Reverts cover zoom & keeps 100% original aspect ratio */
     outline: none;
     border: 1px solid rgba(0, 255, 200, 0.3);
     background: #000000;
@@ -738,7 +740,9 @@ const portfolioData = [
       max-height: 50vh !important;
     }
 
-    .lightbox-video-player {
+    :global(#lightbox-img-layer img),
+    :global(#lightbox-img-layer video),
+    :global(.lightbox-video-player) {
       max-height: 50vh !important;
       object-fit: contain !important;
     }
@@ -856,7 +860,7 @@ const portfolioData = [
         `;
       } else {
         // Standard image element
-        modalImgLayer.innerHTML = `<img src="${fullSrc}" alt="${captionText}" style="max-width: 100%; max-height: 100%; object-fit: contain;" />`;
+        modalImgLayer.innerHTML = `<img src="${fullSrc}" alt="${captionText}" />`;
       }
     }
   }
