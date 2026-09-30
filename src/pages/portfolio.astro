@@ -523,6 +523,7 @@ const portfolioData = [
     justify-content: center;
     align-items: center;
     padding: 24px;
+    box-sizing: border-box;
   }
 
   .lightbox-modal.active {
@@ -546,15 +547,16 @@ const portfolioData = [
 
   .lightbox-content {
     position: relative;
-    width: 100%;
-    max-width: 85vw;
-    height: auto;
-    max-height: 65vh;
+    width: 90vw;
+    max-width: 1200px;
+    height: 60vh;
+    max-height: 60vh;
     display: flex;
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
     cursor: default;
+    overflow: hidden;
   }
 
   .lightbox-img-layer {
@@ -564,13 +566,14 @@ const portfolioData = [
     justify-content: center;
     align-items: center;
     border: none !important;
+    overflow: hidden;
   }
 
   .lightbox-video-player {
-    width: 100% !important;
-    height: auto !important;
     max-width: 100% !important;
-    max-height: 65vh !important;
+    max-height: 100% !important;
+    width: auto !important;
+    height: auto !important;
     object-fit: contain !important;
     outline: none;
     border: 1px solid rgba(0, 255, 200, 0.3);
@@ -684,9 +687,9 @@ const portfolioData = [
 
     /* Mobile Lightbox Controls */
     .lightbox-modal {
-      padding: 80px 16px 30px 16px !important;
+      padding: 80px 12px 20px 12px !important;
       justify-content: flex-start;
-      gap: 15px;
+      gap: 10px;
     }
 
     .lightbox-close {
@@ -696,14 +699,15 @@ const portfolioData = [
 
     .lightbox-content {
       width: 100% !important;
-      height: auto !important;
-      max-height: 55vh !important;
       max-width: 100% !important;
+      height: 48vh !important;
+      max-height: 48vh !important;
       flex-shrink: 0;
     }
 
     .lightbox-video-player {
-      max-height: 55vh !important;
+      max-width: 100% !important;
+      max-height: 48vh !important;
       object-fit: contain !important;
     }
 
@@ -712,11 +716,11 @@ const portfolioData = [
       padding: 0;
       box-sizing: border-box;
       margin-top: 5px;
-      gap: 12px;
+      gap: 10px;
     }
 
     .lightbox-caption {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       width: 100%;
       text-align: center;
       line-height: 1.3;
@@ -803,7 +807,7 @@ const portfolioData = [
     }, { passive: false });
   });
 
-  // IntersectionObserver to only play grid video previews when scrolled into view
+  // Strict IntersectionObserver: Only play grid videos when 50%+ in view to guarantee smooth framerates
   if ('IntersectionObserver' in window) {
     const videoObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -814,7 +818,7 @@ const portfolioData = [
           video.pause();
         }
       });
-    }, { threshold: 0.25 });
+    }, { threshold: 0.5 });
 
     document.querySelectorAll('.card-image-layer').forEach((vid) => {
       if (vid.tagName === 'VIDEO') {
@@ -840,15 +844,15 @@ const portfolioData = [
 
     if (modalImgLayer && fullSrc) {
       if (fullSrc.endsWith('.mp4')) {
-        // Render an interactive video player inside the lightbox modal with sound
+        // Fully fitted interactive video player inside lightbox modal
         modalImgLayer.innerHTML = `
-          <video controls autoplay class="lightbox-video-player">
+          <video controls autoplay playsinline webkit-playsinline class="lightbox-video-player">
             <source src="${fullSrc}" type="video/mp4" />
           </video>
         `;
       } else {
-        // Render standard image element
-        modalImgLayer.innerHTML = `<img src="${fullSrc}" alt="${captionText}" style="max-width: 100%; max-height: 65vh; object-fit: contain;" />`;
+        // Standard image element
+        modalImgLayer.innerHTML = `<img src="${fullSrc}" alt="${captionText}" style="max-width: 100%; max-height: 100%; object-fit: contain;" />`;
       }
     }
   }
