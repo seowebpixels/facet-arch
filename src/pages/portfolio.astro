@@ -75,10 +75,20 @@ import sustElectricity from '../assets/sustainability-electricity.avif';
 import sustThermalComfort from '../assets/sustainability-thermal-comfort.avif';
 import sustWater from '../assets/sustainability-water.avif';
 import susPassive from '../assets/sustainability-passive-and-landscaping.avif'
-import sus3E from '../assets/the-3-e-s-of-sustainability.avif'
+import sus3E from '../assets/the-3-es-of-sustainability.avif'
 
-// Elementum Asset Placeholder
-import renImg from '../assets/renvid-elementum.jpg';
+
+// Elementum Imports
+import renCopper from '..videos/Copperleaf.mp4'
+import renCrescent from '../videos/crescent-village.mp4'
+import renMeadowlands from '../videos/meadowlands-shopping-centre.mp4'
+import renModlito from '../videos/moditlo-lodge.mp4'
+import renOasis from '../videos/oasis-lodge.mp4'
+import renSandstone from '..videos/sandstone-village.mp4'
+import renSunset from '..videos/sunset-canyon.mp4'
+import renHills from '..videos/the-hills.mp4'
+
+
 
 const portfolioData = [
   {
@@ -181,14 +191,20 @@ const portfolioData = [
     ]
   },
   {
-    id: 'elementum',
-    title: 'RENDERING & VIDEO',
-    num: '06',
-    items: [
-      { name: 'ELEMENTUM', img: renImg }
-    ]
-  }
-];
+  id: 'elementum',
+  title: 'RENDERING & VIDEO',
+  num: '06',
+  items: [
+    { name: 'COPPERLEAF', video: '/videos/copperleaf.mp4' },
+    { name: 'CRESCENT VILLAGE', video: '/videos/crescent-village.mp4' },
+    { name: 'MEADOWLANDS SHOPPING CENTRE', video: '/videos/meadowlands-shopping-centre.mp4' },
+    { name: 'MODITLO LODGE', video: '/videos/moditlo-lodge.mp4' },
+    { name: 'OASIS LODGE', video: '/videos/oasis-lodge.mp4' },
+    { name: 'SANDSTONE VILLAGE', video: '/videos/sandstone-village.mp4' },
+    { name: 'SUNSET CANYON', video: '/videos/sunset-canyon.mp4' },
+    { name: 'THE HILLS', video: '/videos/the-hills.mp4' }
+  ]
+}
 ---
 
 <Layout title="Facet Architecture | Portfolio Matrix">
@@ -210,42 +226,48 @@ const portfolioData = [
   <main class="portfolio-stage">
     {portfolioData.map((cat, idx) => (
       <section class={`category-panel ${idx === 0 ? 'active' : ''}`} id={`panel-${cat.id}`}>
-        <div class="panel-header">
-          <span class="panel-num">{cat.num} // ARCHITECTURAL CATEGORY</span>
-          <h2 class="panel-title">{cat.title}</h2>
-        </div>
-
-        <!-- Horizontal Scroll Track -->
-        <div class="scroll-rail-wrapper">
-          <div class="scroll-rail scroll-container">
-            {cat.items.map((item, itemIdx) => (
-              <div class="portfolio-card cad-trigger" data-fullsrc={item.img.src} data-caption={item.name} data-index={itemIdx}>
-                <div class="card-frame">
-                  <Image 
-                    src={item.img} 
-                    alt={item.name} 
-                    class="card-image-layer" 
+      <div class="scroll-rail-wrapper">
+        <div class="scroll-rail scroll-container">
+          {cat.items?.map((item) => (
+            <div class="portfolio-card cad-trigger" data-fullsrc={(item as any).img?.src || (item as any).video} data-caption={item.name}>
+              <div class="card-frame">
+                {(item as any).video ? (
+                  <video 
+                    controls 
+                    preload="none" 
+                    class="card-image-layer"
+                    style="width: 100%; height: 100%; object-fit: cover;"
+                  >
+                    <source src={(item as any).video} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                ) : (
+                  <Image
+                    src={(item as any).img}
+                    alt={item.name}
+                    class="card-image-layer"
                     widths={[320, 640, 900]}
                     sizes="(max-width: 768px) 320px, (max-width: 1024px) 50vw, 33vw"
                     loading="lazy"
                     decoding="async"
                   />
-                  <div class="card-shield"></div>
-                  <div class="cad-grid-layer"></div>
-                </div>
-                <div class="card-caption">
-                  <h3>{item.name}</h3>
-                </div>
+                )}
+                <div class="card-shield"></div>
+                <div class="cad-grid-layer"></div>
               </div>
-            ))}
-          </div>
-          <div class="custom-scrollbar-track mobile-only-indicator">
-            <div class="custom-scrollbar-thumb"></div>
-          </div>
+              <div class="card-caption">
+                <h3>{item.name}</h3>
+              </div>
+            </div>
+          ))}
         </div>
-      </section>
-    ))}
-  </main>
+        <div class="custom-scrollbar-track mobile-only-indicator">
+          <div class="custom-scrollbar-thumb"></div>
+        </div>
+      </div>
+    </section>
+  ))}
+</main>
 
   <div class="portfolio-spacer-gap"></div>
 
