@@ -74,21 +74,8 @@ import resWaterfall1951 from '../assets/res-waterfall-1951.avif';
 import sustElectricity from '../assets/sustainability-electricity.avif';
 import sustThermalComfort from '../assets/sustainability-thermal-comfort.avif';
 import sustWater from '../assets/sustainability-water.avif';
-import susPassive from '../assets/sustainability-passive-and-landscaping.avif'
-import sus3E from '../assets/the-3-e-s-of-sustainability.avif'
-
-
-// Elementum Imports
-import renCopperleaf from '../videos/copperleaf.mp4'
-import renCrescent from '../videos/crescent-village.mp4'
-import renMeadowlands from '../videos/meadowlands-shopping-centre.mp4'
-import renModlito from '../videos/moditlo-lodge.mp4'
-import renOasis from '../videos/oasis-lodge.mp4'
-import renSandstone from '..videos/sandstone-village.mp4'
-import renSunset from '..videos/sunset-canyon.mp4'
-import renHills from '..videos/the-hills.mp4'
-
-
+import susPassive from '../assets/sustainability-passive-and-landscaping.avif';
+import sus3E from '../assets/the-3-e-s-of-sustainability.avif';
 
 const portfolioData = [
   {
@@ -185,26 +172,25 @@ const portfolioData = [
       { name: 'THERMAL COMFORT STUDY', img: sustThermalComfort },
       { name: 'ELECTRICAL INTEGRATION', img: sustElectricity },
       { name: 'WATER HARVESTING SYSTEM', img: sustWater },
-      { name: 'PASSIVE AND LANDSCAPING', img: susPassive},
-      { name: '3Es OF SUSTAINABILITY', img: sus3E}
-
+      { name: 'PASSIVE AND LANDSCAPING', img: susPassive },
+      { name: '3Es OF SUSTAINABILITY', img: sus3E }
     ]
   },
   {
-  id: 'elementum',
-  title: 'RENDERING & VIDEO',
-  num: '06',
-  items: [
-    { name: 'COPPERLEAF', video: '/videos/copperleaf.mp4' },
-    { name: 'CRESCENT VILLAGE', video: '/videos/crescent-village.mp4' },
-    { name: 'MEADOWLANDS SHOPPING CENTRE', video: '/videos/meadowlands-shopping-centre.mp4' },
-    { name: 'MODITLO LODGE', video: '/videos/moditlo-lodge.mp4' },
-    { name: 'OASIS LODGE', video: '/videos/oasis-lodge.mp4' },
-    { name: 'SANDSTONE VILLAGE', video: '/videos/sandstone-village.mp4' },
-    { name: 'SUNSET CANYON', video: '/videos/sunset-canyon.mp4' },
-    { name: 'THE HILLS', video: '/videos/the-hills.mp4' }
-  ]
-}
+    id: 'elementum',
+    title: 'RENDERING & VIDEO',
+    num: '06',
+    items: [
+      { name: 'COPPERLEAF', video: '/videos/copperleaf.mp4' },
+      { name: 'CRESCENT VILLAGE', video: '/videos/crescent-village.mp4' },
+      { name: 'MEADOWLANDS SHOPPING CENTRE', video: '/videos/meadowlands-shopping-centre.mp4' },
+      { name: 'MODITLO LODGE', video: '/videos/moditlo-lodge.mp4' },
+      { name: 'OASIS LODGE', video: '/videos/oasis-lodge.mp4' },
+      { name: 'SANDSTONE VILLAGE', video: '/videos/sandstone-village.mp4' },
+      { name: 'SUNSET CANYON', video: '/videos/sunset-canyon.mp4' },
+      { name: 'THE HILLS', video: '/videos/the-hills.mp4' }
+    ]
+  }
 ];
 ---
 
@@ -227,48 +213,49 @@ const portfolioData = [
   <main class="portfolio-stage">
     {portfolioData.map((cat, idx) => (
       <section class={`category-panel ${idx === 0 ? 'active' : ''}`} id={`panel-${cat.id}`}>
-      <div class="scroll-rail-wrapper">
-        <div class="scroll-rail scroll-container">
-          {cat.items?.map((item) => (
-            <div class="portfolio-card cad-trigger" data-fullsrc={(item as any).img?.src || (item as any).video} data-caption={item.name}>
-              <div class="card-frame">
-                {(item as any).video ? (
-                  <video 
-                    controls 
-                    preload="none" 
-                    class="card-image-layer"
-                    style="width: 100%; height: 100%; object-fit: cover;"
-                  >
-                    <source src={`${(item as any).video}#t=0.1`} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                ) : (
-                  <Image
-                    src={(item as any).img}
-                    alt={item.name}
-                    class="card-image-layer"
-                    widths={[320, 640, 900]}
-                    sizes="(max-width: 768px) 320px, (max-width: 1024px) 50vw, 33vw"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                )}
-                <div class="card-shield"></div>
-                <div class="cad-grid-layer"></div>
+        <div class="scroll-rail-wrapper">
+          <div class="scroll-rail scroll-container">
+            {cat.items?.map((item) => (
+              <div class="portfolio-card cad-trigger" data-fullsrc={(item as any).img?.src || (item as any).video} data-caption={item.name}>
+                <div class="card-frame">
+                  {(item as any).video ? (
+                    <video 
+                      autoplay 
+                      loop 
+                      muted 
+                      playsinline 
+                      preload="metadata" 
+                      class="card-image-layer"
+                    >
+                      <source src={`${(item as any).video}#t=0.1`} type="video/mp4" />
+                    </video>
+                  ) : (
+                    <Image
+                      src={(item as any).img}
+                      alt={item.name}
+                      class="card-image-layer"
+                      widths={[320, 640, 900]}
+                      sizes="(max-width: 768px) 320px, (max-width: 1024px) 50vw, 33vw"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  )}
+                  <div class="card-shield"></div>
+                  <div class="cad-grid-layer"></div>
+                </div>
+                <div class="card-caption">
+                  <h3>{item.name}</h3>
+                </div>
               </div>
-              <div class="card-caption">
-                <h3>{item.name}</h3>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <div class="custom-scrollbar-track mobile-only-indicator">
+            <div class="custom-scrollbar-thumb"></div>
+          </div>
         </div>
-        <div class="custom-scrollbar-track mobile-only-indicator">
-          <div class="custom-scrollbar-thumb"></div>
-        </div>
-      </div>
-    </section>
-  ))}
-</main>
+      </section>
+    ))}
+  </main>
 
   <div class="portfolio-spacer-gap"></div>
 
@@ -447,29 +434,6 @@ const portfolioData = [
     display: block;
   }
 
-  .panel-header {
-    margin-bottom: 20px;
-  }
-
-  .panel-num {
-    font-family: 'BankGothic', sans-serif, system-ui;
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.6);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-
-  .panel-title {
-    font-family: 'BankGothic', sans-serif, system-ui;
-    font-size: clamp(1.8rem, 6vw, 2.8rem);
-    text-transform: uppercase;
-    margin: 4px 0 0;
-    color: #ffffff;
-    line-height: 1.1;
-    word-break: break-word;
-    overflow-wrap: break-word;
-  }
-
   .scroll-rail-wrapper {
     position: relative;
     width: 100%;
@@ -585,7 +549,9 @@ const portfolioData = [
     position: relative;
     width: 85vw;
     height: 65vh;
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     box-sizing: border-box;
     cursor: default;
   }
@@ -593,11 +559,19 @@ const portfolioData = [
   .lightbox-img-layer {
     width: 100%;
     height: 100%;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: none !important;
-    pointer-events: none;
+  }
+
+  .lightbox-video-player {
+    max-width: 100%;
+    max-height: 65vh;
+    width: auto;
+    height: auto;
+    outline: none;
+    border: 1px solid rgba(0, 255, 200, 0.3);
   }
 
   .lightbox-mobile-controls {
@@ -725,9 +699,8 @@ const portfolioData = [
       flex-shrink: 0;
     }
 
-    .lightbox-img-layer {
-      background-size: contain !important;
-      background-position: center !important;
+    .lightbox-video-player {
+      max-height: 50vh;
     }
 
     .lightbox-mobile-controls {
@@ -835,22 +808,26 @@ const portfolioData = [
     currentActiveIndex = index;
     const card = currentCategoryCards[currentActiveIndex];
     const fullSrc = card.getAttribute('data-fullsrc');
-const lightboxImgLayer = document.getElementById('lightbox-img-layer');
+    const captionText = card.getAttribute('data-caption') || '';
 
-if (lightboxImgLayer && fullSrc) {
-  if (fullSrc.endsWith('.mp4')) {
-    // Render an interactive video player inside the lightbox modal
-    lightboxImgLayer.innerHTML = `
-      <video controls autoplay class="lightbox-video-player" style="max-width: 100%; max-height: 80vh; width: 100%;">
-        <source src="${fullSrc}" type="video/mp4" />
-      </video>
-    `;
-  } else {
-    // Render standard image element
-    lightboxImgLayer.innerHTML = `<img src="${fullSrc}" alt="Portfolio preview" style="max-width: 100%; max-height: 80vh; object-fit: contain;" />`;
+    if (modalCaption) {
+      modalCaption.textContent = captionText;
+    }
+
+    if (modalImgLayer && fullSrc) {
+      if (fullSrc.endsWith('.mp4')) {
+        // Render an interactive video player inside the lightbox modal with sound
+        modalImgLayer.innerHTML = `
+          <video controls autoplay class="lightbox-video-player">
+            <source src="${fullSrc}" type="video/mp4" />
+          </video>
+        `;
+      } else {
+        // Render standard image element
+        modalImgLayer.innerHTML = `<img src="${fullSrc}" alt="${captionText}" style="max-width: 100%; max-height: 65vh; object-fit: contain;" />`;
+      }
+    }
   }
-}
-}
 
   // Open Lightbox
   document.querySelectorAll('.category-panel').forEach((panel) => {
@@ -870,10 +847,9 @@ if (lightboxImgLayer && fullSrc) {
     });
   });
 
-  // Disable clicks inside lightbox content/image from triggering navigation
+  // Disable clicks inside lightbox content/image from triggering background navigation
   if (modalContentBox) {
     modalContentBox.addEventListener('click', (e) => {
-      e.preventDefault();
       e.stopPropagation();
     });
   }
@@ -886,6 +862,11 @@ if (lightboxImgLayer && fullSrc) {
     if (modal) {
       modal.classList.remove('active');
       document.body.style.overflow = '';
+      
+      // Stop playback & kill audio stream completely
+      if (modalImgLayer) {
+        modalImgLayer.innerHTML = '';
+      }
     }
   };
 
@@ -901,7 +882,7 @@ if (lightboxImgLayer && fullSrc) {
     updateLightboxImage(currentActiveIndex + 1);
   });
 
-  // Global Key Down Handler: Escape key only closes lightbox if active
+  // Global Key Down Handler: Escape key closes lightbox and kills media stream
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && modal && modal.classList.contains('active')) {
       closeModal(e);
