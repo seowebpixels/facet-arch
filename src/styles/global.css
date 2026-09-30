@@ -1,3 +1,22 @@
+/* Primary definition targeting the site's existing styles */
+@font-face {
+  font-family: 'Bank Gothic';
+  src: url('/fonts/BankGothic.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Alias definition for non-spaced declarations */
+@font-face {
+  font-family: 'BankGothic';
+  src: url('/fonts/BankGothic.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Custom alias matching index.astro inline styles */
 @font-face {
   font-family: 'FacetBankGothic';
   src: url('/fonts/BankGothic.woff2') format('woff2');
