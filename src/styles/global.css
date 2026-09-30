@@ -196,4 +196,14 @@ footer p,
 .menu-overlay a {
   font-family: var(--font-heading) !important;
 }
+
+/* Force Bank Gothic on Selected Works List (Mobile & Desktop) */
+.selected-works-list,
+.selected-works-list li,
+.selected-works-list a,
+.selected-works-item {
+  font-family: 'Bank Gothic', 'BankGothic', sans-serif !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.5px;
+}
 }
