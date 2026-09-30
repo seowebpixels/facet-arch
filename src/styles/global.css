@@ -197,9 +197,11 @@ footer p,
   font-family: var(--font-heading) !important;
 }
 
-/* Target the Index Legend section explicitly */
+/* Direct element & inline node font override */
 .index-legend,
-.index-legend .legend-item {
+.index-legend *,
+.legend-item,
+.legend-item * {
   font-family: 'Bank Gothic', 'BankGothic', sans-serif !important;
   text-transform: uppercase !important;
   letter-spacing: 1.5px !important;
