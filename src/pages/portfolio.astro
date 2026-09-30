@@ -239,7 +239,7 @@ const portfolioData = [
                     class="card-image-layer"
                     style="width: 100%; height: 100%; object-fit: cover;"
                   >
-                    <source src={(item as any).video} type="video/mp4" />
+                    <source src={`${(item as any).video}#t=0.1`} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 ) : (
@@ -835,13 +835,21 @@ const portfolioData = [
     currentActiveIndex = index;
     const card = currentCategoryCards[currentActiveIndex];
     const fullSrc = card.getAttribute('data-fullsrc');
-    const caption = card.getAttribute('data-caption');
+const lightboxImgLayer = document.getElementById('lightbox-img-layer');
 
-    if (modalImgLayer && modalCaption && fullSrc) {
-      modalImgLayer.style.backgroundImage = `url('${fullSrc}')`;
-      modalCaption.textContent = caption || '';
-    }
+if (lightboxImgLayer && fullSrc) {
+  if (fullSrc.endsWith('.mp4')) {
+    // Render an interactive video player inside the lightbox modal
+    lightboxImgLayer.innerHTML = `
+      <video controls autoplay class="lightbox-video-player" style="max-width: 100%; max-height: 80vh; width: 100%;">
+        <source src="${fullSrc}" type="video/mp4" />
+      </video>
+    `;
+  } else {
+    // Render standard image element
+    lightboxImgLayer.innerHTML = `<img src="${fullSrc}" alt="Portfolio preview" style="max-width: 100%; max-height: 80vh; object-fit: contain;" />`;
   }
+}
 
   // Open Lightbox
   document.querySelectorAll('.category-panel').forEach((panel) => {
