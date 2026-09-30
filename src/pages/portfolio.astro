@@ -220,10 +220,9 @@ const portfolioData = [
                 <div class="card-frame">
                   {(item as any).video ? (
                     <video 
-                      loop 
+                      preload="metadata" 
                       muted 
                       playsinline 
-                      preload="metadata" 
                       class="card-image-layer"
                     >
                       <source src={`${(item as any).video}#t=0.1`} type="video/mp4" />
@@ -241,6 +240,13 @@ const portfolioData = [
                   )}
                   <div class="card-shield"></div>
                   <div class="cad-grid-layer"></div>
+                  {(item as any).video && (
+                    <div class="video-play-indicator">
+                      <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z"/>
+                      </svg>
+                    </div>
+                  )}
                 </div>
                 <div class="card-caption">
                   <h3>{item.name}</h3>
@@ -267,7 +273,6 @@ const portfolioData = [
     
     <div class="lightbox-content" id="lightbox-content-box">
       <div id="lightbox-img-layer" class="lightbox-img-layer"></div>
-      <div class="lightbox-shield"></div>
     </div>
 
     <!-- Mobile Navigation Controls below image -->
@@ -480,6 +485,37 @@ const portfolioData = [
     display: block;
   }
 
+  .video-play-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 48px;
+    height: 48px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid #00ffc8;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #00ffc8;
+    pointer-events: none;
+    z-index: 5;
+    transition: transform 0.3s ease, background 0.3s ease;
+  }
+
+  .video-play-indicator svg {
+    width: 24px;
+    height: 24px;
+    margin-left: 3px;
+  }
+
+  .cad-trigger:hover .video-play-indicator {
+    transform: translate(-50%, -50%) scale(1.15);
+    background: #00ffc8;
+    color: #111111;
+  }
+
   .card-caption h3 {
     font-family: 'BankGothic', sans-serif, system-ui;
     font-size: 0.95rem;
@@ -511,7 +547,7 @@ const portfolioData = [
     border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  /* Lightbox Base Styling */
+  /* Lightbox Base Styling - Absolute Precision Fit */
   .lightbox-modal {
     display: none;
     position: fixed;
@@ -522,7 +558,7 @@ const portfolioData = [
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 24px;
+    padding: 20px;
     box-sizing: border-box;
   }
 
@@ -532,31 +568,29 @@ const portfolioData = [
 
   .lightbox-close {
     position: absolute;
-    top: 95px;
+    top: 80px;
     right: 24px;
-    background: none;
+    background: rgba(0, 0, 0, 0.8);
     border: 1px solid #00ffc8;
     color: #00ffc8;
     font-family: 'BankGothic', sans-serif, system-ui;
     font-size: 0.85rem;
-    padding: 6px 14px;
+    padding: 8px 16px;
     cursor: pointer;
     text-transform: uppercase;
-    z-index: 1010;
+    z-index: 10000;
   }
 
   .lightbox-content {
     position: relative;
-    width: 90vw;
-    max-width: 1200px;
-    height: 60vh;
-    max-height: 60vh;
+    width: 100%;
+    height: 100%;
+    max-width: 90vw;
+    max-height: 70vh;
     display: flex;
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
-    cursor: default;
-    overflow: hidden;
   }
 
   .lightbox-img-layer {
@@ -569,14 +603,16 @@ const portfolioData = [
     overflow: hidden;
   }
 
+  /* Full Uncropped Video Aspect Ratio */
   .lightbox-video-player {
+    width: 100% !important;
+    height: 100% !important;
     max-width: 100% !important;
-    max-height: 100% !important;
-    width: auto !important;
-    height: auto !important;
-    object-fit: contain !important;
+    max-height: 70vh !important;
+    object-fit: contain !important; /* CRITICAL: Un-zooms video and displays full scene aspect ratio */
     outline: none;
     border: 1px solid rgba(0, 255, 200, 0.3);
+    background: #000000;
   }
 
   .lightbox-mobile-controls {
@@ -625,7 +661,7 @@ const portfolioData = [
   /* Desktop View Styling Adjustment */
   @media (min-width: 768px) {
     .lightbox-close {
-      top: 160px;
+      top: 140px;
       right: 32px;
     }
 
@@ -685,29 +721,25 @@ const portfolioData = [
       height: 4px !important;
     }
 
-    /* Mobile Lightbox Controls */
     .lightbox-modal {
-      padding: 80px 12px 20px 12px !important;
-      justify-content: flex-start;
+      padding: 70px 10px 15px 10px !important;
+      justify-content: center;
       gap: 10px;
     }
 
     .lightbox-close {
-      top: 95px;
-      right: 16px;
+      top: 75px;
+      right: 12px;
     }
 
     .lightbox-content {
       width: 100% !important;
-      max-width: 100% !important;
-      height: 48vh !important;
-      max-height: 48vh !important;
-      flex-shrink: 0;
+      height: 50vh !important;
+      max-height: 50vh !important;
     }
 
     .lightbox-video-player {
-      max-width: 100% !important;
-      max-height: 48vh !important;
+      max-height: 50vh !important;
       object-fit: contain !important;
     }
 
@@ -716,7 +748,7 @@ const portfolioData = [
       padding: 0;
       box-sizing: border-box;
       margin-top: 5px;
-      gap: 10px;
+      gap: 8px;
     }
 
     .lightbox-caption {
@@ -725,18 +757,10 @@ const portfolioData = [
       text-align: center;
       line-height: 1.3;
       white-space: normal;
-      overflow: visible;
-    }
-
-    .lightbox-arrow-row {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
     }
 
     .lightbox-arrow {
-      flex-shrink: 0;
-      padding: 8px 18px;
+      padding: 6px 14px;
     }
   }
 </style>
@@ -807,26 +831,6 @@ const portfolioData = [
     }, { passive: false });
   });
 
-  // Strict IntersectionObserver: Only play grid videos when 50%+ in view to guarantee smooth framerates
-  if ('IntersectionObserver' in window) {
-    const videoObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        const video = entry.target as HTMLVideoElement;
-        if (entry.isIntersecting) {
-          video.play().catch(() => {});
-        } else {
-          video.pause();
-        }
-      });
-    }, { threshold: 0.5 });
-
-    document.querySelectorAll('.card-image-layer').forEach((vid) => {
-      if (vid.tagName === 'VIDEO') {
-        videoObserver.observe(vid);
-      }
-    });
-  }
-
   // Lightbox Navigation Functions
   function updateLightboxImage(index: number) {
     if (!currentCategoryCards.length) return;
@@ -844,7 +848,7 @@ const portfolioData = [
 
     if (modalImgLayer && fullSrc) {
       if (fullSrc.endsWith('.mp4')) {
-        // Fully fitted interactive video player inside lightbox modal
+        // Fully un-zoomed interactive video player inside lightbox
         modalImgLayer.innerHTML = `
           <video controls autoplay playsinline webkit-playsinline class="lightbox-video-player">
             <source src="${fullSrc}" type="video/mp4" />
