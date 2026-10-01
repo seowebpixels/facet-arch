@@ -9,34 +9,27 @@ import resBlannImg from '../assets/res-blann.avif';  // Slide 2
 import ascotManorImg from '../assets/dev-kubu.avif'; // Slide 3
 import intStarckImg from '../assets/int-starck.avif';// Slide 4
 
-// 1. Mobile Variants (For Lighthouse & Mobile Screens - Sharp @ 2x DPI for 375px viewport)
-const LCP_Hero_Mobile = await getImage({ src: resHeroImg, format: 'avif', width: 750, quality: 75 });
-const slide1_Mobile  = await getImage({ src: resDavidImg, format: 'avif', width: 750, quality: 75 });
+// --- OPTIMIZED IMAGE VARIANTS ---
+// Mobile: 600px width @ quality 80 gives exact 2x pixel density for 375px viewports (~20-25 KiB)
+const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 600, quality: 80 });
+const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1920, quality: 80 });
 
-// 2. Desktop/Retina Variants (Pixel-perfect sharpness for high-DPI desktop screens)
-const LCP_Hero_Desktop = await getImage({ src: resHeroImg, format: 'avif', width: 1600, quality: 80 });
-const slide1_Desktop  = await getImage({ src: resDavidImg, format: 'avif', width: 1920, quality: 80 });
+const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 600, quality: 80 });
+const slide1Desktop = await getImage({ src: resDavidImg, format: 'avif', width: 1920, quality: 80 });
 
-// Deferred Slides (Loaded dynamically after GSAP intro)
+// Deferred Slides (Loaded dynamically after GSAP intro for 4K desktop)
 const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1920, quality: 80 });
 const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1920, quality: 80 });
 const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1920, quality: 80 });
 
-// Canvas Logo Source
-const optimisedLogo = await getImage({
-  src: heroLogoImg,
-  format: 'webp',
-  width: 430,
-  height: 430,
-  quality: 80
-});
+const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, quality: 85 });
 ---
 
-<!-- Responsive Preload for LCP Image -->
+<!-- High-Priority Preloads for LCP -->
 <link 
   rel="preload" 
   as="image" 
-  href={LCP_Hero_Mobile.src} 
+  href={heroMobile.src} 
   media="(max-width: 768px)" 
   type="image/avif" 
   fetchpriority="high" 
@@ -44,7 +37,7 @@ const optimisedLogo = await getImage({
 <link 
   rel="preload" 
   as="image" 
-  href={LCP_Hero_Desktop.src} 
+  href={heroDesktop.src} 
   media="(min-width: 769px)" 
   type="image/avif" 
   fetchpriority="high" 
@@ -59,10 +52,16 @@ const optimisedLogo = await getImage({
   </div>
 
   <div id="fullscreen-bg" class="fullscreen-bg">
-    <!-- Responsive Slide 1 -->
+    <!-- Slide 1 Responsive Picture -->
     <picture>
-      <source media="(max-width: 768px)" srcset={slide1_Mobile.src} type="image/avif" />
-      <img src={slide1_Desktop.src} alt="Facet Architecture Showcase Slide 1" class="hero-img slide-img active" decoding="async" />
+      <source media="(max-width: 768px)" srcset={slide1Mobile.src} type="image/avif" />
+      <source media="(min-width: 769px)" srcset={slide1Desktop.src} type="image/avif" />
+      <img 
+        src={slide1Desktop.src} 
+        alt="Facet Architecture Showcase Slide 1" 
+        class="hero-img slide-img active" 
+        decoding="async" 
+      />
     </picture>
 
     <!-- Deferred Slides 2-4 -->
@@ -72,11 +71,12 @@ const optimisedLogo = await getImage({
   </div>
 
   <div id="hero-frame" class="hero-frame">
-    <!-- Responsive LCP Image -->
+    <!-- Initial Hero Responsive Picture -->
     <picture>
-      <source media="(max-width: 768px)" srcset={LCP_Hero_Mobile.src} type="image/avif" />
+      <source media="(max-width: 768px)" srcset={heroMobile.src} type="image/avif" />
+      <source media="(min-width: 769px)" srcset={heroDesktop.src} type="image/avif" />
       <img 
-        src={LCP_Hero_Desktop.src} 
+        src={heroDesktop.src} 
         alt="Facet Architecture Initial Hero" 
         class="hero-img intro-frame-img"
         loading="eager"
@@ -91,14 +91,16 @@ const optimisedLogo = await getImage({
   </div>
 
   <div id="logo-center" class="logo-center-wrapper" role="img" aria-label="Facet Architecture Logo">
-    <canvas
-      id="logo-canvas"
-      class="logo-canvas"
-      width="430"
-      height="430"
-      data-logo-src={optimisedLogo.src}
-      aria-hidden="true"
-    ></canvas>
+    <img 
+      src={logoImg.src} 
+      alt="Facet Architecture Logo" 
+      class="site-logo"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+      width="175"
+      height="175"
+    />
   </div>
 </section>
 
@@ -119,33 +121,7 @@ const optimisedLogo = await getImage({
       });
     }
 
-    // 1. Canvas Logo Render Engine
-    const logoCanvas = document.getElementById('logo-canvas') as HTMLCanvasElement | null;
-    if (logoCanvas) {
-      const ctx = logoCanvas.getContext('2d');
-      const src = logoCanvas.getAttribute('data-logo-src');
-      if (ctx && src) {
-        const dpr = window.devicePixelRatio || 1;
-        const displaySize = window.innerWidth <= 768 ? 280 : 430;
-        
-        logoCanvas.width = displaySize * dpr;
-        logoCanvas.height = displaySize * dpr;
-
-        const logoImage = new Image();
-        logoImage.onload = () => {
-          ctx.save();
-          ctx.scale(dpr, dpr);
-          ctx.imageSmoothingEnabled = true;
-          ctx.imageSmoothingQuality = 'high';
-          ctx.clearRect(0, 0, displaySize, displaySize);
-          ctx.drawImage(logoImage, 0, 0, displaySize, displaySize);
-          ctx.restore();
-        };
-        logoImage.src = src;
-      }
-    }
-
-    // 2. Real-time SAST Clock
+    // Real-time SAST Clock
     const clockCanvas = document.getElementById('clock-canvas') as HTMLCanvasElement | null;
     if (clockCanvas) {
       const updateClock = () => {
@@ -181,7 +157,7 @@ const optimisedLogo = await getImage({
       setInterval(updateClock, 1000);
     }
 
-    // 3. Ken Burns Carousel Sequence
+    // Ken Burns Carousel Sequence
     function startKenBurnsCarousel() {
       const fullscreenBg = document.getElementById('fullscreen-bg');
       const heroFrame = document.getElementById('hero-frame');
@@ -257,7 +233,7 @@ const optimisedLogo = await getImage({
       }, 5800);
     }
 
-    // 4. Primary GSAP Intro Sequence
+    // GSAP Intro Animation
     const logoCenter = document.getElementById('logo-center');
     const heroTextContainer = document.getElementById('hero-text-container');
     const clock = document.getElementById('hero-clock');
@@ -504,8 +480,8 @@ const optimisedLogo = await getImage({
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 430px;
-    height: 430px;
+    width: 175px;
+    height: 175px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -513,6 +489,13 @@ const optimisedLogo = await getImage({
     pointer-events: none;
     will-change: transform, top, left, opacity;
     visibility: hidden;
+  }
+
+  .site-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
   }
 
   .hero-frame {
@@ -528,12 +511,6 @@ const optimisedLogo = await getImage({
     will-change: transform, opacity;
     backface-visibility: hidden;
     opacity: 0;
-  }
-
-  .logo-canvas {
-    width: 100%;
-    height: 100%;
-    display: block;
   }
 
   .intro-frame-img {
@@ -562,8 +539,8 @@ const optimisedLogo = await getImage({
 
   @media (max-width: 768px) {
     .logo-center-wrapper {
-      width: 280px;
-      height: 280px;
+      width: 140px;
+      height: 140px;
     }
 
     .hero-frame {
