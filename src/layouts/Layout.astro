@@ -106,18 +106,7 @@ const preloadedLogo = await getImage({
       type="font/woff2"
       crossorigin="anonymous"
     />
-
-    <!-- Fully Responsive LCP Image Preload -->
-<link
-  rel="preload"
-  as="image"
-  href={heroImg.src}
-  type="image/avif"
-  imagesrcset={`${heroImg.src} 750w`}
-  imagesizes="(max-width: 768px) 100vw, 100vw"
-  fetchpriority="high"
-/>
-    
+   
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url} />
     <meta property="og:title" content={title} />
