@@ -3,31 +3,27 @@ import { getImage } from 'astro:assets';
 import heroLogoImg from '../assets/facet-logo-white.avif';
 
 // Import showcase images
-import resHeroImg from '../assets/res-eoa-1597.avif'; // Intro Frame
+import resHeroImg from '../assets/res-eoa-1597.avif'; // Initial Frame Image
 import resDavidImg from '../assets/res-david.avif';  // Slide 1
 import resBlannImg from '../assets/res-blann.avif';  // Slide 2
-import ascotManorImg from '../assets/dev-kubu.avif'; // Slide 3
+import ascotManorImg from '../assets/dev-ascot-manor.avif'; // Slide 3
 import intStarckImg from '../assets/int-starck.avif';// Slide 4
 
-// --- RESPONSIVE OPTIMIZED VARIANTS ---
-// Mobile Variants (~15-18 KiB: 2x retina density for mobile screens up to 425px)
+// --- INITIAL LOAD IMAGE ONLY (HIGH QUALITY MAINTAINED) ---
 const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 850, quality: 80 });
-const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 850, quality: 80 });
-
-// Desktop Variants (1920px @ quality 85 for maximum crispness on 1080p, 2K, & 4K displays)
 const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1920, quality: 85 });
-const slide1Desktop = await getImage({ src: resDavidImg, format: 'avif', width: 1920, quality: 85 });
 
-// Deferred Slides for Desktop Carousel (Loaded dynamically after GSAP intro)
-const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1920, quality: 85 });
-const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1920, quality: 85 });
-const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1920, quality: 85 });
+// --- DEFERRED SLIDES (UNCOMPRESSED HIGH-RES ASSETS LOADED AFTER INTRO) ---
+const slide1 = await getImage({ src: resDavidImg, format: 'avif', width: 1920, quality: 90 });
+const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1920, quality: 90 });
+const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1920, quality: 90 });
+const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1920, quality: 90 });
 
-// Your exact 450 x 450 logo setting
+// Exact 450x450 logo setting
 const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, height: 450, quality: 85 });
 ---
 
-<!-- High-Priority Preload for Initial LCP Images -->
+<!-- Preload ONLY the 1st Critical LCP Asset -->
 <link 
   rel="preload" 
   as="image" 
@@ -53,27 +49,16 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
     <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
   </div>
 
+  <!-- Fullscreen Carousel Background: Hidden from initial network scan -->
   <div id="fullscreen-bg" class="fullscreen-bg">
-    <!-- Slide 1 Responsive Image -->
-    <picture>
-      <source media="(max-width: 768px)" srcset={slide1Mobile.src} type="image/avif" />
-      <source media="(min-width: 769px)" srcset={slide1Desktop.src} type="image/avif" />
-      <img 
-        src={slide1Desktop.src} 
-        alt="Facet Architecture Showcase Slide 1" 
-        class="hero-img slide-img active" 
-        decoding="async" 
-      />
-    </picture>
-
-    <!-- Deferred Slides 2-4 -->
+    <img data-src={slide1.src} alt="Facet Architecture Showcase Slide 1" class="hero-img slide-img active deferred-slide" decoding="async" />
     <img data-src={slide2.src} alt="Facet Architecture Showcase Slide 2" class="hero-img slide-img deferred-slide" decoding="async" />
     <img data-src={slide3.src} alt="Facet Architecture Showcase Slide 3" class="hero-img slide-img deferred-slide" decoding="async" />
     <img data-src={slide4.src} alt="Facet Architecture Showcase Slide 4" class="hero-img slide-img deferred-slide" decoding="async" />
   </div>
 
   <div id="hero-frame" class="hero-frame">
-    <!-- Initial Hero Responsive Image -->
+    <!-- Initial Hero Responsive Image (Single Image for LCP) -->
     <picture>
       <source media="(max-width: 768px)" srcset={heroMobile.src} type="image/avif" />
       <source media="(min-width: 769px)" srcset={heroDesktop.src} type="image/avif" />
@@ -112,6 +97,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
   function initHero() {
     gsap.config({ force3D: true });
 
+    // Populate deferred image sources immediately before GSAP transition begins
     function preloadRemainingSlides() {
       const deferred = document.querySelectorAll<HTMLImageElement>('.deferred-slide');
       deferred.forEach((img) => {
