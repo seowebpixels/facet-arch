@@ -8,22 +8,26 @@ import resBlannImg from '../assets/res-blann.avif';
 import ascotManorImg from '../assets/dev-kubu.avif';
 import intStarckImg from '../assets/int-starck.avif';
 
-// Exclude the primary hero image from the background loop array to avoid double downloads
-const backgroundSlides = [resBlannImg, ascotManorImg, intStarckImg];
-
-// Single mobile-optimized LCP image (640px wide max for mobile screens)
+// Optimized LCP focal image (Mobile target ~640px)
 const optimisedHero = await getImage({ 
   src: resHeroImg, 
   format: 'avif', 
   width: 640, 
   height: 360, 
-  quality: 70 
+  quality: 75 
 });
 
-// Canvas logo source (downscaled to 560px for 2x retina display)
+// Process background slides ahead of time into optimized image URLs
+const slide1 = await getImage({ src: resBlannImg, format: 'avif', width: 1080, quality: 65 });
+const slide2 = await getImage({ src: ascotManorImg, format: 'avif', width: 1080, quality: 65 });
+const slide3 = await getImage({ src: intStarckImg, format: 'avif', width: 1080, quality: 65 });
+
+const lazySlideUrls = [slide1.src, slide2.src, slide3.src];
+
+// Canvas logo source
 const optimisedLogo = await getImage({
   src: heroLogoImg,
-  format: 'webp',
+  format: 'avif',
   width: 560,
   height: 560,
   quality: 75
@@ -36,55 +40,30 @@ const optimisedLogo = await getImage({
 <section id="hero-stage" class="stage-container">
   <h2 class="lcp-seo-anchor">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
-  <!-- Persistent Header Text Element -->
   <div id="hero-text-container" class="hero-text-container">
     <h1 id="text-facet" class="title-text text-facet">FACET</h1>
     <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
   </div>
 
   <!-- Fullscreen Container for Ken Burns Slides -->
-  <div id="fullscreen-bg" class="fullscreen-bg">
-    <!-- Slide 1: Shares same source as intro frame -->
-    <Image 
-      src={resHeroImg} 
+  <div id="fullscreen-bg" class="fullscreen-bg" data-pending-slides={JSON.stringify(lazySlideUrls)}>
+    <!-- Slide 0: Primary Hero Image (Loaded immediately) -->
+    <img 
+      src={optimisedHero.src} 
       alt="Facet Architecture Showcase 1" 
       class="hero-img slide-img active"
-      widths={[360, 640, 1080, 1920]}
-      sizes="100vw"
-      format="avif"
-      quality={70}
       loading="eager"
       fetchpriority="high"
       decoding="async"
     />
-    
-    <!-- Subsequent Slides: Lazy loaded with reduced quality for smooth background rendering -->
-    {backgroundSlides.map((img, index) => (
-      <Image 
-        src={img} 
-        alt={`Facet Architecture Showcase ${index + 2}`} 
-        class="hero-img slide-img"
-        widths={[360, 640, 1080, 1920]}
-        sizes="100vw"
-        format="avif"
-        quality={68}
-        loading="lazy"
-        fetchpriority="low"
-        decoding="async"
-      />
-    ))}
   </div>
 
   <div id="hero-frame" class="hero-frame">
-    <!-- Initial Intro Focal Frame (Primary LCP Element) -->
-    <Image 
-      src={resHeroImg} 
+    <!-- Initial Intro Focal Frame -->
+    <img 
+      src={optimisedHero.src} 
       alt="Facet Architecture Initial Hero" 
       class="hero-img intro-frame-img"
-      widths={[360, 640, 1080]}
-      sizes="(max-width: 768px) 100vw, 76vw"
-      format="avif"
-      quality={70}
       loading="eager"
       fetchpriority="high"
       decoding="async"
@@ -175,13 +154,31 @@ const optimisedLogo = await getImage({
       setInterval(updateClock, 1000);
     }
 
-    // 3. Smooth Fullscreen Ken Burns Carousel
+    // 3. Deferred Slides Loader & Ken Burns Carousel
     function startKenBurnsCarousel() {
       const fullscreenBg = document.getElementById('fullscreen-bg');
       const heroFrame = document.getElementById('hero-frame');
-      const slides = document.querySelectorAll('.slide-img');
 
-      if (!fullscreenBg || !heroFrame || slides.length === 0) return;
+      if (!fullscreenBg || !heroFrame) return;
+
+      // Inject remaining slides into DOM now that LCP is finished
+      const pendingData = fullscreenBg.getAttribute('data-pending-slides');
+      if (pendingData) {
+        const pendingUrls: string[] = JSON.parse(pendingData);
+        pendingUrls.forEach((url, i) => {
+          const img = document.createElement('img');
+          img.src = url;
+          img.alt = `Facet Architecture Showcase ${i + 2}`;
+          img.className = 'hero-img slide-img';
+          img.loading = 'lazy';
+          img.decoding = 'async';
+          fullscreenBg.appendChild(img);
+        });
+        fullscreenBg.removeAttribute('data-pending-slides');
+      }
+
+      const slides = document.querySelectorAll('.slide-img');
+      if (slides.length === 0) return;
 
       gsap.to(fullscreenBg, {
         opacity: 1,
