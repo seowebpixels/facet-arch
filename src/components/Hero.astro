@@ -13,20 +13,20 @@ import intStarckImg from '../assets/int-starck.avif';// Slide 4
 const LCP_Hero = await getImage({ 
   src: resHeroImg, 
   format: 'avif', 
-  width: 720, 
-  quality: 65 
+  width: 540, 
+  quality: 80 
 });
 
 // 2. Pre-generate strictly capped 1080px AVIF files for slides
-const slide1 = await getImage({ src: resDavidImg, format: 'avif', width: 1080, quality: 60 });
-const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1080, quality: 60 });
-const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1080, quality: 60 });
-const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1080, quality: 60 });
+const slide1 = await getImage({ src: resDavidImg, format: 'avif', width: 1080, quality: 70 });
+const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1080, quality: 70 });
+const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1080, quality: 70 });
+const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1080, quality: 70 });
 
 // Canvas Logo Source
 const optimisedLogo = await getImage({
   src: heroLogoImg,
-  format: 'webp',
+  format: 'avif',
   width: 430,
   height: 430,
   quality: 75
