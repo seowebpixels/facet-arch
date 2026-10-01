@@ -8,28 +8,29 @@ import resBlannImg from '../assets/res-blann.avif';
 import ascotManorImg from '../assets/dev-kubu.avif';
 import intStarckImg from '../assets/int-starck.avif';
 
-const heroImages = [resHeroImg, resBlannImg, ascotManorImg, intStarckImg];
+// Exclude the primary hero image from the background loop array to avoid double downloads
+const backgroundSlides = [resBlannImg, ascotManorImg, intStarckImg];
 
-// Preload optimized LCP focal image (Mobile breakpoint ~640px max width)
+// Single mobile-optimized LCP image (640px wide max for mobile screens)
 const optimisedHero = await getImage({ 
   src: resHeroImg, 
   format: 'avif', 
   width: 640, 
   height: 360, 
-  quality: 75 
+  quality: 70 
 });
 
-// Canvas logo source (downscaled to 600px width for smooth 2x retina display)
+// Canvas logo source (downscaled to 560px for 2x retina display)
 const optimisedLogo = await getImage({
   src: heroLogoImg,
   format: 'webp',
-  width: 600,
-  height: 600,
+  width: 560,
+  height: 560,
   quality: 75
 });
 ---
 
-<!-- Preload critical LCP intro image -->
+<!-- Single critical LCP preload target -->
 <link rel="preload" as="image" href={optimisedHero.src} type="image/avif" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
@@ -43,17 +44,32 @@ const optimisedLogo = await getImage({
 
   <!-- Fullscreen Container for Ken Burns Slides -->
   <div id="fullscreen-bg" class="fullscreen-bg">
-    {heroImages.map((img, index) => (
+    <!-- Slide 1: Shares same source as intro frame -->
+    <Image 
+      src={resHeroImg} 
+      alt="Facet Architecture Showcase 1" 
+      class="hero-img slide-img active"
+      widths={[360, 640, 1080, 1920]}
+      sizes="100vw"
+      format="avif"
+      quality={70}
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+    />
+    
+    <!-- Subsequent Slides: Lazy loaded with reduced quality for smooth background rendering -->
+    {backgroundSlides.map((img, index) => (
       <Image 
         src={img} 
-        alt={`Facet Architecture Showcase ${index + 1}`} 
-        class={`hero-img slide-img ${index === 0 ? 'active' : ''}`}
+        alt={`Facet Architecture Showcase ${index + 2}`} 
+        class="hero-img slide-img"
         widths={[360, 640, 1080, 1920]}
-        sizes="(max-width: 768px) 100vw, 100vw"
+        sizes="100vw"
         format="avif"
-        quality={72}
-        loading={index === 0 ? "eager" : "lazy"}
-        fetchpriority={index === 0 ? "high" : "low"}
+        quality={68}
+        loading="lazy"
+        fetchpriority="low"
         decoding="async"
       />
     ))}
@@ -68,7 +84,7 @@ const optimisedLogo = await getImage({
       widths={[360, 640, 1080]}
       sizes="(max-width: 768px) 100vw, 76vw"
       format="avif"
-      quality={75}
+      quality={70}
       loading="eager"
       fetchpriority="high"
       decoding="async"
