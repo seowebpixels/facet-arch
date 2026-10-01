@@ -3,21 +3,20 @@ import { Image, getImage } from 'astro:assets';
 import heroLogoImg from '../assets/facet-logo-white.avif';
 
 // Import showcase images
-import resHeroImg from '../assets/res-eoa-1597.avif'; // Primary Intro Frame (LCP target)
-import resDavidImg from '../assets/res-david.avif';  // Fullscreen Ken Burns Slide 1 (High Res replacement)
-import resBlannImg from '../assets/res-blann.avif';  // Slide 2
-import ascotManorImg from '../assets/dev-kubu.avif'; // Slide 3
-import intStarckImg from '../assets/int-starck.avif';// Slide 4
+import resHeroImg from '../assets/res-eoa-1597.avif'; // Intro Frame (LCP target)
+import resDavidImg from '../assets/res-david.avif';  // Carousel Slide 1
+import resBlannImg from '../assets/res-blann.avif';  // Carousel Slide 2
+import ascotManorImg from '../assets/dev-kubu.avif'; // Carousel Slide 3
+import intStarckImg from '../assets/int-starck.avif';// Carousel Slide 4
 
 const backgroundSlides = [resDavidImg, resBlannImg, ascotManorImg, intStarckImg];
 
-// Mobile LCP Target Optimization for Primary Intro Frame
+// Pre-optimize single mobile-first high-priority LCP target
 const optimisedHero = await getImage({ 
   src: resHeroImg, 
   format: 'avif', 
-  width: 640, 
-  height: 360, 
-  quality: 75 
+  width: 720, 
+  quality: 70 
 });
 
 // Canvas Logo Source
@@ -30,7 +29,7 @@ const optimisedLogo = await getImage({
 });
 ---
 
-<!-- Single critical LCP preload target -->
+<!-- Single LCP Preload for Mobile/Desktop -->
 <link rel="preload" as="image" href={optimisedHero.src} type="image/avif" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
@@ -48,12 +47,11 @@ const optimisedLogo = await getImage({
         src={img} 
         alt={`Facet Architecture Showcase Slide ${index + 1}`} 
         class={`hero-img slide-img ${index === 0 ? 'active' : ''}`}
-        widths={[360, 640, 1080, 1920]}
-        sizes="100vw"
+        widths={[360, 640, 1080]}
+        sizes="(max-width: 768px) 100vw, 100vw"
         format="avif"
-        quality={72}
-        loading={index === 0 ? "eager" : "lazy"}
-        fetchpriority={index === 0 ? "high" : "low"}
+        quality={62}
+        loading="lazy"
         decoding="async"
       />
     ))}
@@ -65,10 +63,10 @@ const optimisedLogo = await getImage({
       src={resHeroImg} 
       alt="Facet Architecture Initial Hero" 
       class="hero-img intro-frame-img"
-      widths={[360, 640, 1080]}
+      widths={[360, 640, 960]}
       sizes="(max-width: 768px) 100vw, 76vw"
       format="avif"
-      quality={75}
+      quality={70}
       loading="eager"
       fetchpriority="high"
       decoding="async"
