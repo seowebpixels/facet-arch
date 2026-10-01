@@ -3,43 +3,40 @@ import { Image, getImage } from 'astro:assets';
 import heroLogoImg from '../assets/facet-logo-white.avif';
 
 // Import showcase images
-import resHeroImg from '../assets/res-eoa-1597.avif'; // Intro Frame (LCP target)
-import resDavidImg from '../assets/res-david.avif';  // Carousel Slide 1
-import resBlannImg from '../assets/res-blann.avif';  // Carousel Slide 2
-import ascotManorImg from '../assets/dev-kubu.avif'; // Carousel Slide 3
-import intStarckImg from '../assets/int-starck.avif';// Carousel Slide 4
+import resHeroImg from '../assets/res-eoa-1597.avif'; // Intro Frame
+import resDavidImg from '../assets/res-david.avif';  // Slide 1
+import resBlannImg from '../assets/res-blann.avif';  // Slide 2
+import ascotManorImg from '../assets/dev-kubu.avif'; // Slide 3
+import intStarckImg from '../assets/int-starck.avif';// Slide 4
 
-// 1. Optimize Main Intro Focal Frame (Primary LCP target)
-const optimisedHero = await getImage({ 
+// 1. Optimize Primary LCP Element (Intro Frame)
+const LCP_Hero = await getImage({ 
   src: resHeroImg, 
   format: 'avif', 
   width: 720, 
-  quality: 75 
+  quality: 65 
 });
 
-// 2. Pre-generate strictly constrained single-resolution AVIF URLs for Carousel
-// Capping max width at 1080px guarantees high DPR mobile devices won't request 3K/4K originals
-const slide1 = await getImage({ src: resDavidImg, format: 'avif', width: 1080, quality: 70 });
-const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1080, quality: 70 });
-const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1080, quality: 70 });
-const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1080, quality: 70 });
-
-const bgSlideUrls = JSON.stringify([slide1.src, slide2.src, slide3.src, slide4.src]);
+// 2. Pre-generate strictly capped 1080px AVIF files for slides
+const slide1 = await getImage({ src: resDavidImg, format: 'avif', width: 1080, quality: 60 });
+const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1080, quality: 60 });
+const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1080, quality: 60 });
+const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1080, quality: 60 });
 
 // Canvas Logo Source
 const optimisedLogo = await getImage({
   src: heroLogoImg,
   format: 'webp',
-  width: 560,
-  height: 560,
-  quality: 80
+  width: 430,
+  height: 430,
+  quality: 75
 });
 ---
 
-<!-- Single LCP Preload for Mobile/Desktop -->
-<link rel="preload" as="image" href={optimisedHero.src} type="image/avif" fetchpriority="high" />
+<!-- Match exact hash generated asset for Preload -->
+<link rel="preload" as="image" href={LCP_Hero.src} type="image/avif" fetchpriority="high" />
 
-<section id="hero-stage" class="stage-container" data-bg-slides={bgSlideUrls}>
+<section id="hero-stage" class="stage-container">
   <h2 class="lcp-seo-anchor">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
   <div id="hero-text-container" class="hero-text-container">
@@ -47,22 +44,18 @@ const optimisedLogo = await getImage({
     <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
   </div>
 
-  <!-- Fullscreen Container for Ken Burns Slides (Lazy Instantiated via JS) -->
+  <!-- Fullscreen Container for Ken Burns Slides -->
   <div id="fullscreen-bg" class="fullscreen-bg">
-    <!-- Initial slide pre-rendered with exact fixed AVIF src -->
-    <img 
-      src={slide1.src} 
-      alt="Facet Architecture Showcase Slide 1" 
-      class="hero-img slide-img active"
-      loading="lazy"
-      decoding="async"
-    />
+    <img src={slide1.src} alt="Facet Architecture Showcase Slide 1" class="hero-img slide-img active" decoding="async" />
+    <img src={slide2.src} alt="Facet Architecture Showcase Slide 2" class="hero-img slide-img" loading="lazy" decoding="async" />
+    <img src={slide3.src} alt="Facet Architecture Showcase Slide 3" class="hero-img slide-img" loading="lazy" decoding="async" />
+    <img src={slide4.src} alt="Facet Architecture Showcase Slide 4" class="hero-img slide-img" loading="lazy" decoding="async" />
   </div>
 
   <div id="hero-frame" class="hero-frame">
-    <!-- Initial Intro Focal Frame (Primary LCP Element) -->
+    <!-- Main LCP Element -->
     <img 
-      src={optimisedHero.src} 
+      src={LCP_Hero.src} 
       alt="Facet Architecture Initial Hero" 
       class="hero-img intro-frame-img"
       loading="eager"
@@ -92,9 +85,6 @@ const optimisedLogo = await getImage({
 
   function initHero() {
     gsap.config({ force3D: true });
-
-    const heroStage = document.getElementById('hero-stage');
-    const slideUrls = heroStage ? JSON.parse(heroStage.getAttribute('data-bg-slides') || '[]') : [];
 
     // 1. Canvas Logo Render Engine
     const logoCanvas = document.getElementById('logo-canvas') as HTMLCanvasElement | null;
@@ -158,26 +148,16 @@ const optimisedLogo = await getImage({
       setInterval(updateClock, 1000);
     }
 
-    // 3. Deferred Smooth Fullscreen Ken Burns Carousel
+    // 3. Ken Burns Carousel Sequence
     function startKenBurnsCarousel() {
       const fullscreenBg = document.getElementById('fullscreen-bg');
       const heroFrame = document.getElementById('hero-frame');
 
       if (!fullscreenBg || !heroFrame) return;
 
-      // Lazy inject remaining slides into DOM now that initial render/intro is complete
-      if (fullscreenBg.children.length === 1 && slideUrls.length > 1) {
-        for (let i = 1; i < slideUrls.length; i++) {
-          const img = document.createElement('img');
-          img.src = slideUrls[i];
-          img.alt = `Facet Architecture Showcase Slide ${i + 1}`;
-          img.className = 'hero-img slide-img';
-          img.decoding = 'async';
-          fullscreenBg.appendChild(img);
-        }
-      }
-
-      const slides = fullscreenBg.querySelectorAll('.slide-img');
+      // Select slides statically rendered in DOM
+      const slides = fullscreenBg.querySelectorAll<HTMLImageElement>('.slide-img');
+      if (slides.length === 0) return;
 
       gsap.to(fullscreenBg, {
         opacity: 1,
