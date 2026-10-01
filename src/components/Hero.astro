@@ -9,31 +9,31 @@ import resBlannImg from '../assets/res-blann.avif';  // Slide 2
 import ascotManorImg from '../assets/dev-kubu.avif'; // Slide 3
 import intStarckImg from '../assets/int-starck.avif';// Slide 4
 
-// 1. Optimize Primary LCP Element (Intro Frame)
+// 1. Optimize Primary LCP Element (Intro Frame) - Capped tightly for instant LCP
 const LCP_Hero = await getImage({ 
   src: resHeroImg, 
   format: 'avif', 
   width: 540, 
-  quality: 80 
+  quality: 60 
 });
 
-// 2. Pre-generate strictly capped 1080px AVIF files for slides
-const slide1 = await getImage({ src: resDavidImg, format: 'avif', width: 1080, quality: 70 });
-const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1080, quality: 70 });
-const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1080, quality: 70 });
-const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1080, quality: 70 });
+// 2. Pre-generate optimized AVIF slides (Max 800px width, 45-50 quality for high compression)
+const slide1 = await getImage({ src: resDavidImg, format: 'avif', width: 800, quality: 60 });
+const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 800, quality: 60 });
+const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 800, quality: 60 });
+const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 800, quality: 60 });
 
 // Canvas Logo Source
 const optimisedLogo = await getImage({
   src: heroLogoImg,
   format: 'avif',
-  width: 430,
-  height: 430,
-  quality: 75
+  width: 360,
+  height: 360,
+  quality: 70
 });
 ---
 
-<!-- Match exact hash generated asset for Preload -->
+<!-- Native Head Preload for LCP Image -->
 <link rel="preload" as="image" href={LCP_Hero.src} type="image/avif" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
@@ -45,11 +45,12 @@ const optimisedLogo = await getImage({
   </div>
 
   <!-- Fullscreen Container for Ken Burns Slides -->
+  <!-- Note: loading="lazy" removed so browser fetches images in parallel prior to GSAP animation -->
   <div id="fullscreen-bg" class="fullscreen-bg">
     <img src={slide1.src} alt="Facet Architecture Showcase Slide 1" class="hero-img slide-img active" decoding="async" />
-    <img src={slide2.src} alt="Facet Architecture Showcase Slide 2" class="hero-img slide-img" loading="lazy" decoding="async" />
-    <img src={slide3.src} alt="Facet Architecture Showcase Slide 3" class="hero-img slide-img" loading="lazy" decoding="async" />
-    <img src={slide4.src} alt="Facet Architecture Showcase Slide 4" class="hero-img slide-img" loading="lazy" decoding="async" />
+    <img src={slide2.src} alt="Facet Architecture Showcase Slide 2" class="hero-img slide-img" decoding="async" />
+    <img src={slide3.src} alt="Facet Architecture Showcase Slide 3" class="hero-img slide-img" decoding="async" />
+    <img src={slide4.src} alt="Facet Architecture Showcase Slide 4" class="hero-img slide-img" decoding="async" />
   </div>
 
   <div id="hero-frame" class="hero-frame">
@@ -155,7 +156,6 @@ const optimisedLogo = await getImage({
 
       if (!fullscreenBg || !heroFrame) return;
 
-      // Select slides statically rendered in DOM
       const slides = fullscreenBg.querySelectorAll<HTMLImageElement>('.slide-img');
       if (slides.length === 0) return;
 
