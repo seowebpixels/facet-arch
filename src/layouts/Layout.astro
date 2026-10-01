@@ -1,4 +1,3 @@
----
 /* src/layouts/Layout.astro */
 import { getImage } from 'astro:assets';
 import Header from '../components/Header.astro';
@@ -85,7 +84,7 @@ const preloadedLogo = await getImage({
       fetchpriority="high"
     />
 
-    <!-- Font Preloads -->
+    <!-- Font Preloads (Optimized to WOFF2) -->
     <link
       rel="preload"
       href="/fonts/BankGothic.woff2"
@@ -95,17 +94,16 @@ const preloadedLogo = await getImage({
     />
     <link
       rel="preload"
-      href="/fonts/Nesobrite Regular.ttf"
+      href="/fonts/Nesobrite-Regular.woff2"
       as="font"
-      type="font/ttf"
+      type="font/woff2"
       crossorigin="anonymous"
     />
-
     <link
       rel="preload"
-      href="/fonts/Nesobrite Bold.ttf"
+      href="/fonts/Nesobrite-Bold.woff2"
       as="font"
-      type="font/ttf"
+      type="font/woff2"
       crossorigin="anonymous"
     />
 

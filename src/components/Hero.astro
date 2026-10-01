@@ -9,11 +9,11 @@ import resBlannImg from '../assets/res-blann.avif';  // Slide 2
 import ascotManorImg from '../assets/dev-ascot-manor.avif'; // Slide 3
 import intStarckImg from '../assets/int-starck.avif';// Slide 4
 
-// --- INITIAL LOAD IMAGE ONLY (HIGH QUALITY MAINTAINED) ---
-const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 750, quality: 60 });
+// --- INITIAL LOAD IMAGE ONLY (MOBILE QUALITY OPTIMIZED TO 48) ---
+const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 750, quality: 48 });
 const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1920, quality: 85 });
 
-// --- DEFERRED SLIDES (UNCOMPRESSED HIGH-RES ASSETS LOADED AFTER INTRO) ---
+// --- DEFERRED SLIDES ---
 const slide1 = await getImage({ src: resDavidImg, format: 'avif', width: 1920, quality: 90 });
 const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1920, quality: 90 });
 const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1920, quality: 90 });
@@ -49,7 +49,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
     <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
   </div>
 
-  <!-- Fullscreen Carousel Background: Hidden from initial network scan -->
+  <!-- Fullscreen Carousel Background -->
   <div id="fullscreen-bg" class="fullscreen-bg">
     <img data-src={slide1.src} alt="Facet Architecture Showcase Slide 1" class="hero-img slide-img active deferred-slide" decoding="async" />
     <img data-src={slide2.src} alt="Facet Architecture Showcase Slide 2" class="hero-img slide-img deferred-slide" decoding="async" />
@@ -58,7 +58,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
   </div>
 
   <div id="hero-frame" class="hero-frame">
-    <!-- Initial Hero Responsive Image (Single Image for LCP) -->
     <picture>
       <source media="(max-width: 768px)" srcset={heroMobile.src} type="image/avif" />
       <source media="(min-width: 769px)" srcset={heroDesktop.src} type="image/avif" />
@@ -97,7 +96,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
   function initHero() {
     gsap.config({ force3D: true });
 
-    // Populate deferred image sources immediately before GSAP transition begins
     function preloadRemainingSlides() {
       const deferred = document.querySelectorAll<HTMLImageElement>('.deferred-slide');
       deferred.forEach((img) => {
@@ -233,10 +231,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
 
     if (isMobile) {
       gsap.set(heroTextContainer, {
-        top: '50%',
-        left: '50%',
-        xPercent: -50,
-        yPercent: -50,
+        top: '105px',
+        left: '15px',
         opacity: 0
       });
 
@@ -249,7 +245,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
         opacity: 1 
       });
 
-      gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
+      gsap.set(heroFrame, { opacity: 0, scale: 0.9, transformOrigin: 'center center' });
       gsap.set(clock, { opacity: 0, y: 15 });
 
       logoCenter.style.visibility = 'visible';
@@ -258,44 +254,29 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
       clock.style.visibility = 'visible';
 
       const tl = gsap.timeline({ 
-        defaults: { ease: 'power3.inOut' },
+        defaults: { ease: 'power2.out' },
         onComplete: startKenBurnsCarousel
       });
 
       tl
         .to(heroTextContainer, {
           opacity: 1,
-          duration: 0.8,
-          delay: 0.8
+          duration: 0.3
         })
-        .to(heroTextContainer, {
-          top: '105px',
-          left: '15px',
-          xPercent: 0,
-          yPercent: 0,
-          duration: 1.2,
-          ease: 'power3.inOut'
-        })
+        .to(heroFrame, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.5
+        }, '<')
         .to(logoCenter, {
-          top: '130px',
-          left: '125vw',
-          xPercent: 0,
-          yPercent: -50,
-          scale: 0.32,
           opacity: 0,
-          duration: 1.2
+          duration: 0.4
         }, '<')
         .to(clock, {
           opacity: 1,
           y: 0,
-          duration: 0.5
-        }, '-=0.4')
-        .to(heroFrame, {
-          opacity: 1,
-          scale: 1,
-          duration: 1.2,
-          ease: 'power4.out'
-        }, '-=0.6');
+          duration: 0.3
+        }, '-=0.2');
 
     } else {
       gsap.set(heroTextContainer, {
