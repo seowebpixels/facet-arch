@@ -10,22 +10,24 @@ import ascotManorImg from '../assets/dev-kubu.avif'; // Slide 3
 import intStarckImg from '../assets/int-starck.avif';// Slide 4
 
 // --- OPTIMIZED IMAGE VARIANTS ---
-// Mobile: 600px width @ quality 80 gives exact 2x pixel density for 375px viewports (~20-25 KiB)
+// Mobile Variants (Serves ~20-25 KiB on mobile, resolving PSI warnings)
 const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 600, quality: 80 });
-const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1920, quality: 80 });
-
 const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 600, quality: 80 });
+
+// Desktop Variants (1920px width @ quality 80 for high-resolution displays)
+const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1920, quality: 80 });
 const slide1Desktop = await getImage({ src: resDavidImg, format: 'avif', width: 1920, quality: 80 });
 
-// Deferred Slides (Loaded dynamically after GSAP intro for 4K desktop)
+// Deferred Slides (Loaded dynamically after GSAP intro)
 const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1920, quality: 80 });
 const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1920, quality: 80 });
 const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1920, quality: 80 });
 
-const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 650, quality: 85 });
+// Logo optimized to match displayed size (450px image for 250-450px display container)
+const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, quality: 85 });
 ---
 
-<!-- High-Priority Preloads for LCP -->
+<!-- Preload Initial LCP Images -->
 <link 
   rel="preload" 
   as="image" 
@@ -52,7 +54,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 650, q
   </div>
 
   <div id="fullscreen-bg" class="fullscreen-bg">
-    <!-- Slide 1 Responsive Picture -->
+    <!-- Slide 1 Responsive Image -->
     <picture>
       <source media="(max-width: 768px)" srcset={slide1Mobile.src} type="image/avif" />
       <source media="(min-width: 769px)" srcset={slide1Desktop.src} type="image/avif" />
@@ -71,7 +73,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 650, q
   </div>
 
   <div id="hero-frame" class="hero-frame">
-    <!-- Initial Hero Responsive Picture -->
+    <!-- Initial Hero Responsive Image -->
     <picture>
       <source media="(max-width: 768px)" srcset={heroMobile.src} type="image/avif" />
       <source media="(min-width: 769px)" srcset={heroDesktop.src} type="image/avif" />
@@ -98,8 +100,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 650, q
       loading="eager"
       fetchpriority="high"
       decoding="async"
-      width="175"
-      height="175"
+      width="450"
+      height="450"
     />
   </div>
 </section>
@@ -257,7 +259,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 650, q
         left: '50%', 
         xPercent: -50, 
         yPercent: -50, 
-        scale: 0.75,
+        scale: 0.85,
         opacity: 1 
       });
 
@@ -480,8 +482,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 650, q
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 175px;
-    height: 175px;
+    width: 450px;
+    height: 450px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -539,8 +541,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 650, q
 
   @media (max-width: 768px) {
     .logo-center-wrapper {
-      width: 140px;
-      height: 140px;
+      width: 250px;
+      height: 250px;
     }
 
     .hero-frame {
