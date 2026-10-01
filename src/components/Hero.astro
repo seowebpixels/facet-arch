@@ -9,25 +9,25 @@ import resBlannImg from '../assets/res-blann.avif';  // Slide 2
 import ascotManorImg from '../assets/dev-kubu.avif'; // Slide 3
 import intStarckImg from '../assets/int-starck.avif';// Slide 4
 
-// --- OPTIMIZED IMAGE VARIANTS ---
-// Mobile Variants (Serves ~20-25 KiB on mobile, resolving PSI warnings)
-const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 600, quality: 80 });
-const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 600, quality: 80 });
+// --- RESPONSIVE OPTIMIZED VARIANTS ---
+// Mobile Variants (~15-18 KiB: 2x retina density for mobile screens up to 425px)
+const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 850, quality: 80 });
+const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 850, quality: 80 });
 
-// Desktop Variants (1920px width @ quality 80 for high-resolution displays)
-const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1920, quality: 80 });
-const slide1Desktop = await getImage({ src: resDavidImg, format: 'avif', width: 1920, quality: 80 });
+// Desktop Variants (1920px @ quality 85 for maximum crispness on 1080p, 2K, & 4K displays)
+const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1920, quality: 85 });
+const slide1Desktop = await getImage({ src: resDavidImg, format: 'avif', width: 1920, quality: 85 });
 
-// Deferred Slides (Loaded dynamically after GSAP intro)
-const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1920, quality: 80 });
-const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1920, quality: 80 });
-const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1920, quality: 80 });
+// Deferred Slides for Desktop Carousel (Loaded dynamically after GSAP intro)
+const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1920, quality: 85 });
+const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1920, quality: 85 });
+const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1920, quality: 85 });
 
-// Logo optimized to match displayed size (450px image for 250-450px display container)
-const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, quality: 85 });
+// Your exact 450 x 450 logo setting
+const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, height: 450, quality: 85 });
 ---
 
-<!-- Preload Initial LCP Images -->
+<!-- High-Priority Preload for Initial LCP Images -->
 <link 
   rel="preload" 
   as="image" 
@@ -541,8 +541,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, q
 
   @media (max-width: 768px) {
     .logo-center-wrapper {
-      width: 250px;
-      height: 250px;
+      width: 280px;
+      height: 280px;
     }
 
     .hero-frame {
