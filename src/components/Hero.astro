@@ -10,14 +10,30 @@ import intStarckImg from '../assets/int-starck.avif';
 
 const heroImages = [resHeroImg, resBlannImg, ascotManorImg, intStarckImg];
 
-const optimisedHero = await getImage({ src: resHeroImg, format: 'webp', width: 720, height: 480, quality: 100 });
+// Preload optimized LCP focal image (downscaled to 720 width at 80% quality)
+const optimisedHero = await getImage({ 
+  src: resHeroImg, 
+  format: 'avif', 
+  width: 720, 
+  height: 405, 
+  quality: 80 
+});
+
+// Preload downscaled logo source (860px max width for retina 2x display)
+const optimisedLogo = await getImage({
+  src: heroLogoImg,
+  format: 'webp',
+  width: 860,
+  height: 860,
+  quality: 80
+});
 ---
 
-<!-- Preload main initial image -->
-<link rel="preload" as="image" href={optimisedHero.src} type="image/webp" fetchpriority="high" />
+<!-- Preload critical LCP intro image -->
+<link rel="preload" as="image" href={optimisedHero.src} type="image/avif" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
-  <h2 class="lcp-seo-anchor" fetchpriority="high">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
+  <h2 class="lcp-seo-anchor">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
   <!-- Persistent Header Text Element -->
   <div id="hero-text-container" class="hero-text-container">
@@ -32,10 +48,10 @@ const optimisedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         src={img} 
         alt={`Facet Architecture Showcase ${index + 1}`} 
         class={`hero-img slide-img ${index === 0 ? 'active' : ''}`}
-        widths={[720, 1280, 1920, 2560, 3840]}
+        widths={[480, 720, 1280, 1920]}
         sizes="100vw"
         format="avif"
-        quality={100}
+        quality={80}
         loading={index === 0 ? "eager" : "lazy"}
         fetchpriority={index === 0 ? "high" : "low"}
         decoding="async"
@@ -44,18 +60,18 @@ const optimisedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
   </div>
 
   <div id="hero-frame" class="hero-frame">
-    <!-- Initial Intro Focal Frame -->
+    <!-- Initial Intro Focal Frame (Primary LCP Element) -->
     <Image 
       src={resHeroImg} 
       alt="Facet Architecture Initial Hero" 
       class="hero-img intro-frame-img"
-      widths={[720, 1280, 1920]}
-      sizes="76vw"
+      widths={[480, 720, 1280]}
+      sizes="(max-width: 768px) 100vw, 76vw"
       format="avif"
-      quality={100}
+      quality={80}
       loading="eager"
       fetchpriority="high"
-      decoding="sync"
+      decoding="async"
     />
   </div>
 
@@ -67,9 +83,9 @@ const optimisedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     <canvas
       id="logo-canvas"
       class="logo-canvas"
-      width="760"
-      height="760"
-      data-logo-src={heroLogoImg.src}
+      width="430"
+      height="430"
+      data-logo-src={optimisedLogo.src}
       aria-hidden="true"
     ></canvas>
   </div>
@@ -88,7 +104,7 @@ const optimisedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
       const src = logoCanvas.getAttribute('data-logo-src');
       if (ctx && src) {
         const dpr = window.devicePixelRatio || 1;
-        const displaySize = 430;
+        const displaySize = window.innerWidth <= 768 ? 280 : 430;
         
         logoCanvas.width = displaySize * dpr;
         logoCanvas.height = displaySize * dpr;
@@ -226,7 +242,6 @@ const optimisedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
     const isMobile = window.innerWidth <= 768;
 
     if (isMobile) {
-      // Set initial centered state explicitly
       gsap.set(heroTextContainer, {
         top: '50%',
         left: '50%',
@@ -258,13 +273,11 @@ const optimisedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
       });
 
       tl
-        // 1. Fade in centered text
         .to(heroTextContainer, {
           opacity: 1,
           duration: 0.8,
           delay: 0.8
         })
-        // 2. Animate text to mobile header position & shoot logo completely off-screen right
         .to(heroTextContainer, {
           top: '105px',
           left: '15px',
@@ -282,7 +295,6 @@ const optimisedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           opacity: 0,
           duration: 1.2
         }, '<')
-        // 3. Reveal clock & hero frame
         .to(clock, {
           opacity: 1,
           y: 0,
@@ -296,7 +308,6 @@ const optimisedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
         }, '-=0.6');
 
     } else {
-      /* DESKTOP BRANCH */
       gsap.set(heroTextContainer, {
         top: '50%',
         left: '50%',
@@ -328,13 +339,11 @@ const optimisedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
       });
 
       tl
-        // 1. Fade in centered text
         .to(heroTextContainer, {
           opacity: 1,
           duration: 0.8,
           delay: 0.8
         })
-        // 2. Animate text to header position & shoot logo completely off-screen right
         .to(heroTextContainer, {
           top: '130px',
           left: '30px',
@@ -356,7 +365,6 @@ const optimisedHero = await getImage({ src: resHeroImg, format: 'webp', width: 7
           duration: 1.2,
           ease: 'power2.inOut'
         }, '<')
-        // 3. Reveal clock & hero frame
         .to(clock, {
           opacity: 1,
           y: 0,
