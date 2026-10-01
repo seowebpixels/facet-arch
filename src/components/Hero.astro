@@ -9,34 +9,25 @@ import resBlannImg from '../assets/res-blann.avif';  // Slide 2
 import ascotManorImg from '../assets/dev-ascot-manor.avif'; // Slide 3
 import intStarckImg from '../assets/int-starck.avif';// Slide 4
 
-// --- INITIAL LOAD IMAGE ONLY (MOBILE QUALITY OPTIMIZED TO 48) ---
-const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 600, quality: 40 });
-const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1920, quality: 85 });
+// --- STRICT MOBILE OPTIMIZATION ---
+const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 450, quality: 35 });
+const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 75 });
 
 // --- DEFERRED SLIDES ---
-const slide1 = await getImage({ src: resDavidImg, format: 'avif', width: 1920, quality: 90 });
-const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1920, quality: 90 });
-const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1920, quality: 90 });
-const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1920, quality: 90 });
+const slide1 = await getImage({ src: resDavidImg, format: 'avif', width: 1440, quality: 75 });
+const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1440, quality: 75 });
+const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1440, quality: 75 });
+const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 75 });
 
-// Exact 450x450 logo setting
-const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, height: 450, quality: 85 });
+// Logo setting
+const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 80 });
 ---
 
-<!-- Preload ONLY the 1st Critical LCP Asset -->
+<!-- Single direct Mobile LCP Preload -->
 <link 
   rel="preload" 
   as="image" 
   href={heroMobile.src} 
-  media="(max-width: 768px)" 
-  type="image/avif" 
-  fetchpriority="high" 
-/>
-<link 
-  rel="preload" 
-  as="image" 
-  href={heroDesktop.src} 
-  media="(min-width: 769px)" 
   type="image/avif" 
   fetchpriority="high" 
 />
@@ -62,14 +53,14 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
       <source media="(max-width: 768px)" srcset={heroMobile.src} type="image/avif" />
       <source media="(min-width: 769px)" srcset={heroDesktop.src} type="image/avif" />
       <img 
-        src={heroMobile.src}
+        src={heroMobile.src} 
         alt="Facet Architecture Initial Hero" 
         class="hero-img intro-frame-img"
         loading="eager"
         fetchpriority="high"
         decoding="async"
-        width="600"
-        height="400"
+        width="450"
+        height="300"
       />
     </picture>
   </div>
@@ -86,8 +77,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
       loading="eager"
       fetchpriority="high"
       decoding="async"
-      width="450"
-      height="450"
+      width="350"
+      height="350"
     />
   </div>
 </section>
@@ -109,7 +100,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
       });
     }
 
-    // Real-time SAST Clock
+    // SAST Clock
     const clockCanvas = document.getElementById('clock-canvas') as HTMLCanvasElement | null;
     if (clockCanvas) {
       const updateClock = () => {
@@ -157,20 +148,10 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
       const slides = fullscreenBg.querySelectorAll<HTMLImageElement>('.slide-img');
       if (slides.length === 0) return;
 
-      gsap.to(fullscreenBg, {
-        opacity: 1,
-        duration: 1.5,
-        ease: 'power2.inOut'
-      });
-
-      gsap.to(heroFrame, {
-        opacity: 0,
-        duration: 1.2,
-        ease: 'power2.inOut'
-      });
+      gsap.to(fullscreenBg, { opacity: 1, duration: 1.2, ease: 'power2.inOut' });
+      gsap.to(heroFrame, { opacity: 0, duration: 1.0, ease: 'power2.inOut' });
 
       let current = 0;
-      
       const directions = [
         { xStart: -25, xEnd: 25, scaleStart: 1.05, scaleEnd: 1.18 },
         { xStart: 25, xEnd: -25, scaleStart: 1.18, scaleEnd: 1.05 },
@@ -187,124 +168,33 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
         const next = (current + 1) % slides.length;
         const dir = directions[next % directions.length];
 
-        gsap.set(slides[next], { 
-          opacity: 0, 
-          x: dir.xStart, 
-          scale: dir.scaleStart, 
-          zIndex: 2 
-        });
+        gsap.set(slides[next], { opacity: 0, x: dir.xStart, scale: dir.scaleStart, zIndex: 2 });
         gsap.set(slides[current], { zIndex: 1 });
 
-        gsap.to(slides[next], {
-          opacity: 1,
-          duration: 2.0,
-          ease: 'power2.inOut',
-          force3D: true
-        });
-
-        gsap.to(slides[next], {
-          x: dir.xEnd,
-          scale: dir.scaleEnd,
-          duration: 7.5,
-          ease: 'none',
-          force3D: true
-        });
-
-        gsap.to(slides[current], {
-          opacity: 0,
-          duration: 2.0,
-          ease: 'power2.inOut',
-          force3D: true
-        });
+        gsap.to(slides[next], { opacity: 1, duration: 1.8, ease: 'power2.inOut', force3D: true });
+        gsap.to(slides[next], { x: dir.xEnd, scale: dir.scaleEnd, duration: 7.5, ease: 'none', force3D: true });
+        gsap.to(slides[current], { opacity: 0, duration: 1.8, ease: 'power2.inOut', force3D: true });
 
         current = next;
       }, 5800);
     }
 
-    // GSAP Intro Animation
-    const logoCenter = document.getElementById('logo-center');
-    const heroTextContainer = document.getElementById('hero-text-container');
-    const clock = document.getElementById('hero-clock');
-    const heroFrame = document.getElementById('hero-frame');
-
-    if (!logoCenter || !heroTextContainer || !clock || !heroFrame) return;
-
     const isMobile = window.innerWidth <= 768;
 
     if (isMobile) {
-      gsap.set(heroTextContainer, {
-        top: '105px',
-        left: '15px',
-        opacity: 0
-      });
-
-      gsap.set(logoCenter, { 
-        top: '50%', 
-        left: '50%', 
-        xPercent: -50, 
-        yPercent: -50, 
-        scale: 0.85,
-        opacity: 1 
-      });
-
-      gsap.set(heroFrame, { opacity: 0, scale: 0.9, transformOrigin: 'center center' });
-      gsap.set(clock, { opacity: 0, y: 15 });
-
-      logoCenter.style.visibility = 'visible';
-      heroFrame.style.visibility = 'visible';
-      heroTextContainer.style.visibility = 'visible';
-      clock.style.visibility = 'visible';
-
-      const tl = gsap.timeline({ 
-        defaults: { ease: 'power2.out' },
-        onComplete: startKenBurnsCarousel
-      });
-
-      tl
-        .to(heroTextContainer, {
-          opacity: 1,
-          duration: 0.3
-        })
-        .to(heroFrame, {
-          opacity: 1,
-          scale: 1,
-          duration: 0.5
-        }, '<')
-        .to(logoCenter, {
-          opacity: 0,
-          duration: 0.4
-        }, '<')
-        .to(clock, {
-          opacity: 1,
-          y: 0,
-          duration: 0.3
-        }, '-=0.2');
-
+      setTimeout(startKenBurnsCarousel, 2500);
     } else {
-      gsap.set(heroTextContainer, {
-        top: '50%',
-        left: '50%',
-        xPercent: -50,
-        yPercent: -50,
-        opacity: 0
-      });
+      const logoCenter = document.getElementById('logo-center');
+      const heroTextContainer = document.getElementById('hero-text-container');
+      const clock = document.getElementById('hero-clock');
+      const heroFrame = document.getElementById('hero-frame');
 
-      gsap.set(logoCenter, {
-        top: '50%',
-        left: '50%',
-        xPercent: -50,
-        yPercent: -50,
-        scale: 1,
-        opacity: 1
-      });
+      if (!logoCenter || !heroTextContainer || !clock || !heroFrame) return;
 
+      gsap.set(heroTextContainer, { top: '50%', left: '50%', xPercent: -50, yPercent: -50, opacity: 0 });
+      gsap.set(logoCenter, { top: '50%', left: '50%', xPercent: -50, yPercent: -50, scale: 1, opacity: 1 });
       gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
       gsap.set(clock, { opacity: 0, y: 15 });
-
-      logoCenter.style.visibility = 'visible';
-      heroFrame.style.visibility = 'visible';
-      heroTextContainer.style.visibility = 'visible';
-      clock.style.visibility = 'visible';
 
       const tl = gsap.timeline({ 
         defaults: { ease: 'power3.inOut' },
@@ -312,43 +202,11 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
       });
 
       tl
-        .to(heroTextContainer, {
-          opacity: 1,
-          duration: 0.8,
-          delay: 0.8
-        })
-        .to(heroTextContainer, {
-          top: '130px',
-          left: '30px',
-          xPercent: 0,
-          yPercent: 0,
-          duration: 1.2,
-          ease: 'power3.inOut'
-        })
-        .to(logoCenter, {
-          top: '130px',
-          left: '120vw',
-          xPercent: 0,
-          x: 0,
-          yPercent: 0,
-          y: 0,
-          scale: 0.55,
-          opacity: 0,
-          transformOrigin: 'top left',
-          duration: 1.2,
-          ease: 'power2.inOut'
-        }, '<')
-        .to(clock, {
-          opacity: 1,
-          y: 0,
-          duration: 0.5
-        }, '-=0.4')
-        .to(heroFrame, {
-          opacity: 1,
-          scale: 1,
-          duration: 1.2,
-          ease: 'power4.out'
-        }, '-=0.6');
+        .to(heroTextContainer, { opacity: 1, duration: 0.6, delay: 0.4 })
+        .to(heroTextContainer, { top: '130px', left: '30px', xPercent: 0, yPercent: 0, duration: 1.0 })
+        .to(logoCenter, { top: '130px', left: '120vw', xPercent: 0, scale: 0.55, opacity: 0, duration: 1.0 }, '<')
+        .to(clock, { opacity: 1, y: 0, duration: 0.4 }, '-=0.3')
+        .to(heroFrame, { opacity: 1, scale: 1, duration: 1.0, ease: 'power4.out' }, '-=0.5');
     }
   }
 
@@ -408,7 +266,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
     gap: 12px;
     white-space: nowrap;
     will-change: transform, top, left, opacity;
-    visibility: hidden;
     pointer-events: none;
   }
 
@@ -437,7 +294,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
     display: flex;
     align-items: center;
     will-change: transform, opacity;
-    visibility: hidden;
   }
 
   #clock-canvas {
@@ -459,7 +315,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
     z-index: 99999;
     pointer-events: none;
     will-change: transform, top, left, opacity;
-    visibility: hidden;
   }
 
   .site-logo {
@@ -480,8 +335,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     transform-origin: center center;
     will-change: transform, opacity;
-    backface-visibility: hidden;
-    opacity: 0;
+    opacity: 1; /* Explicit CSS paint for FCP */
   }
 
   .intro-frame-img {
@@ -500,8 +354,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
     display: block;
     opacity: 0;
     will-change: transform, opacity;
-    backface-visibility: hidden;
-    transform-style: preserve-3d;
   }
 
   .slide-img.active {
@@ -510,8 +362,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
 
   @media (max-width: 768px) {
     .logo-center-wrapper {
-      width: 280px;
-      height: 280px;
+      display: none !important; /* Hide unneeded logo on mobile initial paint */
     }
 
     .hero-frame {
@@ -521,10 +372,14 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
       height: 45vh;
       box-shadow: none;
       border-radius: 0;
+      opacity: 1 !important;
     }
 
     .hero-text-container {
+      top: 105px;
+      left: 15px;
       gap: 6px;
+      opacity: 1 !important;
     }
 
     .text-facet,
@@ -539,6 +394,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
       bottom: 20px;
       left: 15px;
       font-size: 0.85rem;
+      opacity: 1 !important;
     }
   }
 </style>
