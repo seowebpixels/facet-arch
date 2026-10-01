@@ -10,7 +10,7 @@ import ascotManorImg from '../assets/dev-ascot-manor.avif'; // Slide 3
 import intStarckImg from '../assets/int-starck.avif';// Slide 4
 
 // --- STRICT MOBILE OPTIMIZATION ---
-const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 450, quality: 35 });
+const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 400, quality: 30 });
 const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 75 });
 
 // --- DEFERRED SLIDES ---
@@ -59,6 +59,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
         loading="eager"
         fetchpriority="high"
         decoding="async"
+        sizes="100vw"
         width="450"
         height="300"
       />
