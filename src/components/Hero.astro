@@ -10,7 +10,7 @@ import ascotManorImg from '../assets/dev-ascot-manor.avif'; // Slide 3
 import intStarckImg from '../assets/int-starck.avif';// Slide 4
 
 // --- INITIAL LOAD IMAGE ONLY (MOBILE QUALITY OPTIMIZED TO 48) ---
-const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 750, quality: 48 });
+const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 600, quality: 40 });
 const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1920, quality: 85 });
 
 // --- DEFERRED SLIDES ---
@@ -62,12 +62,14 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 450, h
       <source media="(max-width: 768px)" srcset={heroMobile.src} type="image/avif" />
       <source media="(min-width: 769px)" srcset={heroDesktop.src} type="image/avif" />
       <img 
-        src={heroDesktop.src} 
+        src={heroMobile.src}
         alt="Facet Architecture Initial Hero" 
         class="hero-img intro-frame-img"
         loading="eager"
         fetchpriority="high"
         decoding="async"
+        width="600"
+        height="400"
       />
     </picture>
   </div>
