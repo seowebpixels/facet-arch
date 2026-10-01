@@ -10,22 +10,22 @@ import intStarckImg from '../assets/int-starck.avif';
 
 const heroImages = [resHeroImg, resBlannImg, ascotManorImg, intStarckImg];
 
-// Preload optimized LCP focal image (downscaled to 720 width at 80% quality)
+// Preload optimized LCP focal image (Mobile breakpoint ~640px max width)
 const optimisedHero = await getImage({ 
   src: resHeroImg, 
   format: 'avif', 
-  width: 720, 
-  height: 405, 
-  quality: 80 
+  width: 640, 
+  height: 360, 
+  quality: 75 
 });
 
-// Preload downscaled logo source (860px max width for retina 2x display)
+// Canvas logo source (downscaled to 600px width for smooth 2x retina display)
 const optimisedLogo = await getImage({
   src: heroLogoImg,
   format: 'webp',
-  width: 860,
-  height: 860,
-  quality: 80
+  width: 600,
+  height: 600,
+  quality: 75
 });
 ---
 
@@ -48,10 +48,10 @@ const optimisedLogo = await getImage({
         src={img} 
         alt={`Facet Architecture Showcase ${index + 1}`} 
         class={`hero-img slide-img ${index === 0 ? 'active' : ''}`}
-        widths={[480, 720, 1280, 1920]}
-        sizes="100vw"
+        widths={[360, 640, 1080, 1920]}
+        sizes="(max-width: 768px) 100vw, 100vw"
         format="avif"
-        quality={80}
+        quality={72}
         loading={index === 0 ? "eager" : "lazy"}
         fetchpriority={index === 0 ? "high" : "low"}
         decoding="async"
@@ -65,10 +65,10 @@ const optimisedLogo = await getImage({
       src={resHeroImg} 
       alt="Facet Architecture Initial Hero" 
       class="hero-img intro-frame-img"
-      widths={[480, 720, 1280]}
+      widths={[360, 640, 1080]}
       sizes="(max-width: 768px) 100vw, 76vw"
       format="avif"
-      quality={80}
+      quality={75}
       loading="eager"
       fetchpriority="high"
       decoding="async"
