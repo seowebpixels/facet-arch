@@ -3,21 +3,21 @@ import { getImage } from 'astro:assets';
 import heroLogoImg from '../assets/facet-logo-white.avif';
 
 // Import showcase images
-import resHeroImg from '../assets/res-eoa-1597.avif'; // Intro Frame (LCP)
+import resHeroImg from '../assets/res-eoa-1597.avif'; // Intro Frame
 import resDavidImg from '../assets/res-david.avif';  // Slide 1
 import resBlannImg from '../assets/res-blann.avif';  // Slide 2
 import ascotManorImg from '../assets/dev-kubu.avif'; // Slide 3
 import intStarckImg from '../assets/int-starck.avif';// Slide 4
 
-// Crisp 1440px - 1920px rendering for Retina displays & high DPI screens
-const LCP_Hero = await getImage({ 
-  src: resHeroImg, 
-  format: 'avif', 
-  width: 1440, 
-  quality: 80 
-});
+// 1. Mobile Variants (For Lighthouse & Mobile Screens - Sharp @ 2x DPI for 375px viewport)
+const LCP_Hero_Mobile = await getImage({ src: resHeroImg, format: 'avif', width: 750, quality: 75 });
+const slide1_Mobile  = await getImage({ src: resDavidImg, format: 'avif', width: 750, quality: 75 });
 
-const slide1 = await getImage({ src: resDavidImg, format: 'avif', width: 1920, quality: 80 });
+// 2. Desktop/Retina Variants (Pixel-perfect sharpness for high-DPI desktop screens)
+const LCP_Hero_Desktop = await getImage({ src: resHeroImg, format: 'avif', width: 1600, quality: 80 });
+const slide1_Desktop  = await getImage({ src: resDavidImg, format: 'avif', width: 1920, quality: 80 });
+
+// Deferred Slides (Loaded dynamically after GSAP intro)
 const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1920, quality: 80 });
 const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1920, quality: 80 });
 const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1920, quality: 80 });
@@ -26,14 +26,29 @@ const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1920, 
 const optimisedLogo = await getImage({
   src: heroLogoImg,
   format: 'webp',
-  width: 500,
-  height: 500,
-  quality: 85
+  width: 430,
+  height: 430,
+  quality: 80
 });
 ---
 
-<!-- Explicit LCP Preload Link -->
-<link rel="preload" as="image" href={LCP_Hero.src} type="image/avif" fetchpriority="high" />
+<!-- Responsive Preload for LCP Image -->
+<link 
+  rel="preload" 
+  as="image" 
+  href={LCP_Hero_Mobile.src} 
+  media="(max-width: 768px)" 
+  type="image/avif" 
+  fetchpriority="high" 
+/>
+<link 
+  rel="preload" 
+  as="image" 
+  href={LCP_Hero_Desktop.src} 
+  media="(min-width: 769px)" 
+  type="image/avif" 
+  fetchpriority="high" 
+/>
 
 <section id="hero-stage" class="stage-container">
   <h2 class="lcp-seo-anchor">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
@@ -43,44 +58,32 @@ const optimisedLogo = await getImage({
     <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
   </div>
 
-  <!-- Offscreen Carousel Container: Only Slide 1 is loaded initially -->
   <div id="fullscreen-bg" class="fullscreen-bg">
-    <img 
-      src={slide1.src} 
-      alt="Facet Architecture Showcase Slide 1" 
-      class="hero-img slide-img active" 
-      decoding="async" 
-    />
-    <img 
-      data-src={slide2.src} 
-      alt="Facet Architecture Showcase Slide 2" 
-      class="hero-img slide-img deferred-slide" 
-      decoding="async" 
-    />
-    <img 
-      data-src={slide3.src} 
-      alt="Facet Architecture Showcase Slide 3" 
-      class="hero-img slide-img deferred-slide" 
-      decoding="async" 
-    />
-    <img 
-      data-src={slide4.src} 
-      alt="Facet Architecture Showcase Slide 4" 
-      class="hero-img slide-img deferred-slide" 
-      decoding="async" 
-    />
+    <!-- Responsive Slide 1 -->
+    <picture>
+      <source media="(max-width: 768px)" srcset={slide1_Mobile.src} type="image/avif" />
+      <img src={slide1_Desktop.src} alt="Facet Architecture Showcase Slide 1" class="hero-img slide-img active" decoding="async" />
+    </picture>
+
+    <!-- Deferred Slides 2-4 -->
+    <img data-src={slide2.src} alt="Facet Architecture Showcase Slide 2" class="hero-img slide-img deferred-slide" decoding="async" />
+    <img data-src={slide3.src} alt="Facet Architecture Showcase Slide 3" class="hero-img slide-img deferred-slide" decoding="async" />
+    <img data-src={slide4.src} alt="Facet Architecture Showcase Slide 4" class="hero-img slide-img deferred-slide" decoding="async" />
   </div>
 
   <div id="hero-frame" class="hero-frame">
-    <!-- Main LCP Element -->
-    <img 
-      src={LCP_Hero.src} 
-      alt="Facet Architecture Initial Hero" 
-      class="hero-img intro-frame-img"
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
-    />
+    <!-- Responsive LCP Image -->
+    <picture>
+      <source media="(max-width: 768px)" srcset={LCP_Hero_Mobile.src} type="image/avif" />
+      <img 
+        src={LCP_Hero_Desktop.src} 
+        alt="Facet Architecture Initial Hero" 
+        class="hero-img intro-frame-img"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </picture>
   </div>
 
   <div id="hero-clock" class="hero-clock">
@@ -105,7 +108,6 @@ const optimisedLogo = await getImage({
   function initHero() {
     gsap.config({ force3D: true });
 
-    // Preload remaining deferred slides in background once initial interaction / animation sequence starts
     function preloadRemainingSlides() {
       const deferred = document.querySelectorAll<HTMLImageElement>('.deferred-slide');
       deferred.forEach((img) => {
@@ -143,7 +145,7 @@ const optimisedLogo = await getImage({
       }
     }
 
-    // 2. SAST Clock
+    // 2. Real-time SAST Clock
     const clockCanvas = document.getElementById('clock-canvas') as HTMLCanvasElement | null;
     if (clockCanvas) {
       const updateClock = () => {
@@ -186,7 +188,6 @@ const optimisedLogo = await getImage({
 
       if (!fullscreenBg || !heroFrame) return;
 
-      // Hydrate slides 2, 3, 4 right when intro sequence finishes
       preloadRemainingSlides();
 
       const slides = fullscreenBg.querySelectorAll<HTMLImageElement>('.slide-img');
