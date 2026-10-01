@@ -216,7 +216,11 @@ const portfolioData = [
         <div class="scroll-rail-wrapper">
           <div class="scroll-rail scroll-container">
             {cat.items?.map((item) => (
-              <div class="portfolio-card cad-trigger" data-fullsrc={(item as any).img?.src || (item as any).video} data-caption={item.name}>
+              <div 
+                class="portfolio-card cad-trigger" 
+                data-fullsrc={(item as any).img?.src || (item as any).video} 
+                data-caption={item.name}
+              >
                 <div class="card-frame">
                   {(item as any).video ? (
                     <video 
@@ -232,8 +236,9 @@ const portfolioData = [
                       src={(item as any).img}
                       alt={item.name}
                       class="card-image-layer"
-                      widths={[320, 640, 900]}
-                      sizes="(max-width: 768px) 320px, (max-width: 1024px) 50vw, 33vw"
+                      width={720}
+                      format="avif"
+                      quality={70}
                       loading="lazy"
                       decoding="async"
                     />
@@ -547,7 +552,7 @@ const portfolioData = [
     border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  /* Lightbox Base Styling - Absolute Precision Fit */
+  /* Lightbox Base Styling */
   .lightbox-modal {
     display: none;
     position: fixed;
@@ -603,7 +608,6 @@ const portfolioData = [
     overflow: hidden;
   }
 
-  /* CRITICAL UN-ZOOM OVERRIDE FOR LIGHTBOX MEDIA */
   :global(#lightbox-img-layer img),
   :global(#lightbox-img-layer video),
   :global(.lightbox-video-player) {
@@ -611,7 +615,7 @@ const portfolioData = [
     height: auto !important;
     max-width: 100% !important;
     max-height: 100% !important;
-    object-fit: contain !important; /* Reverts cover zoom & keeps 100% original aspect ratio */
+    object-fit: contain !important;
     outline: none;
     border: 1px solid rgba(0, 255, 200, 0.3);
     background: #000000;
@@ -660,7 +664,6 @@ const portfolioData = [
     word-break: break-word;
   }
 
-  /* Desktop View Styling Adjustment */
   @media (min-width: 768px) {
     .lightbox-close {
       top: 140px;
@@ -699,7 +702,6 @@ const portfolioData = [
     }
   }
 
-  /* Mobile Specific Layout Adjustments */
   @media (max-width: 767px) {
     .portfolio-nav {
       top: 90px;
@@ -781,7 +783,6 @@ const portfolioData = [
   const modalNext = document.getElementById('lightbox-next');
   const modalContentBox = document.getElementById('lightbox-content-box');
 
-  // Activate Category Panel
   const navBtns = document.querySelectorAll('.nav-btn');
   const panels = document.querySelectorAll('.category-panel');
 
@@ -797,8 +798,6 @@ const portfolioData = [
       targetPanel.classList.add('active');
 
       currentCategoryCards = Array.from(targetPanel.querySelectorAll('.portfolio-card'));
-
-      // Center active tab into view smoothly on mobile
       targetBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
   }
@@ -824,7 +823,6 @@ const portfolioData = [
     });
   });
 
-  // Enable Sideways Wheel Scroll for Desktop Tracks
   document.querySelectorAll('.scroll-rail').forEach((rail) => {
     rail.addEventListener('wheel', (e) => {
       const wheelEvent = e as WheelEvent;
@@ -835,7 +833,6 @@ const portfolioData = [
     }, { passive: false });
   });
 
-  // Lightbox Navigation Functions
   function updateLightboxImage(index: number) {
     if (!currentCategoryCards.length) return;
     if (index < 0) index = currentCategoryCards.length - 1;
@@ -852,20 +849,17 @@ const portfolioData = [
 
     if (modalImgLayer && fullSrc) {
       if (fullSrc.endsWith('.mp4')) {
-        // Fully un-zoomed interactive video player inside lightbox
         modalImgLayer.innerHTML = `
           <video controls autoplay playsinline webkit-playsinline class="lightbox-video-player">
             <source src="${fullSrc}" type="video/mp4" />
           </video>
         `;
       } else {
-        // Standard image element
         modalImgLayer.innerHTML = `<img src="${fullSrc}" alt="${captionText}" />`;
       }
     }
   }
 
-  // Open Lightbox
   document.querySelectorAll('.category-panel').forEach((panel) => {
     const cards = panel.querySelectorAll('.portfolio-card');
     cards.forEach((card, idx) => {
@@ -883,7 +877,6 @@ const portfolioData = [
     });
   });
 
-  // Disable clicks inside lightbox content/image from triggering background navigation
   if (modalContentBox) {
     modalContentBox.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -899,7 +892,6 @@ const portfolioData = [
       modal.classList.remove('active');
       document.body.style.overflow = '';
       
-      // Stop playback & kill audio stream completely
       if (modalImgLayer) {
         modalImgLayer.innerHTML = '';
       }
@@ -918,7 +910,6 @@ const portfolioData = [
     updateLightboxImage(currentActiveIndex + 1);
   });
 
-  // Global Key Down Handler: Escape key closes lightbox and kills media stream
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && modal && modal.classList.contains('active')) {
       closeModal(e);
