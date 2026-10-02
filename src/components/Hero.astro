@@ -23,7 +23,7 @@ const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1440, 
 const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 95 });
 ---
 
-<!-- Single direct LCP Preloads -->
+<!-- Direct LCP Preloads for initial frame and slide1 candidate -->
 <link 
   rel="preload" 
   as="image" 
@@ -40,6 +40,13 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
   type="image/avif" 
   fetchpriority="high" 
 />
+<link 
+  rel="preload" 
+  as="image" 
+  href={slide1.src} 
+  type="image/avif" 
+  fetchpriority="high" 
+/>
 
 <section id="hero-stage" class="stage-container">
   <h2 class="lcp-seo-anchor">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
@@ -49,12 +56,20 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
   </div>
 
-  <!-- Fullscreen Carousel Background (Deferred slide URLs stored in dataset) -->
+  <!-- Fullscreen Carousel Background: Slide 1 rendered in HTML so browser preload scanner discovers LCP image -->
   <div 
     id="fullscreen-bg" 
     class="fullscreen-bg"
-    data-slides={JSON.stringify([slide1.src, slide2.src, slide3.src, slide4.src])}
+    data-slides={JSON.stringify([slide2.src, slide3.src, slide4.src])}
   >
+    <img 
+      src={slide1.src} 
+      alt="Facet Architecture Showcase Slide 1" 
+      class="hero-img slide-img active" 
+      decoding="async"
+      fetchpriority="high"
+      loading="eager"
+    />
   </div>
 
   <div id="hero-frame" class="hero-frame">
@@ -147,19 +162,19 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       const slideUrlsRaw = fullscreenBg.getAttribute('data-slides');
       if (!slideUrlsRaw) return;
 
-      const slideUrls: string[] = JSON.parse(slideUrlsRaw);
+      const remainingSlideUrls: string[] = JSON.parse(slideUrlsRaw);
 
+      // Append remaining deferred slides dynamically
       const fragment = document.createDocumentFragment();
-      slideUrls.forEach((url, idx) => {
+      remainingSlideUrls.forEach((url, idx) => {
         const img = document.createElement('img');
         img.src = url;
-        img.alt = `Facet Architecture Showcase Slide ${idx + 1}`;
-        img.className = `hero-img slide-img ${idx === 0 ? 'active' : ''}`;
+        img.alt = `Facet Architecture Showcase Slide ${idx + 2}`;
+        img.className = 'hero-img slide-img';
         img.decoding = 'async';
         fragment.appendChild(img);
       });
 
-      fullscreenBg.innerHTML = '';
       fullscreenBg.appendChild(fragment);
 
       const slides = fullscreenBg.querySelectorAll<HTMLImageElement>('.slide-img');
@@ -220,7 +235,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 
       if (!logoCenter || !heroTextContainer || !clock || !heroFrame) return;
 
-      // Restored exact initial layout positioning while keeping reflow-free GSAP animations
       gsap.set(heroTextContainer, { top: '50%', left: '50%', xPercent: -50, yPercent: -50, opacity: 0 });
       gsap.set(logoCenter, { top: '50%', left: '50%', xPercent: -50, yPercent: -50, scale: 1, opacity: 1 });
       gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
