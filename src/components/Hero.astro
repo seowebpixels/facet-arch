@@ -9,18 +9,18 @@ import resBlannImg from '../assets/res-blann.avif';  // Slide 2
 import ascotManorImg from '../assets/dev-ascot-manor.avif'; // Slide 3
 import intStarckImg from '../assets/int-starck.avif';// Slide 4
 
-// --- STRICT MOBILE OPTIMIZATION ---
-const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 450, quality: 30 });
-const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1200, quality: 75 });
+// --- HIGH QUALITY INITIAL HERO ASSETS ---
+const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 750, quality: 75 });
+const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 85 });
 
-// --- DEFERRED SLIDES ---
-const slide1 = await getImage({ src: resDavidImg, format: 'avif', width: 1440, quality: 75 });
-const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1440, quality: 75 });
-const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1440, quality: 75 });
-const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 75 });
+// --- DEFERRED SLIDES (HIGH RES FOR CAROUSEL) ---
+const slide1 = await getImage({ src: resDavidImg, format: 'avif', width: 1440, quality: 80 });
+const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1440, quality: 80 });
+const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1440, quality: 80 });
+const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 80 });
 
 // Logo setting
-const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 280, height: 280, quality: 70 });
+const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 85 });
 ---
 
 <!-- Single direct Mobile LCP Preload -->
@@ -28,6 +28,15 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 280, h
   rel="preload" 
   as="image" 
   href={heroMobile.src} 
+  media="(max-width: 768px)"
+  type="image/avif" 
+  fetchpriority="high" 
+/>
+<link 
+  rel="preload" 
+  as="image" 
+  href={heroDesktop.src} 
+  media="(min-width: 769px)"
   type="image/avif" 
   fetchpriority="high" 
 />
@@ -40,7 +49,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 280, h
     <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
   </div>
 
-  <!-- Fullscreen Carousel Background -->
+  <!-- Fullscreen Carousel Background: Completely deferred (no initial src) -->
   <div id="fullscreen-bg" class="fullscreen-bg">
     <img data-src={slide1.src} alt="Facet Architecture Showcase Slide 1" class="hero-img slide-img active deferred-slide" decoding="async" />
     <img data-src={slide2.src} alt="Facet Architecture Showcase Slide 2" class="hero-img slide-img deferred-slide" decoding="async" />
@@ -50,8 +59,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 280, h
 
   <div id="hero-frame" class="hero-frame">
     <picture>
-      <source media="(max-width: 768px)" srcset={heroMobile.src} type="image/avif" sizes="100vw" />
-      <source media="(min-width: 769px)" srcset={heroDesktop.src} type="image/avif" sizes="100vw" />
+      <source media="(max-width: 768px)" srcset={heroMobile.src} type="image/avif" />
+      <source media="(min-width: 769px)" srcset={heroDesktop.src} type="image/avif" />
       <img 
         src={heroMobile.src} 
         alt="Facet Architecture Initial Hero" 
@@ -59,9 +68,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 280, h
         loading="eager"
         fetchpriority="high"
         decoding="async"
-        sizes="100vw"
-        width="450"
-        height="300"
+        width="750"
+        height="500"
       />
     </picture>
   </div>
@@ -90,7 +98,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 280, h
   function initHero() {
     gsap.config({ force3D: true });
 
-    function preloadRemainingSlides() {
+    // Populate deferred image sources ONLY when carousel starts
+    function loadDeferredSlides() {
       const deferred = document.querySelectorAll<HTMLImageElement>('.deferred-slide');
       deferred.forEach((img) => {
         const src = img.getAttribute('data-src');
@@ -144,7 +153,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 280, h
 
       if (!fullscreenBg || !heroFrame) return;
 
-      preloadRemainingSlides();
+      loadDeferredSlides();
 
       const slides = fullscreenBg.querySelectorAll<HTMLImageElement>('.slide-img');
       if (slides.length === 0) return;
@@ -183,7 +192,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 280, h
     const isMobile = window.innerWidth <= 768;
 
     if (isMobile) {
-      setTimeout(startKenBurnsCarousel, 2500);
+      // Direct, clean mobile intro: defer carousel start by 3 seconds
+      setTimeout(startKenBurnsCarousel, 3000);
     } else {
       const logoCenter = document.getElementById('logo-center');
       const heroTextContainer = document.getElementById('hero-text-container');
@@ -194,6 +204,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 280, h
 
       gsap.set(heroTextContainer, { top: '50%', left: '50%', xPercent: -50, yPercent: -50, opacity: 0 });
       gsap.set(logoCenter, { top: '50%', left: '50%', xPercent: -50, yPercent: -50, scale: 1, opacity: 1 });
+      gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
       gsap.set(clock, { opacity: 0, y: 15 });
 
       const tl = gsap.timeline({ 
@@ -335,7 +346,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 280, h
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     transform-origin: center center;
     will-change: transform, opacity;
-    opacity: 1; /* Explicit CSS paint for FCP */
+    opacity: 1 !important;
   }
 
   .intro-frame-img {
@@ -361,8 +372,9 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 280, h
   }
 
   @media (max-width: 768px) {
+    /* Completely hide the overlapping center logo on mobile */
     .logo-center-wrapper {
-      display: none !important; /* Hide unneeded logo on mobile initial paint */
+      display: none !important;
     }
 
     .hero-frame {
