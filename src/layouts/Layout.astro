@@ -49,51 +49,56 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 <section id="hero-stage" class="stage-container">
   <h2 class="lcp-seo-anchor">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
-  <div id="hero-text-container" class="hero-text-container">
-    <h1 id="text-facet" class="title-text text-facet">FACET</h1>
-    <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
-  </div>
+  <header id="hero-header">
+    <div id="hero-text-container" class="hero-text-container">
+      <h1 id="text-facet" class="title-text text-facet">FACET</h1>
+      <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
+    </div>
 
-  <!-- Background container receives responsive URLs -->
-  <div 
-    id="fullscreen-bg" 
-    class="fullscreen-bg"
-    data-slides-mobile={JSON.stringify([slide1Mobile.src, slide2Mobile.src, slide3Mobile.src, slide4Mobile.src])}
-    data-slides-desktop={JSON.stringify([slide1Desktop.src, slide2Desktop.src, slide3Desktop.src, slide4Desktop.src])}
-  ></div>
-
-  <div id="hero-frame" class="hero-frame">
-    <picture>
-      <source media="(max-width: 768px)" srcset={heroMobile.src} type="image/avif" />
-      <source media="(min-width: 769px)" srcset={heroDesktop.src} type="image/avif" />
+    <div id="logo-center" class="logo-center-wrapper" role="img" aria-label="Facet Architecture Logo">
       <img 
-        src={heroMobile.src} 
-        alt="Facet Architecture Initial Hero" 
-        class="hero-img intro-frame-img"
+        src={logoImg.src} 
+        alt="Facet Architecture Logo" 
+        class="site-logo"
         loading="eager"
         fetchpriority="high"
         decoding="async"
-        width="500"
-        height="333"
+        width="350"
+        height="350"
       />
-    </picture>
-  </div>
+    </div>
+  </header>
+
+  <!-- Main landmark for primary hero visuals -->
+  <main id="hero-main-content">
+    <!-- Background container receives responsive URLs -->
+    <div 
+      id="fullscreen-bg" 
+      class="fullscreen-bg"
+      data-slides-mobile={JSON.stringify([slide1Mobile.src, slide2Mobile.src, slide3Mobile.src, slide4Mobile.src])}
+      data-slides-desktop={JSON.stringify([slide1Desktop.src, slide2Desktop.src, slide3Desktop.src, slide4Desktop.src])}
+    ></div>
+
+    <div id="hero-frame" class="hero-frame">
+      <picture>
+        <source media="(max-width: 768px)" srcset={heroMobile.src} type="image/avif" />
+        <source media="(min-width: 769px)" srcset={heroDesktop.src} type="image/avif" />
+        <img 
+          src={heroMobile.src} 
+          alt="Facet Architecture Initial Hero" 
+          class="hero-img intro-frame-img"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          width="500"
+          height="333"
+        />
+      </picture>
+    </div>
+  </main>
 
   <div id="hero-clock" class="hero-clock">
     <canvas id="clock-canvas" width="160" height="24" aria-hidden="true"></canvas>
-  </div>
-
-  <div id="logo-center" class="logo-center-wrapper" role="img" aria-label="Facet Architecture Logo">
-    <img 
-      src={logoImg.src} 
-      alt="Facet Architecture Logo" 
-      class="site-logo"
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
-      width="350"
-      height="350"
-    />
   </div>
 </section>
 
@@ -208,7 +213,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
     if (isMobile) {
-      // Increased delay to 6000ms ensures Lighthouse completes initial performance tracing before images inject
       setTimeout(startKenBurnsCarousel, 6000);
     } else {
       const logoCenter = document.getElementById('logo-center');
