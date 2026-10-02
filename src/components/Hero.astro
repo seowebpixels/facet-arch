@@ -194,7 +194,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 280, h
 
       gsap.set(heroTextContainer, { top: '50%', left: '50%', xPercent: -50, yPercent: -50, opacity: 0 });
       gsap.set(logoCenter, { top: '50%', left: '50%', xPercent: -50, yPercent: -50, scale: 1, opacity: 1 });
-      gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
       gsap.set(clock, { opacity: 0, y: 15 });
 
       const tl = gsap.timeline({ 
