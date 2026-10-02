@@ -8,22 +8,22 @@ import resBlannImg from '../assets/res-blann.avif';        // Slide 2
 import ascotManorImg from '../assets/dev-ascot-manor.avif';// Slide 3
 import intStarckImg from '../assets/int-starck.avif';      // Slide 4
 
-// Initial LCP Hero Optimizations
-const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 500, quality: 70 });
-const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 80 });
+// Crisp Quality Hero Optimizations
+const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 600, quality: 80 });
+const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 82 });
 
-// Carousel Slides - Dedicated Mobile Sizes (600px width)
-const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 600, quality: 75 });
-const slide1Desktop = await getImage({ src: resDavidImg, format: 'avif', width: 1440, quality: 80 });
+// Carousel Slides - High Clarity Mobile (600px width @ quality 80)
+const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 600, quality: 80 });
+const slide1Desktop = await getImage({ src: resDavidImg, format: 'avif', width: 1440, quality: 82 });
 
-const slide2Mobile = await getImage({ src: resBlannImg, format: 'avif', width: 600, quality: 75 });
-const slide2Desktop = await getImage({ src: resBlannImg, format: 'avif', width: 1440, quality: 80 });
+const slide2Mobile = await getImage({ src: resBlannImg, format: 'avif', width: 600, quality: 80 });
+const slide2Desktop = await getImage({ src: resBlannImg, format: 'avif', width: 1440, quality: 82 });
 
-const slide3Mobile = await getImage({ src: ascotManorImg, format: 'avif', width: 600, quality: 75 });
-const slide3Desktop = await getImage({ src: ascotManorImg, format: 'avif', width: 1440, quality: 80 });
+const slide3Mobile = await getImage({ src: ascotManorImg, format: 'avif', width: 600, quality: 80 });
+const slide3Desktop = await getImage({ src: ascotManorImg, format: 'avif', width: 1440, quality: 82 });
 
-const slide4Mobile = await getImage({ src: intStarckImg, format: 'avif', width: 600, quality: 75 });
-const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 80 });
+const slide4Mobile = await getImage({ src: intStarckImg, format: 'avif', width: 600, quality: 80 });
+const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 82 });
 
 const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 85 });
 ---
@@ -69,9 +69,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     </div>
   </header>
 
-  <!-- Main landmark for primary hero visuals -->
   <main id="hero-main-content">
-    <!-- Background container receives responsive URLs -->
     <div 
       id="fullscreen-bg" 
       class="fullscreen-bg"
@@ -90,8 +88,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
           loading="eager"
           fetchpriority="high"
           decoding="async"
-          width="500"
-          height="333"
+          width="600"
+          height="400"
         />
       </picture>
     </div>
@@ -142,7 +140,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       setInterval(updateClock, 1000);
     }
 
-    // Lazy Carousel Setup
+    // Carousel Setup
     function startKenBurnsCarousel() {
       const fullscreenBg = document.getElementById('fullscreen-bg');
       const heroFrame = document.getElementById('hero-frame');
@@ -164,7 +162,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
         img.alt = `Facet Architecture Showcase Slide ${idx + 1}`;
         img.className = 'hero-img slide-img';
         img.decoding = 'async';
-        img.loading = 'lazy';
+        img.loading = 'eager'; // Changed from lazy to eager to ensure mobile renders sequence reliably
         fragment.appendChild(img);
       });
 
@@ -185,7 +183,15 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
         });
       });
 
-      gsap.to(heroFrame, { opacity: 0, duration: 1.0, ease: 'power2.inOut' });
+      // Cross-fade the initial hero frame out so Ken Burns takes over smoothly on both mobile & desktop
+      gsap.to(heroFrame, { 
+        opacity: 0, 
+        duration: 1.2, 
+        ease: 'power2.inOut',
+        onComplete: () => {
+          heroFrame.style.display = 'none'; // Ensure hero-frame disappears completely from DOM layout
+        }
+      });
 
       let current = 0;
       const directions = [
@@ -213,7 +219,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
     if (isMobile) {
-      setTimeout(startKenBurnsCarousel, 6000);
+      setTimeout(startKenBurnsCarousel, 4000);
     } else {
       const logoCenter = document.getElementById('logo-center');
       const heroTextContainer = document.getElementById('hero-text-container');
@@ -397,8 +403,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       height: 45vh;
       box-shadow: none;
       border-radius: 0;
-      opacity: 1 !important;
-      transform: none !important;
+      /* Removed opacity: 1 !important to allow GSAP fade out */
+      transform: none;
     }
 
     .hero-text-container {
