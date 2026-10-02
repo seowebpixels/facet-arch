@@ -9,25 +9,44 @@ import resBlannImg from '../assets/res-blann.avif';  // Slide 2
 import ascotManorImg from '../assets/dev-ascot-manor.avif'; // Slide 3
 import intStarckImg from '../assets/int-starck.avif';// Slide 4
 
-// --- HIGH QUALITY INITIAL HERO ASSETS ---
-const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 480, quality: 80 });
+// --- OPTIMIZED HERO & SLIDE ASSETS ---
+const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 600, quality: 85 });
 const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 90 });
 
-// --- DEFERRED SLIDES ---
-const slide1 = await getImage({ src: resDavidImg, format: 'avif', width: 1440, quality: 90 });
-const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1440, quality: 90 });
-const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1440, quality: 90 });
-const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 90 });
+// Separate responsive sizes for Slide 1 (LCP Candidate)
+const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 800, quality: 85 });
+const slide1Desktop = await getImage({ src: resDavidImg, format: 'avif', width: 1440, quality: 90 });
+
+// Deferred slides
+const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1440, quality: 85 });
+const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1440, quality: 85 });
+const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 85 });
 
 // Logo setting
 const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 95 });
 ---
 
-<!-- Direct LCP Preloads for initial frame and slide1 candidate -->
+<!-- CRITICAL FONT PRELOADS (Fixes Network Dependency Tree) -->
+<link 
+  rel="preload" 
+  href="/fonts/NesobriteRegular.woff2" 
+  as="font" 
+  type="font/woff2" 
+  crossorigin 
+/>
+<link 
+  rel="preload" 
+  href="/fonts/NesobriteBold.woff2" 
+  as="font" 
+  type="font/woff2" 
+  crossorigin 
+/>
+
+<!-- DIRECT IMAGE PRELOADS -->
 <link 
   rel="preload" 
   as="image" 
-  href={heroMobile.src} 
+  href={slide1Mobile.src} 
   media="(max-width: 768px)"
   type="image/avif" 
   fetchpriority="high" 
@@ -35,15 +54,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 <link 
   rel="preload" 
   as="image" 
-  href={heroDesktop.src} 
+  href={slide1Desktop.src} 
   media="(min-width: 769px)"
-  type="image/avif" 
-  fetchpriority="high" 
-/>
-<link 
-  rel="preload" 
-  as="image" 
-  href={slide1.src} 
   type="image/avif" 
   fetchpriority="high" 
 />
@@ -56,20 +68,24 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
   </div>
 
-  <!-- Fullscreen Carousel Background: Slide 1 rendered in HTML so browser preload scanner discovers LCP image -->
+  <!-- Fullscreen Carousel Background -->
   <div 
     id="fullscreen-bg" 
     class="fullscreen-bg"
     data-slides={JSON.stringify([slide2.src, slide3.src, slide4.src])}
   >
-    <img 
-      src={slide1.src} 
-      alt="Facet Architecture Showcase Slide 1" 
-      class="hero-img slide-img active" 
-      decoding="async"
-      fetchpriority="high"
-      loading="eager"
-    />
+    <picture>
+      <source media="(max-width: 768px)" srcset={slide1Mobile.src} type="image/avif" />
+      <source media="(min-width: 769px)" srcset={slide1Desktop.src} type="image/avif" />
+      <img 
+        src={slide1Desktop.src} 
+        alt="Facet Architecture Showcase Slide 1" 
+        class="hero-img slide-img active" 
+        decoding="async"
+        fetchpriority="high"
+        loading="eager"
+      />
+    </picture>
   </div>
 
   <div id="hero-frame" class="hero-frame">
@@ -164,7 +180,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 
       const remainingSlideUrls: string[] = JSON.parse(slideUrlsRaw);
 
-      // Append remaining deferred slides dynamically
       const fragment = document.createDocumentFragment();
       remainingSlideUrls.forEach((url, idx) => {
         const img = document.createElement('img');
@@ -192,7 +207,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
         });
       });
 
-      gsap.to(fullscreenBg, { opacity: 1, duration: 1.2, ease: 'power2.inOut' });
       gsap.to(heroFrame, { opacity: 0, duration: 1.0, ease: 'power2.inOut' });
 
       let current = 0;
@@ -290,6 +304,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     z-index: 10;
   }
 
+  /* CRITICAL: Set initial opacity to 1 so browser records LCP paint instantly without GSAP render delay */
   .fullscreen-bg {
     position: absolute;
     top: 0;
@@ -297,7 +312,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     width: 100vw;
     height: 100vh;
     z-index: 5;
-    opacity: 0;
+    opacity: 1;
     overflow: hidden;
     pointer-events: none;
   }
@@ -315,7 +330,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 
   .text-facet,
   .text-architecture {
-    font-family: 'Bank Gothic', sans-serif !important;
+    font-family: 'Nesobrite', 'Bank Gothic', sans-serif !important;
     font-weight: 900;
     font-size: clamp(1.2rem, 3.8vw, 4.1rem);
     letter-spacing: 0.10em;
@@ -388,7 +403,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     object-fit: cover;
   }
 
-  /* CRITICAL: Strict full-viewport sizing for dynamic slide images */
   :global(.slide-img) {
     position: absolute !important;
     top: 0 !important;
