@@ -10,20 +10,20 @@ import ascotManorImg from '../assets/dev-ascot-manor.avif'; // Slide 3
 import intStarckImg from '../assets/int-starck.avif';// Slide 4
 
 // --- HIGH QUALITY INITIAL HERO ASSETS ---
-const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 750, quality: 75 });
+const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 750, quality: 80 });
 const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 85 });
 
-// --- DEFERRED SLIDES (HIGH RES FOR CAROUSEL) ---
-const slide1 = await getImage({ src: resDavidImg, format: 'avif', width: 1440, quality: 80 });
-const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1440, quality: 80 });
-const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1440, quality: 80 });
-const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 80 });
+// --- DEFERRED SLIDES ---
+const slide1 = await getImage({ src: resDavidImg, format: 'avif', width: 1200, quality: 75 });
+const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1200, quality: 75 });
+const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1200, quality: 75 });
+const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1200, quality: 75 });
 
 // Logo setting
 const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 85 });
 ---
 
-<!-- Single direct Mobile LCP Preload -->
+<!-- Single direct LCP Preloads -->
 <link 
   rel="preload" 
   as="image" 
@@ -49,12 +49,12 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
   </div>
 
-  <!-- Fullscreen Carousel Background: Completely deferred (no initial src) -->
-  <div id="fullscreen-bg" class="fullscreen-bg">
-    <img data-src={slide1.src} alt="Facet Architecture Showcase Slide 1" class="hero-img slide-img active deferred-slide" decoding="async" />
-    <img data-src={slide2.src} alt="Facet Architecture Showcase Slide 2" class="hero-img slide-img deferred-slide" decoding="async" />
-    <img data-src={slide3.src} alt="Facet Architecture Showcase Slide 3" class="hero-img slide-img deferred-slide" decoding="async" />
-    <img data-src={slide4.src} alt="Facet Architecture Showcase Slide 4" class="hero-img slide-img deferred-slide" decoding="async" />
+  <!-- Fullscreen Carousel Background -->
+  <div 
+    id="fullscreen-bg" 
+    class="fullscreen-bg"
+    data-slides={JSON.stringify([slide1.src, slide2.src, slide3.src, slide4.src])}
+  >
   </div>
 
   <div id="hero-frame" class="hero-frame">
@@ -98,18 +98,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
   function initHero() {
     gsap.config({ force3D: true });
 
-    // Populate deferred image sources ONLY when carousel starts
-    function loadDeferredSlides() {
-      const deferred = document.querySelectorAll<HTMLImageElement>('.deferred-slide');
-      deferred.forEach((img) => {
-        const src = img.getAttribute('data-src');
-        if (src) {
-          img.src = src;
-          img.removeAttribute('data-src');
-        }
-      });
-    }
-
     // SAST Clock
     const clockCanvas = document.getElementById('clock-canvas') as HTMLCanvasElement | null;
     if (clockCanvas) {
@@ -146,18 +134,33 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       setInterval(updateClock, 1000);
     }
 
-    // Ken Burns Carousel Sequence
+    // Dynamic Ken Burns Carousel Sequence
     function startKenBurnsCarousel() {
       const fullscreenBg = document.getElementById('fullscreen-bg');
       const heroFrame = document.getElementById('hero-frame');
 
       if (!fullscreenBg || !heroFrame) return;
 
-      loadDeferredSlides();
+      // Extract slide URLs from dataset and inject <img> elements dynamically
+      const slideUrlsRaw = fullscreenBg.getAttribute('data-slides');
+      if (!slideUrlsRaw) return;
+
+      const slideUrls: string[] = JSON.parse(slideUrlsRaw);
+      fullscreenBg.innerHTML = ''; // clear
+
+      slideUrls.forEach((url, idx) => {
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = `Facet Architecture Showcase Slide ${idx + 1}`;
+        img.className = `hero-img slide-img ${idx === 0 ? 'active' : ''}`;
+        img.decoding = 'async';
+        fullscreenBg.appendChild(img);
+      });
 
       const slides = fullscreenBg.querySelectorAll<HTMLImageElement>('.slide-img');
       if (slides.length === 0) return;
 
+      // Fade out initial hero frame and fade in fullscreen background
       gsap.to(fullscreenBg, { opacity: 1, duration: 1.2, ease: 'power2.inOut' });
       gsap.to(heroFrame, { opacity: 0, duration: 1.0, ease: 'power2.inOut' });
 
@@ -192,8 +195,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     const isMobile = window.innerWidth <= 768;
 
     if (isMobile) {
-      // Direct, clean mobile intro: defer carousel start by 3 seconds
-      setTimeout(startKenBurnsCarousel, 3000);
+      // On mobile, start carousel after 2.5s
+      setTimeout(startKenBurnsCarousel, 2500);
     } else {
       const logoCenter = document.getElementById('logo-center');
       const heroTextContainer = document.getElementById('hero-text-container');
@@ -346,7 +349,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     transform-origin: center center;
     will-change: transform, opacity;
-    opacity: 1 !important;
+    opacity: 1;
   }
 
   .intro-frame-img {
@@ -372,7 +375,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
   }
 
   @media (max-width: 768px) {
-    /* Completely hide the overlapping center logo on mobile */
     .logo-center-wrapper {
       display: none !important;
     }
@@ -384,7 +386,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       height: 45vh;
       box-shadow: none;
       border-radius: 0;
-      opacity: 1 !important;
+      opacity: 1;
     }
 
     .hero-text-container {
