@@ -14,10 +14,10 @@ const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 750,
 const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 85 });
 
 // --- DEFERRED SLIDES ---
-const slide1 = await getImage({ src: resDavidImg, format: 'avif', width: 1200, quality: 75 });
-const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1200, quality: 75 });
-const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1200, quality: 75 });
-const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1200, quality: 75 });
+const slide1 = await getImage({ src: resDavidImg, format: 'avif', width: 1440, quality: 80 });
+const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1440, quality: 80 });
+const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1440, quality: 80 });
+const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 80 });
 
 // Logo setting
 const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 85 });
@@ -49,7 +49,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
   </div>
 
-  <!-- Fullscreen Carousel Background -->
+  <!-- Fullscreen Carousel Background (Deferred slide URLs stored in dataset) -->
   <div 
     id="fullscreen-bg" 
     class="fullscreen-bg"
@@ -141,12 +141,11 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 
       if (!fullscreenBg || !heroFrame) return;
 
-      // Extract slide URLs from dataset and inject <img> elements dynamically
       const slideUrlsRaw = fullscreenBg.getAttribute('data-slides');
       if (!slideUrlsRaw) return;
 
       const slideUrls: string[] = JSON.parse(slideUrlsRaw);
-      fullscreenBg.innerHTML = ''; // clear
+      fullscreenBg.innerHTML = ''; 
 
       slideUrls.forEach((url, idx) => {
         const img = document.createElement('img');
@@ -159,6 +158,19 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 
       const slides = fullscreenBg.querySelectorAll<HTMLImageElement>('.slide-img');
       if (slides.length === 0) return;
+
+      // Ensure explicit initial GSAP states on slides
+      slides.forEach((s, i) => {
+        gsap.set(s, {
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          objectFit: 'cover',
+          opacity: i === 0 ? 1 : 0
+        });
+      });
 
       // Fade out initial hero frame and fade in fullscreen background
       gsap.to(fullscreenBg, { opacity: 1, duration: 1.2, ease: 'power2.inOut' });
@@ -195,7 +207,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     const isMobile = window.innerWidth <= 768;
 
     if (isMobile) {
-      // On mobile, start carousel after 2.5s
       setTimeout(startKenBurnsCarousel, 2500);
     } else {
       const logoCenter = document.getElementById('logo-center');
@@ -358,19 +369,20 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     object-fit: cover;
   }
 
-  .slide-img {
-    position: absolute;
-    top: -5%;
-    left: -5%;
-    width: 110vw;
-    height: 110vh;
-    object-fit: cover;
-    display: block;
+  /* CRITICAL: Strict full-viewport sizing for dynamic slide images */
+  :global(.slide-img) {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    object-fit: cover !important;
+    display: block !important;
     opacity: 0;
     will-change: transform, opacity;
   }
 
-  .slide-img.active {
+  :global(.slide-img.active) {
     opacity: 1;
   }
 
