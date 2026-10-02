@@ -8,11 +8,11 @@ import resBlannImg from '../assets/res-blann.avif';        // Slide 2
 import ascotManorImg from '../assets/dev-ascot-manor.avif';// Slide 3
 import intStarckImg from '../assets/int-starck.avif';      // Slide 4
 
-// Initial Hero Image
-const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 360, quality: 55 });
+// Initial Hero Image - Optimized for 360px mobile viewport (~10 KiB)
+const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 360, quality: 60 });
 const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 80 });
 
-// Carousel Slides (Kept crisp @ 600px mobile, but deferred from initial load)
+// Carousel Slides
 const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 600, quality: 75 });
 const slide1Desktop = await getImage({ src: resDavidImg, format: 'avif', width: 1440, quality: 80 });
 
@@ -28,10 +28,7 @@ const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width:
 const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 85 });
 ---
 
-<!-- LOAD GSAP VIA CDN TO ELIMINATE BUNDLE WATERFALL CHAINS -->
-<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-
-<!-- PRELOAD LCP HERO IMAGE ONLY -->
+<!-- PRELOAD CRITICAL MOBILE & DESKTOP LCP HERO -->
 <link 
   rel="preload" 
   as="image" 
@@ -103,17 +100,14 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
   </div>
 </section>
 
-<script is:inline>
-  function initHero() {
-    if (typeof gsap === 'undefined') {
-      setTimeout(initHero, 50);
-      return;
-    }
-
+<script>
+  // Pure local import scheduled on main-thread idle time
+  async function runHeroApp() {
+    const { gsap } = await import('gsap');
     gsap.config({ force3D: true });
 
-    // --- CLOCK ---
-    const clockCanvas = document.getElementById('clock-canvas');
+    // --- CANVAS CLOCK ---
+    const clockCanvas = document.getElementById('clock-canvas') as HTMLCanvasElement | null;
     if (clockCanvas) {
       const updateClock = () => {
         const ctx = clockCanvas.getContext('2d');
@@ -159,7 +153,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 
       if (!slidesAttr) return;
 
-      const slideUrls = JSON.parse(slidesAttr);
+      const slideUrls: string[] = JSON.parse(slidesAttr);
       const fragment = document.createDocumentFragment();
 
       slideUrls.forEach((url, idx) => {
@@ -168,13 +162,13 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
         img.alt = `Facet Architecture Showcase Slide ${idx + 1}`;
         img.className = 'hero-img slide-img';
         img.decoding = 'async';
-        img.loading = 'lazy'; // Lazy load so initial page speed ignores them completely
+        img.loading = 'lazy';
         fragment.appendChild(img);
       });
 
       fullscreenBg.appendChild(fragment);
 
-      const slides = fullscreenBg.querySelectorAll('.slide-img');
+      const slides = fullscreenBg.querySelectorAll<HTMLImageElement>('.slide-img');
       if (slides.length === 0) return;
 
       slides.forEach((s, i) => {
@@ -252,10 +246,11 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     }
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initHero);
+  // Defer execution after window load so first paint renders instantly
+  if (document.readyState === 'complete') {
+    setTimeout(runHeroApp, 100);
   } else {
-    initHero();
+    window.addEventListener('load', () => setTimeout(runHeroApp, 100));
   }
 </script>
 
