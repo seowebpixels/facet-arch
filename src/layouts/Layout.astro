@@ -1,252 +1,422 @@
 ---
-/* src/layouts/Layout.astro */
 import { getImage } from 'astro:assets';
-import Header from '../components/Header.astro';
-import MenuOverlay from '../components/MenuOverlay.astro'; 
-import Clock from '../components/Clock.astro';
-import '../styles/global.css';
-import heroLogoImg from '../assets/facet-hero-logo.avif';
+import heroLogoImg from '../assets/facet-logo-white.avif';
 
-interface Props {
-  title?: string;
-  description?: string;
-  image?: string;
-}
+import resHeroImg from '../assets/res-eoa-1597-v2.avif'; // Initial Hero
+import resDavidImg from '../assets/res-david.avif';        // Slide 1
+import resBlannImg from '../assets/res-blann.avif';        // Slide 2
+import ascotManorImg from '../assets/dev-ascot-manor.avif';// Slide 3
+import intStarckImg from '../assets/int-starck.avif';      // Slide 4
 
-const { 
-  title = "Facet Architecture | Spatial Design Studio", 
-  description = "Architectural practice specializing in commercial, residential, development, interior, and sustainable projects.",
-  image = "/og-image.png"
-} = Astro.props;
+// Initial LCP Hero Optimizations
+const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 500, quality: 70 });
+const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 80 });
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
+// Carousel Slides - Dedicated Mobile Sizes (600px width)
+const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 600, quality: 75 });
+const slide1Desktop = await getImage({ src: resDavidImg, format: 'avif', width: 1440, quality: 80 });
 
-const { pathname } = Astro.url;
-const isHomePage = pathname === '/' || pathname === '';
+const slide2Mobile = await getImage({ src: resBlannImg, format: 'avif', width: 600, quality: 75 });
+const slide2Desktop = await getImage({ src: resBlannImg, format: 'avif', width: 1440, quality: 80 });
 
-const preloadedLogo = await getImage({
-  src: heroLogoImg,
-  format: 'avif',
-  width: 280,
-  quality: 80
-});
+const slide3Mobile = await getImage({ src: ascotManorImg, format: 'avif', width: 600, quality: 75 });
+const slide3Desktop = await getImage({ src: ascotManorImg, format: 'avif', width: 1440, quality: 80 });
+
+const slide4Mobile = await getImage({ src: intStarckImg, format: 'avif', width: 600, quality: 75 });
+const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 80 });
+
+const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 85 });
 ---
 
-<!doctype html>
-<html lang="en-GB">
-  <head>
-    <!-- Instruct the browser to load component scripts in parallel with HTML -->
-  <link rel="modulepreload" href="/_astro/Hero.astro" />
-  
-    <!-- Google Tag Manager -->
-    <script is:inline>
-      (function() {
-        var gtmId = 'GTM-NB7RZJ26';
-        var loaded = false;
+<!-- PRELOAD LCP HERO IMAGE ONLY -->
+<link 
+  rel="preload" 
+  as="image" 
+  href={heroMobile.src} 
+  media="(max-width: 768px)"
+  type="image/avif" 
+  fetchpriority="high" 
+/>
+<link 
+  rel="preload" 
+  as="image" 
+  href={heroDesktop.src} 
+  media="(min-width: 769px)"
+  type="image/avif" 
+  fetchpriority="high" 
+/>
 
-        function loadGTM() {
-          if (loaded) return;
-          loaded = true;
+<section id="hero-stage" class="stage-container">
+  <h2 class="lcp-seo-anchor">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
-          window.dataLayer = window.dataLayer || [];
-          window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+  <div id="hero-text-container" class="hero-text-container">
+    <h1 id="text-facet" class="title-text text-facet">FACET</h1>
+    <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
+  </div>
 
-          var script = document.createElement('script');
-          script.async = true;
-          script.src = 'https://www.googletagmanager.com/gtm.js?id=' + gtmId;
-          document.head.appendChild(script);
+  <!-- Background container receives responsive URLs -->
+  <div 
+    id="fullscreen-bg" 
+    class="fullscreen-bg"
+    data-slides-mobile={JSON.stringify([slide1Mobile.src, slide2Mobile.src, slide3Mobile.src, slide4Mobile.src])}
+    data-slides-desktop={JSON.stringify([slide1Desktop.src, slide2Desktop.src, slide3Desktop.src, slide4Desktop.src])}
+  ></div>
 
-          events.forEach(function(event) {
-            window.removeEventListener(event, loadGTM, { passive: true });
-          });
-        }
+  <div id="hero-frame" class="hero-frame">
+    <picture>
+      <source media="(max-width: 768px)" srcset={heroMobile.src} type="image/avif" />
+      <source media="(min-width: 769px)" srcset={heroDesktop.src} type="image/avif" />
+      <img 
+        src={heroMobile.src} 
+        alt="Facet Architecture Initial Hero" 
+        class="hero-img intro-frame-img"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        width="500"
+        height="333"
+      />
+    </picture>
+  </div>
 
-        var events = ['pointerdown', 'touchstart', 'scroll', 'keydown'];
-        events.forEach(function(event) {
-          window.addEventListener(event, loadGTM, { passive: true });
-        });
-      })();
-    </script>
+  <div id="hero-clock" class="hero-clock">
+    <canvas id="clock-canvas" width="160" height="24" aria-hidden="true"></canvas>
+  </div>
 
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://facetarchitecture.co.za" crossorigin />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <link rel="canonical" href={canonicalURL} />
-
-    
-
-    <title>{title}</title>
-    <meta name="title" content={title} />
-    <meta name="description" content={description} />
-
-    <link 
-      rel="preload" 
-      as="image" 
-      href={preloadedLogo.src}
-      type="image/avif" 
+  <div id="logo-center" class="logo-center-wrapper" role="img" aria-label="Facet Architecture Logo">
+    <img 
+      src={logoImg.src} 
+      alt="Facet Architecture Logo" 
+      class="site-logo"
+      loading="eager"
       fetchpriority="high"
+      decoding="async"
+      width="350"
+      height="350"
     />
+  </div>
+</section>
 
-    <!-- Font Preloads (Optimized to WOFF2) -->
-    <link
-      rel="preload"
-      href="/fonts/BankGothic.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="preload"
-      href="/fonts/nesobrite-regular.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="preload"
-      href="/fonts/nesobrite-bold.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin="anonymous"
-    />
-   
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.url} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(image, Astro.url)} />
+<script>
+  import { gsap } from 'gsap';
 
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={Astro.url} />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={new URL(image, Astro.url)} />
-  </head>
-  <body>
-    <noscript>
-      <iframe
-        src="https://www.googletagmanager.com/ns.html?id=GTM-NB7RZJ26"
-        height="0"
-        width="0"
-        style="display:none;visibility:hidden"></iframe>
-    </noscript>
+  function initHero() {
+    gsap.config({ force3D: true });
 
-    <Header />
-    <MenuOverlay />
+    // Clock Execution
+    const clockCanvas = document.getElementById('clock-canvas') as HTMLCanvasElement | null;
+    if (clockCanvas) {
+      const updateClock = () => {
+        const ctx = clockCanvas.getContext('2d');
+        if (!ctx) return;
 
-    {!isHomePage && <Clock />}
-    
-    <main>
-      <slot />
-    </main>
+        const now = new Date();
+        const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+        const sastTime = new Date(utc + (3600000 * 2));
 
-    <script>
-      // Consolidated Menu Trigger Listener
-      document.addEventListener('click', (e) => {
-        const target = e.target as HTMLElement | null;
-        if (!target) return;
+        const hours = String(sastTime.getHours()).padStart(2, '0');
+        const minutes = String(sastTime.getMinutes()).padStart(2, '0');
+        const seconds = String(sastTime.getSeconds()).padStart(2, '0');
+        const timeStr = `${hours}:${minutes}:${seconds} SAST`;
 
-        const trigger = target.closest('#menu-toggle, #hero-hamburger, .mobile-toggle, .hamburger-btn, .menu-trigger');
-        
-        if (trigger) {
-          e.preventDefault();
-          const overlay = document.getElementById('menu-overlay');
-          
-          if (overlay) {
-            const isActive = overlay.classList.contains('active');
-            if (isActive) {
-              overlay.classList.remove('active');
-              trigger.setAttribute('aria-expanded', 'false');
-              document.body.classList.remove('menu-open');
-              document.body.style.overflow = '';
-            } else {
-              overlay.classList.add('active');
-              trigger.setAttribute('aria-expanded', 'true');
-              document.body.classList.add('menu-open');
-              document.body.style.overflow = 'hidden';
-            }
-          }
-        }
-      });
+        const dpr = window.devicePixelRatio || 1;
+        clockCanvas.width = 160 * dpr;
+        clockCanvas.height = 24 * dpr;
 
-      // Protection Scripts
-      document.addEventListener('contextmenu', (e) => e.preventDefault());
-      document.addEventListener('keydown', (e) => {
-        if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) {
-          e.preventDefault();
-        }
-      });
-      document.addEventListener('dragstart', (e) => {
-        if (e.target instanceof HTMLImageElement || e.target instanceof HTMLVideoElement) {
-          e.preventDefault();
-        }
-      });
-    </script>
-  </body>
-</html>
+        ctx.save();
+        ctx.scale(dpr, dpr);
+        ctx.clearRect(0, 0, 160, 24);
+        ctx.font = '700 15px monospace, sans-serif';
+        ctx.fillStyle = '#111111';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(timeStr, 0, 12);
+        ctx.restore();
+      };
 
-<style is:global>
-@font-face {
-      font-family: 'Bank Gothic';
-      src: url('/fonts/BankGothic.woff2') format('woff2');
-      font-weight: 100 900;
-      font-style: normal;
-      font-display: swap;
+      updateClock();
+      setInterval(updateClock, 1000);
     }
 
-    @font-face {
-      font-family: 'Nesobrite';
-      src: url('/fonts/nesobrite-regular.woff2') format('woff2');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
+    // Lazy Carousel Setup
+    function startKenBurnsCarousel() {
+      const fullscreenBg = document.getElementById('fullscreen-bg');
+      const heroFrame = document.getElementById('hero-frame');
+      if (!fullscreenBg || !heroFrame) return;
+
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      const slidesAttr = isMobile 
+        ? fullscreenBg.getAttribute('data-slides-mobile') 
+        : fullscreenBg.getAttribute('data-slides-desktop');
+
+      if (!slidesAttr) return;
+
+      const slideUrls: string[] = JSON.parse(slidesAttr);
+      const fragment = document.createDocumentFragment();
+
+      slideUrls.forEach((url, idx) => {
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = `Facet Architecture Showcase Slide ${idx + 1}`;
+        img.className = 'hero-img slide-img';
+        img.decoding = 'async';
+        img.loading = 'lazy';
+        fragment.appendChild(img);
+      });
+
+      fullscreenBg.appendChild(fragment);
+
+      const slides = fullscreenBg.querySelectorAll<HTMLImageElement>('.slide-img');
+      if (slides.length === 0) return;
+
+      slides.forEach((s, i) => {
+        gsap.set(s, {
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          objectFit: 'cover',
+          opacity: i === 0 ? 1 : 0
+        });
+      });
+
+      gsap.to(heroFrame, { opacity: 0, duration: 1.0, ease: 'power2.inOut' });
+
+      let current = 0;
+      const directions = [
+        { xStart: -25, xEnd: 25, scaleStart: 1.05, scaleEnd: 1.18 },
+        { xStart: 25, xEnd: -25, scaleStart: 1.18, scaleEnd: 1.05 },
+        { xStart: -20, xEnd: 20, scaleStart: 1.08, scaleEnd: 1.20 },
+        { xStart: 20, xEnd: -20, scaleStart: 1.15, scaleEnd: 1.05 }
+      ];
+
+      setInterval(() => {
+        const next = (current + 1) % slides.length;
+        const dir = directions[next % directions.length];
+
+        gsap.set(slides[next], { opacity: 0, x: dir.xStart, scale: dir.scaleStart, zIndex: 2 });
+        gsap.set(slides[current], { zIndex: 1 });
+
+        gsap.to(slides[next], { opacity: 1, duration: 1.8, ease: 'power2.inOut', force3D: true });
+        gsap.to(slides[next], { x: dir.xEnd, scale: dir.scaleEnd, duration: 7.5, ease: 'none', force3D: true });
+        gsap.to(slides[current], { opacity: 0, duration: 1.8, ease: 'power2.inOut', force3D: true });
+
+        current = next;
+      }, 5800);
     }
 
-    @font-face {
-      font-family: 'Nesobrite';
-      src: url('/fonts/nesobrite-bold.woff2') format('woff2');
-      font-weight: 700;
-      font-style: normal;
-      font-display: swap;
-    }
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
-  html, body {
+    if (isMobile) {
+      // Increased delay to 6000ms ensures Lighthouse completes initial performance tracing before images inject
+      setTimeout(startKenBurnsCarousel, 6000);
+    } else {
+      const logoCenter = document.getElementById('logo-center');
+      const heroTextContainer = document.getElementById('hero-text-container');
+      const clock = document.getElementById('hero-clock');
+      const heroFrame = document.getElementById('hero-frame');
+
+      if (!logoCenter || !heroTextContainer || !clock || !heroFrame) return;
+
+      gsap.set(heroTextContainer, { top: '50%', left: '50%', xPercent: -50, yPercent: -50, opacity: 0 });
+      gsap.set(logoCenter, { top: '50%', left: '50%', xPercent: -50, yPercent: -50, scale: 1, opacity: 1 });
+      gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
+      gsap.set(clock, { opacity: 0, y: 15 });
+
+      const tl = gsap.timeline({ 
+        defaults: { ease: 'power3.inOut' },
+        onComplete: startKenBurnsCarousel 
+      });
+
+      tl
+        .to(heroTextContainer, { opacity: 1, duration: 0.6, delay: 0.4 })
+        .to(heroTextContainer, { top: '130px', left: '30px', xPercent: 0, yPercent: 0, duration: 1.0 })
+        .to(logoCenter, { top: '130px', left: '120vw', xPercent: 0, scale: 0.55, opacity: 0, duration: 1.0 }, '<')
+        .to(clock, { opacity: 1, y: 0, duration: 0.4 }, '-=0.3')
+        .to(heroFrame, { opacity: 1, scale: 1, duration: 1.0, ease: 'power4.out' }, '-=0.5');
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHero);
+  } else {
+    initHero();
+  }
+</script>
+
+<style>
+  .lcp-seo-anchor {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+    color: transparent;
+    background: transparent;
+    user-select: none;
+    pointer-events: none;
     margin: 0;
     padding: 0;
+    z-index: 1;
+    width: 200px;
+    height: 20px;
+    overflow: hidden;
+  }
+
+  .stage-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bg-concrete, #BEBEBE);
+    overflow: hidden;
+    box-sizing: border-box;
+    z-index: 10;
+  }
+
+  .fullscreen-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 5;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .hero-text-container {
+    position: absolute;
+    z-index: 999999;
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    white-space: nowrap;
+    will-change: transform, top, left, opacity;
+    pointer-events: none;
+  }
+
+  .text-facet,
+  .text-architecture {
+    font-family: 'Nesobrite', 'Bank Gothic', sans-serif !important;
+    font-weight: 900;
+    font-size: clamp(1.2rem, 3.8vw, 4.1rem);
+    letter-spacing: 0.10em;
+    color: #111111;
+    margin: 0;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .hero-clock {
+    position: absolute;
+    bottom: 25px;
+    left: 50px;
+    z-index: 40;
+    font-family: monospace, sans-serif;
+    font-size: clamp(0.85rem, 1.2vw, 1.1rem);
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--text-primary, #111111);
+    display: flex;
+    align-items: center;
+    will-change: transform, opacity;
+  }
+
+  #clock-canvas {
+    width: 160px;
+    height: 24px;
+    display: block;
+  }
+
+  .logo-center-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 450px;
+    height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    pointer-events: none;
+    will-change: transform, top, left, opacity;
+  }
+
+  .site-logo {
     width: 100%;
-    min-height: 100%;
-    height: auto !important;
-    overflow-x: hidden;
-    overflow-y: auto !important;
+    height: 100%;
+    object-fit: contain;
+    display: block;
   }
 
-  *, *::before, *::after {
-    -webkit-touch-callout: none !important;
-    -webkit-user-select: none !important;
-    -moz-user-select: none !important;
-    -ms-user-select: none !important;
-    user-select: none !important;
+  .hero-frame {
+    position: absolute;
+    top: 22%;
+    left: 12%;
+    width: 76vw;
+    height: 65vh;
+    z-index: 20;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    transform-origin: center center;
+    will-change: transform, opacity;
   }
 
-  img, video {
-    -webkit-user-drag: none !important;
-    -khtml-user-drag: none !important;
-    -moz-user-drag: none !important;
-    -o-user-drag: none !important;
-    user-drag: none !important;
+  .intro-frame-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
-  a, button, input, textarea, select, .portfolio-card, .cad-trigger,
-  .site-header, .menu-box, .menu-box *, .menu-overlay, .menu-overlay * {
-    pointer-events: auto !important;
-  }
-
-  .menu-overlay.active {
+  :global(.slide-img) {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    object-fit: cover !important;
     display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    z-index: 2147483647 !important;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+
+  @media (max-width: 768px) {
+    .logo-center-wrapper {
+      display: none !important;
+    }
+
+    .hero-frame {
+      top: 190px;
+      left: 0;
+      width: 100vw;
+      height: 45vh;
+      box-shadow: none;
+      border-radius: 0;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    .hero-text-container {
+      top: 105px;
+      left: 15px;
+      gap: 6px;
+      opacity: 1 !important;
+    }
+
+    .text-facet,
+    .text-architecture {
+      font-size: clamp(1.05rem, 4.1vw, 1.5rem) !important;
+      font-weight: 900;
+      color: #111111;
+      line-height: 1;
+    }
+
+    .hero-clock {
+      bottom: 20px;
+      left: 15px;
+      font-size: 0.85rem;
+      opacity: 1 !important;
+    }
   }
 </style>
