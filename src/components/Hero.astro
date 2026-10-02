@@ -10,8 +10,8 @@ import ascotManorImg from '../assets/dev-ascot-manor.avif'; // Slide 3
 import intStarckImg from '../assets/int-starck.avif';// Slide 4
 
 // --- STRICT MOBILE OPTIMIZATION ---
-const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 400, quality: 30 });
-const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 75 });
+const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 450, quality: 30 });
+const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1200, quality: 75 });
 
 // --- DEFERRED SLIDES ---
 const slide1 = await getImage({ src: resDavidImg, format: 'avif', width: 1440, quality: 75 });
@@ -50,8 +50,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 280, h
 
   <div id="hero-frame" class="hero-frame">
     <picture>
-      <source media="(max-width: 768px)" srcset={heroMobile.src} type="image/avif" />
-      <source media="(min-width: 769px)" srcset={heroDesktop.src} type="image/avif" />
+      <source media="(max-width: 768px)" srcset={heroMobile.src} type="image/avif" sizes="100vw" />
+      <source media="(min-width: 769px)" srcset={heroDesktop.src} type="image/avif" sizes="100vw" />
       <img 
         src={heroMobile.src} 
         alt="Facet Architecture Initial Hero" 
