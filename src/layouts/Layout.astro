@@ -35,6 +35,9 @@ const preloadedLogo = await getImage({
 <!doctype html>
 <html lang="en-GB">
   <head>
+    <!-- Instruct the browser to load component scripts in parallel with HTML -->
+  <link rel="modulepreload" href="/_astro/Hero.astro" />
+  
     <!-- Google Tag Manager -->
     <script is:inline>
       (function() {
