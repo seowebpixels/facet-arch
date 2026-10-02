@@ -72,6 +72,8 @@ const preloadedLogo = await getImage({
     <meta name="generator" content={Astro.generator} />
     <link rel="canonical" href={canonicalURL} />
 
+    
+
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
@@ -94,14 +96,14 @@ const preloadedLogo = await getImage({
     />
     <link
       rel="preload"
-      href="/fonts/Nesobrite-Regular.woff2"
+      href="/fonts/nesobrite-regular.woff2"
       as="font"
       type="font/woff2"
       crossorigin="anonymous"
     />
     <link
       rel="preload"
-      href="/fonts/Nesobrite-Bold.woff2"
+      href="/fonts/nesobrite-bold.woff2"
       as="font"
       type="font/woff2"
       crossorigin="anonymous"
@@ -183,6 +185,30 @@ const preloadedLogo = await getImage({
 </html>
 
 <style is:global>
+@font-face {
+      font-family: 'Bank Gothic';
+      src: url('/fonts/BankGothic.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Nesobrite';
+      src: url('/fonts/nesobrite-regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Nesobrite';
+      src: url('/fonts/nesobrite-bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
   html, body {
     margin: 0;
     padding: 0;

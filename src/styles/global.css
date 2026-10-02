@@ -1,52 +1,10 @@
-/* Primary definition targeting the site's existing styles */
-@font-face {
-  font-family: 'Bank Gothic';
-  src: url('/fonts/BankGothic.woff2') format('woff2');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Alias definition for non-spaced declarations */
-@font-face {
-  font-family: 'BankGothic';
-  src: url('/fonts/BankGothic.woff2') format('woff2');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Custom alias matching index.astro inline styles */
-@font-face {
-  font-family: 'FacetBankGothic';
-  src: url('/fonts/BankGothic.woff2') format('woff2');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Nesobrite Font Definitions - Corrected Syntax */
-@font-face {
-  font-family: 'Nesobrite';
-  src: url('/fonts/Nesobrite Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Nesobrite';
-  src: url('/fonts/Nesobrite Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
+/* src/styles/global.css */
 
 :root {
   --bg-concrete: #BEBEBE;
   --text-primary: #111111;
   --border-dark: #111111;
-  --font-heading: 'Bank Gothic', sans-serif;
+  --font-heading: 'Bank Gothic', 'BankGothic', sans-serif;
   --font-body: 'Nesobrite', sans-serif;
 }
 
@@ -197,39 +155,39 @@ cite.quote-cite[data-astro-cid-lcdefpme],
   }
 
   /* Lock Bank Gothic on Header, Navigation, and Footer elements */
-header,
-header a,
-header span,
-header button,
-nav,
-nav a,
-nav span,
-footer,
-footer a,
-footer span,
-footer p,
-.nav-link,
-.menu-overlay,
-.menu-overlay a {
-  font-family: var(--font-heading) !important;
-}
+  header,
+  header a,
+  header span,
+  header button,
+  nav,
+  nav a,
+  nav span,
+  footer,
+  footer a,
+  footer span,
+  footer p,
+  .nav-link,
+  .menu-overlay,
+  .menu-overlay a {
+    font-family: var(--font-heading) !important;
+  }
 
-/* Direct element & inline node font override */
-.index-legend,
-.index-legend *,
-.legend-item,
-.legend-item * {
-  font-family: 'Bank Gothic', 'BankGothic', sans-serif !important;
-  text-transform: uppercase !important;
-  letter-spacing: 1.5px !important;
-}
+  /* Direct element & inline node font override */
+  .index-legend,
+  .index-legend *,
+  .legend-item,
+  .legend-item * {
+    font-family: 'Bank Gothic', 'BankGothic', sans-serif !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.5px !important;
+  }
 
-/* Active / Hover State enforced across BOTH text and numbers */
-.index-legend .legend-item.active,
-.index-legend .legend-item.active .legend-num,
-.index-legend .legend-item:hover,
-.index-legend .legend-item:hover .legend-num {
-  color: #D9DDDC !important; /* Soft platinum gray on active/hover */
-  opacity: 1 !important;
-}
+  /* Active / Hover State enforced across BOTH text and numbers */
+  .index-legend .legend-item.active,
+  .index-legend .legend-item.active .legend-num,
+  .index-legend .legend-item:hover,
+  .index-legend .legend-item:hover .legend-num {
+    color: #D9DDDC !important;
+    opacity: 1 !important;
+  }
 }

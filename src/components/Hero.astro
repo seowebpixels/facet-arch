@@ -2,51 +2,31 @@
 import { getImage } from 'astro:assets';
 import heroLogoImg from '../assets/facet-logo-white.avif';
 
-// Import showcase images
-import resHeroImg from '../assets/res-eoa-1597-v2.avif'; // Initial Frame Image
-import resDavidImg from '../assets/res-david.avif';  // Slide 1
-import resBlannImg from '../assets/res-blann.avif';  // Slide 2
-import ascotManorImg from '../assets/dev-ascot-manor.avif'; // Slide 3
-import intStarckImg from '../assets/int-starck.avif';// Slide 4
+import resHeroImg from '../assets/res-eoa-1597-v2.avif'; // Initial Mobile/Desktop Hero
+import resDavidImg from '../assets/res-david.avif';        // Slide 1
+import resBlannImg from '../assets/res-blann.avif';        // Slide 2
+import ascotManorImg from '../assets/dev-ascot-manor.avif';// Slide 3
+import intStarckImg from '../assets/int-starck.avif';      // Slide 4
 
-// --- OPTIMIZED HERO & SLIDE ASSETS ---
-const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 600, quality: 85 });
-const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 90 });
+// Optimizations
+const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 600, quality: 80 });
+const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 85 });
 
-// Separate responsive sizes for Slide 1 (LCP Candidate)
-const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 800, quality: 85 });
-const slide1Desktop = await getImage({ src: resDavidImg, format: 'avif', width: 1440, quality: 90 });
+const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 800, quality: 80 });
+const slide1Desktop = await getImage({ src: resDavidImg, format: 'avif', width: 1440, quality: 85 });
 
-// Deferred slides
-const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1440, quality: 85 });
-const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1440, quality: 85 });
-const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 85 });
+const slide2 = await getImage({ src: resBlannImg, format: 'avif', width: 1440, quality: 80 });
+const slide3 = await getImage({ src: ascotManorImg, format: 'avif', width: 1440, quality: 80 });
+const slide4 = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 80 });
 
-// Logo setting
-const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 95 });
+const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 90 });
 ---
 
-<!-- CRITICAL FONT PRELOADS (Fixes Network Dependency Tree) -->
-<link 
-  rel="preload" 
-  href="/fonts/NesobriteRegular.woff2" 
-  as="font" 
-  type="font/woff2" 
-  crossorigin 
-/>
-<link 
-  rel="preload" 
-  href="/fonts/NesobriteBold.woff2" 
-  as="font" 
-  type="font/woff2" 
-  crossorigin 
-/>
-
-<!-- DIRECT IMAGE PRELOADS -->
+<!-- PRELOAD LCP HERO IMAGE -->
 <link 
   rel="preload" 
   as="image" 
-  href={slide1Mobile.src} 
+  href={heroMobile.src} 
   media="(max-width: 768px)"
   type="image/avif" 
   fetchpriority="high" 
@@ -54,7 +34,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 <link 
   rel="preload" 
   as="image" 
-  href={slide1Desktop.src} 
+  href={heroDesktop.src} 
   media="(min-width: 769px)"
   type="image/avif" 
   fetchpriority="high" 
@@ -68,25 +48,11 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
   </div>
 
-  <!-- Fullscreen Carousel Background -->
   <div 
     id="fullscreen-bg" 
     class="fullscreen-bg"
-    data-slides={JSON.stringify([slide2.src, slide3.src, slide4.src])}
-  >
-    <picture>
-      <source media="(max-width: 768px)" srcset={slide1Mobile.src} type="image/avif" />
-      <source media="(min-width: 769px)" srcset={slide1Desktop.src} type="image/avif" />
-      <img 
-        src={slide1Desktop.src} 
-        alt="Facet Architecture Showcase Slide 1" 
-        class="hero-img slide-img active" 
-        decoding="async"
-        fetchpriority="high"
-        loading="eager"
-      />
-    </picture>
-  </div>
+    data-slides={JSON.stringify([slide1Mobile.src, slide2.src, slide3.src, slide4.src])}
+  ></div>
 
   <div id="hero-frame" class="hero-frame">
     <picture>
@@ -129,7 +95,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
   function initHero() {
     gsap.config({ force3D: true });
 
-    // SAST Clock
+    // Clock Execution
     const clockCanvas = document.getElementById('clock-canvas') as HTMLCanvasElement | null;
     if (clockCanvas) {
       const updateClock = () => {
@@ -146,13 +112,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
         const timeStr = `${hours}:${minutes}:${seconds} SAST`;
 
         const dpr = window.devicePixelRatio || 1;
-        const targetWidth = 160 * dpr;
-        const targetHeight = 24 * dpr;
-
-        if (clockCanvas.width !== targetWidth) {
-          clockCanvas.width = targetWidth;
-          clockCanvas.height = targetHeight;
-        }
+        clockCanvas.width = 160 * dpr;
+        clockCanvas.height = 24 * dpr;
 
         ctx.save();
         ctx.scale(dpr, dpr);
@@ -168,23 +129,22 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       setInterval(updateClock, 1000);
     }
 
-    // Dynamic Ken Burns Carousel Sequence
+    // Carousel Setup
     function startKenBurnsCarousel() {
       const fullscreenBg = document.getElementById('fullscreen-bg');
       const heroFrame = document.getElementById('hero-frame');
-
       if (!fullscreenBg || !heroFrame) return;
 
       const slideUrlsRaw = fullscreenBg.getAttribute('data-slides');
       if (!slideUrlsRaw) return;
 
-      const remainingSlideUrls: string[] = JSON.parse(slideUrlsRaw);
-
+      const slideUrls: string[] = JSON.parse(slideUrlsRaw);
       const fragment = document.createDocumentFragment();
-      remainingSlideUrls.forEach((url, idx) => {
+
+      slideUrls.forEach((url, idx) => {
         const img = document.createElement('img');
         img.src = url;
-        img.alt = `Facet Architecture Showcase Slide ${idx + 2}`;
+        img.alt = `Facet Architecture Showcase Slide ${idx + 1}`;
         img.className = 'hero-img slide-img';
         img.decoding = 'async';
         fragment.appendChild(img);
@@ -217,11 +177,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
         { xStart: 20, xEnd: -20, scaleStart: 1.15, scaleEnd: 1.05 }
       ];
 
-      gsap.fromTo(slides[0], 
-        { x: directions[0].xStart, scale: directions[0].scaleStart },
-        { x: directions[0].xEnd, scale: directions[0].scaleEnd, duration: 7.5, ease: 'none', force3D: true }
-      );
-
       setInterval(() => {
         const next = (current + 1) % slides.length;
         const dir = directions[next % directions.length];
@@ -240,7 +195,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
     if (isMobile) {
-      setTimeout(startKenBurnsCarousel, 2500);
+      setTimeout(startKenBurnsCarousel, 3000);
     } else {
       const logoCenter = document.getElementById('logo-center');
       const heroTextContainer = document.getElementById('hero-text-container');
@@ -304,7 +259,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     z-index: 10;
   }
 
-  /* CRITICAL: Set initial opacity to 1 so browser records LCP paint instantly without GSAP render delay */
   .fullscreen-bg {
     position: absolute;
     top: 0;
@@ -312,7 +266,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     width: 100vw;
     height: 100vh;
     z-index: 5;
-    opacity: 1;
     overflow: hidden;
     pointer-events: none;
   }
@@ -394,7 +347,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     transform-origin: center center;
     will-change: transform, opacity;
-    opacity: 1;
   }
 
   .intro-frame-img {
@@ -415,10 +367,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     will-change: transform, opacity;
   }
 
-  :global(.slide-img.active) {
-    opacity: 1;
-  }
-
   @media (max-width: 768px) {
     .logo-center-wrapper {
       display: none !important;
@@ -431,7 +379,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       height: 45vh;
       box-shadow: none;
       border-radius: 0;
-      opacity: 1;
+      opacity: 1 !important;
+      transform: none !important;
     }
 
     .hero-text-container {
