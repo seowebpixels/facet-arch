@@ -70,7 +70,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
         decoding="async"
         width="750"
         height="500"
-        />
+      />
     </picture>
   </div>
 
@@ -118,7 +118,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
         const targetWidth = 160 * dpr;
         const targetHeight = 24 * dpr;
 
-        // Prevent layout reflow by checking width/height without re-reading layout properties
         if (clockCanvas.width !== targetWidth) {
           clockCanvas.width = targetWidth;
           clockCanvas.height = targetHeight;
@@ -150,7 +149,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 
       const slideUrls: string[] = JSON.parse(slideUrlsRaw);
 
-      // Use DocumentFragment to batch DOM insertions and avoid forced layout reflows
       const fragment = document.createDocumentFragment();
       slideUrls.forEach((url, idx) => {
         const img = document.createElement('img');
@@ -167,7 +165,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       const slides = fullscreenBg.querySelectorAll<HTMLImageElement>('.slide-img');
       if (slides.length === 0) return;
 
-      // Batch GSAP sets purely through transform/opacity to prevent geometry recalculations
       slides.forEach((s, i) => {
         gsap.set(s, {
           position: 'absolute',
@@ -180,7 +177,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
         });
       });
 
-      // Fade out initial hero frame and fade in fullscreen background via composited hardware layers
       gsap.to(fullscreenBg, { opacity: 1, duration: 1.2, ease: 'power2.inOut' });
       gsap.to(heroFrame, { opacity: 0, duration: 1.0, ease: 'power2.inOut' });
 
@@ -212,7 +208,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       }, 5800);
     }
 
-    // Avoid reading layout geometry like window.innerWidth directly before animation setups
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
     if (isMobile) {
@@ -225,9 +220,9 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 
       if (!logoCenter || !heroTextContainer || !clock || !heroFrame) return;
 
-      // Animate exclusively using transforms (x, y, xPercent, yPercent) rather than layout top/left measurements
-      gsap.set(heroTextContainer, { xPercent: -50, yPercent: -50, opacity: 0 });
-      gsap.set(logoCenter, { xPercent: -50, yPercent: -50, scale: 1, opacity: 1 });
+      // Restored exact initial layout positioning while keeping reflow-free GSAP animations
+      gsap.set(heroTextContainer, { top: '50%', left: '50%', xPercent: -50, yPercent: -50, opacity: 0 });
+      gsap.set(logoCenter, { top: '50%', left: '50%', xPercent: -50, yPercent: -50, scale: 1, opacity: 1 });
       gsap.set(heroFrame, { opacity: 0, scale: 0.1, transformOrigin: 'center center' });
       gsap.set(clock, { opacity: 0, y: 15 });
 
@@ -238,8 +233,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 
       tl
         .to(heroTextContainer, { opacity: 1, duration: 0.6, delay: 0.4 })
-        .to(heroTextContainer, { y: -180, x: -350, xPercent: 0, yPercent: 0, duration: 1.0 })
-        .to(logoCenter, { y: -180, x: 800, xPercent: 0, scale: 0.55, opacity: 0, duration: 1.0 }, '<')
+        .to(heroTextContainer, { top: '130px', left: '30px', xPercent: 0, yPercent: 0, duration: 1.0 })
+        .to(logoCenter, { top: '130px', left: '120vw', xPercent: 0, scale: 0.55, opacity: 0, duration: 1.0 }, '<')
         .to(clock, { opacity: 1, y: 0, duration: 0.4 }, '-=0.3')
         .to(heroFrame, { opacity: 1, scale: 1, duration: 1.0, ease: 'power4.out' }, '-=0.5');
     }
@@ -295,14 +290,12 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 
   .hero-text-container {
     position: absolute;
-    top: 50%;
-    left: 50%;
     z-index: 999999;
     display: flex;
     flex-direction: row;
     gap: 12px;
     white-space: nowrap;
-    will-change: transform, opacity;
+    will-change: transform, top, left, opacity;
     pointer-events: none;
   }
 
@@ -351,7 +344,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     justify-content: center;
     z-index: 99999;
     pointer-events: none;
-    will-change: transform, opacity;
+    will-change: transform, top, left, opacity;
   }
 
   .site-logo {
@@ -414,9 +407,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     }
 
     .hero-text-container {
-      top: 105px !important;
-      left: 15px !important;
-      transform: none !important;
+      top: 105px;
+      left: 15px;
       gap: 6px;
       opacity: 1 !important;
     }
