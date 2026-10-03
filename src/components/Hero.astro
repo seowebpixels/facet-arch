@@ -8,24 +8,23 @@ import resBlannImg from '../assets/res-blann.avif';
 import ascotManorImg from '../assets/dev-ascot-manor.avif';
 import intStarckImg from '../assets/int-starck.avif';
 
-// Frontmatter
-const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 1000, quality: 90 });
-const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 90 });
+// --- FRONTMATTER OPTIMIZATION ---
+const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 640, quality: 75 });
+const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 85 });
 
-// Set mobile slides to 360px @ quality 50 (Slashes file sizes to ~10-12KiB each)
-const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 500, quality: 70 });
-const slide1Desktop = await getImage({ src: resDavidImg, format: 'avif', width: 1440, quality: 95 });
+const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 480, quality: 60 });
+const slide1Desktop = await getImage({ src: resDavidImg, format: 'avif', width: 1440, quality: 85 });
 
-const slide2Mobile = await getImage({ src: resBlannImg, format: 'avif', width: 500, quality: 70 });
-const slide2Desktop = await getImage({ src: resBlannImg, format: 'avif', width: 1440, quality: 95 });
+const slide2Mobile = await getImage({ src: resBlannImg, format: 'avif', width: 480, quality: 60 });
+const slide2Desktop = await getImage({ src: resBlannImg, format: 'avif', width: 1440, quality: 85 });
 
-const slide3Mobile = await getImage({ src: ascotManorImg, format: 'avif', width: 500, quality: 70 });
-const slide3Desktop = await getImage({ src: ascotManorImg, format: 'avif', width: 1440, quality: 95 });
+const slide3Mobile = await getImage({ src: ascotManorImg, format: 'avif', width: 480, quality: 60 });
+const slide3Desktop = await getImage({ src: ascotManorImg, format: 'avif', width: 1440, quality: 85 });
 
-const slide4Mobile = await getImage({ src: intStarckImg, format: 'avif', width: 500, quality: 70 });
-const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 95 });
+const slide4Mobile = await getImage({ src: intStarckImg, format: 'avif', width: 480, quality: 60 });
+const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 85 });
 
-const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 90 });
+const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 85 });
 ---
 
 <link 
@@ -49,11 +48,13 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
   <h2 class="lcp-seo-anchor">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
   <header id="hero-header">
+    <!-- FACET ARCHITECTURE TEXT (Initial Position: Center, Below Logo) -->
     <div id="hero-text-container" class="hero-text-container">
       <h1 id="text-facet" class="title-text text-facet">FACET</h1>
       <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
     </div>
 
+    <!-- LOGO CENTER (Initial Position: Dead Center) -->
     <div id="logo-center" class="logo-center-wrapper" role="img" aria-label="Facet Architecture Logo">
       <img 
         src={logoImg.src} 
@@ -77,21 +78,21 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     ></div>
 
     <div id="hero-frame" class="hero-frame">
-  <picture>
-    <source media="(max-width: 768px)" srcset={heroMobile.src} type="image/avif" />
-    <source media="(min-width: 769px)" srcset={heroDesktop.src} type="image/avif" />
-    <img 
-      src={heroDesktop.src} 
-      alt="Facet Architecture Initial Hero" 
-      class="hero-img intro-frame-img"
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
-      width={heroDesktop.attributes.width}
-      height={heroDesktop.attributes.height}
-    />
-  </picture>
-</div>
+      <picture>
+        <source media="(max-width: 768px)" srcset={heroMobile.src} type="image/avif" />
+        <source media="(min-width: 769px)" srcset={heroDesktop.src} type="image/avif" />
+        <img 
+          src={heroDesktop.src} 
+          alt="Facet Architecture Initial Hero" 
+          class="hero-img intro-frame-img"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          width={heroDesktop.attributes.width}
+          height={heroDesktop.attributes.height}
+        />
+      </picture>
+    </div>
   </main>
 
   <div id="hero-clock" class="hero-clock">
@@ -99,7 +100,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
   </div>
 </section>
 
-<!-- IS:INLINE + DELAYED INJECTION ELIMINATES NETWORK TREE FROM LIGHTHOUSE AUDIT -->
 <script is:inline>
   document.addEventListener('DOMContentLoaded', () => {
     // --- CANVAS CLOCK ---
@@ -135,40 +135,70 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       setInterval(updateClock, 1000);
     }
 
-    // --- CAROUSEL (Post-Load Injection) ---
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        const bg = document.getElementById('fullscreen-bg');
-        if (!bg) return;
+    // --- HERO ANIMATION SEQUENCE (DESKTOP & MOBILE) ---
+    const logoCenter = document.getElementById('logo-center');
+    const heroText = document.getElementById('hero-text-container');
+    const heroFrame = document.getElementById('hero-frame');
+    const bg = document.getElementById('fullscreen-bg');
 
-        const slidesAttr = bg.getAttribute('data-slides-mobile');
+    // Step 1: Hold Logo alone for 2.5s
+    setTimeout(() => {
+      // Step 2: Show FACET ARCHITECTURE below the logo, then animate to top header
+      if (heroText) {
+        heroText.classList.add('animate-to-header');
+      }
+
+      // Step 3: Shoot Logo off-screen vertically upwards
+      if (logoCenter) {
+        logoCenter.classList.add('animate-offscreen');
+      }
+
+      // Step 4: Dissolve Hero Frame card & start carousel
+      setTimeout(() => {
+        if (heroFrame) {
+          heroFrame.style.transition = 'opacity 1.2s ease-in-out';
+          heroFrame.style.opacity = '0';
+          setTimeout(() => { heroFrame.style.display = 'none'; }, 1200);
+        }
+
+        if (!bg) return;
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        const slidesAttr = isMobile 
+          ? bg.getAttribute('data-slides-mobile') 
+          : bg.getAttribute('data-slides-desktop');
+
         if (!slidesAttr) return;
 
         const urls = JSON.parse(slidesAttr);
         
-        // Dynamically create remaining slide elements after Lighthouse run completes
         urls.forEach((url, idx) => {
           const img = document.createElement('img');
           img.src = url;
-          img.alt = `Slide ${idx + 1}`;
+          img.alt = `Facet Architecture Slide ${idx + 1}`;
           img.style.cssText = `
             position: absolute; top:0; left:0; width:100vw; height:100vh;
             object-fit:cover; opacity:0; transition: opacity 1.8s ease-in-out;
+            will-change: opacity;
           `;
           bg.appendChild(img);
         });
 
-        // Simple loop transition
         const slides = bg.querySelectorAll('img');
+        if (slides.length === 0) return;
+
+        slides[0].style.opacity = '1';
+
         let current = 0;
         setInterval(() => {
           const next = (current + 1) % slides.length;
           slides[next].style.opacity = '1';
           slides[current].style.opacity = '0';
           current = next;
-        }, 5000);
-      }, 2000); // 2 second delay post-load bypasses Lighthouse audit pass completely
-    });
+        }, 5500);
+
+      }, 1000); // Trigger background carousel as text lands at top
+
+    }, 2500); // 2.5s Hold on initial Logo
   });
 </script>
 
@@ -212,15 +242,58 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     pointer-events: none;
   }
 
+  /* --- LOGO INITIAL POSITION (Center Screen) --- */
+  .logo-center-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(350px, 70vw);
+    height: min(350px, 70vw);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    pointer-events: none;
+    opacity: 1;
+    transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease-in-out;
+  }
+
+  /* Shoot logo off-screen */
+  .logo-center-wrapper.animate-offscreen {
+    transform: translate(-50%, -180vh);
+    opacity: 0;
+  }
+
+  .site-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* --- TEXT INITIAL POSITION (Below Logo at Center) --- */
   .hero-text-container {
     position: absolute;
+    top: calc(50% + min(180px, 35vw));
+    left: 50%;
+    transform: translate(-50%, 0);
     z-index: 999999;
     display: flex;
     flex-direction: row;
     gap: 12px;
     white-space: nowrap;
-    will-change: transform, top, left, opacity;
+    opacity: 0;
     pointer-events: none;
+    transition: top 1.4s cubic-bezier(0.77, 0, 0.175, 1), left 1.4s cubic-bezier(0.77, 0, 0.175, 1), transform 1.4s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.6s ease-in-out;
+  }
+
+  /* Trajectory move to header position */
+  .hero-text-container.animate-to-header {
+    top: 35px;
+    left: 50px;
+    transform: translate(0, 0);
+    opacity: 1;
   }
 
   .text-facet,
@@ -256,28 +329,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     display: block;
   }
 
-  .logo-center-wrapper {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 450px;
-    height: 450px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 99999;
-    pointer-events: none;
-    will-change: transform, top, left, opacity;
-  }
-
-  .site-logo {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
-  }
-
   .hero-frame {
     position: absolute;
     top: 22%;
@@ -297,21 +348,35 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     object-fit: cover;
   }
 
-  :global(.slide-img) {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    object-fit: cover !important;
-    display: block !important;
-    opacity: 0;
-    will-change: transform, opacity;
-  }
-
+  /* --- MOBILE RESPONSIVE ANIMATION --- */
   @media (max-width: 768px) {
+    /* Ensure logo displays prominently on Mobile initially */
     .logo-center-wrapper {
-      display: none !important;
+      display: flex !important;
+      width: 220px;
+      height: 220px;
+    }
+
+    .hero-text-container {
+      top: calc(50% + 120px);
+      left: 50%;
+      transform: translate(-50%, 0);
+      gap: 6px;
+    }
+
+    /* Mobile final header placement */
+    .hero-text-container.animate-to-header {
+      top: 25px;
+      left: 15px;
+      transform: translate(0, 0);
+    }
+
+    .text-facet,
+    .text-architecture {
+      font-size: clamp(1.05rem, 4.1vw, 1.5rem) !important;
+      font-weight: 900;
+      color: #111111;
+      line-height: 1;
     }
 
     .hero-frame {
@@ -324,26 +389,10 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       transform: none;
     }
 
-    .hero-text-container {
-      top: 105px;
-      left: 15px;
-      gap: 6px;
-      opacity: 1 !important;
-    }
-
-    .text-facet,
-    .text-architecture {
-      font-size: clamp(1.05rem, 4.1vw, 1.5rem) !important;
-      font-weight: 900;
-      color: #111111;
-      line-height: 1;
-    }
-
     .hero-clock {
       bottom: 20px;
       left: 15px;
       font-size: 0.85rem;
-      opacity: 1 !important;
     }
   }
 </style>
