@@ -101,7 +101,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 <script>
   import { gsap } from 'gsap';
 
-  function initAnimations() {
+  // Run animations immediately after DOM is ready so there are zero blank frames
+  document.addEventListener('DOMContentLoaded', () => {
     gsap.config({ force3D: true });
 
     // --- CANVAS CLOCK ---
@@ -138,7 +139,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       setInterval(updateClock, 1000);
     }
 
-    // --- CAROUSEL ---
+    // --- CAROUSEL & HERO ANIMATION ---
     function startKenBurnsCarousel() {
       const fullscreenBg = document.getElementById('fullscreen-bg');
       const heroFrame = document.getElementById('hero-frame');
@@ -216,7 +217,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
     if (isMobile) {
-      setTimeout(startKenBurnsCarousel, 3000);
+      setTimeout(startKenBurnsCarousel, 1000);
     } else {
       const logoCenter = document.getElementById('logo-center');
       const heroTextContainer = document.getElementById('hero-text-container');
@@ -242,14 +243,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
         .to(clock, { opacity: 1, y: 0, duration: 0.4 }, '-=0.3')
         .to(heroFrame, { opacity: 1, scale: 1, duration: 1.0, ease: 'power4.out' }, '-=0.5');
     }
-  }
-
-  // Execute after load to keep critical LCP path clean
-  if (document.readyState === 'complete') {
-    requestAnimationFrame(initAnimations);
-  } else {
-    window.addEventListener('load', () => requestAnimationFrame(initAnimations));
-  }
+  });
 </script>
 
 <style>
