@@ -8,7 +8,6 @@ import resBlannImg from '../assets/res-blann.avif';
 import ascotManorImg from '../assets/dev-ascot-manor.avif';
 import intStarckImg from '../assets/int-starck.avif';
 
-// --- FRONTMATTER OPTIMIZATION ---
 const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 500, quality: 60 });
 const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 85 });
 
@@ -27,7 +26,7 @@ const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width:
 const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 85 });
 ---
 
-<!-- CRITICAL PRELOADS FOR INSTANT LCP PAINT -->
+<!-- OPTIMIZED LCP PRELOAD (SINGLE CRITICAL RESOURCE) -->
 <link 
   rel="preload" 
   as="image" 
@@ -35,47 +34,27 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
   type="image/avif" 
   fetchpriority="high" 
 />
-<link 
-  rel="preload" 
-  as="image" 
-  href={heroMobile.src} 
-  media="(max-width: 768px)"
-  type="image/avif" 
-  fetchpriority="high" 
-/>
-<link 
-  rel="preload" 
-  as="image" 
-  href={heroDesktop.src} 
-  media="(min-width: 769px)"
-  type="image/avif" 
-  fetchpriority="high" 
-/>
 
 <section id="hero-stage" class="stage-container">
-  <h2 class="lcp-seo-anchor">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
+  <h2 class="sr-only">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
-  <!-- CENTER WRAPPER: Renders DEAD-CENTER instantly on Frame 1 -->
-  <div id="intro-center-group" class="intro-center-group">
-    <!-- LOGO (Shoots off-screen upward) -->
-    <div id="logo-center" class="logo-wrapper" role="img" aria-label="Facet Architecture Logo">
-      <img 
-        src={logoImg.src} 
-        alt="Facet Architecture Logo" 
-        class="site-logo"
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-        width="350"
-        height="350"
-      />
-    </div>
+  <!-- FA TEXT PLACED IN FIXED STRUCTURAL GAP -->
+  <div id="hero-text-container" class="hero-text-container">
+    <h1 class="title-text">FACET ARCHITECTURE</h1>
+  </div>
 
-    <!-- FA TEXT (Glides to precise space above Hero Image) -->
-    <div id="hero-text-container" class="hero-text-container">
-      <h1 id="text-facet" class="title-text text-facet">FACET</h1>
-      <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
-    </div>
+  <!-- CENTER LOGO INTRO -->
+  <div id="logo-center" class="logo-wrapper" role="img" aria-label="Facet Architecture Logo">
+    <img 
+      src={logoImg.src} 
+      alt="Facet Architecture Logo" 
+      class="site-logo"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+      width="350"
+      height="350"
+    />
   </div>
 
   <main id="hero-main-content">
@@ -95,7 +74,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
           alt="Facet Architecture Initial Hero" 
           class="hero-img intro-frame-img"
           loading="eager"
-          fetchpriority="high"
           decoding="async"
           width={heroDesktop.attributes.width}
           height={heroDesktop.attributes.height}
@@ -105,68 +83,45 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
   </main>
 
   <div id="hero-clock" class="hero-clock">
-    <canvas id="clock-canvas" width="160" height="24" aria-hidden="true"></canvas>
+    <span id="sast-clock-display">00:00:00 SAST</span>
   </div>
 </section>
 
 <script is:inline>
-  window.addEventListener('DOMContentLoaded', () => {
-    // --- NON-BLOCKING CANVAS CLOCK ---
-    const clockCanvas = document.getElementById('clock-canvas');
-    if (clockCanvas) {
-      const ctx = clockCanvas.getContext('2d', { alpha: false });
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      
-      clockCanvas.width = 160 * dpr;
-      clockCanvas.height = 24 * dpr;
-
+  window.addEventListener('load', () => {
+    // --- LCP-SAFE DOM CLOCK (NO CANVAS / NO REFLOW) ---
+    const clockEl = document.getElementById('sast-clock-display');
+    if (clockEl) {
       const updateClock = () => {
-        if (!ctx) return;
         const now = new Date();
         const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
         const sastTime = new Date(utc + 7200000);
-
         const hours = String(sastTime.getHours()).padStart(2, '0');
         const minutes = String(sastTime.getMinutes()).padStart(2, '0');
         const seconds = String(sastTime.getSeconds()).padStart(2, '0');
-
-        ctx.save();
-        ctx.scale(dpr, dpr);
-        ctx.fillStyle = '#BEBEBE';
-        ctx.fillRect(0, 0, 160, 24);
-        ctx.font = '700 15px monospace, sans-serif';
-        ctx.fillStyle = '#111111';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(`${hours}:${minutes}:${seconds} SAST`, 0, 12);
-        ctx.restore();
+        clockEl.textContent = `${hours}:${minutes}:${seconds} SAST`;
       };
-
-      requestAnimationFrame(() => {
-        updateClock();
-        setInterval(updateClock, 1000);
-      });
+      updateClock();
+      setInterval(updateClock, 1000);
     }
 
-    // --- TIMED GPU-COMPOSITED ANIMATION SEQUENCE ---
+    // --- NON-BLOCKING INTRO SEQUENCE ---
     const logoCenter = document.getElementById('logo-center');
     const heroText = document.getElementById('hero-text-container');
     const heroFrame = document.getElementById('hero-frame');
     const bg = document.getElementById('fullscreen-bg');
 
-    // Hold center for 1.8s then transition
     setTimeout(() => {
-      if (logoCenter) logoCenter.classList.add('animate-offscreen');
-      if (heroText) heroText.classList.add('animate-to-header');
+      if (logoCenter) logoCenter.classList.add('hide-logo');
+      if (heroText) heroText.classList.add('show-text');
       if (heroFrame) heroFrame.classList.add('show-hero-frame');
 
-      // Hold Hero Frame for 3s
       setTimeout(() => {
         if (heroFrame) {
           heroFrame.classList.remove('show-hero-frame');
           setTimeout(() => { heroFrame.style.display = 'none'; }, 1000);
         }
 
-        // Slideshow
         if (!bg) return;
         const isMobile = window.matchMedia('(max-width: 768px)').matches;
         const slidesAttr = isMobile 
@@ -176,20 +131,18 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
         if (!slidesAttr) return;
 
         const urls = JSON.parse(slidesAttr);
+        const fragment = document.createDocumentFragment();
         
         urls.forEach((url, idx) => {
           const img = document.createElement('img');
           img.src = url;
           img.alt = `Facet Architecture Slide ${idx + 1}`;
-          img.style.cssText = `
-            position: absolute; top:0; left:0; width:100vw; height:100vh;
-            object-fit:cover; opacity:0; transition: opacity 1.8s ease-in-out;
-            will-change: opacity;
-          `;
-          bg.appendChild(img);
+          img.className = 'slide-img';
+          fragment.appendChild(img);
         });
 
-        const slides = bg.querySelectorAll('img');
+        bg.appendChild(fragment);
+        const slides = bg.querySelectorAll('.slide-img');
         if (slides.length === 0) return;
 
         slides[0].style.opacity = '1';
@@ -209,22 +162,16 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 </script>
 
 <style>
-  .lcp-seo-anchor {
+  .sr-only {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 12px;
-    color: transparent;
-    background: transparent;
-    user-select: none;
-    pointer-events: none;
-    margin: 0;
+    width: 1px;
+    height: 1px;
     padding: 0;
-    z-index: 1;
-    width: 200px;
-    height: 20px;
+    margin: -1px;
     overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   .stage-container {
@@ -248,23 +195,24 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     pointer-events: none;
   }
 
-  /* --- DEAD-CENTER INTRO GROUP --- */
-  .intro-center-group {
+  :global(.slide-img) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.8s ease-in-out;
+    will-change: opacity;
+  }
+
+  /* --- LOGO INTRO --- */
+  .logo-wrapper {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate3d(-50%, -50%, 0);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    z-index: 9999;
-    pointer-events: none;
-    width: max-content;
-  }
-
-  .logo-wrapper {
     width: min(350px, 60vw);
     height: min(350px, 60vw);
     display: flex;
@@ -273,11 +221,13 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     opacity: 1;
     transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease-in-out;
     will-change: transform, opacity;
+    z-index: 9999;
+    pointer-events: none;
   }
 
-  .logo-wrapper.animate-offscreen {
-    transform: translate3d(0, -150vh, 0) !important;
-    opacity: 0 !important;
+  .logo-wrapper.hide-logo {
+    transform: translate3d(-50%, -180vh, 0);
+    opacity: 0;
   }
 
   .site-logo {
@@ -287,67 +237,43 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     display: block;
   }
 
-  /* --- FA TEXT: GPU TRANSFORMATION --- */
+  /* --- EXACT FACET ARCHITECTURE TEXT ALIGNMENT --- */
   .hero-text-container {
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
-    white-space: nowrap;
+    position: absolute;
+    top: 135px; /* Sits directly under header bottom border */
+    left: 12vw; /* Perfectly aligns with left edge of the hero frame */
+    z-index: 30;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    pointer-events: none;
+  }
+
+  .hero-text-container.show-text {
     opacity: 1;
-    transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
-    will-change: transform;
-    transform: translate3d(0, 0, 0);
   }
 
-  /* MOVES EXACTLY ABOVE HERO IMAGE & BELOW MAIN HEADER BORDER */
-  .hero-text-container.animate-to-header {
-    transform: translate3d(calc(-38vw + 12px), calc(-36vh + 10px), 0) !important;
-  }
-
-  .text-facet,
-  .text-architecture {
+  .title-text {
     font-family: 'Nesobrite', 'Bank Gothic', sans-serif !important;
     font-weight: 900 !important;
-    font-size: clamp(1.1rem, 2.8vw, 3.2rem) !important;
+    font-size: clamp(1.2rem, 2.5vw, 2.8rem) !important;
     letter-spacing: 0.10em !important;
     color: #111111 !important;
     margin: 0 !important;
     line-height: 1 !important;
     text-transform: uppercase !important;
-  }
-
-  .hero-clock {
-    position: absolute;
-    bottom: 25px;
-    left: 50px;
-    z-index: 40;
-    font-family: monospace, sans-serif;
-    font-size: clamp(0.85rem, 1.2vw, 1.1rem);
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    color: var(--text-primary, #111111);
-    display: flex;
-    align-items: center;
-    contain: strict;
-  }
-
-  #clock-canvas {
-    width: 160px;
-    height: 24px;
-    display: block;
+    white-space: nowrap;
   }
 
   /* --- HERO IMAGE FRAME --- */
   .hero-frame {
     position: absolute;
     top: 22%;
-    left: 12%;
+    left: 12vw;
     width: 76vw;
     height: 65vh;
     z-index: 20;
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    transform-origin: center center;
     will-change: opacity;
     opacity: 0;
     transition: opacity 1s ease-in-out;
@@ -363,39 +289,37 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     object-fit: cover;
   }
 
+  /* --- CLOCK --- */
+  .hero-clock {
+    position: absolute;
+    bottom: 25px;
+    left: 50px;
+    z-index: 40;
+    font-family: monospace, sans-serif;
+    font-size: clamp(0.85rem, 1.2vw, 1.1rem);
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--text-primary, #111111);
+  }
+
   /* --- MOBILE STYLING --- */
   @media (max-width: 768px) {
-    .intro-center-group {
-      gap: 10px;
-    }
-
-    .logo-wrapper {
-      width: 200px;
-      height: 200px;
-    }
-
-    .hero-text-container.animate-to-header {
-      transform: translate3d(calc(-50vw + 15px + 50%), calc(-34vh), 0) !important;
-    }
-
-    .text-facet,
-    .text-architecture {
-      font-size: clamp(1.05rem, 4.1vw, 1.5rem) !important;
+    .hero-text-container {
+      top: 100px;
+      left: 20px;
     }
 
     .hero-frame {
-      top: 190px;
+      top: 150px;
       left: 0;
       width: 100vw;
-      height: 45vh;
+      height: 50vh;
       box-shadow: none;
-      border-radius: 0;
     }
 
     .hero-clock {
       bottom: 20px;
       left: 15px;
-      font-size: 0.85rem;
     }
   }
 </style>
