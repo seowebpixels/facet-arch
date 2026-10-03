@@ -71,7 +71,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       />
     </div>
 
-    <!-- FA TEXT (Glides up to top-left header position, stays completely ON SCREEN) -->
+    <!-- FA TEXT (Glides to precise space above Hero Image) -->
     <div id="hero-text-container" class="hero-text-container">
       <h1 id="text-facet" class="title-text text-facet">FACET</h1>
       <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
@@ -153,20 +153,20 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     const heroFrame = document.getElementById('hero-frame');
     const bg = document.getElementById('fullscreen-bg');
 
-    // Step 1: Hold dead-center for 1.8s, then trigger transition
+    // Hold center for 1.8s then transition
     setTimeout(() => {
       if (logoCenter) logoCenter.classList.add('animate-offscreen');
       if (heroText) heroText.classList.add('animate-to-header');
       if (heroFrame) heroFrame.classList.add('show-hero-frame');
 
-      // Step 2: Hold Hero Frame 3s then fade out
+      // Hold Hero Frame for 3s
       setTimeout(() => {
         if (heroFrame) {
           heroFrame.classList.remove('show-hero-frame');
           setTimeout(() => { heroFrame.style.display = 'none'; }, 1000);
         }
 
-        // Step 3: Slideshow
+        // Slideshow
         if (!bg) return;
         const isMobile = window.matchMedia('(max-width: 768px)').matches;
         const slidesAttr = isMobile 
@@ -248,7 +248,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     pointer-events: none;
   }
 
-  /* --- DEAD-CENTER INTRO GROUP (GPU COMPOSITED) --- */
+  /* --- DEAD-CENTER INTRO GROUP --- */
   .intro-center-group {
     position: absolute;
     top: 50%;
@@ -275,7 +275,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     will-change: transform, opacity;
   }
 
-  /* LOGO SHOOTS OFF SCREEN UPWARD */
   .logo-wrapper.animate-offscreen {
     transform: translate3d(0, -150vh, 0) !important;
     opacity: 0 !important;
@@ -288,28 +287,28 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     display: block;
   }
 
-  /* --- FA TEXT: Pure GPU Transform Animation (No CLS / Non-composited errors) --- */
+  /* --- FA TEXT: GPU TRANSFORMATION --- */
   .hero-text-container {
     display: flex;
     flex-direction: row;
     gap: 12px;
     white-space: nowrap;
-    opacity: 1; /* Instant paint for zero element render delay */
+    opacity: 1;
     transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
     will-change: transform;
     transform: translate3d(0, 0, 0);
   }
 
-  /* FA TEXT MOVES TO TOP HEADER (CALCULATED FROM DEAD-CENTER) */
+  /* MOVES EXACTLY ABOVE HERO IMAGE & BELOW MAIN HEADER BORDER */
   .hero-text-container.animate-to-header {
-    transform: translate3d(calc(-50vw + 50px + 50%), calc(-50vh + 35px + 100%), 0) !important;
+    transform: translate3d(calc(-38vw + 12px), calc(-36vh + 10px), 0) !important;
   }
 
   .text-facet,
   .text-architecture {
     font-family: 'Nesobrite', 'Bank Gothic', sans-serif !important;
     font-weight: 900 !important;
-    font-size: clamp(1.2rem, 3.8vw, 4.1rem) !important;
+    font-size: clamp(1.1rem, 2.8vw, 3.2rem) !important;
     letter-spacing: 0.10em !important;
     color: #111111 !important;
     margin: 0 !important;
@@ -376,7 +375,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     }
 
     .hero-text-container.animate-to-header {
-      transform: translate3d(calc(-50vw + 15px + 50%), calc(-50vh + 25px + 100%), 0) !important;
+      transform: translate3d(calc(-50vw + 15px + 50%), calc(-34vh), 0) !important;
     }
 
     .text-facet,
