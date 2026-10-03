@@ -8,7 +8,7 @@ import resBlannImg from '../assets/res-blann.avif';
 import ascotManorImg from '../assets/dev-ascot-manor.avif';
 import intStarckImg from '../assets/int-starck.avif';
 
-const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 480, quality:  });
+const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 480, quality: 55 });
 const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 85 });
 
 const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 480, quality: 60 });
@@ -26,25 +26,15 @@ const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width:
 const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 85 });
 ---
 
-<!-- OPTIMIZED LCP PRELOAD (SINGLE CRITICAL RESOURCE) -->
-<link 
-  rel="preload" 
-  as="image" 
-  href={logoImg.src} 
-  type="image/avif" 
-  fetchpriority="high" 
-/>
+<!-- CRITICAL LCP PRELOAD -->
+<link rel="preload" as="image" href={logoImg.src} type="image/avif" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
-  <h2 class="sr-only">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
-
-  <!-- FA TEXT PLACED IN FIXED STRUCTURAL GAP -->
   <div id="hero-text-container" class="hero-text-container">
     <h1 class="title-text">FACET ARCHITECTURE</h1>
   </div>
 
-  <!-- CENTER LOGO INTRO -->
-  <div id="logo-center" class="logo-wrapper" role="img" aria-label="Facet Architecture Logo">
+  <div id="logo-center" class="logo-wrapper">
     <img 
       src={logoImg.src} 
       alt="Facet Architecture Logo" 
@@ -57,7 +47,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     />
   </div>
 
-  <main id="hero-main-content">
+  <main>
     <div 
       id="fullscreen-bg" 
       class="fullscreen-bg"
@@ -71,8 +61,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
         <source media="(min-width: 769px)" srcset={heroDesktop.src} type="image/avif" />
         <img 
           src={heroDesktop.src} 
-          alt="Facet Architecture Initial Hero" 
-          class="hero-img intro-frame-img"
+          alt="Facet Architecture Showcase" 
+          class="intro-frame-img"
           loading="eager"
           decoding="async"
           width={heroDesktop.attributes.width}
@@ -82,30 +72,24 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     </div>
   </main>
 
-  <div id="hero-clock" class="hero-clock">
+  <div class="hero-clock">
     <span id="sast-clock-display">00:00:00 SAST</span>
   </div>
 </section>
 
 <script is:inline>
   window.addEventListener('load', () => {
-    // --- LCP-SAFE DOM CLOCK (NO CANVAS / NO REFLOW) ---
     const clockEl = document.getElementById('sast-clock-display');
     if (clockEl) {
       const updateClock = () => {
         const now = new Date();
-        const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-        const sastTime = new Date(utc + 7200000);
-        const hours = String(sastTime.getHours()).padStart(2, '0');
-        const minutes = String(sastTime.getMinutes()).padStart(2, '0');
-        const seconds = String(sastTime.getSeconds()).padStart(2, '0');
-        clockEl.textContent = `${hours}:${minutes}:${seconds} SAST`;
+        const sastTime = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + 7200000);
+        clockEl.textContent = `${String(sastTime.getHours()).padStart(2, '0')}:${String(sastTime.getMinutes()).padStart(2, '0')}:${String(sastTime.getSeconds()).padStart(2, '0')} SAST`;
       };
       updateClock();
       setInterval(updateClock, 1000);
     }
 
-    // --- NON-BLOCKING INTRO SEQUENCE ---
     const logoCenter = document.getElementById('logo-center');
     const heroText = document.getElementById('hero-text-container');
     const heroFrame = document.getElementById('hero-frame');
@@ -136,7 +120,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
         urls.forEach((url, idx) => {
           const img = document.createElement('img');
           img.src = url;
-          img.alt = `Facet Architecture Slide ${idx + 1}`;
+          img.alt = `Slide ${idx + 1}`;
           img.className = 'slide-img';
           fragment.appendChild(img);
         });
@@ -162,18 +146,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 </script>
 
 <style>
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
-
   .stage-container {
     position: relative;
     width: 100vw;
@@ -207,7 +179,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     will-change: opacity;
   }
 
-  /* --- LOGO INTRO --- */
   .logo-wrapper {
     position: absolute;
     top: 50%;
@@ -222,27 +193,24 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     pointer-events: none;
   }
 
-  /* Only apply transition ON EXIT when hiding */
-.logo-wrapper.hide-logo {
-  transform: translate3d(-50%, -180vh, 0);
-  opacity: 0;
-  transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease-in-out;
-}
+  .logo-wrapper.hide-logo {
+    transform: translate3d(-50%, -180vh, 0);
+    opacity: 0;
+    transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease-in-out;
+  }
 
   .site-logo {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-  /* Content-visibility forces instantaneous GPU paint */
-  content-visibility: auto; 
-}
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    content-visibility: auto;
+  }
 
-  /* --- EXACT FACET ARCHITECTURE TEXT ALIGNMENT --- */
   .hero-text-container {
     position: absolute;
-    top: 135px; /* Sits directly under header bottom border */
-    left: 12vw; /* Perfectly aligns with left edge of the hero frame */
+    top: 135px;
+    left: 12vw;
     z-index: 30;
     opacity: 0;
     transition: opacity 1s ease-in-out;
@@ -265,7 +233,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     white-space: nowrap;
   }
 
-  /* --- HERO IMAGE FRAME --- */
   .hero-frame {
     position: absolute;
     top: 22%;
@@ -290,7 +257,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     object-fit: cover;
   }
 
-  /* --- CLOCK --- */
   .hero-clock {
     position: absolute;
     bottom: 25px;
@@ -303,7 +269,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     color: var(--text-primary, #111111);
   }
 
-  /* --- MOBILE STYLING --- */
   @media (max-width: 768px) {
     .hero-text-container {
       top: 100px;
