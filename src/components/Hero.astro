@@ -27,6 +27,14 @@ const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width:
 const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 85 });
 ---
 
+<!-- CRITICAL LCP PRELOAD: Preload the actual LCP element (Logo) to wipe out 170ms load delay -->
+<link 
+  rel="preload" 
+  as="image" 
+  href={logoImg.src} 
+  type="image/avif" 
+  fetchpriority="high" 
+/>
 <link 
   rel="preload" 
   as="image" 
@@ -44,16 +52,16 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
   fetchpriority="high" 
 />
 
+<!-- FIXED PORTAL LAYER FOR FA TEXT -->
+<div id="hero-text-container" class="hero-text-container">
+  <h1 id="text-facet" class="title-text text-facet">FACET</h1>
+  <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
+</div>
+
 <section id="hero-stage" class="stage-container">
   <h2 class="lcp-seo-anchor">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
-  <!-- FACET ARCHITECTURE TEXT (STATIONARY & PINNED TO TOP STAGE) -->
-  <div id="hero-text-container" class="hero-text-container">
-    <h1 id="text-facet" class="title-text text-facet">FACET</h1>
-    <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
-  </div>
-
-  <!-- LOGO CENTER (ONLY THIS OBJECT MOVES OFF-SCREEN) -->
+  <!-- LOGO CENTER -->
   <div id="logo-center" class="logo-center-wrapper" role="img" aria-label="Facet Architecture Logo">
     <img 
       src={logoImg.src} 
@@ -100,7 +108,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 
 <script is:inline>
   window.addEventListener('DOMContentLoaded', () => {
-    // --- NON-BLOCKING CANVAS CLOCK (ZERO FORCED REFLOW) ---
+    // --- CANVAS CLOCK ---
     const clockCanvas = document.getElementById('clock-canvas');
     if (clockCanvas) {
       const ctx = clockCanvas.getContext('2d', { alpha: false });
@@ -142,26 +150,24 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     const heroFrame = document.getElementById('hero-frame');
     const bg = document.getElementById('fullscreen-bg');
 
-    // STEP 1: Logo loads alone & holds for 2s
-
-    // STEP 2: At 2s -> FA appears below logo
+    // Step 2 (1.5s): FA Text appears below logo
     setTimeout(() => {
       if (heroText) heroText.classList.add('show-below-logo');
 
-      // STEP 3 & 4: At 3s -> ONLY Logo shoots off top, FA glides to top header
+      // Step 3 & 4: Logo shoots up offscreen; FA text glides to top header
       setTimeout(() => {
         if (logoCenter) logoCenter.classList.add('animate-offscreen');
         if (heroText) heroText.classList.add('animate-to-header');
         if (heroFrame) heroFrame.classList.add('show-hero-frame');
 
-        // STEP 5: Hold Hero Image for 3s, then fade out
+        // Step 5: Hold Hero Frame 3s then fade out
         setTimeout(() => {
           if (heroFrame) {
             heroFrame.classList.remove('show-hero-frame');
             setTimeout(() => { heroFrame.style.display = 'none'; }, 1000);
           }
 
-          // STEP 6: Load KB Slides Sequence
+          // Step 6: Slideshow
           if (!bg) return;
           const isMobile = window.matchMedia('(max-width: 768px)').matches;
           const slidesAttr = isMobile 
@@ -201,7 +207,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 
       }, 1000);
 
-    }, 2000);
+    }, 1500);
   });
 </script>
 
@@ -245,7 +251,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     pointer-events: none;
   }
 
-  /* --- LOGO: Dead Center initially (ISOLATED TARGET FOR OFFSCREEN SHOT) --- */
+  /* --- LOGO: Dead Center initially --- */
   .logo-center-wrapper {
     position: absolute;
     top: 50%;
@@ -256,14 +262,14 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     display: flex !important;
     align-items: center;
     justify-content: center;
-    z-index: 99999;
+    z-index: 99;
     pointer-events: none;
-    opacity: 1;
+    opacity: 1 !important; /* Immediate paint for LCP */
     transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease-in-out;
     will-change: transform, opacity;
   }
 
-  /* ONLY this class causes the logo to shoot off top of screen */
+  /* LOGO MOVES OFFSCREEN ALONE */
   .logo-center-wrapper.animate-offscreen {
     transform: translate(-50%, -180vh) !important;
     opacity: 0 !important;
@@ -276,46 +282,43 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     display: block;
   }
 
-  /* --- FACET ARCHITECTURE TEXT (ISOLATED & CANNOT BE SHOT OFFSCREEN) --- */
+  /* --- FACET ARCHITECTURE TEXT --- */
   .hero-text-container {
-    position: absolute;
-    top: calc(50% + min(180px, 35vw));
-    left: 50%;
-    transform: translate(-50%, 0);
-    z-index: 999999;
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: top 1.2s cubic-bezier(0.77, 0, 0.175, 1), left 1.2s cubic-bezier(0.77, 0, 0.175, 1), transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.6s ease-in-out;
-    will-change: top, left, transform, opacity;
+    position: fixed !important;
+    top: 62vh !important;
+    left: 50vw !important;
+    margin-left: -200px !important;
+    z-index: 999999 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 12px !important;
+    white-space: nowrap !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: top 1.2s cubic-bezier(0.77, 0, 0.175, 1), left 1.2s cubic-bezier(0.77, 0, 0.175, 1), margin-left 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.6s ease-in-out !important;
   }
 
-  /* Step 2: Fades in directly below logo */
   .hero-text-container.show-below-logo {
     opacity: 1 !important;
   }
 
-  /* Step 4: Moves to top header and LOCKS in place */
   .hero-text-container.animate-to-header {
     top: 35px !important;
     left: 50px !important;
-    transform: translate(0, 0) !important;
+    margin-left: 0 !important;
     opacity: 1 !important;
   }
 
   .text-facet,
   .text-architecture {
     font-family: 'Nesobrite', 'Bank Gothic', sans-serif !important;
-    font-weight: 900;
-    font-size: clamp(1.2rem, 3.8vw, 4.1rem);
-    letter-spacing: 0.10em;
-    color: #111111;
-    margin: 0;
-    line-height: 1;
-    text-transform: uppercase;
+    font-weight: 900 !important;
+    font-size: clamp(1.2rem, 3.8vw, 4.1rem) !important;
+    letter-spacing: 0.10em !important;
+    color: #111111 !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+    text-transform: uppercase !important;
   }
 
   .hero-clock {
@@ -373,24 +376,24 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     }
 
     .hero-text-container {
-      top: calc(50% + 120px);
-      left: 50%;
-      transform: translate(-50%, 0);
-      gap: 6px;
+      top: 58vh !important;
+      left: 50vw !important;
+      margin-left: -110px !important;
+      gap: 6px !important;
     }
 
     .hero-text-container.animate-to-header {
       top: 25px !important;
       left: 15px !important;
-      transform: translate(0, 0) !important;
+      margin-left: 0 !important;
     }
 
     .text-facet,
     .text-architecture {
       font-size: clamp(1.05rem, 4.1vw, 1.5rem) !important;
-      font-weight: 900;
-      color: #111111;
-      line-height: 1;
+      font-weight: 900 !important;
+      color: #111111 !important;
+      line-height: 1 !important;
     }
 
     .hero-frame {
