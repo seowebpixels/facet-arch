@@ -8,7 +8,7 @@ import resBlannImg from '../assets/res-blann.avif';
 import ascotManorImg from '../assets/dev-ascot-manor.avif';
 import intStarckImg from '../assets/int-starck.avif';
 
-const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 480, quality: 55 });
+const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 500, quality: 60 });
 const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 85 });
 
 const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 480, quality: 60 });
@@ -26,11 +26,11 @@ const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width:
 const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 85 });
 ---
 
-<!-- CRITICAL LCP PRELOAD -->
+<!-- PRELOAD CRITICAL ASSETS IN HEAD -->
 <link rel="preload" as="image" href={logoImg.src} type="image/avif" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
-  <div id="hero-text-container" class="hero-text-container">
+  <div id="hero-text-container" class="hero-text-container show-text">
     <h1 class="title-text">FACET ARCHITECTURE</h1>
   </div>
 
@@ -41,7 +41,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       class="site-logo"
       loading="eager"
       fetchpriority="high"
-      decoding="async"
+      decoding="sync"
       width="350"
       height="350"
     />
@@ -55,7 +55,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       data-slides-desktop={JSON.stringify([slide1Desktop.src, slide2Desktop.src, slide3Desktop.src, slide4Desktop.src])}
     ></div>
 
-    <div id="hero-frame" class="hero-frame">
+    <div id="hero-frame" class="hero-frame show-hero-frame">
       <picture>
         <source media="(max-width: 768px)" srcset={heroMobile.src} type="image/avif" />
         <source media="(min-width: 769px)" srcset={heroDesktop.src} type="image/avif" />
@@ -64,6 +64,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
           alt="Facet Architecture Showcase" 
           class="intro-frame-img"
           loading="eager"
+          fetchpriority="high"
           decoding="async"
           width={heroDesktop.attributes.width}
           height={heroDesktop.attributes.height}
@@ -78,27 +79,26 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 </section>
 
 <script is:inline>
-  window.addEventListener('load', () => {
-    const clockEl = document.getElementById('sast-clock-display');
-    if (clockEl) {
-      const updateClock = () => {
-        const now = new Date();
-        const sastTime = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + 7200000);
-        clockEl.textContent = `${String(sastTime.getHours()).padStart(2, '0')}:${String(sastTime.getMinutes()).padStart(2, '0')}:${String(sastTime.getSeconds()).padStart(2, '0')} SAST`;
-      };
-      updateClock();
-      setInterval(updateClock, 1000);
-    }
+  // Clock update
+  const clockEl = document.getElementById('sast-clock-display');
+  if (clockEl) {
+    const updateClock = () => {
+      const now = new Date();
+      const sastTime = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + 7200000);
+      clockEl.textContent = `${String(sastTime.getHours()).padStart(2, '0')}:${String(sastTime.getMinutes()).padStart(2, '0')}:${String(sastTime.getSeconds()).padStart(2, '0')} SAST`;
+    };
+    updateClock();
+    setInterval(updateClock, 1000);
+  }
 
+  window.addEventListener('DOMContentLoaded', () => {
     const logoCenter = document.getElementById('logo-center');
-    const heroText = document.getElementById('hero-text-container');
     const heroFrame = document.getElementById('hero-frame');
     const bg = document.getElementById('fullscreen-bg');
 
+    // Smoothly transition intro logo out after mount
     setTimeout(() => {
       if (logoCenter) logoCenter.classList.add('hide-logo');
-      if (heroText) heroText.classList.add('show-text');
-      if (heroFrame) heroFrame.classList.add('show-hero-frame');
 
       setTimeout(() => {
         if (heroFrame) {
@@ -139,9 +139,9 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
           current = next;
         }, 5500);
 
-      }, 3000);
+      }, 2500);
 
-    }, 1800);
+    }, 1200);
   });
 </script>
 
@@ -212,13 +212,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     top: 135px;
     left: 12vw;
     z-index: 30;
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
-    pointer-events: none;
-  }
-
-  .hero-text-container.show-text {
     opacity: 1;
+    pointer-events: none;
   }
 
   .title-text {
@@ -242,13 +237,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     z-index: 20;
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    will-change: opacity;
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
-  }
-
-  .hero-frame.show-hero-frame {
     opacity: 1;
+    transition: opacity 1s ease-in-out;
   }
 
   .intro-frame-img {
