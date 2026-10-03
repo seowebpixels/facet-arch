@@ -47,27 +47,25 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 <section id="hero-stage" class="stage-container">
   <h2 class="lcp-seo-anchor">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
-  <header id="hero-header">
-    <!-- FACET ARCHITECTURE TEXT -->
-    <div id="hero-text-container" class="hero-text-container">
-      <h1 id="text-facet" class="title-text text-facet">FACET</h1>
-      <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
-    </div>
+  <!-- FACET ARCHITECTURE TEXT (STATIONARY & PINNED TO TOP STAGE) -->
+  <div id="hero-text-container" class="hero-text-container">
+    <h1 id="text-facet" class="title-text text-facet">FACET</h1>
+    <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
+  </div>
 
-    <!-- LOGO CENTER -->
-    <div id="logo-center" class="logo-center-wrapper" role="img" aria-label="Facet Architecture Logo">
-      <img 
-        src={logoImg.src} 
-        alt="Facet Architecture Logo" 
-        class="site-logo"
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-        width="350"
-        height="350"
-      />
-    </div>
-  </header>
+  <!-- LOGO CENTER (ONLY THIS OBJECT MOVES OFF-SCREEN) -->
+  <div id="logo-center" class="logo-center-wrapper" role="img" aria-label="Facet Architecture Logo">
+    <img 
+      src={logoImg.src} 
+      alt="Facet Architecture Logo" 
+      class="site-logo"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+      width="350"
+      height="350"
+    />
+  </div>
 
   <main id="hero-main-content">
     <div 
@@ -101,29 +99,30 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 </section>
 
 <script is:inline>
-  document.addEventListener('DOMContentLoaded', () => {
-    // --- CANVAS CLOCK ---
+  window.addEventListener('DOMContentLoaded', () => {
+    // --- NON-BLOCKING CANVAS CLOCK (ZERO FORCED REFLOW) ---
     const clockCanvas = document.getElementById('clock-canvas');
     if (clockCanvas) {
-      const updateClock = () => {
-        const ctx = clockCanvas.getContext('2d');
-        if (!ctx) return;
+      const ctx = clockCanvas.getContext('2d', { alpha: false });
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      
+      clockCanvas.width = 160 * dpr;
+      clockCanvas.height = 24 * dpr;
 
+      const updateClock = () => {
+        if (!ctx) return;
         const now = new Date();
         const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-        const sastTime = new Date(utc + (3600000 * 2));
+        const sastTime = new Date(utc + 7200000);
 
         const hours = String(sastTime.getHours()).padStart(2, '0');
         const minutes = String(sastTime.getMinutes()).padStart(2, '0');
         const seconds = String(sastTime.getSeconds()).padStart(2, '0');
 
-        const dpr = window.devicePixelRatio || 1;
-        clockCanvas.width = 160 * dpr;
-        clockCanvas.height = 24 * dpr;
-
         ctx.save();
         ctx.scale(dpr, dpr);
-        ctx.clearRect(0, 0, 160, 24);
+        ctx.fillStyle = '#BEBEBE';
+        ctx.fillRect(0, 0, 160, 24);
         ctx.font = '700 15px monospace, sans-serif';
         ctx.fillStyle = '#111111';
         ctx.textBaseline = 'middle';
@@ -131,8 +130,10 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
         ctx.restore();
       };
 
-      updateClock();
-      setInterval(updateClock, 1000);
+      requestAnimationFrame(() => {
+        updateClock();
+        setInterval(updateClock, 1000);
+      });
     }
 
     // --- TIMED ANIMATION SEQUENCE ---
@@ -143,19 +144,14 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 
     // STEP 1: Logo loads alone & holds for 2s
 
-    // STEP 2: At 2s -> FA appears below logo (Hold together for 1s)
+    // STEP 2: At 2s -> FA appears below logo
     setTimeout(() => {
       if (heroText) heroText.classList.add('show-below-logo');
 
-      // STEP 3 & 4: At 3s -> Logo shoots off, FA moves to top header and LOCKS, Hero Image appears
+      // STEP 3 & 4: At 3s -> ONLY Logo shoots off top, FA glides to top header
       setTimeout(() => {
         if (logoCenter) logoCenter.classList.add('animate-offscreen');
-        
-        if (heroText) {
-          heroText.classList.remove('show-below-logo');
-          heroText.classList.add('animate-to-header');
-        }
-
+        if (heroText) heroText.classList.add('animate-to-header');
         if (heroFrame) heroFrame.classList.add('show-hero-frame');
 
         // STEP 5: Hold Hero Image for 3s, then fade out
@@ -249,7 +245,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     pointer-events: none;
   }
 
-  /* --- LOGO: Dead Center initially --- */
+  /* --- LOGO: Dead Center initially (ISOLATED TARGET FOR OFFSCREEN SHOT) --- */
   .logo-center-wrapper {
     position: absolute;
     top: 50%;
@@ -264,9 +260,10 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     pointer-events: none;
     opacity: 1;
     transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease-in-out;
+    will-change: transform, opacity;
   }
 
-  /* Only the logo shoots off screen */
+  /* ONLY this class causes the logo to shoot off top of screen */
   .logo-center-wrapper.animate-offscreen {
     transform: translate(-50%, -180vh) !important;
     opacity: 0 !important;
@@ -279,7 +276,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     display: block;
   }
 
-  /* --- FACET ARCHITECTURE TEXT --- */
+  /* --- FACET ARCHITECTURE TEXT (ISOLATED & CANNOT BE SHOT OFFSCREEN) --- */
   .hero-text-container {
     position: absolute;
     top: calc(50% + min(180px, 35vw));
@@ -293,14 +290,15 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     opacity: 0;
     pointer-events: none;
     transition: top 1.2s cubic-bezier(0.77, 0, 0.175, 1), left 1.2s cubic-bezier(0.77, 0, 0.175, 1), transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.6s ease-in-out;
+    will-change: top, left, transform, opacity;
   }
 
-  /* Step 2: Appears below logo */
+  /* Step 2: Fades in directly below logo */
   .hero-text-container.show-below-logo {
-    opacity: 1;
+    opacity: 1 !important;
   }
 
-  /* Step 4: Moves to top header and stays pinned forever */
+  /* Step 4: Moves to top header and LOCKS in place */
   .hero-text-container.animate-to-header {
     top: 35px !important;
     left: 50px !important;
@@ -332,7 +330,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     color: var(--text-primary, #111111);
     display: flex;
     align-items: center;
-    will-change: transform, opacity;
+    contain: strict;
   }
 
   #clock-canvas {
