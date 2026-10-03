@@ -8,7 +8,7 @@ import resBlannImg from '../assets/res-blann.avif';
 import ascotManorImg from '../assets/dev-ascot-manor.avif';
 import intStarckImg from '../assets/int-starck.avif';
 
-const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 480, quality: 55 });
+const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 500, quality: 60 });
 const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 85 });
 
 const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 480, quality: 60 });
@@ -26,14 +26,16 @@ const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width:
 const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 85 });
 ---
 
-<!-- PRELOAD CRITICAL ASSETS IN HEAD -->
+<!-- CRITICAL LCP PRELOAD FOR LOGO -->
 <link rel="preload" as="image" href={logoImg.src} type="image/avif" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
-  <div id="hero-text-container" class="hero-text-container show-text">
+  <!-- FA Title Positioned Initially at Center, Transitions to Top -->
+  <div id="hero-text-container" class="hero-text-container">
     <h1 class="title-text">FACET ARCHITECTURE</h1>
   </div>
 
+  <!-- Initial Center Intro Logo -->
   <div id="logo-center" class="logo-wrapper">
     <img 
       src={logoImg.src} 
@@ -41,7 +43,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       class="site-logo"
       loading="eager"
       fetchpriority="high"
-      decoding="sync"
+      decoding="async"
       width="350"
       height="350"
     />
@@ -55,7 +57,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       data-slides-desktop={JSON.stringify([slide1Desktop.src, slide2Desktop.src, slide3Desktop.src, slide4Desktop.src])}
     ></div>
 
-    <div id="hero-frame" class="hero-frame show-hero-frame">
+    <!-- Hidden initially during intro -->
+    <div id="hero-frame" class="hero-frame">
       <picture>
         <source media="(max-width: 768px)" srcset={heroMobile.src} type="image/avif" />
         <source media="(min-width: 769px)" srcset={heroDesktop.src} type="image/avif" />
@@ -63,8 +66,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
           src={heroDesktop.src} 
           alt="Facet Architecture Showcase" 
           class="intro-frame-img"
-          loading="eager"
-          fetchpriority="high"
+          loading="lazy"
           decoding="async"
           width={heroDesktop.attributes.width}
           height={heroDesktop.attributes.height}
@@ -79,7 +81,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 </section>
 
 <script is:inline>
-  // Clock update
+  // Real-time clock setup
   const clockEl = document.getElementById('sast-clock-display');
   if (clockEl) {
     const updateClock = () => {
@@ -93,55 +95,66 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 
   window.addEventListener('DOMContentLoaded', () => {
     const logoCenter = document.getElementById('logo-center');
+    const heroText = document.getElementById('hero-text-container');
     const heroFrame = document.getElementById('hero-frame');
     const bg = document.getElementById('fullscreen-bg');
 
-    // Smoothly transition intro logo out after mount
+    // STEP 1: 0s - 2s -> Only Logo visible.
+    // STEP 2: At 2s -> Show FA title under/with logo.
     setTimeout(() => {
-      if (logoCenter) logoCenter.classList.add('hide-logo');
+      if (heroText) heroText.classList.add('show-text');
 
+      // STEP 3: At 3s (1s after FA appears) -> Logo shoots off screen, FA moves to top header slot, Hero image appears.
       setTimeout(() => {
-        if (heroFrame) {
-          heroFrame.classList.remove('show-hero-frame');
-          setTimeout(() => { heroFrame.style.display = 'none'; }, 1000);
-        }
+        if (logoCenter) logoCenter.classList.add('hide-logo');
+        if (heroText) heroText.classList.add('move-to-top');
+        if (heroFrame) heroFrame.classList.add('show-hero-frame');
 
-        if (!bg) return;
-        const isMobile = window.matchMedia('(max-width: 768px)').matches;
-        const slidesAttr = isMobile 
-          ? bg.getAttribute('data-slides-mobile') 
-          : bg.getAttribute('data-slides-desktop');
+        // STEP 4: Reveal background slider
+        setTimeout(() => {
+          if (heroFrame) {
+            heroFrame.classList.remove('show-hero-frame');
+            setTimeout(() => { heroFrame.style.display = 'none'; }, 1000);
+          }
 
-        if (!slidesAttr) return;
+          if (!bg) return;
+          const isMobile = window.matchMedia('(max-width: 768px)').matches;
+          const slidesAttr = isMobile 
+            ? bg.getAttribute('data-slides-mobile') 
+            : bg.getAttribute('data-slides-desktop');
 
-        const urls = JSON.parse(slidesAttr);
-        const fragment = document.createDocumentFragment();
-        
-        urls.forEach((url, idx) => {
-          const img = document.createElement('img');
-          img.src = url;
-          img.alt = `Slide ${idx + 1}`;
-          img.className = 'slide-img';
-          fragment.appendChild(img);
-        });
+          if (!slidesAttr) return;
 
-        bg.appendChild(fragment);
-        const slides = bg.querySelectorAll('.slide-img');
-        if (slides.length === 0) return;
+          const urls = JSON.parse(slidesAttr);
+          const fragment = document.createDocumentFragment();
+          
+          urls.forEach((url, idx) => {
+            const img = document.createElement('img');
+            img.src = url;
+            img.alt = `Slide ${idx + 1}`;
+            img.className = 'slide-img';
+            fragment.appendChild(img);
+          });
 
-        slides[0].style.opacity = '1';
+          bg.appendChild(fragment);
+          const slides = bg.querySelectorAll('.slide-img');
+          if (slides.length === 0) return;
 
-        let current = 0;
-        setInterval(() => {
-          const next = (current + 1) % slides.length;
-          slides[next].style.opacity = '1';
-          slides[current].style.opacity = '0';
-          current = next;
-        }, 5500);
+          slides[0].style.opacity = '1';
 
-      }, 2500);
+          let current = 0;
+          setInterval(() => {
+            const next = (current + 1) % slides.length;
+            slides[next].style.opacity = '1';
+            slides[current].style.opacity = '0';
+            current = next;
+          }, 5500);
 
-    }, 1200);
+        }, 3000);
+
+      }, 1000);
+
+    }, 2000);
   });
 </script>
 
@@ -179,9 +192,10 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     will-change: opacity;
   }
 
+  /* INTRO LOGO (Center) */
   .logo-wrapper {
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: 50%;
     transform: translate3d(-50%, -50%, 0);
     width: min(350px, 60vw);
@@ -204,16 +218,29 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     height: 100%;
     object-fit: contain;
     display: block;
-    content-visibility: auto;
   }
 
+  /* FA TITLE ANIMATION */
   .hero-text-container {
     position: absolute;
+    top: 65%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    z-index: 30;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out, top 1.2s cubic-bezier(0.77, 0, 0.175, 1), left 1.2s cubic-bezier(0.77, 0, 0.175, 1), transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+    pointer-events: none;
+  }
+
+  .hero-text-container.show-text {
+    opacity: 1;
+  }
+
+  /* Moves FA to header space between top border & hero image */
+  .hero-text-container.move-to-top {
     top: 135px;
     left: 12vw;
-    z-index: 30;
-    opacity: 1;
-    pointer-events: none;
+    transform: translate3d(0, 0, 0);
   }
 
   .title-text {
@@ -228,6 +255,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     white-space: nowrap;
   }
 
+  /* HERO SHOWCASE FRAME */
   .hero-frame {
     position: absolute;
     top: 22%;
@@ -237,8 +265,12 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     z-index: 20;
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    opacity: 1;
+    opacity: 0;
     transition: opacity 1s ease-in-out;
+  }
+
+  .hero-frame.show-hero-frame {
+    opacity: 1;
   }
 
   .intro-frame-img {
@@ -260,7 +292,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
   }
 
   @media (max-width: 768px) {
-    .hero-text-container {
+    .hero-text-container.move-to-top {
       top: 100px;
       left: 20px;
     }
