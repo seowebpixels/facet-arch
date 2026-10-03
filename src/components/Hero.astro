@@ -48,13 +48,13 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
   <h2 class="lcp-seo-anchor">FACET ARCHITECTURE PORTFOLIO SHOWCASE GAUTENG</h2>
 
   <header id="hero-header">
-    <!-- FACET ARCHITECTURE TEXT (Initial Position: Center, Below Logo) -->
+    <!-- FACET ARCHITECTURE TEXT -->
     <div id="hero-text-container" class="hero-text-container">
       <h1 id="text-facet" class="title-text text-facet">FACET</h1>
       <h1 id="text-architecture" class="title-text text-architecture">ARCHITECTURE</h1>
     </div>
 
-    <!-- LOGO CENTER (Initial Position: Dead Center) -->
+    <!-- LOGO CENTER -->
     <div id="logo-center" class="logo-center-wrapper" role="img" aria-label="Facet Architecture Logo">
       <img 
         src={logoImg.src} 
@@ -135,70 +135,72 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       setInterval(updateClock, 1000);
     }
 
-    // --- HERO ANIMATION SEQUENCE (DESKTOP & MOBILE) ---
+    // --- TIMED ANIMATION SEQUENCE ---
     const logoCenter = document.getElementById('logo-center');
     const heroText = document.getElementById('hero-text-container');
     const heroFrame = document.getElementById('hero-frame');
     const bg = document.getElementById('fullscreen-bg');
 
-    // Step 1: Hold Logo alone for 2.5s
+    // STEP 1: Logo loads alone & holds for 2s (handled by CSS initial state)
+
+    // STEP 2: At 2s -> FA appears below logo (Hold together for 1s)
     setTimeout(() => {
-      // Step 2: Show FACET ARCHITECTURE below the logo, then animate to top header
-      if (heroText) {
-        heroText.classList.add('animate-to-header');
-      }
+      if (heroText) heroText.classList.add('show-below-logo');
 
-      // Step 3: Shoot Logo off-screen vertically upwards
-      if (logoCenter) {
-        logoCenter.classList.add('animate-offscreen');
-      }
-
-      // Step 4: Dissolve Hero Frame card & start carousel
+      // STEP 3 & 4: At 3s (2s + 1s hold) -> Logo shoots off, FA moves to top header, Hero Image appears
       setTimeout(() => {
-        if (heroFrame) {
-          heroFrame.style.transition = 'opacity 1.2s ease-in-out';
-          heroFrame.style.opacity = '0';
-          setTimeout(() => { heroFrame.style.display = 'none'; }, 1200);
-        }
+        if (logoCenter) logoCenter.classList.add('animate-offscreen');
+        if (heroText) heroText.classList.add('animate-to-header');
+        if (heroFrame) heroFrame.classList.add('show-hero-frame');
 
-        if (!bg) return;
-        const isMobile = window.matchMedia('(max-width: 768px)').matches;
-        const slidesAttr = isMobile 
-          ? bg.getAttribute('data-slides-mobile') 
-          : bg.getAttribute('data-slides-desktop');
+        // STEP 5: Hold Hero Image for 3s (3s mark + 3s hold = 6s total), then fade out
+        setTimeout(() => {
+          if (heroFrame) {
+            heroFrame.classList.remove('show-hero-frame');
+            setTimeout(() => { heroFrame.style.display = 'none'; }, 1000);
+          }
 
-        if (!slidesAttr) return;
+          // STEP 6: Load KB Slides Sequence
+          if (!bg) return;
+          const isMobile = window.matchMedia('(max-width: 768px)').matches;
+          const slidesAttr = isMobile 
+            ? bg.getAttribute('data-slides-mobile') 
+            : bg.getAttribute('data-slides-desktop');
 
-        const urls = JSON.parse(slidesAttr);
-        
-        urls.forEach((url, idx) => {
-          const img = document.createElement('img');
-          img.src = url;
-          img.alt = `Facet Architecture Slide ${idx + 1}`;
-          img.style.cssText = `
-            position: absolute; top:0; left:0; width:100vw; height:100vh;
-            object-fit:cover; opacity:0; transition: opacity 1.8s ease-in-out;
-            will-change: opacity;
-          `;
-          bg.appendChild(img);
-        });
+          if (!slidesAttr) return;
 
-        const slides = bg.querySelectorAll('img');
-        if (slides.length === 0) return;
+          const urls = JSON.parse(slidesAttr);
+          
+          urls.forEach((url, idx) => {
+            const img = document.createElement('img');
+            img.src = url;
+            img.alt = `Facet Architecture Slide ${idx + 1}`;
+            img.style.cssText = `
+              position: absolute; top:0; left:0; width:100vw; height:100vh;
+              object-fit:cover; opacity:0; transition: opacity 1.8s ease-in-out;
+              will-change: opacity;
+            `;
+            bg.appendChild(img);
+          });
 
-        slides[0].style.opacity = '1';
+          const slides = bg.querySelectorAll('img');
+          if (slides.length === 0) return;
 
-        let current = 0;
-        setInterval(() => {
-          const next = (current + 1) % slides.length;
-          slides[next].style.opacity = '1';
-          slides[current].style.opacity = '0';
-          current = next;
-        }, 5500);
+          slides[0].style.opacity = '1';
 
-      }, 1000); // Trigger background carousel as text lands at top
+          let current = 0;
+          setInterval(() => {
+            const next = (current + 1) % slides.length;
+            slides[next].style.opacity = '1';
+            slides[current].style.opacity = '0';
+            current = next;
+          }, 5500);
 
-    }, 2500); // 2.5s Hold on initial Logo
+        }, 3000); // Step 5: Hero Image 3s duration
+
+      }, 1000); // Step 2: 1s joint hold duration
+
+    }, 2000); // Step 1: 2s initial logo hold
   });
 </script>
 
@@ -242,7 +244,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     pointer-events: none;
   }
 
-  /* --- LOGO INITIAL POSITION (Center Screen) --- */
+  /* --- LOGO: Dead Center initially --- */
   .logo-center-wrapper {
     position: absolute;
     top: 50%;
@@ -250,7 +252,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     transform: translate(-50%, -50%);
     width: min(350px, 70vw);
     height: min(350px, 70vw);
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
     z-index: 99999;
@@ -259,7 +261,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease-in-out;
   }
 
-  /* Shoot logo off-screen */
+  /* Step 3: Logo shoots off screen */
   .logo-center-wrapper.animate-offscreen {
     transform: translate(-50%, -180vh);
     opacity: 0;
@@ -272,7 +274,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     display: block;
   }
 
-  /* --- TEXT INITIAL POSITION (Below Logo at Center) --- */
+  /* --- FACET ARCHITECTURE TEXT --- */
   .hero-text-container {
     position: absolute;
     top: calc(50% + min(180px, 35vw));
@@ -283,12 +285,17 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     flex-direction: row;
     gap: 12px;
     white-space: nowrap;
-    opacity: 0;
+    opacity: 0; /* Hidden initially in Step 1 */
     pointer-events: none;
-    transition: top 1.4s cubic-bezier(0.77, 0, 0.175, 1), left 1.4s cubic-bezier(0.77, 0, 0.175, 1), transform 1.4s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.6s ease-in-out;
+    transition: top 1.2s cubic-bezier(0.77, 0, 0.175, 1), left 1.2s cubic-bezier(0.77, 0, 0.175, 1), transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.6s ease-in-out;
   }
 
-  /* Trajectory move to header position */
+  /* Step 2: Appears below logo */
+  .hero-text-container.show-below-logo {
+    opacity: 1;
+  }
+
+  /* Step 4: Glides to top header and STAYS THERE */
   .hero-text-container.animate-to-header {
     top: 35px;
     left: 50px;
@@ -329,6 +336,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     display: block;
   }
 
+  /* --- HERO IMAGE FRAME --- */
   .hero-frame {
     position: absolute;
     top: 22%;
@@ -340,6 +348,13 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     transform-origin: center center;
     will-change: transform, opacity;
+    opacity: 0; /* Hidden during intro sequence */
+    transition: opacity 1s ease-in-out;
+  }
+
+  /* Step 5: Fades in for 3s */
+  .hero-frame.show-hero-frame {
+    opacity: 1;
   }
 
   .intro-frame-img {
@@ -348,11 +363,9 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     object-fit: cover;
   }
 
-  /* --- MOBILE RESPONSIVE ANIMATION --- */
+  /* --- MOBILE STYLING --- */
   @media (max-width: 768px) {
-    /* Ensure logo displays prominently on Mobile initially */
     .logo-center-wrapper {
-      display: flex !important;
       width: 220px;
       height: 220px;
     }
@@ -364,7 +377,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       gap: 6px;
     }
 
-    /* Mobile final header placement */
     .hero-text-container.animate-to-header {
       top: 25px;
       left: 15px;
