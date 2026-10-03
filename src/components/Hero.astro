@@ -8,20 +8,20 @@ import resBlannImg from '../assets/res-blann.avif';
 import ascotManorImg from '../assets/dev-ascot-manor.avif';
 import intStarckImg from '../assets/int-starck.avif';
 
-const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 360, quality: 60 });
+const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 360, quality: 90 });
 const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 80 });
 
 // Drop mobile slides to width 480 (covers 360px @ 1.33x dpr) and quality 60
-const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 480, quality: 60 });
+const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 400, quality: 55 });
 const slide1Desktop = await getImage({ src: resDavidImg, format: 'avif', width: 1440, quality: 80 });
 
-const slide2Mobile = await getImage({ src: resBlannImg, format: 'avif', width: 480, quality: 60 });
+const slide2Mobile = await getImage({ src: resBlannImg, format: 'avif', width: 400, quality: 55 });
 const slide2Desktop = await getImage({ src: resBlannImg, format: 'avif', width: 1440, quality: 80 });
 
-const slide3Mobile = await getImage({ src: ascotManorImg, format: 'avif', width: 480, quality: 60 });
+const slide3Mobile = await getImage({ src: ascotManorImg, format: 'avif', width: 400, quality: 55 });
 const slide3Desktop = await getImage({ src: ascotManorImg, format: 'avif', width: 1440, quality: 80 });
 
-const slide4Mobile = await getImage({ src: intStarckImg, format: 'avif', width: 480, quality: 60 });
+const slide4Mobile = await getImage({ src: intStarckImg, format: 'avif', width: 400, quality: 55 });
 const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 80 });
 
 const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 80 });
