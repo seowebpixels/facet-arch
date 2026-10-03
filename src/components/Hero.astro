@@ -141,19 +141,24 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     const heroFrame = document.getElementById('hero-frame');
     const bg = document.getElementById('fullscreen-bg');
 
-    // STEP 1: Logo loads alone & holds for 2s (handled by CSS initial state)
+    // STEP 1: Logo loads alone & holds for 2s
 
     // STEP 2: At 2s -> FA appears below logo (Hold together for 1s)
     setTimeout(() => {
       if (heroText) heroText.classList.add('show-below-logo');
 
-      // STEP 3 & 4: At 3s (2s + 1s hold) -> Logo shoots off, FA moves to top header, Hero Image appears
+      // STEP 3 & 4: At 3s -> Logo shoots off, FA moves to top header and LOCKS, Hero Image appears
       setTimeout(() => {
         if (logoCenter) logoCenter.classList.add('animate-offscreen');
-        if (heroText) heroText.classList.add('animate-to-header');
+        
+        if (heroText) {
+          heroText.classList.remove('show-below-logo');
+          heroText.classList.add('animate-to-header');
+        }
+
         if (heroFrame) heroFrame.classList.add('show-hero-frame');
 
-        // STEP 5: Hold Hero Image for 3s (3s mark + 3s hold = 6s total), then fade out
+        // STEP 5: Hold Hero Image for 3s, then fade out
         setTimeout(() => {
           if (heroFrame) {
             heroFrame.classList.remove('show-hero-frame');
@@ -196,11 +201,11 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
             current = next;
           }, 5500);
 
-        }, 3000); // Step 5: Hero Image 3s duration
+        }, 3000);
 
-      }, 1000); // Step 2: 1s joint hold duration
+      }, 1000);
 
-    }, 2000); // Step 1: 2s initial logo hold
+    }, 2000);
   });
 </script>
 
@@ -261,10 +266,10 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease-in-out;
   }
 
-  /* Step 3: Logo shoots off screen */
+  /* Only the logo shoots off screen */
   .logo-center-wrapper.animate-offscreen {
-    transform: translate(-50%, -180vh);
-    opacity: 0;
+    transform: translate(-50%, -180vh) !important;
+    opacity: 0 !important;
   }
 
   .site-logo {
@@ -285,7 +290,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     flex-direction: row;
     gap: 12px;
     white-space: nowrap;
-    opacity: 0; /* Hidden initially in Step 1 */
+    opacity: 0;
     pointer-events: none;
     transition: top 1.2s cubic-bezier(0.77, 0, 0.175, 1), left 1.2s cubic-bezier(0.77, 0, 0.175, 1), transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.6s ease-in-out;
   }
@@ -295,12 +300,12 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     opacity: 1;
   }
 
-  /* Step 4: Glides to top header and STAYS THERE */
+  /* Step 4: Moves to top header and stays pinned forever */
   .hero-text-container.animate-to-header {
-    top: 35px;
-    left: 50px;
-    transform: translate(0, 0);
-    opacity: 1;
+    top: 35px !important;
+    left: 50px !important;
+    transform: translate(0, 0) !important;
+    opacity: 1 !important;
   }
 
   .text-facet,
@@ -348,11 +353,10 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     transform-origin: center center;
     will-change: transform, opacity;
-    opacity: 0; /* Hidden during intro sequence */
+    opacity: 0;
     transition: opacity 1s ease-in-out;
   }
 
-  /* Step 5: Fades in for 3s */
   .hero-frame.show-hero-frame {
     opacity: 1;
   }
@@ -378,9 +382,9 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     }
 
     .hero-text-container.animate-to-header {
-      top: 25px;
-      left: 15px;
-      transform: translate(0, 0);
+      top: 25px !important;
+      left: 15px !important;
+      transform: translate(0, 0) !important;
     }
 
     .text-facet,
