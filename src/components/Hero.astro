@@ -1,7 +1,9 @@
 ---
 import { getImage } from 'astro:assets';
-import heroLogoImg from '../assets/facet-logo-white.avif';
+import fs from 'node:fs';
+import path from 'node:path';
 
+import heroLogoImg from '../assets/facet-logo-white.avif';
 import resHeroImg from '../assets/res-eoa-1597-v2.avif';
 import resDavidImg from '../assets/res-david.avif';
 import resBlannImg from '../assets/res-blann.avif';
@@ -23,11 +25,11 @@ const slide3Desktop = await getImage({ src: ascotManorImg, format: 'avif', width
 const slide4Mobile = await getImage({ src: intStarckImg, format: 'avif', width: 480, quality: 60 });
 const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 85 });
 
-const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 85 });
+// Convert the 33KB logo file directly into a Base64 URI during build time (0ms network delay)
+const logoPath = path.resolve('src/assets/facet-logo-white.avif');
+const logoBuffer = fs.readFileSync(logoPath);
+const logoBase64 = `data:image/avif;base64,${logoBuffer.toString('base64')}`;
 ---
-
-<!-- CRITICAL EARLY DISCOVERY LINK -->
-<link rel="preload" as="image" href={logoImg.src} type="image/avif" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
   <!-- Title Element -->
@@ -38,7 +40,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
   <!-- Center Intro Logo -->
   <div id="logo-center" class="logo-wrapper animate-logo">
     <img 
-      src={logoImg.src} 
+      src={logoBase64} 
       alt="Facet Architecture Logo" 
       class="site-logo"
       loading="eager"
