@@ -1,9 +1,6 @@
 ---
 import { getImage } from 'astro:assets';
-import fs from 'node:fs';
-import path from 'node:path';
 
-import heroLogoImg from '../assets/facet-logo-white.avif';
 import resHeroImg from '../assets/res-eoa-1597-v2.avif';
 import resDavidImg from '../assets/res-david.avif';
 import resBlannImg from '../assets/res-blann.avif';
@@ -24,11 +21,6 @@ const slide3Desktop = await getImage({ src: ascotManorImg, format: 'avif', width
 
 const slide4Mobile = await getImage({ src: intStarckImg, format: 'avif', width: 480, quality: 60 });
 const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 85 });
-
-// Convert the 33KB logo file directly into a Base64 URI during build time (0ms network delay)
-const logoPath = path.resolve('src/assets/facet-logo-white.avif');
-const logoBuffer = fs.readFileSync(logoPath);
-const logoBase64 = `data:image/avif;base64,${logoBuffer.toString('base64')}`;
 ---
 
 <section id="hero-stage" class="stage-container">
@@ -37,18 +29,25 @@ const logoBase64 = `data:image/avif;base64,${logoBuffer.toString('base64')}`;
     <h1 class="title-text">FACET ARCHITECTURE</h1>
   </div>
 
-  <!-- Center Intro Logo -->
+  <!-- Center Intro Logo (Inline Vector SVG) -->
   <div id="logo-center" class="logo-wrapper animate-logo">
-    <img 
-      src={logoBase64} 
-      alt="Facet Architecture Logo" 
-      class="site-logo"
-      loading="eager"
-      fetchpriority="high"
-      decoding="sync"
-      width="350"
-      height="350"
-    />
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" class="site-logo" aria-label="Facet Architecture Logo">
+      <g fill="none" stroke="#FFFFFF" stroke-width="1.5" opacity="0.85">
+        <circle cx="310" cy="500" r="220" stroke-dasharray="6,6" />
+        <circle cx="680" cy="500" r="150" stroke-dasharray="6,6" />
+        <line x1="310" y1="200" x2="310" y2="800" stroke-dasharray="8,8" />
+        <line x1="100" y1="500" x2="900" y2="500" stroke-dasharray="8,8" />
+        <path d="M 310 230 L 310 210 M 300 220 L 310 210 L 320 220" />
+        <path d="M 870 500 L 890 500 M 880 490 L 890 500 L 880 510" />
+      </g>
+      <g fill="#CCCCCC">
+        <path d="M 310 280 A 220 220 0 1 0 310 720 A 170 170 0 1 1 310 280 Z" />
+        <circle cx="310" cy="500" r="45" fill="#FFFFFF" />
+        <circle cx="440" cy="500" r="90" />
+        <circle cx="720" cy="500" r="90" />
+      </g>
+      <text x="500" y="760" font-family="'Nesobrite', 'Bank Gothic', sans-serif" font-weight="900" font-size="38" fill="#FFFFFF" letter-spacing="0.25em" text-anchor="middle">FACET ARCHITECTURE</text>
+    </svg>
   </div>
 
   <main>
