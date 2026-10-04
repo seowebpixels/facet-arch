@@ -26,7 +26,7 @@ const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width:
 const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 85 });
 ---
 
-<!-- CRITICAL LCP PRELOAD -->
+<!-- CRITICAL EARLY DISCOVERY LINK -->
 <link rel="preload" as="image" href={logoImg.src} type="image/avif" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
@@ -35,7 +35,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     <h1 class="title-text">FACET ARCHITECTURE</h1>
   </div>
 
-  <!-- Center Intro Logo (Instant render for 0ms Element Render Delay) -->
+  <!-- Center Intro Logo -->
   <div id="logo-center" class="logo-wrapper animate-logo">
     <img 
       src={logoImg.src} 
@@ -81,18 +81,17 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 </section>
 
 <script is:inline>
-  // Prevent browser scroll position retention
   if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual';
   }
   window.scrollTo(0, 0);
 
-  // Defer non-critical JS execution to avoid forced reflow during paint
+  // Totally non-blocking initialization loop
   window.addEventListener('load', () => {
     window.scrollTo(0, 0);
 
-    const initScripts = () => {
-      // Clock script
+    const runDeferredTasks = () => {
+      // Clock
       const clockEl = document.getElementById('sast-clock-display');
       if (clockEl) {
         const updateClock = () => {
@@ -104,7 +103,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
         setInterval(updateClock, 1000);
       }
 
-      // Background Slider
+      // Slide Loader
       const bg = document.getElementById('fullscreen-bg');
       const heroFrame = document.getElementById('hero-frame');
 
@@ -151,9 +150,9 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     };
 
     if ('requestIdleCallback' in window) {
-      requestIdleCallback(initScripts);
+      requestIdleCallback(runDeferredTasks, { timeout: 2000 });
     } else {
-      setTimeout(initScripts, 100);
+      setTimeout(runDeferredTasks, 200);
     }
   });
 </script>
@@ -192,7 +191,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     will-change: opacity;
   }
 
-  /* LOGO WRAPPER (Paints instantly on frame 0 to maximize LCP) */
   .logo-wrapper {
     position: absolute;
     top: 50%;
@@ -231,7 +229,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     display: block;
   }
 
-  /* FA TITLE ANIMATION */
   .hero-text-container {
     position: absolute;
     top: 0;
@@ -274,7 +271,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     white-space: nowrap;
   }
 
-  /* HERO FRAME ANIMATION */
   .hero-frame {
     position: absolute;
     top: 22%;
