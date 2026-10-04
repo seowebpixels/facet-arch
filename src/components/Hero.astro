@@ -26,16 +26,16 @@ const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width:
 const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 85 });
 ---
 
-<!-- CRITICAL LCP PRELOAD FOR LOGO -->
+<!-- CRITICAL PRELOAD -->
 <link rel="preload" as="image" href={logoImg.src} type="image/avif" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
-  <!-- FA Title Positioned Initially at Center, Transitions to Top -->
+  <!-- Title Element (Centered initially via GPU transform) -->
   <div id="hero-text-container" class="hero-text-container">
     <h1 class="title-text">FACET ARCHITECTURE</h1>
   </div>
 
-  <!-- Initial Center Intro Logo -->
+  <!-- Center Intro Logo -->
   <div id="logo-center" class="logo-wrapper">
     <img 
       src={logoImg.src} 
@@ -57,7 +57,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       data-slides-desktop={JSON.stringify([slide1Desktop.src, slide2Desktop.src, slide3Desktop.src, slide4Desktop.src])}
     ></div>
 
-    <!-- Hidden initially during intro -->
+    <!-- Hidden Hero Image -->
     <div id="hero-frame" class="hero-frame">
       <picture>
         <source media="(max-width: 768px)" srcset={heroMobile.src} type="image/avif" />
@@ -81,6 +81,12 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 </section>
 
 <script is:inline>
+  // Force browser scroll position to absolute top on load/reload
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+  window.scrollTo(0, 0);
+
   // Real-time clock setup
   const clockEl = document.getElementById('sast-clock-display');
   if (clockEl) {
@@ -94,23 +100,24 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
   }
 
   window.addEventListener('DOMContentLoaded', () => {
+    window.scrollTo(0, 0);
+
     const logoCenter = document.getElementById('logo-center');
     const heroText = document.getElementById('hero-text-container');
     const heroFrame = document.getElementById('hero-frame');
     const bg = document.getElementById('fullscreen-bg');
 
-    // STEP 1: 0s - 2s -> Only Logo visible.
-    // STEP 2: At 2s -> Show FA title under/with logo.
+    // 1. Show FA title under logo
     setTimeout(() => {
       if (heroText) heroText.classList.add('show-text');
 
-      // STEP 3: At 3s (1s after FA appears) -> Logo shoots off screen, FA moves to top header slot, Hero image appears.
+      // 2. Animate logo off, title up to header, reveal main hero image
       setTimeout(() => {
         if (logoCenter) logoCenter.classList.add('hide-logo');
         if (heroText) heroText.classList.add('move-to-top');
         if (heroFrame) heroFrame.classList.add('show-hero-frame');
 
-        // STEP 4: Reveal background slider
+        // 3. Initialize background slider sequence
         setTimeout(() => {
           if (heroFrame) {
             heroFrame.classList.remove('show-hero-frame');
@@ -150,11 +157,11 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
             current = next;
           }, 5500);
 
-        }, 3000);
+        }, 2500);
 
       }, 1000);
 
-    }, 2000);
+    }, 1500);
   });
 </script>
 
@@ -192,12 +199,12 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     will-change: opacity;
   }
 
-  /* INTRO LOGO (Center) */
+  /* LOGO WRAPPER */
   .logo-wrapper {
     position: absolute;
-    top: 45%;
+    top: 50%;
     left: 50%;
-    transform: translate3d(-50%, -50%, 0);
+    transform: translate3d(-50%, -60%, 0);
     width: min(350px, 60vw);
     height: min(350px, 60vw);
     display: flex;
@@ -205,10 +212,11 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     justify-content: center;
     z-index: 9999;
     pointer-events: none;
+    will-change: transform, opacity;
   }
 
   .logo-wrapper.hide-logo {
-    transform: translate3d(-50%, -180vh, 0);
+    transform: translate3d(-50%, -200vh, 0);
     opacity: 0;
     transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease-in-out;
   }
@@ -220,27 +228,27 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     display: block;
   }
 
-  /* FA TITLE ANIMATION */
+  /* FA TITLE ANIMATION (GPU COMPOSITED ONLY) */
   .hero-text-container {
     position: absolute;
-    top: 65%;
-    left: 50%;
-    transform: translate3d(-50%, -50%, 0);
+    top: 0;
+    left: 0;
     z-index: 30;
     opacity: 0;
-    transition: opacity 0.8s ease-in-out, top 1.2s cubic-bezier(0.77, 0, 0.175, 1), left 1.2s cubic-bezier(0.77, 0, 0.175, 1), transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
     pointer-events: none;
+    /* Composite positioning using translate3d to avoid layout thrashing */
+    transform: translate3d(calc(50vw - 50%), calc(50vh + 100px), 0);
+    transition: opacity 0.8s ease-in-out, transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+    will-change: transform, opacity;
   }
 
   .hero-text-container.show-text {
     opacity: 1;
   }
 
-  /* Moves FA to header space between top border & hero image */
+  /* Smooth move to header position via pure GPU transform */
   .hero-text-container.move-to-top {
-    top: 135px;
-    left: 12vw;
-    transform: translate3d(0, 0, 0);
+    transform: translate3d(12vw, 135px, 0);
   }
 
   .title-text {
@@ -255,7 +263,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     white-space: nowrap;
   }
 
-  /* HERO SHOWCASE FRAME */
+  /* HERO FRAME */
   .hero-frame {
     position: absolute;
     top: 22%;
@@ -267,6 +275,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     opacity: 0;
     transition: opacity 1s ease-in-out;
+    will-change: opacity;
   }
 
   .hero-frame.show-hero-frame {
@@ -293,8 +302,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 
   @media (max-width: 768px) {
     .hero-text-container.move-to-top {
-      top: 100px;
-      left: 20px;
+      transform: translate3d(20px, 100px, 0);
     }
 
     .hero-frame {
