@@ -8,7 +8,7 @@ import resBlannImg from '../assets/res-blann.avif';
 import ascotManorImg from '../assets/dev-ascot-manor.avif';
 import intStarckImg from '../assets/int-starck.avif';
 
-const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 480, quality: 55 });
+const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 500, quality: 60 });
 const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 85 });
 
 const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 480, quality: 60 });
@@ -30,12 +30,12 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 <link rel="preload" as="image" href={logoImg.src} type="image/avif" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
-  <!-- Title Element (CSS Animating to header slot) -->
+  <!-- Title Element -->
   <div id="hero-text-container" class="hero-text-container animate-title">
     <h1 class="title-text">FACET ARCHITECTURE</h1>
   </div>
 
-  <!-- Center Intro Logo (CSS Animating upwards) -->
+  <!-- Center Intro Logo (Instant render for 0ms Element Render Delay) -->
   <div id="logo-center" class="logo-wrapper animate-logo">
     <img 
       src={logoImg.src} 
@@ -43,7 +43,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       class="site-logo"
       loading="eager"
       fetchpriority="high"
-      decoding="async"
+      decoding="sync"
       width="350"
       height="350"
     />
@@ -57,7 +57,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       data-slides-desktop={JSON.stringify([slide1Desktop.src, slide2Desktop.src, slide3Desktop.src, slide4Desktop.src])}
     ></div>
 
-    <!-- Hero Showcase Frame (CSS Animating opacity) -->
+    <!-- Hero Showcase Frame -->
     <div id="hero-frame" class="hero-frame animate-frame">
       <picture>
         <source media="(max-width: 768px)" srcset={heroMobile.src} type="image/avif" />
@@ -67,7 +67,6 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
           alt="Facet Architecture Showcase" 
           class="intro-frame-img"
           loading="eager"
-          fetchpriority="high"
           decoding="async"
           width={heroDesktop.attributes.width}
           height={heroDesktop.attributes.height}
@@ -82,70 +81,80 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 </section>
 
 <script is:inline>
-  // Prevent browser scroll position retention on refresh
+  // Prevent browser scroll position retention
   if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual';
   }
   window.scrollTo(0, 0);
 
-  // SAST Clock
-  const clockEl = document.getElementById('sast-clock-display');
-  if (clockEl) {
-    const updateClock = () => {
-      const now = new Date();
-      const sastTime = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + 7200000);
-      clockEl.textContent = `${String(sastTime.getHours()).padStart(2, '0')}:${String(sastTime.getMinutes()).padStart(2, '0')}:${String(sastTime.getSeconds()).padStart(2, '0')} SAST`;
-    };
-    updateClock();
-    setInterval(updateClock, 1000);
-  }
-
-  // Background Slider Delay (Runs after intro CSS animation)
+  // Defer non-critical JS execution to avoid forced reflow during paint
   window.addEventListener('load', () => {
     window.scrollTo(0, 0);
-    const bg = document.getElementById('fullscreen-bg');
-    const heroFrame = document.getElementById('hero-frame');
 
-    setTimeout(() => {
-      if (heroFrame) {
-        heroFrame.style.opacity = '0';
-        setTimeout(() => { heroFrame.style.display = 'none'; }, 1000);
+    const initScripts = () => {
+      // Clock script
+      const clockEl = document.getElementById('sast-clock-display');
+      if (clockEl) {
+        const updateClock = () => {
+          const now = new Date();
+          const sastTime = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + 7200000);
+          clockEl.textContent = `${String(sastTime.getHours()).padStart(2, '0')}:${String(sastTime.getMinutes()).padStart(2, '0')}:${String(sastTime.getSeconds()).padStart(2, '0')} SAST`;
+        };
+        updateClock();
+        setInterval(updateClock, 1000);
       }
 
-      if (!bg) return;
-      const isMobile = window.matchMedia('(max-width: 768px)').matches;
-      const slidesAttr = isMobile 
-        ? bg.getAttribute('data-slides-mobile') 
-        : bg.getAttribute('data-slides-desktop');
+      // Background Slider
+      const bg = document.getElementById('fullscreen-bg');
+      const heroFrame = document.getElementById('hero-frame');
 
-      if (!slidesAttr) return;
+      setTimeout(() => {
+        if (heroFrame) {
+          heroFrame.style.opacity = '0';
+          setTimeout(() => { heroFrame.style.display = 'none'; }, 1000);
+        }
 
-      const urls = JSON.parse(slidesAttr);
-      const fragment = document.createDocumentFragment();
-      
-      urls.forEach((url, idx) => {
-        const img = document.createElement('img');
-        img.src = url;
-        img.alt = `Slide ${idx + 1}`;
-        img.className = 'slide-img';
-        fragment.appendChild(img);
-      });
+        if (!bg) return;
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        const slidesAttr = isMobile 
+          ? bg.getAttribute('data-slides-mobile') 
+          : bg.getAttribute('data-slides-desktop');
 
-      bg.appendChild(fragment);
-      const slides = bg.querySelectorAll('.slide-img');
-      if (slides.length === 0) return;
+        if (!slidesAttr) return;
 
-      slides[0].style.opacity = '1';
+        const urls = JSON.parse(slidesAttr);
+        const fragment = document.createDocumentFragment();
+        
+        urls.forEach((url, idx) => {
+          const img = document.createElement('img');
+          img.src = url;
+          img.alt = `Slide ${idx + 1}`;
+          img.className = 'slide-img';
+          fragment.appendChild(img);
+        });
 
-      let current = 0;
-      setInterval(() => {
-        const next = (current + 1) % slides.length;
-        slides[next].style.opacity = '1';
-        slides[current].style.opacity = '0';
-        current = next;
-      }, 5500);
+        bg.appendChild(fragment);
+        const slides = bg.querySelectorAll('.slide-img');
+        if (slides.length === 0) return;
 
-    }, 5500);
+        slides[0].style.opacity = '1';
+
+        let current = 0;
+        setInterval(() => {
+          const next = (current + 1) % slides.length;
+          slides[next].style.opacity = '1';
+          slides[current].style.opacity = '0';
+          current = next;
+        }, 5500);
+
+      }, 4500);
+    };
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(initScripts);
+    } else {
+      setTimeout(initScripts, 100);
+    }
   });
 </script>
 
@@ -183,7 +192,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     will-change: opacity;
   }
 
-  /* LOGO WRAPPER & ANIMATION */
+  /* LOGO WRAPPER (Paints instantly on frame 0 to maximize LCP) */
   .logo-wrapper {
     position: absolute;
     top: 50%;
@@ -196,11 +205,12 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     justify-content: center;
     z-index: 9999;
     pointer-events: none;
+    opacity: 1;
     will-change: transform, opacity;
   }
 
   .animate-logo {
-    animation: shootLogo 1.2s cubic-bezier(0.77, 0, 0.175, 1) 2.8s forwards;
+    animation: shootLogo 1.2s cubic-bezier(0.77, 0, 0.175, 1) 2.2s forwards;
   }
 
   @keyframes shootLogo {
@@ -234,7 +244,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
   }
 
   .animate-title {
-    animation: revealAndMoveTitle 2.2s cubic-bezier(0.77, 0, 0.175, 1) 1.8s forwards;
+    animation: revealAndMoveTitle 2.0s cubic-bezier(0.77, 0, 0.175, 1) 1.2s forwards;
   }
 
   @keyframes revealAndMoveTitle {
@@ -242,7 +252,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
       opacity: 0;
       transform: translate3d(calc(50vw - 50%), calc(50vh + 100px), 0);
     }
-    25% {
+    30% {
       opacity: 1;
       transform: translate3d(calc(50vw - 50%), calc(50vh + 100px), 0);
     }
@@ -280,7 +290,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
   }
 
   .animate-frame {
-    animation: revealFrame 1s ease-in-out 3.0s forwards;
+    animation: revealFrame 1s ease-in-out 2.4s forwards;
   }
 
   @keyframes revealFrame {
@@ -316,7 +326,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
         opacity: 0;
         transform: translate3d(calc(50vw - 50%), calc(50vh + 100px), 0);
       }
-      25% {
+      30% {
         opacity: 1;
         transform: translate3d(calc(50vw - 50%), calc(50vh + 100px), 0);
       }
