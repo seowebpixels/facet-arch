@@ -220,7 +220,7 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     display: block;
   }
 
-  /* FA TITLE ANIMATION */
+  /* FA TITLE ANIMATION (GPU Composited) */
   .hero-text-container {
     position: absolute;
     top: 65%;
@@ -228,7 +228,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     transform: translate3d(-50%, -50%, 0);
     z-index: 30;
     opacity: 0;
-    transition: opacity 0.8s ease-in-out, top 1.2s cubic-bezier(0.77, 0, 0.175, 1), left 1.2s cubic-bezier(0.77, 0, 0.175, 1), transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+    will-change: transform, opacity;
+    transition: opacity 0.8s ease-in-out, transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
     pointer-events: none;
   }
 
@@ -236,11 +237,9 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     opacity: 1;
   }
 
-  /* Moves FA to header space between top border & hero image */
+  /* Moves FA to header space using hardware-accelerated transform */
   .hero-text-container.move-to-top {
-    top: 135px;
-    left: 12vw;
-    transform: translate3d(0, 0, 0);
+    transform: translate3d(calc(-50vw + 12vw + 50%), calc(-65vh + 135px), 0);
   }
 
   .title-text {
@@ -293,14 +292,13 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 
   @media (max-width: 768px) {
     .hero-text-container.move-to-top {
-      top: 100px;
-      left: 20px;
+      transform: translate3d(calc(-50vw + 20px + 50%), calc(-65vh + 100px), 0);
     }
 
     .hero-frame {
       top: 150px;
       left: 0;
-      width: 100vw;
+      width: 100%;
       height: 50vh;
       box-shadow: none;
     }
