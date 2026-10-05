@@ -298,19 +298,18 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     /* Target the intro frame image and the active slide images directly on mobile */
     .hero-frame,
     .fullscreen-bg {
-      top: 150px !important;
+      top: 0 !important;
       left: 0 !important;
       width: 100% !important;
-      height: auto !important;
-      aspect-ratio: 16 / 9 !important;
-      box-shadow: none !important;
+      height: 100vh !important;
+      aspect-ratio: auto !important;
     }
 
     :global(.slide-img),
     .intro-frame-img {
       width: 100% !important;
-      height: 100% !important;
-      object-fit: contain !important;
+      height: 100vh !important;
+      object-fit: cover !important;
     }
   
     .hero-clock {
