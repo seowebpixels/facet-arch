@@ -24,7 +24,8 @@ const slide3Desktop = await getImage({ src: ascotManorImg, format: 'avif', width
 const slide4Mobile = await getImage({ src: intStarckImg, format: 'avif', width: 768, quality: 85 });
 const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 90 });
 
-const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 850, height: 850, quality: 90 });
+// Updated logo optimization size
+const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 500, height: 500, quality: 90 });
 
 // Slide sources for dynamic loading
 const mobileSlideSrcs = [slide1Mobile.src, slide2Mobile.src, slide3Mobile.src, slide4Mobile.src];
@@ -231,9 +232,9 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     text-align: center;
   }
 
-  /* LOGO PRELOADER WRAPPER - Restored full scale size up to 350px */
+  /* LOGO PRELOADER WRAPPER - CSS clamp cap increased to allow up to 500px rendering */
   .logo-preloader-wrapper {
-    width: clamp(200px, 25vw, 850px);
+    width: clamp(320px, 50vw, 850px);
     height: auto;
     opacity: 0;
     transform: scale(0.95);
@@ -258,14 +259,14 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     display: block;
   }
 
-  /* BRAND TEXT STYLING */
+  /* BRAND TEXT STYLING - Bold & Controlled Positioning */
   .brand-title-text {
     position: fixed;
-    top: 58%;
+    top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 280px); /* Bounded offset directly below the logo */
     font-family: 'Nesobrite', 'Bank Gothic', sans-serif !important;
-    font-weight: 800 !important;
+    font-weight: 900 !important; /* Extra Bold weight */
     font-size: clamp(1.5rem, 2.5vw, 2.25rem) !important;
     letter-spacing: 0.12em !important;
     color: #000000 !important;
@@ -275,19 +276,18 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     white-space: nowrap;
     opacity: 0;
     z-index: 350;
-    transition: opacity 0.6s ease, top 1s cubic-bezier(0.65, 0, 0.35, 1), left 1s cubic-bezier(0.65, 0, 0.35, 1), transform 1s cubic-bezier(0.65, 0, 0.35, 1), font-size 1s ease;
+    transition: opacity 0.6s ease, transform 1s cubic-bezier(0.65, 0, 0.35, 1), font-size 1s ease;
+    will-change: transform, opacity;
   }
 
   .brand-title-text.show-text {
     opacity: 1;
   }
 
-  /* DOCKED TOP-LEFT HEADER STATE - Clean position inside screen bounds */
+  /* DOCKED TOP-LEFT HEADER STATE - Smooth relative translate to stay in bounds */
   .brand-title-text.dock-top-left {
-    top: 2rem;
-    left: 2rem;
-    transform: translate(0, 0);
-    font-size: clamp(1rem, 1.5vw, 1.4rem) !important;
+    transform: translate(calc(-50vw + 2rem + 50%), calc(-50vh + 2rem + 50%));
+    font-size: clamp(1.1rem, 1.8vw, 1.5rem) !important;
   }
 
   /* MAIN STAGE */
@@ -372,8 +372,7 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
   /* MOBILE RESPONSIVE ADJUSTMENTS */
   @media (max-width: 768px) {
     .brand-title-text.dock-top-left {
-      top: 1rem;
-      left: 1rem;
+      transform: translate(calc(-50vw + 1rem + 50%), calc(-50vh + 1rem + 50%));
       font-size: 1rem !important;
     }
 
