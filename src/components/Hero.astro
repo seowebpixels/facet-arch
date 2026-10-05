@@ -8,25 +8,25 @@ import resBlannImg from '../assets/kb-res-blann.avif';
 import ascotManorImg from '../assets/dev-ascot-manor.avif';
 import intStarckImg from '../assets/int-starck.avif';
 
-// Optimized explicitly for 9:16 / Phone Wallpaper dimensions (e.g., 1080x1920 scaled to 432x768 / 480x853)
-const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 480, height: 853, quality: 65 });
+// Pre-render image optimizations for Mobile & Desktop
+const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 768, quality: 80 });
 const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 85 });
 
-const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 480, height: 853, quality: 65 });
+const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 768, quality: 80 });
 const slide1Desktop = await getImage({ src: resDavidImg, format: 'avif', width: 1440, quality: 85 });
 
-const slide2Mobile = await getImage({ src: resBlannImg, format: 'avif', width: 480, height: 853, quality: 65 });
+const slide2Mobile = await getImage({ src: resBlannImg, format: 'avif', width: 768, quality: 80 });
 const slide2Desktop = await getImage({ src: resBlannImg, format: 'avif', width: 1440, quality: 85 });
 
-const slide3Mobile = await getImage({ src: ascotManorImg, format: 'avif', width: 480, height: 853, quality: 65 });
+const slide3Mobile = await getImage({ src: ascotManorImg, format: 'avif', width: 768, quality: 80 });
 const slide3Desktop = await getImage({ src: ascotManorImg, format: 'avif', width: 1440, quality: 85 });
 
-const slide4Mobile = await getImage({ src: intStarckImg, format: 'avif', width: 480, height: 853, quality: 65 });
+const slide4Mobile = await getImage({ src: intStarckImg, format: 'avif', width: 768, quality: 80 });
 const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 85 });
 
 const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 85 });
 
-// Extract src strings into clean frontmatter arrays
+// Slide sources for dynamic loading
 const mobileSlideSrcs = [slide1Mobile.src, slide2Mobile.src, slide3Mobile.src, slide4Mobile.src];
 const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.src, slide4Desktop.src];
 ---
@@ -35,7 +35,7 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
 <link rel="preload" as="image" href={logoImg.src} type="image/avif" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
-  <!-- FA Title Positioned Initially at Center, Transitions to Top -->
+  <!-- FA Title: Always persistent on top layer -->
   <div id="hero-text-container" class="hero-text-container">
     <h1 class="title-text">FACET ARCHITECTURE</h1>
   </div>
@@ -55,6 +55,7 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
   </div>
 
   <main>
+    <!-- Ken Burns / Background Slide Showcase -->
     <div 
       id="fullscreen-bg" 
       class="fullscreen-bg"
@@ -62,7 +63,7 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
       data-slides-desktop={JSON.stringify(desktopSlideSrcs)}
     ></div>
 
-    <!-- Hidden initially during intro -->
+    <!-- Initial Hero Frame Image -->
     <div id="hero-frame" class="hero-frame">
       <picture>
         <source media="(max-width: 768px)" srcset={heroMobile.src} type="image/avif" />
@@ -71,10 +72,8 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
           src={heroDesktop.src} 
           alt="Facet Architecture Showcase" 
           class="intro-frame-img"
-          loading="lazy"
+          loading="eager"
           decoding="async"
-          width={heroDesktop.attributes.width}
-          height={heroDesktop.attributes.height}
         />
       </picture>
     </div>
@@ -86,7 +85,7 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
 </section>
 
 <script is:inline>
-  // Real-time clock setup
+  // Real-time SAST Clock
   const clockEl = document.getElementById('sast-clock-display');
   if (clockEl) {
     const updateClock = () => {
@@ -104,67 +103,64 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     const heroFrame = document.getElementById('hero-frame');
     const bg = document.getElementById('fullscreen-bg');
 
-    // STEP 1: 0s - 2s -> Only Logo visible.
-    // STEP 2: At 2s -> Show FA title under/with logo.
+    // STEP 1: Show FA title initially
+    if (heroText) heroText.classList.add('show-text');
+
+    // STEP 2: At 2s -> Animate logo off-screen & move FA title to top persistent slot
     setTimeout(() => {
-      if (heroText) heroText.classList.add('show-text');
+      if (logoCenter) logoCenter.classList.add('hide-logo');
+      if (heroText) heroText.classList.add('move-to-top');
+      if (heroFrame) heroFrame.classList.add('show-hero-frame');
 
-      // STEP 3: At 3s (1s after FA appears) -> Logo shoots off screen, FA moves to top header slot, Hero image appears.
+      // STEP 3: Reveal background slider after hero frame display
       setTimeout(() => {
-        if (logoCenter) logoCenter.classList.add('hide-logo');
-        if (heroText) heroText.classList.add('move-to-top');
-        if (heroFrame) heroFrame.classList.add('show-hero-frame');
+        if (heroFrame) {
+          heroFrame.classList.remove('show-hero-frame');
+          setTimeout(() => { heroFrame.style.display = 'none'; }, 1000);
+        }
 
-        // STEP 4: Reveal background slider
-        setTimeout(() => {
-          if (heroFrame) {
-            heroFrame.classList.remove('show-hero-frame');
-            setTimeout(() => { heroFrame.style.display = 'none'; }, 1000);
-          }
+        if (!bg) return;
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        const slidesAttr = isMobile 
+          ? bg.getAttribute('data-slides-mobile') 
+          : bg.getAttribute('data-slides-desktop');
 
-          if (!bg) return;
-          const isMobile = window.matchMedia('(max-width: 768px)').matches;
-          const slidesAttr = isMobile 
-            ? bg.getAttribute('data-slides-mobile') 
-            : bg.getAttribute('data-slides-desktop');
+        if (!slidesAttr) return;
 
-          if (!slidesAttr) return;
+        let urls = [];
+        try {
+          urls = JSON.parse(slidesAttr);
+        } catch (e) {
+          console.error('Failed to parse slide URLs:', e);
+          return;
+        }
 
-          let urls = [];
-          try {
-            urls = JSON.parse(slidesAttr);
-          } catch (e) {
-            console.error('Failed to parse slide URLs:', e);
-            return;
-          }
+        const fragment = document.createDocumentFragment();
+        
+        urls.forEach((url, idx) => {
+          const img = document.createElement('img');
+          img.src = url;
+          img.alt = `Slide ${idx + 1}`;
+          img.className = 'slide-img';
+          fragment.appendChild(img);
+        });
 
-          const fragment = document.createDocumentFragment();
-          
-          urls.forEach((url, idx) => {
-            const img = document.createElement('img');
-            img.src = url;
-            img.alt = `Slide ${idx + 1}`;
-            img.className = 'slide-img';
-            fragment.appendChild(img);
-          });
+        bg.appendChild(fragment);
+        const slides = bg.querySelectorAll('.slide-img');
+        if (slides.length === 0) return;
 
-          bg.appendChild(fragment);
-          const slides = bg.querySelectorAll('.slide-img');
-          if (slides.length === 0) return;
+        // Show first slide immediately
+        slides[0].style.opacity = '1';
 
-          slides[0].style.opacity = '1';
+        let current = 0;
+        setInterval(() => {
+          const next = (current + 1) % slides.length;
+          slides[next].style.opacity = '1';
+          slides[current].style.opacity = '0';
+          current = next;
+        }, 5500);
 
-          let current = 0;
-          setInterval(() => {
-            const next = (current + 1) % slides.length;
-            slides[next].style.opacity = '1';
-            slides[current].style.opacity = '0';
-            current = next;
-          }, 5500);
-
-        }, 3000);
-
-      }, 1000);
+      }, 3000);
 
     }, 2000);
   });
@@ -175,7 +171,7 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     position: relative;
     width: 100%;
     height: 100vh;
-    height: 100dvh; /* Dynamic viewport height for modern mobile browsers */
+    height: 100dvh;
     background-color: var(--bg-concrete, #BEBEBE);
     overflow: hidden;
     box-sizing: border-box;
@@ -187,8 +183,7 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
-    height: 100dvh;
+    height: 100%;
     z-index: 5;
     overflow: hidden;
     pointer-events: none;
@@ -199,8 +194,7 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
-    height: 100dvh;
+    height: 100%;
     object-fit: cover;
     object-position: center;
     opacity: 0;
@@ -219,7 +213,7 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 9999;
+    z-index: 90;
     pointer-events: none;
   }
 
@@ -236,13 +230,13 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     display: block;
   }
 
-  /* FA TITLE ANIMATION */
+  /* FA TITLE persistent top layer styling */
   .hero-text-container {
     position: absolute;
-    top: 65%;
+    top: 50%;
     left: 50%;
     transform: translate3d(-50%, -50%, 0);
-    z-index: 30;
+    z-index: 100; /* Stays above all hero layers */
     opacity: 0;
     will-change: transform, opacity;
     transition: opacity 0.8s ease-in-out, transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
@@ -254,7 +248,9 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
   }
 
   .hero-text-container.move-to-top {
-    transform: translate3d(calc(-50vw + 12vw + 50%), calc(-65vh + 135px), 0);
+    top: 35px;
+    left: 50px;
+    transform: translate3d(0, 0, 0);
   }
 
   .title-text {
@@ -272,8 +268,9 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
   /* HERO SHOWCASE FRAME */
   .hero-frame {
     position: absolute;
-    top: 22%;
-    left: 12vw;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
     width: 76vw;
     height: 65vh;
     z-index: 20;
@@ -291,13 +288,15 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
+    display: block;
   }
 
   .hero-clock {
     position: absolute;
     bottom: 25px;
     left: 50px;
-    z-index: 40;
+    z-index: 100;
     font-family: monospace, sans-serif;
     font-size: clamp(0.85rem, 1.2vw, 1.1rem);
     font-weight: 700;
@@ -305,38 +304,22 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     color: var(--text-primary, #111111);
   }
 
-  /* MOBILE FULL-SCREEN OVERRIDES */
+  /* MOBILE RESPONSIVE ADJUSTMENTS */
   @media (max-width: 768px) {
     .hero-text-container.move-to-top {
-    /* Adjust the vertical shift to fit the shorter hero container height */
-    transform: translate3d(calc(-40vw + 20px + 50%), calc(-65vh + 40px), 0);
-  }
-}
+      top: 85px;
+      left: 20px;
+      transform: translate3d(0, 0, 0);
+    }
 
-    @media (max-width: 768px) {
-  @media (max-width: 768px) {
-  .hero-frame,
-  .fullscreen-bg {
-    position: relative !important;   /* Ensure relative layout if previously absolute */
-    width: 100% !important;
-    height: auto !important;
-    min-height: auto !important;
-  }
+    .hero-frame {
+      width: 90vw;
+      height: 60vh;
+    }
 
-  :global(.slide-img),
-  .intro-frame-img {
-    display: block !important;
-    width: 100% !important;
-    height: auto !important;        /* Let standard image ratio drive the height */
-    max-height: 80vh !important;     /* Optional cap for vertical screens */
-    object-fit: contain !important;
-    object-position: center !important;
-  }
-}
-  
     .hero-clock {
       bottom: 20px;
-      left: 15px;
+      left: 20px;
     }
   }
 </style>
