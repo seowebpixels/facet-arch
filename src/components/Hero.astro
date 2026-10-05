@@ -114,13 +114,13 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
         // Logo moves gracefully off top screen
         if (logoCenter) logoCenter.classList.add('hide-logo');
 
-        // FA Title moves to persistent slot near header/top screen
+        // FA Title moves to persistent top slot
         if (heroText) heroText.classList.add('move-to-top');
 
         // Hero frame image loads
         if (heroFrame) heroFrame.classList.add('show-hero-frame');
 
-        // STEP 3: Transition to background Ken Burns showcase
+        // STEP 3: Transition to background showcase
         setTimeout(() => {
           if (heroFrame) {
             heroFrame.classList.remove('show-hero-frame');
@@ -211,7 +211,6 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     pointer-events: none;
   }
 
-  /* Ken Burns static image containment - Eliminates software zoom/blurring */
   :global(.slide-img) {
     position: absolute;
     top: 0;
@@ -221,12 +220,12 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     object-fit: cover;
     object-position: center;
     opacity: 0;
-    transform: none !important; /* Disabled aggressive zooming to keep crisp resolution */
+    transform: none !important;
     transition: opacity 1.8s ease-in-out;
     will-change: opacity;
   }
 
-  /* INTRO GROUP (Center Alignment) */
+  /* INTRO GROUP */
   .hero-intro-group {
     position: absolute;
     top: 50%;
@@ -236,12 +235,12 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 100; /* Highest priority to remain visible over hero image */
+    z-index: 200; /* Highest z-index so FACET ARCHITECTURE remains on top throughout load sequence */
     pointer-events: none;
     width: 100%;
   }
 
-  /* Center Intro Logo */
+  /* Logo */
   .logo-wrapper {
     width: min(320px, 55vw);
     height: min(320px, 55vw);
@@ -264,33 +263,33 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     display: block;
   }
 
-  /* FACET ARCHITECTURE Text Styling */
+  /* FACET ARCHITECTURE Text */
   .hero-text-container {
     margin-top: 15px;
     opacity: 0;
     transform: translate3d(0, 0, 0);
-    transition: opacity 0.8s ease-in-out, transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+    transition: opacity 0.8s ease-in-out, transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), top 1.2s cubic-bezier(0.77, 0, 0.175, 1);
   }
 
   .hero-text-container.show-text {
     opacity: 1;
   }
 
-  /* Move FA text directly under header navigation */
+  /* Persistent Top Position across all image loads */
   .hero-text-container.move-to-top {
     position: fixed;
-    top: 100px;
+    top: 14vh; /* Aligns high near top nav bar */
     left: 50%;
     transform: translate3d(-50%, 0, 0);
     margin-top: 0;
-    z-index: 120;
+    z-index: 200;
   }
 
   .title-text {
     font-family: 'Nesobrite', 'Bank Gothic', sans-serif !important;
     font-weight: 900 !important;
-    font-size: clamp(1.1rem, 2.2vw, 2.4rem) !important;
-    letter-spacing: 0.12em !important;
+    font-size: clamp(1.2rem, 2.5vw, 2.6rem) !important;
+    letter-spacing: 0.15em !important;
     color: #111111 !important;
     margin: 0 !important;
     line-height: 1 !important;
@@ -302,10 +301,10 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
   /* HERO SHOWCASE FRAME */
   .hero-frame {
     position: absolute;
-    top: 54%;
+    top: 55%;
     left: 50%;
     transform: translate3d(-50%, -50%, 0);
-    width: 70vw;
+    width: 72vw;
     max-width: 1100px;
     height: 52vh;
     z-index: 20;
@@ -331,7 +330,7 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     position: absolute;
     bottom: 25px;
     left: 50px;
-    z-index: 100;
+    z-index: 200;
     font-family: monospace, sans-serif;
     font-size: clamp(0.85rem, 1.2vw, 1.1rem);
     font-weight: 700;
@@ -342,15 +341,15 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
   /* MOBILE RESPONSIVE ADJUSTMENTS */
   @media (max-width: 768px) {
     .hero-text-container.move-to-top {
-      top: 115px; /* Clear header menu bar and match hero.png reference */
+      top: 120px; /* Positioned directly below social icons & menu icon */
       left: 50%;
       transform: translate3d(-50%, 0, 0);
     }
 
     .hero-frame {
-      width: 86vw;
-      height: 42vh; /* Adjusted aspect ratio to eliminate vertical over-expansion */
-      top: 56%;
+      width: 88vw;
+      height: 48vh;
+      top: 58%;
     }
 
     .hero-clock {
