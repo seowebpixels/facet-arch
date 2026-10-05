@@ -24,6 +24,10 @@ const slide4Mobile = await getImage({ src: intStarckImg, format: 'avif', width: 
 const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 85 });
 
 const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, height: 350, quality: 85 });
+
+// Extract src strings into clean frontmatter arrays
+const mobileSlideSrcs = [slide1Mobile.src, slide2Mobile.src, slide3Mobile.src, slide4Mobile.src];
+const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.src, slide4Desktop.src];
 ---
 
 <!-- CRITICAL LCP PRELOAD FOR LOGO -->
@@ -53,8 +57,8 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
     <div 
       id="fullscreen-bg" 
       class="fullscreen-bg"
-      data-slides-mobile={JSON.stringify([slide1Mobile.src, slide2Mobile.src, slide3Mobile.src, slide4Mobile.src])}
-      data-slides-desktop={JSON.stringify([slide1Desktop.src, slide2Desktop.src, slide3Desktop.src, slide4Desktop.src])}
+      data-slides-mobile={JSON.stringify(mobileSlideSrcs)}
+      data-slides-desktop={JSON.stringify(desktopSlideSrcs)}
     ></div>
 
     <!-- Hidden initially during intro -->
@@ -125,7 +129,14 @@ const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 350, h
 
           if (!slidesAttr) return;
 
-          const urls = JSON.parse(slidesAttr);
+          let urls = [];
+          try {
+            urls = JSON.parse(slidesAttr);
+          } catch (e) {
+            console.error('Failed to parse slide URLs:', e);
+            return;
+          }
+
           const fragment = document.createDocumentFragment();
           
           urls.forEach((url, idx) => {
