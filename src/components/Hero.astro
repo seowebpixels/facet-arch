@@ -50,7 +50,7 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
         />
       </div>
 
-      <!-- Centered Text strictly 50px visually under logo artwork -->
+      <!-- Centered Text -->
       <h1 id="brand-title-text" class="brand-title-text">FACET ARCHITECTURE</h1>
     </div>
   </div>
@@ -105,30 +105,24 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
 
     if (!logoWrapper || !brandText) return;
 
-    // STEP 1: Fade in Logo in Center
+    // Preloader Animation Loop
     setTimeout(() => {
       logoWrapper.classList.add('fade-in');
 
-      // STEP 2: Fade in Text below logo
       setTimeout(() => {
         brandText.classList.add('show-text');
 
-        // STEP 3: Hold together, then fade OUT text
         setTimeout(() => {
           brandText.classList.remove('show-text');
 
-          // STEP 4: Straight vertical trajectory up and off-screen
           setTimeout(() => {
             logoWrapper.classList.add('exit-up');
 
-            // Dismiss preloader overlay background at the same time
             if (preloaderOverlay) preloaderOverlay.classList.add('dismiss-preloader');
 
-            // STEP 5: Reveal Hero Frame Image
             setTimeout(() => {
               if (heroFrame) heroFrame.classList.add('show-hero-frame');
 
-              // STEP 6: Background Slide Showcase Loop
               setTimeout(() => {
                 if (heroFrame) {
                   heroFrame.classList.remove('show-hero-frame');
@@ -172,11 +166,11 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
 
             }, 600);
 
-          }, 500); // Small pause after text fades out before logo shoots up
+          }, 500);
 
-        }, 1200); // Text display duration
+        }, 1200);
 
-      }, 2000); // Logo solo display duration
+      }, 2000);
 
     }, 200);
   });
@@ -215,7 +209,6 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     pointer-events: none;
   }
 
-  /* CENTERED LOADING STAGE */
   .loading-stage {
     display: flex;
     flex-direction: column;
@@ -227,7 +220,6 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     box-sizing: border-box;
   }
 
-  /* LOGO PRELOADER WRAPPER */
   .logo-preloader-wrapper {
     width: clamp(300px, 45vw, 750px);
     height: auto;
@@ -242,7 +234,6 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     transform: scale(1) translateY(0);
   }
 
-  /* STRAIGHT VERTICAL TRAJECTORY UP & OFF-SCREEN */
   .logo-preloader-wrapper.exit-up {
     opacity: 0;
     transform: translateY(-120vh) scale(0.9);
@@ -256,14 +247,13 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     display: block;
   }
 
-  /* BRAND TITLE TEXT (Visually 50px below logo artwork) */
   .brand-title-text {
     font-family: 'Nesobrite', 'Bank Gothic', sans-serif !important;
     font-weight: 900 !important;
     font-size: clamp(1.2rem, 2.2vw, 2rem) !important;
     letter-spacing: 0.12em !important;
     color: #000000 !important;
-    margin: 20px 0 0 0 !important; /* Visual 50px distance accounting for SVG padding */
+    margin: 20px 0 0 0 !important;
     line-height: 1 !important;
     text-transform: uppercase !important;
     text-align: center !important;
@@ -313,12 +303,12 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     will-change: opacity;
   }
 
-  /* HERO SHOWCASE FRAME */
+  /* DESKTOP HERO SHOWCASE FRAME */
   .hero-frame {
     position: absolute;
-    top: 52%;
+    top: 50%;
     left: 50%;
-    transform: translate3d(-50%, -50%, 0);
+    transform: translate(-50%, -50%);
     width: 72vw;
     max-width: 1100px;
     height: 52vh;
@@ -354,6 +344,7 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
   }
 
+  /* MOBILE HERO SHOWCASE FRAME (Edge-to-Edge Full Width) */
   @media (max-width: 768px) {
     .brand-title-text {
       margin-top: 15px !important;
@@ -361,9 +352,14 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     }
 
     .hero-frame {
-      width: 88vw;
-      height: 48vh;
-      top: 56%;
+      width: 100%;
+      max-width: 100%;
+      height: 38vh;
+      top: 50%;
+      left: 0;
+      right: 0;
+      transform: translateY(-50%);
+      box-shadow: none;
     }
 
     .hero-clock {
