@@ -8,7 +8,7 @@ import resBlannImg from '../assets/kb-res-blann.avif';
 import ascotManorImg from '../assets/dev-ascot-manor.avif';
 import intStarckImg from '../assets/int-starck.avif';
 
-// Pre-render image optimizations for Mobile & Desktop
+// Pre-render image optimizations
 const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 768, quality: 85 });
 const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 90 });
 
@@ -24,27 +24,24 @@ const slide3Desktop = await getImage({ src: ascotManorImg, format: 'avif', width
 const slide4Mobile = await getImage({ src: intStarckImg, format: 'avif', width: 768, quality: 85 });
 const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 90 });
 
-// Optimized 850px high-resolution logo asset
 const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 850, height: 850, quality: 90 });
 
-// Slide sources for dynamic loading
 const mobileSlideSrcs = [slide1Mobile.src, slide2Mobile.src, slide3Mobile.src, slide4Mobile.src];
 const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.src, slide4Desktop.src];
 ---
 
-<!-- CRITICAL LCP PRELOAD FOR LOGO -->
 <link rel="preload" as="image" href={logoImg.src} type="image/avif" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
 
-  <!-- Fixed Top-Left Header Brand Text -->
-  <h1 id="brand-title-text" class="brand-title-text">FACET ARCHITECTURE</h1>
+  <!-- Docked Brand Header (Permanent Natural DOM Position) -->
+  <header class="brand-header">
+    <h1 id="brand-title-text" class="brand-title-text">FACET ARCHITECTURE</h1>
+  </header>
 
   <!-- Preloader Overlay Layer -->
   <div id="preloader-overlay" class="preloader-overlay">
-    <!-- Center Stage Loading Group -->
     <div id="loading-stage" class="loading-stage">
-      <!-- Centered Hero Preloader Logo -->
       <div id="logo-preloader-wrapper" class="logo-preloader-wrapper">
         <img 
           src={logoImg.src} 
@@ -55,11 +52,12 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
           decoding="async"
         />
       </div>
+      <!-- Target anchor for centering text during preloader -->
+      <div id="preloader-text-anchor" class="preloader-text-anchor"></div>
     </div>
   </div>
 
   <main class="hero-main">
-    <!-- Ken Burns / Background Slide Showcase -->
     <div 
       id="fullscreen-bg" 
       class="fullscreen-bg"
@@ -67,7 +65,6 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
       data-slides-desktop={JSON.stringify(desktopSlideSrcs)}
     ></div>
 
-    <!-- Initial Hero Frame Image -->
     <div id="hero-frame" class="hero-frame">
       <picture>
         <source media="(max-width: 768px)" srcset={heroMobile.src} type="image/avif" />
@@ -89,7 +86,7 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
 </section>
 
 <script is:inline>
-  // Real-time SAST Clock
+  // SAST Clock
   const clockEl = document.getElementById('sast-clock-display');
   if (clockEl) {
     const updateClock = () => {
@@ -105,59 +102,54 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     const preloaderOverlay = document.getElementById('preloader-overlay');
     const logoWrapper = document.getElementById('logo-preloader-wrapper');
     const brandText = document.getElementById('brand-title-text');
+    const textAnchor = document.getElementById('preloader-text-anchor');
     const heroFrame = document.getElementById('hero-frame');
     const bg = document.getElementById('fullscreen-bg');
 
-    // STEP 1: Fade/Scale in centered logo
+    if (!brandText || !textAnchor) return;
+
+    // Measure positions to center text under logo initially
+    const targetRect = textAnchor.getBoundingClientRect();
+    const textRect = brandText.getBoundingClientRect();
+
+    const initialX = targetRect.left + (targetRect.width / 2) - (textRect.width / 2) - textRect.left;
+    const initialY = targetRect.top - textRect.top;
+
+    // Set initial position centered at 1.3 scale
+    brandText.style.transform = `translate(${initialX}px, ${initialY}px) scale(1.3)`;
+    brandText.style.transformOrigin = '0 0';
+
+    // 1. Fade in logo
     setTimeout(() => {
       if (logoWrapper) logoWrapper.classList.add('fade-in');
 
-      // STEP 2: Hold logo for 2.5s, then fade in "FACET ARCHITECTURE" text
+      // 2. Fade in text under logo
       setTimeout(() => {
-        if (brandText) {
-          brandText.classList.add('is-centered', 'show-text');
-        }
+        brandText.style.opacity = '1';
 
-        // STEP 3: Both hold together for 1s
+        // 3. Hold together
         setTimeout(() => {
-
-          // STEP 4: Logo fades out
+          // Fade logo out
           if (logoWrapper) logoWrapper.classList.add('fade-out');
 
-          // STEP 4b: Real-time FLIP animation to Top-Left
-          if (brandText) {
-            // 1. FIRST: Get exact bounding rect while centered
-            const firstRect = brandText.getBoundingClientRect();
+          // Smooth WAAPI transition directly to docked top-left (0,0, scale 1)
+          const animation = brandText.animate([
+            { transform: `translate(${initialX}px, ${initialY}px) scale(1.3)` },
+            { transform: 'translate(0px, 0px) scale(1)' }
+          ], {
+            duration: 1100,
+            easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+            fill: 'forwards'
+          });
 
-            // 2. LAST: Temporarily remove center class to snap to top-left dock position
-            brandText.classList.remove('is-centered');
-            brandText.classList.add('dock-top-left');
-            const lastRect = brandText.getBoundingClientRect();
-
-            // 3. INVERT: Calculate exact pixel delta
-            const deltaX = firstRect.left - lastRect.left;
-            const deltaY = firstRect.top - lastRect.top;
-
-            // Apply inverse transform instantly (no transition)
-            brandText.style.transition = 'none';
-            brandText.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-
-            // Force reflow
-            brandText.getBoundingClientRect();
-
-            // 4. PLAY: Re-enable transition and reset transform to (0,0)
-            brandText.style.transition = 'transform 1.1s cubic-bezier(0.16, 1, 0.3, 1)';
-            brandText.style.transform = 'translate(0, 0)';
-          }
-
-          // Fade out preloader background layer
+          // Dismiss preloader background layer
           if (preloaderOverlay) preloaderOverlay.classList.add('dismiss-preloader');
 
-          // STEP 5: Reveal Hero Frame Image
+          // Reveal Hero Frame
           setTimeout(() => {
             if (heroFrame) heroFrame.classList.add('show-hero-frame');
 
-            // STEP 6: Transition from Hero Frame to Background Slide Showcase
+            // Slide Showcase Loop
             setTimeout(() => {
               if (heroFrame) {
                 heroFrame.classList.remove('show-hero-frame');
@@ -173,15 +165,9 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
               if (!slidesAttr) return;
 
               let urls = [];
-              try {
-                urls = JSON.parse(slidesAttr);
-              } catch (e) {
-                console.error('Failed to parse slide URLs:', e);
-                return;
-              }
+              try { urls = JSON.parse(slidesAttr); } catch (e) { return; }
 
               const fragment = document.createDocumentFragment();
-              
               urls.forEach((url, idx) => {
                 const img = document.createElement('img');
                 img.src = url;
@@ -195,7 +181,6 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
               if (slides.length === 0) return;
 
               slides[0].style.opacity = '1';
-
               let current = 0;
               setInterval(() => {
                 const next = (current + 1) % slides.length;
@@ -208,9 +193,9 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
 
           }, 600);
 
-        }, 1000); // 1.0s hold step
+        }, 1000);
 
-      }, 2500); // 2.5s logo hold step
+      }, 2500);
 
     }, 200);
   });
@@ -228,12 +213,19 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     z-index: 10;
   }
 
-  /* BRAND TEXT BASE STYLING */
-  .brand-title-text {
+  /* BRAND HEADER ANCHOR (TOP-LEFT) */
+  .brand-header {
     position: fixed;
+    top: 2rem;
+    left: 2rem;
     z-index: 350;
+    pointer-events: none;
+  }
+
+  .brand-title-text {
     font-family: 'Nesobrite', 'Bank Gothic', sans-serif !important;
     font-weight: 900 !important;
+    font-size: clamp(1.1rem, 1.8vw, 1.5rem) !important;
     letter-spacing: 0.12em !important;
     color: #000000 !important;
     margin: 0 !important;
@@ -241,27 +233,9 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     text-transform: uppercase !important;
     white-space: nowrap;
     opacity: 0;
+    transform-origin: 0 0;
     transition: opacity 0.6s ease;
     will-change: transform, opacity;
-  }
-
-  /* PRELOADER CENTERED STATE (Below 850px Logo) */
-  .brand-title-text.is-centered {
-    top: calc(50% + 250px);
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: clamp(1.5rem, 2.5vw, 2.25rem) !important;
-  }
-
-  .brand-title-text.show-text {
-    opacity: 1;
-  }
-
-  /* FINAL DOCKED HEADER STATE */
-  .brand-title-text.dock-top-left {
-    top: 2rem;
-    left: 2rem;
-    font-size: clamp(1.1rem, 1.8vw, 1.5rem) !important;
   }
 
   /* PRELOADER OVERLAY */
@@ -285,7 +259,6 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     pointer-events: none;
   }
 
-  /* CENTERED LOADING STAGE */
   .loading-stage {
     display: flex;
     flex-direction: column;
@@ -294,7 +267,6 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     text-align: center;
   }
 
-  /* LOGO PRELOADER WRAPPER - 850px Max Cap */
   .logo-preloader-wrapper {
     width: clamp(320px, 50vw, 850px);
     height: auto;
@@ -321,7 +293,14 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     display: block;
   }
 
-  /* MAIN STAGE */
+  /* Anchor div for measuring target center position */
+  .preloader-text-anchor {
+    width: 1px;
+    height: 1px;
+    margin-top: 2rem;
+  }
+
+  /* MAIN HERO STAGE */
   .hero-main {
     position: absolute;
     top: 0;
@@ -354,12 +333,10 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     object-fit: cover;
     object-position: center;
     opacity: 0;
-    transform: none !important;
     transition: opacity 1.8s ease-in-out;
     will-change: opacity;
   }
 
-  /* HERO SHOWCASE FRAME */
   .hero-frame {
     position: absolute;
     top: 52%;
@@ -400,16 +377,10 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
   }
 
-  /* MOBILE RESPONSIVE ADJUSTMENTS */
   @media (max-width: 768px) {
-    .brand-title-text.is-centered {
-      top: calc(50% + 160px);
-    }
-
-    .brand-title-text.dock-top-left {
+    .brand-header {
       top: 1rem;
       left: 1rem;
-      font-size: 1rem !important;
     }
 
     .hero-frame {
