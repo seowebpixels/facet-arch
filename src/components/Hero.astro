@@ -34,14 +34,11 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
 
 <section id="hero-stage" class="stage-container">
 
-  <!-- Docked Brand Header (Permanent Natural DOM Position) -->
-  <header class="brand-header">
-    <h1 id="brand-title-text" class="brand-title-text">FACET ARCHITECTURE</h1>
-  </header>
-
   <!-- Preloader Overlay Layer -->
   <div id="preloader-overlay" class="preloader-overlay">
+    <!-- Center Stage Loading Group -->
     <div id="loading-stage" class="loading-stage">
+      <!-- Centered Hero Preloader Logo -->
       <div id="logo-preloader-wrapper" class="logo-preloader-wrapper">
         <img 
           src={logoImg.src} 
@@ -52,8 +49,9 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
           decoding="async"
         />
       </div>
-      <!-- Target anchor for centering text during preloader -->
-      <div id="preloader-text-anchor" class="preloader-text-anchor"></div>
+
+      <!-- Centered Brand Title (Strictly 50px below logo) -->
+      <h1 id="brand-title-text" class="brand-title-text">FACET ARCHITECTURE</h1>
     </div>
   </div>
 
@@ -102,54 +100,28 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     const preloaderOverlay = document.getElementById('preloader-overlay');
     const logoWrapper = document.getElementById('logo-preloader-wrapper');
     const brandText = document.getElementById('brand-title-text');
-    const textAnchor = document.getElementById('preloader-text-anchor');
     const heroFrame = document.getElementById('hero-frame');
     const bg = document.getElementById('fullscreen-bg');
 
-    if (!brandText || !textAnchor) return;
-
-    // Measure positions to center text under logo initially
-    const targetRect = textAnchor.getBoundingClientRect();
-    const textRect = brandText.getBoundingClientRect();
-
-    const initialX = targetRect.left + (targetRect.width / 2) - (textRect.width / 2) - textRect.left;
-    const initialY = targetRect.top - textRect.top;
-
-    // Set initial position centered at 1.3 scale
-    brandText.style.transform = `translate(${initialX}px, ${initialY}px) scale(1.3)`;
-    brandText.style.transformOrigin = '0 0';
-
-    // 1. Fade in logo
+    // STEP 1: Fade/Scale in centered logo
     setTimeout(() => {
       if (logoWrapper) logoWrapper.classList.add('fade-in');
 
-      // 2. Fade in text under logo
+      // STEP 2: Hold logo for 2.5s, then fade in "FACET ARCHITECTURE" text
       setTimeout(() => {
-        brandText.style.opacity = '1';
+        if (brandText) brandText.classList.add('show-text');
 
-        // 3. Hold together
+        // STEP 3: Both hold together for 1s
         setTimeout(() => {
-          // Fade logo out
-          if (logoWrapper) logoWrapper.classList.add('fade-out');
 
-          // Smooth WAAPI transition directly to docked top-left (0,0, scale 1)
-          const animation = brandText.animate([
-            { transform: `translate(${initialX}px, ${initialY}px) scale(1.3)` },
-            { transform: 'translate(0px, 0px) scale(1)' }
-          ], {
-            duration: 1100,
-            easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
-            fill: 'forwards'
-          });
-
-          // Dismiss preloader background layer
+          // STEP 4: Fade out preloader overlay (logo + text together)
           if (preloaderOverlay) preloaderOverlay.classList.add('dismiss-preloader');
 
-          // Reveal Hero Frame
+          // STEP 5: Reveal Hero Frame Image
           setTimeout(() => {
             if (heroFrame) heroFrame.classList.add('show-hero-frame');
 
-            // Slide Showcase Loop
+            // STEP 6: Transition from Hero Frame to Background Slide Showcase
             setTimeout(() => {
               if (heroFrame) {
                 heroFrame.classList.remove('show-hero-frame');
@@ -165,9 +137,15 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
               if (!slidesAttr) return;
 
               let urls = [];
-              try { urls = JSON.parse(slidesAttr); } catch (e) { return; }
+              try {
+                urls = JSON.parse(slidesAttr);
+              } catch (e) {
+                console.error('Failed to parse slide URLs:', e);
+                return;
+              }
 
               const fragment = document.createDocumentFragment();
+              
               urls.forEach((url, idx) => {
                 const img = document.createElement('img');
                 img.src = url;
@@ -181,6 +159,7 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
               if (slides.length === 0) return;
 
               slides[0].style.opacity = '1';
+
               let current = 0;
               setInterval(() => {
                 const next = (current + 1) % slides.length;
@@ -193,9 +172,9 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
 
           }, 600);
 
-        }, 1000);
+        }, 1000); // 1.0s hold step
 
-      }, 2500);
+      }, 2500); // 2.5s logo hold step
 
     }, 200);
   });
@@ -211,31 +190,6 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     overflow: hidden;
     box-sizing: border-box;
     z-index: 10;
-  }
-
-  /* BRAND HEADER ANCHOR (TOP-LEFT) */
-  .brand-header {
-    position: fixed;
-    top: 2rem;
-    left: 2rem;
-    z-index: 350;
-    pointer-events: none;
-  }
-
-  .brand-title-text {
-    font-family: 'Nesobrite', 'Bank Gothic', sans-serif !important;
-    font-weight: 900 !important;
-    font-size: clamp(1.1rem, 1.8vw, 1.5rem) !important;
-    letter-spacing: 0.12em !important;
-    color: #000000 !important;
-    margin: 0 !important;
-    line-height: 1 !important;
-    text-transform: uppercase !important;
-    white-space: nowrap;
-    opacity: 0;
-    transform-origin: 0 0;
-    transition: opacity 0.6s ease;
-    will-change: transform, opacity;
   }
 
   /* PRELOADER OVERLAY */
@@ -259,14 +213,19 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     pointer-events: none;
   }
 
+  /* CENTERED LOADING STAGE */
   .loading-stage {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
+    width: 100%;
+    padding: 0 1rem;
+    box-sizing: border-box;
   }
 
+  /* LOGO PRELOADER WRAPPER - 850px Max Cap */
   .logo-preloader-wrapper {
     width: clamp(320px, 50vw, 850px);
     height: auto;
@@ -280,12 +239,6 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     transform: scale(1);
   }
 
-  .logo-preloader-wrapper.fade-out {
-    opacity: 0;
-    transform: translateY(-20px) scale(0.95);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-
   .preloader-logo {
     width: 100%;
     height: auto;
@@ -293,14 +246,27 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     display: block;
   }
 
-  /* Anchor div for measuring target center position */
-  .preloader-text-anchor {
-    width: 1px;
-    height: 1px;
-    margin-top: 2rem;
+  /* BRAND TITLE TEXT (Strictly 50px below logo) */
+  .brand-title-text {
+    font-family: 'Nesobrite', 'Bank Gothic', sans-serif !important;
+    font-weight: 900 !important;
+    font-size: clamp(1.4rem, 2.5vw, 2.25rem) !important;
+    letter-spacing: 0.12em !important;
+    color: #000000 !important;
+    margin: 50px 0 0 0 !important; /* EXACT 50px gap below the logo */
+    line-height: 1 !important;
+    text-transform: uppercase !important;
+    text-align: center !important;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.6s ease;
   }
 
-  /* MAIN HERO STAGE */
+  .brand-title-text.show-text {
+    opacity: 1;
+  }
+
+  /* MAIN STAGE */
   .hero-main {
     position: absolute;
     top: 0;
@@ -337,6 +303,7 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     will-change: opacity;
   }
 
+  /* HERO SHOWCASE FRAME */
   .hero-frame {
     position: absolute;
     top: 52%;
@@ -377,10 +344,11 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
   }
 
+  /* MOBILE RESPONSIVE ADJUSTMENTS */
   @media (max-width: 768px) {
-    .brand-header {
-      top: 1rem;
-      left: 1rem;
+    .brand-title-text {
+      margin-top: 50px !important; /* Preserves exact 50px spacing on mobile */
+      font-size: clamp(1.1rem, 4vw, 1.5rem) !important;
     }
 
     .hero-frame {
