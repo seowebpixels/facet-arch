@@ -117,7 +117,7 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
         // STEP 3: Both hold together for 1s
         setTimeout(() => {
 
-          // STEP 4: Logo fades & slides out off-screen
+          // STEP 4: Logo fades out
           if (logoWrapper) logoWrapper.classList.add('fade-out');
 
           // STEP 4b: Text shifts smoothly to top-left header position
@@ -231,9 +231,9 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     text-align: center;
   }
 
-  /* LOGO PRELOADER WRAPPER */
+  /* LOGO PRELOADER WRAPPER - Restored full scale size up to 350px */
   .logo-preloader-wrapper {
-    width: clamp(120px, 15vw, 200px);
+    width: clamp(200px, 25vw, 350px);
     height: auto;
     opacity: 0;
     transform: scale(0.95);
@@ -247,7 +247,7 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
 
   .logo-preloader-wrapper.fade-out {
     opacity: 0;
-    transform: translateY(-30px) scale(0.9);
+    transform: translateY(-20px) scale(0.95);
     transition: opacity 0.8s ease, transform 0.8s ease;
   }
 
@@ -261,7 +261,7 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
   /* BRAND TEXT STYLING */
   .brand-title-text {
     position: fixed;
-    top: 55%;
+    top: 58%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-family: 'Nesobrite', 'Bank Gothic', sans-serif !important;
@@ -282,12 +282,12 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     opacity: 1;
   }
 
-  /* DOCKED TOP-LEFT HEADER STATE */
+  /* DOCKED TOP-LEFT HEADER STATE - Clean position inside screen bounds */
   .brand-title-text.dock-top-left {
-    top: 1.5rem;
+    top: 2rem;
     left: 2rem;
     transform: translate(0, 0);
-    font-size: clamp(1.1rem, 1.8vw, 1.6rem) !important;
+    font-size: clamp(1rem, 1.5vw, 1.4rem) !important;
   }
 
   /* MAIN STAGE */
@@ -374,7 +374,7 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     .brand-title-text.dock-top-left {
       top: 1rem;
       left: 1rem;
-      font-size: 1.1rem !important;
+      font-size: 1rem !important;
     }
 
     .hero-frame {
