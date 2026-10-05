@@ -35,23 +35,24 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
 <link rel="preload" as="image" href={logoImg.src} type="image/avif" fetchpriority="high" />
 
 <section id="hero-stage" class="stage-container">
-  <!-- Top Left Brand Identifier persistent throughout sequence -->
-  <div id="brand-header-top-left" class="brand-header-top-left">
-    <div class="logo-wrapper">
-      <img 
-        src={logoImg.src} 
-        alt="Facet Architecture Logo" 
-        class="site-logo"
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-        width="160"
-        height="160"
-      />
-    </div>
+  <!-- Preloader Overlay Layer -->
+  <div id="preloader-overlay" class="preloader-overlay">
+    <!-- Center Stage Loading Group -->
+    <div id="loading-stage" class="loading-stage">
+      <!-- Centered Hero Preloader Logo -->
+      <div id="logo-preloader-wrapper" class="logo-preloader-wrapper">
+        <img 
+          src={logoImg.src} 
+          alt="Facet Architecture Logo" 
+          class="preloader-logo"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
 
-    <div class="hero-text-container">
-      <h1 class="title-text">FACET ARCHITECTURE</h1>
+      <!-- Animated Brand Text -->
+      <h1 id="brand-title-text" class="brand-title-text">FACET ARCHITECTURE</h1>
     </div>
   </div>
 
@@ -99,64 +100,92 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
   }
 
   window.addEventListener('DOMContentLoaded', () => {
+    const preloaderOverlay = document.getElementById('preloader-overlay');
+    const logoWrapper = document.getElementById('logo-preloader-wrapper');
+    const brandText = document.getElementById('brand-title-text');
     const heroFrame = document.getElementById('hero-frame');
     const bg = document.getElementById('fullscreen-bg');
 
-    // STEP 1: Hero Frame Displays
+    // STEP 1: Fade/Scale in centered logo
     setTimeout(() => {
-      if (heroFrame) heroFrame.classList.add('show-hero-frame');
+      if (logoWrapper) logoWrapper.classList.add('fade-in');
 
-      // STEP 2: Transition to background showcase
+      // STEP 2: Hold logo for 2.5s, then fade in "FACET ARCHITECTURE" text below
       setTimeout(() => {
-        if (heroFrame) {
-          heroFrame.classList.remove('show-hero-frame');
-          setTimeout(() => { heroFrame.style.display = 'none'; }, 1000);
-        }
+        if (brandText) brandText.classList.add('show-text');
 
-        if (!bg) return;
-        const isMobile = window.matchMedia('(max-width: 768px)').matches;
-        const slidesAttr = isMobile 
-          ? bg.getAttribute('data-slides-mobile') 
-          : bg.getAttribute('data-slides-desktop');
+        // STEP 3: Both hold together for 1s
+        setTimeout(() => {
 
-        if (!slidesAttr) return;
+          // STEP 4: Logo fades & slides out off-screen
+          if (logoWrapper) logoWrapper.classList.add('fade-out');
 
-        let urls = [];
-        try {
-          urls = JSON.parse(slidesAttr);
-        } catch (e) {
-          console.error('Failed to parse slide URLs:', e);
-          return;
-        }
+          // STEP 4b: Text shifts smoothly to top-left header position
+          if (brandText) brandText.classList.add('dock-top-left');
 
-        const fragment = document.createDocumentFragment();
-        
-        urls.forEach((url, idx) => {
-          const img = document.createElement('img');
-          img.src = url;
-          img.alt = `Slide ${idx + 1}`;
-          img.className = 'slide-img';
-          fragment.appendChild(img);
-        });
+          // Fade out preloader background layer
+          if (preloaderOverlay) preloaderOverlay.classList.add('dismiss-preloader');
 
-        bg.appendChild(fragment);
-        const slides = bg.querySelectorAll('.slide-img');
-        if (slides.length === 0) return;
+          // STEP 5: Reveal Hero Frame Image
+          setTimeout(() => {
+            if (heroFrame) heroFrame.classList.add('show-hero-frame');
 
-        // Display initial slide crisp & static
-        slides[0].style.opacity = '1';
+            // STEP 6: Transition from Hero Frame to Background Slide Showcase
+            setTimeout(() => {
+              if (heroFrame) {
+                heroFrame.classList.remove('show-hero-frame');
+                setTimeout(() => { heroFrame.style.display = 'none'; }, 1000);
+              }
 
-        let current = 0;
-        setInterval(() => {
-          const next = (current + 1) % slides.length;
-          slides[next].style.opacity = '1';
-          slides[current].style.opacity = '0';
-          current = next;
-        }, 5500);
+              if (!bg) return;
+              const isMobile = window.matchMedia('(max-width: 768px)').matches;
+              const slidesAttr = isMobile 
+                ? bg.getAttribute('data-slides-mobile') 
+                : bg.getAttribute('data-slides-desktop');
 
-      }, 3000);
+              if (!slidesAttr) return;
 
-    }, 500);
+              let urls = [];
+              try {
+                urls = JSON.parse(slidesAttr);
+              } catch (e) {
+                console.error('Failed to parse slide URLs:', e);
+                return;
+              }
+
+              const fragment = document.createDocumentFragment();
+              
+              urls.forEach((url, idx) => {
+                const img = document.createElement('img');
+                img.src = url;
+                img.alt = `Slide ${idx + 1}`;
+                img.className = 'slide-img';
+                fragment.appendChild(img);
+              });
+
+              bg.appendChild(fragment);
+              const slides = bg.querySelectorAll('.slide-img');
+              if (slides.length === 0) return;
+
+              slides[0].style.opacity = '1';
+
+              let current = 0;
+              setInterval(() => {
+                const next = (current + 1) % slides.length;
+                slides[next].style.opacity = '1';
+                slides[current].style.opacity = '0';
+                current = next;
+              }, 5500);
+
+            }, 3000);
+
+          }, 600);
+
+        }, 1000); // 1.0s hold step
+
+      }, 2500); // 2.5s logo hold step
+
+    }, 200);
   });
 </script>
 
@@ -172,6 +201,96 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     z-index: 10;
   }
 
+  /* PRELOADER OVERLAY */
+  .preloader-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-concrete, #BEBEBE);
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+    pointer-events: auto;
+  }
+
+  .preloader-overlay.dismiss-preloader {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  /* CENTERED LOADING STAGE */
+  .loading-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* LOGO PRELOADER WRAPPER */
+  .logo-preloader-wrapper {
+    width: clamp(120px, 15vw, 200px);
+    height: auto;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .logo-preloader-wrapper.fade-in {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .logo-preloader-wrapper.fade-out {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.9);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .preloader-logo {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* BRAND TEXT STYLING */
+  .brand-title-text {
+    position: fixed;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Nesobrite', 'Bank Gothic', sans-serif !important;
+    font-weight: 800 !important;
+    font-size: clamp(1.5rem, 2.5vw, 2.25rem) !important;
+    letter-spacing: 0.12em !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+    text-transform: uppercase !important;
+    white-space: nowrap;
+    opacity: 0;
+    z-index: 350;
+    transition: opacity 0.6s ease, top 1s cubic-bezier(0.65, 0, 0.35, 1), left 1s cubic-bezier(0.65, 0, 0.35, 1), transform 1s cubic-bezier(0.65, 0, 0.35, 1), font-size 1s ease;
+  }
+
+  .brand-title-text.show-text {
+    opacity: 1;
+  }
+
+  /* DOCKED TOP-LEFT HEADER STATE */
+  .brand-title-text.dock-top-left {
+    top: 1.5rem;
+    left: 2rem;
+    transform: translate(0, 0);
+    font-size: clamp(1.1rem, 1.8vw, 1.6rem) !important;
+  }
+
+  /* MAIN STAGE */
   .hero-main {
     position: absolute;
     top: 0;
@@ -207,54 +326,6 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     transform: none !important;
     transition: opacity 1.8s ease-in-out;
     will-change: opacity;
-  }
-
-  /* PERSISTENT TOP-LEFT BRAND CONTAINER */
-  .brand-header-top-left {
-    position: fixed;
-    top: 24px;
-    left: 28px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    z-index: 250; /* Stays above all overlays and hero sequences */
-    pointer-events: none;
-  }
-
-  /* Logo */
-  .logo-wrapper {
-    width: clamp(120px, 14vw, 180px);
-    height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-  }
-
-  .site-logo {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    display: block;
-  }
-
-  /* FACET ARCHITECTURE Text */
-  .hero-text-container {
-    margin-top: 8px;
-  }
-
-  .title-text {
-    font-family: 'Nesobrite', 'Bank Gothic', sans-serif !important;
-    font-weight: 900 !important;
-    font-size: clamp(0.95rem, 1.6vw, 1.6rem) !important;
-    letter-spacing: 0.15em !important;
-    color: #FFFFFF !important;
-    margin: 0 !important;
-    line-height: 1 !important;
-    text-transform: uppercase !important;
-    white-space: nowrap;
-    text-align: left;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   }
 
   /* HERO SHOWCASE FRAME */
@@ -294,19 +365,16 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     font-size: clamp(0.85rem, 1.2vw, 1.1rem);
     font-weight: 700;
     letter-spacing: 0.15em;
-    color: var(--text-primary, #FFFFFF);
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    color: #000000;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
   }
 
   /* MOBILE RESPONSIVE ADJUSTMENTS */
   @media (max-width: 768px) {
-    .brand-header-top-left {
-      top: 16px;
-      left: 16px;
-    }
-
-    .logo-wrapper {
-      width: 110px;
+    .brand-title-text.dock-top-left {
+      top: 1rem;
+      left: 1rem;
+      font-size: 1.1rem !important;
     }
 
     .hero-frame {
