@@ -37,10 +37,8 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
 
 <section id="hero-stage" class="stage-container">
 
-  <!-- Fixed Top-Left Header Anchor (Guarantees Text Lands Safely) -->
-  <header class="brand-header-anchor">
-    <h1 id="brand-title-text" class="brand-title-text center-stage-preloader">FACET ARCHITECTURE</h1>
-  </header>
+  <!-- Fixed Top-Left Header Brand Text -->
+  <h1 id="brand-title-text" class="brand-title-text">FACET ARCHITECTURE</h1>
 
   <!-- Preloader Overlay Layer -->
   <div id="preloader-overlay" class="preloader-overlay">
@@ -116,7 +114,9 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
 
       // STEP 2: Hold logo for 2.5s, then fade in "FACET ARCHITECTURE" text
       setTimeout(() => {
-        if (brandText) brandText.classList.add('show-text');
+        if (brandText) {
+          brandText.classList.add('is-centered', 'show-text');
+        }
 
         // STEP 3: Both hold together for 1s
         setTimeout(() => {
@@ -124,8 +124,31 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
           // STEP 4: Logo fades out
           if (logoWrapper) logoWrapper.classList.add('fade-out');
 
-          // STEP 4b: Remove center transform class so text slides cleanly to header anchor
-          if (brandText) brandText.classList.remove('center-stage-preloader');
+          // STEP 4b: Real-time FLIP animation to Top-Left
+          if (brandText) {
+            // 1. FIRST: Get exact bounding rect while centered
+            const firstRect = brandText.getBoundingClientRect();
+
+            // 2. LAST: Temporarily remove center class to snap to top-left dock position
+            brandText.classList.remove('is-centered');
+            brandText.classList.add('dock-top-left');
+            const lastRect = brandText.getBoundingClientRect();
+
+            // 3. INVERT: Calculate exact pixel delta
+            const deltaX = firstRect.left - lastRect.left;
+            const deltaY = firstRect.top - lastRect.top;
+
+            // Apply inverse transform instantly (no transition)
+            brandText.style.transition = 'none';
+            brandText.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+
+            // Force reflow
+            brandText.getBoundingClientRect();
+
+            // 4. PLAY: Re-enable transition and reset transform to (0,0)
+            brandText.style.transition = 'transform 1.1s cubic-bezier(0.16, 1, 0.3, 1)';
+            brandText.style.transform = 'translate(0, 0)';
+          }
 
           // Fade out preloader background layer
           if (preloaderOverlay) preloaderOverlay.classList.add('dismiss-preloader');
@@ -205,20 +228,12 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     z-index: 10;
   }
 
-  /* PERMANENT TOP-LEFT BRAND HEADER ANCHOR */
-  .brand-header-anchor {
-    position: fixed;
-    top: 2rem;
-    left: 2rem;
-    z-index: 350;
-    pointer-events: none;
-  }
-
-  /* BRAND TEXT STYLING */
+  /* BRAND TEXT BASE STYLING */
   .brand-title-text {
+    position: fixed;
+    z-index: 350;
     font-family: 'Nesobrite', 'Bank Gothic', sans-serif !important;
-    font-weight: 900 !important; /* Extra Bold */
-    font-size: clamp(1.1rem, 1.8vw, 1.5rem) !important;
+    font-weight: 900 !important;
     letter-spacing: 0.12em !important;
     color: #000000 !important;
     margin: 0 !important;
@@ -226,20 +241,27 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
     text-transform: uppercase !important;
     white-space: nowrap;
     opacity: 0;
-    transform: translate(0, 0);
-    transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease, font-size 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.6s ease;
     will-change: transform, opacity;
   }
 
-  /* INITIAL PRELOADER CENTER POSITION (Offset from Top-Left Anchor) */
-  .brand-title-text.center-stage-preloader {
-    /* Calculates exact offset from top-left anchor to viewport center below 850px logo */
-    transform: translate(calc(50vw - 2rem - 50%), calc(50vh - 2rem + 260px));
+  /* PRELOADER CENTERED STATE (Below 850px Logo) */
+  .brand-title-text.is-centered {
+    top: calc(50% + 250px);
+    left: 50%;
+    transform: translateX(-50%);
     font-size: clamp(1.5rem, 2.5vw, 2.25rem) !important;
   }
 
   .brand-title-text.show-text {
     opacity: 1;
+  }
+
+  /* FINAL DOCKED HEADER STATE */
+  .brand-title-text.dock-top-left {
+    top: 2rem;
+    left: 2rem;
+    font-size: clamp(1.1rem, 1.8vw, 1.5rem) !important;
   }
 
   /* PRELOADER OVERLAY */
@@ -380,14 +402,14 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
 
   /* MOBILE RESPONSIVE ADJUSTMENTS */
   @media (max-width: 768px) {
-    .brand-header-anchor {
-      top: 1rem;
-      left: 1rem;
+    .brand-title-text.is-centered {
+      top: calc(50% + 160px);
     }
 
-    .brand-title-text.center-stage-preloader {
-      transform: translate(calc(50vw - 1rem - 50%), calc(50vh - 1rem + 170px));
-      font-size: 1.2rem !important;
+    .brand-title-text.dock-top-left {
+      top: 1rem;
+      left: 1rem;
+      font-size: 1rem !important;
     }
 
     .hero-frame {
