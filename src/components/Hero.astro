@@ -309,26 +309,27 @@ const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.sr
   @media (max-width: 768px) {
     .hero-text-container.move-to-top {
     /* Adjust the vertical shift to fit the shorter hero container height */
-    transform: translate3d(calc(-50vw + 20px + 50%), calc(-25vh + 40px), 0);
+    transform: translate3d(calc(-40vw + 20px + 50%), calc(-65vh + 40px), 0);
   }
 }
 
     @media (max-width: 768px) {
+  @media (max-width: 768px) {
   .hero-frame,
   .fullscreen-bg {
-    top: 0 !important;
-    left: 0 !important;
+    position: relative !important;   /* Ensure relative layout if previously absolute */
     width: 100% !important;
-    height: auto !important;       /* Allow container height to scale naturally */
-    min-height: unset !important;
+    height: auto !important;
+    min-height: auto !important;
   }
 
   :global(.slide-img),
   .intro-frame-img {
+    display: block !important;
     width: 100% !important;
-    height: auto !important;       /* Remove forced 100vh full height */
-    max-height: 100vh !important;  /* Prevents it from exceeding screen height */
-    object-fit: contain !important; /* Shows 100% of the original photo without cropping */
+    height: auto !important;        /* Let standard image ratio drive the height */
+    max-height: 80vh !important;     /* Optional cap for vertical screens */
+    object-fit: contain !important;
     object-position: center !important;
   }
 }
