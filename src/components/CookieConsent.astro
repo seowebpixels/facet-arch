@@ -106,82 +106,82 @@
 </div>
 
 <script is:inline>
-  document.addEventListener('DOMContentLoaded', () => {
-    const banner = document.getElementById('cookie-banner');
-    const modal = document.getElementById('pref-modal');
-    
-    const btnAccept = document.getElementById('btn-accept');
-    const btnReject = document.getElementById('btn-reject');
-    const btnOpenModal = document.getElementById('btn-open-modal');
-    const btnBannerPref = document.getElementById('btn-banner-pref');
-    const btnCloseModal = document.getElementById('btn-close-modal');
-    const btnSavePref = document.getElementById('btn-save-pref');
-
-    const toggleAnalytics = document.getElementById('toggle-analytics');
-    const toggleMarketing = document.getElementById('toggle-marketing');
-
+  (() => {
     const COOKIE_KEY = 'fa_consent_preferences';
 
-    const getSavedPreferences = () => {
-      try {
-        return JSON.parse(localStorage.getItem(COOKIE_KEY));
-      } catch (e) {
-        return null;
-      }
-    };
+    window.openCookieModal = () => {
+      const modal = document.getElementById('pref-modal');
+      const toggleAnalytics = document.getElementById('toggle-analytics');
+      const toggleMarketing = document.getElementById('toggle-marketing');
 
-    const savePreferences = (prefs) => {
-      localStorage.setItem(COOKIE_KEY, JSON.stringify(prefs));
-      if (banner) banner.style.display = 'none';
-      if (modal) modal.style.display = 'none';
-    };
+      let saved = null;
+      try { saved = JSON.parse(localStorage.getItem(COOKIE_KEY)); } catch (e) {}
 
-    // Check saved state on load
-    const saved = getSavedPreferences();
-    if (!saved) {
-      if (banner) banner.style.display = 'block';
-    } else {
-      if (toggleAnalytics) toggleAnalytics.checked = !!saved.analytics;
-      if (toggleMarketing) toggleMarketing.checked = !!saved.marketing;
-    }
-
-    // Handlers
-    btnAccept?.addEventListener('click', () => {
-      savePreferences({ essential: true, analytics: true, marketing: true });
-    });
-
-    btnReject?.addEventListener('click', () => {
-      savePreferences({ essential: true, analytics: false, marketing: false });
-    });
-
-    const openModal = () => {
-      const current = getSavedPreferences();
-      if (current) {
-        if (toggleAnalytics) toggleAnalytics.checked = !!current.analytics;
-        if (toggleMarketing) toggleMarketing.checked = !!current.marketing;
+      if (saved) {
+        if (toggleAnalytics) toggleAnalytics.checked = !!saved.analytics;
+        if (toggleMarketing) toggleMarketing.checked = !!saved.marketing;
       }
       if (modal) modal.style.display = 'flex';
     };
 
-    btnOpenModal?.addEventListener('click', openModal);
-    btnBannerPref?.addEventListener('click', openModal);
+    const initConsent = () => {
+      const banner = document.getElementById('cookie-banner');
+      const modal = document.getElementById('pref-modal');
 
-    btnCloseModal?.addEventListener('click', () => {
-      if (modal) modal.style.display = 'none';
-    });
+      const btnAccept = document.getElementById('btn-accept');
+      const btnReject = document.getElementById('btn-reject');
+      const btnOpenModal = document.getElementById('btn-open-modal');
+      const btnBannerPref = document.getElementById('btn-banner-pref');
+      const btnCloseModal = document.getElementById('btn-close-modal');
+      const btnSavePref = document.getElementById('btn-save-pref');
 
-    btnSavePref?.addEventListener('click', () => {
-      savePreferences({
-        essential: true,
-        analytics: toggleAnalytics ? toggleAnalytics.checked : false,
-        marketing: toggleMarketing ? toggleMarketing.checked : false,
+      const toggleAnalytics = document.getElementById('toggle-analytics');
+      const toggleMarketing = document.getElementById('toggle-marketing');
+
+      const savePreferences = (prefs) => {
+        localStorage.setItem(COOKIE_KEY, JSON.stringify(prefs));
+        if (banner) banner.style.display = 'none';
+        if (modal) modal.style.display = 'none';
+      };
+
+      // Force Banner Check On Load
+      let saved = null;
+      try { saved = JSON.parse(localStorage.getItem(COOKIE_KEY)); } catch (e) {}
+
+      if (!saved) {
+        if (banner) banner.style.display = 'block';
+      } else {
+        if (banner) banner.style.display = 'none';
+      }
+
+      btnAccept?.addEventListener('click', () => savePreferences({ essential: true, analytics: true, marketing: true }));
+      btnReject?.addEventListener('click', () => savePreferences({ essential: true, analytics: false, marketing: false }));
+
+      btnOpenModal?.addEventListener('click', window.openCookieModal);
+      btnBannerPref?.addEventListener('click', window.openCookieModal);
+
+      btnCloseModal?.addEventListener('click', () => {
+        if (modal) modal.style.display = 'none';
       });
-    });
-  });
+
+      btnSavePref?.addEventListener('click', () => {
+        savePreferences({
+          essential: true,
+          analytics: toggleAnalytics ? toggleAnalytics.checked : false,
+          marketing: toggleMarketing ? toggleMarketing.checked : false,
+        });
+      });
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initConsent);
+    } else {
+      initConsent();
+    }
+  })();
 </script>
 
 <style>
-  /* COLOR ACCENT VARIABLE */
   :root {
     --accent-cyan: #00ffc8;
   }
@@ -207,7 +207,7 @@
 
   /* COOKIE BANNER (Bottom Left) */
   .cookie-banner {
-    display: none;
+    display: block; /* Visible immediately */
     position: fixed;
     bottom: 2rem;
     left: 2rem;
