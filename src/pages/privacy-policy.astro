@@ -1,0 +1,130 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CookieConsent from '../components/CookieConsent.astro';
+---
+
+<Layout title="Privacy Policy | Facet Architecture">
+  <main class="legal-page">
+    <div class="legal-container">
+      <h1>Privacy Policy</h1>
+      <p class="updated-date"><strong>Last Updated: October 2026</strong></p>
+
+      <p>
+        Facet Architecture ("we," "us," or "our") respects your privacy and is committed to protecting the personal information of visitors, clients, and prospective clients ("you"). This Privacy Policy explains how we collect, use, disclose, and safeguard your personal data when you visit our website at facetarchitecture.co.za or engage with our professional architectural services, in accordance with the Protection of Personal Information Act (POPIA) of South Africa and international data privacy regulations including the General Data Protection Regulation (GDPR).
+      </p>
+
+      <h2>1. Information We Collect</h2>
+
+      <h3>A. Information You Provide Directly</h3>
+      <ul>
+        <li><strong>Contact & Identification Data:</strong> Full name, business/company name, address, email address, and telephone numbers submitted via contact forms or direct email inquiries.</li>
+        <li><strong>Project Specifications:</strong> Architectural briefs, site locations, budget estimates, building plans, and design preferences submitted for project evaluations.</li>
+        <li><strong>Communication Records:</strong> Correspondence logs resulting from consultations, phone conversations, and email exchanges.</li>
+      </ul>
+
+      <h3>B. Information Collected Automatically</h3>
+      <ul>
+        <li><strong>Device & Usage Data:</strong> IP addresses, browser types, operating systems, referring URLs, pages viewed, and navigation paths collected via cookies and server logs.</li>
+        <li><strong>Location Data:</strong> Approximate geographic location derived from IP addresses to assist in localized project consultations.</li>
+      </ul>
+
+      <h2>2. How We Use Your Information</h2>
+      <p>We process your personal information strictly for legitimate architectural business purposes, including:</p>
+      <ul>
+        <li><strong>Service Delivery & Consultation:</strong> Responding to inquiries, preparing architectural proposals, scheduling site visits, and delivering structural documentation.</li>
+        <li><strong>Regulatory Compliance:</strong> Submitting architectural plans to municipal planning departments and heritage councils for plan approvals.</li>
+        <li><strong>Client Communications:</strong> Sending project updates, invoices, and administrative notices.</li>
+        <li><strong>Website Security:</strong> Monitoring website performance and maintaining network security.</li>
+      </ul>
+
+      <h2>3. Legal Basis for Processing (POPIA & GDPR)</h2>
+      <p>We process personal data under the following lawful grounds:</p>
+      <ul>
+        <li><strong>Consent:</strong> Where you have explicitly provided consent (e.g., contact form submissions or non-essential cookies).</li>
+        <li><strong>Contractual Necessity:</strong> Fulfilling pre-contractual requests or executing professional architectural service agreements.</li>
+        <li><strong>Legal Obligation:</strong> Compliance with statutory building regulations, tax mandates, and municipal bylaws.</li>
+      </ul>
+
+      <h2>4. Disclosure of Personal Information</h2>
+      <p>Facet Architecture does not sell or trade your personal data. Disclosures occur strictly under confidentiality to:</p>
+      <ul>
+        <li><strong>Professional Consultants:</strong> Structural engineers, land surveyors, and building contractors collaborating on active projects.</li>
+        <li><strong>Statutory Authorities:</strong> Municipal planning councils requiring documentation for plan approvals.</li>
+        <li><strong>Service Providers:</strong> Trusted hosting, analytics, and infrastructure partners operating under data processing agreements.</li>
+      </ul>
+
+      <h2>5. Your Statutory Rights</h2>
+      <p>Under POPIA and GDPR, you have the right to access, rectify, or request deletion of your personal information, or object to specific processing activities. Contact our Information Officer at <a href="mailto:info@facetarch.com" class="highlight-link">info@facetarch.com</a>.</p>
+    </div>
+  </main>
+  <CookieConsent />
+</Layout>
+
+<style>
+  :root {
+    --accent-cyan: #00ffc8;
+  }
+
+  .highlight-link {
+    color: var(--accent-cyan) !important;
+    text-decoration: underline;
+  }
+
+  .legal-page {
+    background-color: var(--bg-concrete, #BEBEBE);
+    color: #111111;
+    min-height: 100vh;
+    padding: 8rem 2rem 4rem 2rem;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+
+  .legal-container {
+    max-width: 850px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 3rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  }
+
+  h1 {
+    font-family: 'Nesobrite', 'Bank Gothic', sans-serif;
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .updated-date {
+    color: #666666;
+    margin-bottom: 2rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    margin-top: 2rem;
+    border-bottom: 1px solid #eeeeee;
+    padding-bottom: 0.5rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    margin-top: 1.25rem;
+  }
+
+  p, li {
+    line-height: 1.6;
+    color: #333333;
+  }
+
+  ul {
+    padding-left: 1.25rem;
+  }
+
+  @media (max-width: 768px) {
+    .legal-page {
+      padding: 6rem 1rem 2rem 1rem;
+    }
+    .legal-container {
+      padding: 1.5rem;
+    }
+  }
+</style>

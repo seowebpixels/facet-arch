@@ -1,0 +1,167 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CookieConsent from '../components/CookieConsent.astro';
+---
+
+<Layout title="Terms of Service | Facet Architecture">
+  <main class="legal-page">
+    <div class="legal-container">
+      <h1>Terms of Service</h1>
+      <p class="updated-date"><strong>Last Updated: October 2026</strong></p>
+
+      <p>
+        Welcome to the Facet Architecture website. By accessing, browsing, or utilizing this website (facetarchitecture.co.za), you agree to comply with and be bound by these Terms of Service ("Terms"). Please review them carefully before proceeding. If you do not agree to these Terms, you must immediately discontinue use of this site.
+      </p>
+
+      <hr class="legal-divider" />
+
+      <h2>1. Ownership & Intellectual Property</h2>
+      <ol>
+        <li><strong>Copyright Notice:</strong> All content on this website—including architectural drawings, 3D renderings, conceptual sketches, photographs, text, site layout design, graphics, video clips, and branding assets—is the exclusive intellectual property of Facet Architecture or its licensors and is protected by South African copyright laws and international intellectual property treaties.</li>
+        <li><strong>Restricted Use:</strong> You are granted a limited, revocable, non-exclusive license to view website content for personal, non-commercial purposes. You may not reproduce, modify, distribute, publish, frame, mirror, license, or create derivative works from any architectural design or imagery without prior written authorization from Facet Architecture.</li>
+        <li><strong>Protection of Architectural Designs:</strong> Architectural concepts, spatial layouts, and building facade visual representations displayed on this website remain protected original works. Unauthorized reproduction or adaptation for construction purposes constitutes copyright infringement.</li>
+      </ol>
+
+      <h2>2. Website Content & Disclaimer</h2>
+      <ol>
+        <li><strong>Informational Purpose:</strong> The contents of this website are provided solely for general informational and marketing showcase purposes. Portfolio images and project descriptions demonstrate past creative work and do not constitute formal architectural advice, engineering specifications, or binding project estimates.</li>
+        <li><strong>No Binding Contract:</strong> Exploring this website or submitting an inquiry form does not establish a formal client-architect relationship. A binding professional engagement is established only upon the mutual execution of a formal Client-Architect Agreement (e.g., SACAP standard client agreement).</li>
+        <li><strong>Accuracy of Information:</strong> While we strive to maintain accurate information, Facet Architecture makes no warranties or representations regarding the completeness, accuracy, or timeliness of project descriptions, dimensions, or technical details provided on this site.</li>
+      </ol>
+
+      <h2>3. Website Availability & Prohibited Conduct</h2>
+      <ol>
+        <li><strong>Service Modifications:</strong> Facet Architecture reserves the right to suspend, update, modify, or discontinue any aspect of this website at any time without prior notice.</li>
+        <li>
+          <strong>Prohibited Activities:</strong> You agree not to:
+          <ul>
+            <li>Use automated scripts, spiders, or scrapers to extract data, imagery, or code from this website.</li>
+            <li>Attempt to compromise website security, bypass authentication, or introduce computer viruses, malware, or destructive code.</li>
+            <li>Use the contact forms to send unsolicited promotional communications (spam) or fraudulent inquiries.</li>
+          </ul>
+        </li>
+      </ol>
+
+      <h2>4. Third-Party Links & External Services</h2>
+      <p>
+        This website may contain hyperlinks to external websites or digital tools operated by third parties (e.g., map providers, social media platforms, or external portfolio galleries). Facet Architecture does not endorse, control, or assume liability for the content, privacy practices, or availability of third-party platforms.
+      </p>
+
+      <h2>5. Limitation of Liability</h2>
+      <p>
+        To the maximum extent permitted by South African law, Facet Architecture, its principals, employees, consultants, and agents shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising out of your access to, use of, or inability to use this website, including but not limited to loss of data, business interruption, or computer system failure.
+      </p>
+
+      <h2>6. Indemnification</h2>
+      <p>
+        You agree to defend, indemnify, and hold harmless Facet Architecture and its officers from and against any claims, liabilities, damages, losses, or expenses (including legal fees on an attorney-and-client scale) resulting from your violation of these Terms or misuse of website content.
+      </p>
+
+      <h2>7. Governing Law & Jurisdiction</h2>
+      <p>
+        These Terms are governed by and construed in accordance with the laws of the Republic of South Africa. Any dispute arising out of or in connection with these Terms or website usage shall be subject to the exclusive jurisdiction of the High Court of South Africa (Gauteng Local Division, Johannesburg).
+      </p>
+
+      <h2>8. Amendments</h2>
+      <p>
+        Facet Architecture reserves the right to revise these Terms at any time. Continued use of the website following published updates constitutes acceptance of the revised Terms.
+      </p>
+
+      <h2>9. Contact Us</h2>
+      <p>For questions regarding these Terms of Service or intellectual property rights:</p>
+      <address class="contact-box">
+        <strong>Facet Architecture</strong><br />
+        Randburg, Johannesburg, Gauteng, South Africa<br />
+        Email: <a href="mailto:info@facetarch.com" class="highlight-link">info@facetarch.com</a><br />
+        Website: facetarchitecture.co.za
+      </address>
+    </div>
+  </main>
+  <CookieConsent />
+</Layout>
+
+<style>
+  :root {
+    --accent-cyan: #00ffc8;
+  }
+
+  .highlight-link {
+    color: var(--accent-cyan) !important;
+    text-decoration: underline;
+  }
+
+  .legal-page {
+    background-color: var(--bg-concrete, #BEBEBE);
+    color: #111111;
+    min-height: 100vh;
+    padding: 8rem 2rem 4rem 2rem;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+
+  .legal-container {
+    max-width: 850px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 3rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  }
+
+  h1 {
+    font-family: 'Nesobrite', 'Bank Gothic', sans-serif;
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .updated-date {
+    color: #666666;
+    margin-bottom: 1.5rem;
+  }
+
+  .legal-divider {
+    border: none;
+    border-top: 1px solid #eeeeee;
+    margin: 1.5rem 0 2rem 0;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+    margin-top: 2rem;
+    border-bottom: 1px solid #eeeeee;
+    padding-bottom: 0.5rem;
+    color: #000000;
+  }
+
+  p, li {
+    line-height: 1.6;
+    color: #333333;
+    font-size: 0.95rem;
+  }
+
+  ol, ul {
+    padding-left: 1.25rem;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+
+  .contact-box {
+    font-style: normal;
+    line-height: 1.6;
+    margin-top: 1rem;
+    background: #f9f9f9;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    border-left: 3px solid var(--accent-cyan);
+  }
+
+  @media (max-width: 768px) {
+    .legal-page {
+      padding: 6rem 1rem 2rem 1rem;
+    }
+    .legal-container {
+      padding: 1.5rem;
+    }
+  }
+</style>

@@ -103,6 +103,15 @@ const currentYear = new Date().getFullYear();
       </div>
     </div>
 
+    <!-- Legal & Privacy Navigation Bar -->
+    <div class="footer-legal-bar">
+      <a href="/privacy-policy" class="footer-legal-link highlight-cyan">PRIVACY POLICY</a>
+      <span class="legal-divider">|</span>
+      <a href="/terms-of-service" class="footer-legal-link">TERMS OF SERVICE</a>
+      <span class="legal-divider">|</span>
+      <button id="footer-btn-cookies" class="footer-cookie-btn highlight-cyan">YOUR PREFERENCES</button>
+    </div>
+
     <!-- Copyright Base -->
     <div class="footer-base">
       <p class="footer-line copyright-line">&copy; {currentYear} FACET ARCHITECTURE</p>
@@ -119,6 +128,20 @@ const currentYear = new Date().getFullYear();
     </div>
   </div>
 </footer>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const footerCookieBtn = document.getElementById('footer-btn-cookies');
+    const modal = document.getElementById('pref-modal');
+
+    if (footerCookieBtn && modal) {
+      footerCookieBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        modal.style.display = 'flex';
+      });
+    }
+  });
+</script>
 
 <style is:global>
   .home-footer-main .cta-action {
@@ -212,6 +235,49 @@ const currentYear = new Date().getFullYear();
     color: rgba(255, 255, 255, 0.3);
   }
 
+  /* Legal Bar */
+  .home-footer-main .footer-legal-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    font-size: 11px;
+    font-family: monospace;
+    letter-spacing: 0.18em;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .home-footer-main .footer-legal-link {
+    color: #AAAAAA !important;
+    text-decoration: none !important;
+    transition: color 0.2s ease;
+  }
+
+  .home-footer-main .footer-legal-link:hover {
+    color: #FFFFFF !important;
+  }
+
+  .home-footer-main .footer-cookie-btn {
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-family: monospace !important;
+    font-size: 11px !important;
+    letter-spacing: 0.18em !important;
+    cursor: pointer !important;
+  }
+
+  .home-footer-main .highlight-cyan {
+    color: #00FFC8 !important;
+    font-weight: 700 !important;
+  }
+
+  .home-footer-main .legal-divider {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
   .home-footer-main .footer-base {
     display: flex;
     justify-content: space-between;
@@ -290,6 +356,12 @@ const currentYear = new Date().getFullYear();
       align-items: center;
       text-align: center;
       gap: 12px;
+    }
+
+    .home-footer-main .footer-legal-bar {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
     }
 
     .home-footer-main .footer-base {
