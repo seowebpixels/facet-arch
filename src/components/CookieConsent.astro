@@ -5,7 +5,7 @@
 <div id="cookie-banner" class="fa-cookie-banner">
   <h2 class="banner-title">Your Privacy</h2>
   <p class="banner-text">
-    Welcome to the best Facet Architecture! We respect your privacy and your right to control how we collect and use your personal data. Please read our <a href="/privacy-policy" class="highlight-link">Privacy Policy</a> to learn about our privacy practices or click <button id="btn-banner-pref" class="text-btn highlight-text">Your preferences</button> to exercise control over your data.
+    Welcome to Facet Architecture! We respect your privacy and your right to control how we collect and use your personal data. Please read our <a href="/privacy-policy" class="highlight-link">Privacy Policy</a> to learn about our privacy practices or click <button id="btn-banner-pref" class="text-btn highlight-text">Your preferences</button> to exercise control over your data.
   </p>
 
   <div class="banner-actions">
@@ -107,9 +107,9 @@
 
 <script is:inline>
   (function() {
-    const COOKIE_KEY = 'fa_consent_preferences';
+    // Fresh key to bypass cached browser selections during testing
+    const COOKIE_KEY = 'fa_consent_preferences_v2';
 
-    // Global modal opener accessible from HomeFooter
     window.openCookieModal = function() {
       const modal = document.getElementById('pref-modal');
       if (modal) modal.style.display = 'flex';
@@ -131,18 +131,17 @@
 
       function savePreferences(prefs) {
         try { localStorage.setItem(COOKIE_KEY, JSON.stringify(prefs)); } catch (e) {}
-        if (banner) banner.classList.add('fa-hidden');
+        if (banner) banner.style.setProperty('display', 'none', 'important');
         if (modal) modal.style.display = 'none';
       }
 
-      // Hide banner only if user explicitly saved choices previously
       let saved = null;
       try { saved = JSON.parse(localStorage.getItem(COOKIE_KEY)); } catch (e) {}
 
       if (saved && banner) {
-        banner.classList.add('fa-hidden');
+        banner.style.setProperty('display', 'none', 'important');
       } else if (banner) {
-        banner.classList.remove('fa-hidden');
+        banner.style.setProperty('display', 'block', 'important');
       }
 
       btnAccept?.addEventListener('click', function() {
@@ -177,14 +176,19 @@
   })();
 </script>
 
-<style>
+<style is:global>
   :root {
     --accent-cyan: #00ffc8;
   }
 
-  .highlight-link {
+  /* FORCED NO-UNDERLINE Cyan Links */
+  .highlight-link,
+  a.highlight-link,
+  a.highlight-link:hover,
+  a.highlight-link:visited {
     color: var(--accent-cyan) !important;
-    /* text-decoration: underline; -- REMOVED */
+    text-decoration: none !important;
+    border-bottom: none !important;
   }
 
   .highlight-text {
@@ -201,7 +205,7 @@
     font-family: inherit;
   }
 
-  /* COOKIE BANNER */
+  /* COOKIE BANNER (Forced Visible on Page Entrance) */
   .fa-cookie-banner {
     display: block !important;
     position: fixed !important;
@@ -212,13 +216,9 @@
     color: #ffffff !important;
     padding: 1.8rem !important;
     border-radius: 16px !important;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
-    z-index: 99999 !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important;
+    z-index: 2147483647 !important; /* Absolute highest z-index possible */
     font-family: system-ui, -apple-system, sans-serif !important;
-  }
-
-  .fa-cookie-banner.fa-hidden {
-    display: none !important;
   }
 
   .banner-title {
@@ -276,7 +276,7 @@
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.7);
-    z-index: 100000;
+    z-index: 2147483647 !important;
     align-items: center;
     justify-content: center;
     padding: 1rem;
