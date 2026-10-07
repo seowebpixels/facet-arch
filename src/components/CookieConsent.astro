@@ -140,18 +140,18 @@
 
       const savePreferences = (prefs) => {
         localStorage.setItem(COOKIE_KEY, JSON.stringify(prefs));
-        if (banner) banner.style.display = 'none';
+        if (banner) banner.style.setProperty('display', 'none', 'important');
         if (modal) modal.style.display = 'none';
       };
 
-      // Force Banner Check On Load
+      // Check storage
       let saved = null;
       try { saved = JSON.parse(localStorage.getItem(COOKIE_KEY)); } catch (e) {}
 
       if (!saved) {
-        if (banner) banner.style.display = 'block';
+        if (banner) banner.style.setProperty('display', 'block', 'important');
       } else {
-        if (banner) banner.style.display = 'none';
+        if (banner) banner.style.setProperty('display', 'none', 'important');
       }
 
       btnAccept?.addEventListener('click', () => savePreferences({ essential: true, analytics: true, marketing: true }));
@@ -188,7 +188,6 @@
 
   .highlight-link {
     color: var(--accent-cyan) !important;
-    text-decoration: underline;
   }
 
   .highlight-text {
@@ -205,20 +204,20 @@
     font-family: inherit;
   }
 
-  /* COOKIE BANNER (Bottom Left) */
+  /* COOKIE BANNER (Forced Visible on Page Entrance) */
   .cookie-banner {
-    display: block; /* Visible immediately */
-    position: fixed;
-    bottom: 2rem;
-    left: 2rem;
-    width: clamp(300px, 90vw, 420px);
-    background-color: #000000;
-    color: #ffffff;
-    padding: 1.8rem;
-    border-radius: 16px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    z-index: 9999;
-    font-family: system-ui, -apple-system, sans-serif;
+    display: block !important;
+    position: fixed !important;
+    bottom: 2rem !important;
+    left: 2rem !important;
+    width: clamp(300px, 90vw, 420px) !important;
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    padding: 1.8rem !important;
+    border-radius: 16px !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
+    z-index: 99999 !important;
+    font-family: system-ui, -apple-system, sans-serif !important;
   }
 
   .banner-title {
@@ -276,7 +275,7 @@
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.7);
-    z-index: 10000;
+    z-index: 100000;
     align-items: center;
     justify-content: center;
     padding: 1rem;
@@ -460,10 +459,10 @@
 
   @media (max-width: 768px) {
     .cookie-banner {
-      bottom: 1rem;
-      left: 1rem;
-      right: 1rem;
-      width: auto;
+      bottom: 1rem !important;
+      left: 1rem !important;
+      right: 1rem !important;
+      width: auto !important;
     }
 
     .pref-modal-container {
