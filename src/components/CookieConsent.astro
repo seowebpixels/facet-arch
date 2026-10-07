@@ -107,17 +107,24 @@
 
 <script is:inline>
   (function() {
-    // Fresh key to bypass cached browser selections during testing
-    const COOKIE_KEY = 'fa_consent_preferences_v2';
+    const COOKIE_KEY = 'fa_consent_preferences_v3';
 
     window.openCookieModal = function() {
       const modal = document.getElementById('pref-modal');
-      if (modal) modal.style.display = 'flex';
+      if (modal) modal.style.setProperty('display', 'flex', 'important');
     };
 
-    function setupConsent() {
+    function init() {
       const banner = document.getElementById('cookie-banner');
       const modal = document.getElementById('pref-modal');
+
+      // TELEPORT elements directly to <body> to escape parent overflow/transform traps
+      if (banner && banner.parentNode !== document.body) {
+        document.body.appendChild(banner);
+      }
+      if (modal && modal.parentNode !== document.body) {
+        document.body.appendChild(modal);
+      }
 
       const btnAccept = document.getElementById('btn-accept');
       const btnReject = document.getElementById('btn-reject');
@@ -132,7 +139,7 @@
       function savePreferences(prefs) {
         try { localStorage.setItem(COOKIE_KEY, JSON.stringify(prefs)); } catch (e) {}
         if (banner) banner.style.setProperty('display', 'none', 'important');
-        if (modal) modal.style.display = 'none';
+        if (modal) modal.style.setProperty('display', 'none', 'important');
       }
 
       let saved = null;
@@ -142,6 +149,8 @@
         banner.style.setProperty('display', 'none', 'important');
       } else if (banner) {
         banner.style.setProperty('display', 'block', 'important');
+        banner.style.setProperty('visibility', 'visible', 'important');
+        banner.style.setProperty('opacity', '1', 'important');
       }
 
       btnAccept?.addEventListener('click', function() {
@@ -156,7 +165,7 @@
       btnBannerPref?.addEventListener('click', window.openCookieModal);
 
       btnCloseModal?.addEventListener('click', function() {
-        if (modal) modal.style.display = 'none';
+        if (modal) modal.style.setProperty('display', 'none', 'important');
       });
 
       btnSavePref?.addEventListener('click', function() {
@@ -168,10 +177,10 @@
       });
     }
 
-    if (document.readyState === 'interactive' || document.readyState === 'complete') {
-      setupConsent();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
     } else {
-      document.addEventListener('DOMContentLoaded', setupConsent);
+      init();
     }
   })();
 </script>
@@ -205,9 +214,11 @@
     font-family: inherit;
   }
 
-  /* COOKIE BANNER (Forced Visible on Page Entrance) */
+  /* COOKIE BANNER */
   .fa-cookie-banner {
     display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
     position: fixed !important;
     bottom: 2rem !important;
     left: 2rem !important;
@@ -216,8 +227,8 @@
     color: #ffffff !important;
     padding: 1.8rem !important;
     border-radius: 16px !important;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important;
-    z-index: 2147483647 !important; /* Absolute highest z-index possible */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6) !important;
+    z-index: 2147483647 !important;
     font-family: system-ui, -apple-system, sans-serif !important;
   }
 
