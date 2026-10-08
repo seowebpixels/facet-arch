@@ -10,21 +10,21 @@ import intStarckImg from '../assets/int-starck.avif';
 
 // Pre-render image optimizations
 const heroMobile = await getImage({ src: resHeroImg, format: 'avif', width: 768, quality: 85 });
-const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 90 });
+const heroDesktop = await getImage({ src: resHeroImg, format: 'avif', width: 1440, quality: 100 });
 
 const slide1Mobile = await getImage({ src: resDavidImg, format: 'avif', width: 768, quality: 85 });
-const slide1Desktop = await getImage({ src: resDavidImg, format: 'avif', width: 1440, quality: 90 });
+const slide1Desktop = await getImage({ src: resDavidImg, format: 'avif', width: 1440, quality: 100 });
 
 const slide2Mobile = await getImage({ src: resBlannImg, format: 'avif', width: 768, quality: 85 });
-const slide2Desktop = await getImage({ src: resBlannImg, format: 'avif', width: 1440, quality: 90 });
+const slide2Desktop = await getImage({ src: resBlannImg, format: 'avif', width: 1440, quality: 100 });
 
 const slide3Mobile = await getImage({ src: ascotManorImg, format: 'avif', width: 768, quality: 85 });
-const slide3Desktop = await getImage({ src: ascotManorImg, format: 'avif', width: 1440, quality: 90 });
+const slide3Desktop = await getImage({ src: ascotManorImg, format: 'avif', width: 1440, quality: 100 });
 
 const slide4Mobile = await getImage({ src: intStarckImg, format: 'avif', width: 768, quality: 85 });
-const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 90 });
+const slide4Desktop = await getImage({ src: intStarckImg, format: 'avif', width: 1440, quality: 100 });
 
-const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 850, height: 850, quality: 90 });
+const logoImg = await getImage({ src: heroLogoImg, format: 'avif', width: 850, height: 850, quality: 95 });
 
 const mobileSlideSrcs = [slide1Mobile.src, slide2Mobile.src, slide3Mobile.src, slide4Mobile.src];
 const desktopSlideSrcs = [slide1Desktop.src, slide2Desktop.src, slide3Desktop.src, slide4Desktop.src];
