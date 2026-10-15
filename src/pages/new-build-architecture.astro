@@ -1,0 +1,742 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+
+import resStoneSteel from '../assets/res-stone-and-steel.avif';
+import resCopperleaf from '../assets/res-copperleaf.avif';
+import resSomertonEstate from '../assets/res-somerton-estate.avif';
+import resEoa1597 from '../assets/res-eoa-1597-v2.avif';
+import commRiviera from '../assets/comm-riviera-shopping-centre.avif';
+
+const title = 'New Build Architecture | Facet Architecture';
+const description =
+  'Planning a substantial new residential or commercial build? Discover Facet Architecture’s considered architectural approach for projects with a minimum budget of R2.5 million.';
+---
+
+<Layout title={title} description={description}>
+  <div class="new-build-page">
+    <!-- HERO IMAGE -->
+    <section class="hero">
+      <div class="hero-image-wrap">
+        <Image
+          src={resStoneSteel}
+          alt="Stone and Steel architectural project by Facet Architecture"
+          class="hero-image"
+          width={1800}
+          quality={100}
+          format="avif"
+          loading="eager"
+        />
+      </div>
+
+      <!-- HERO CONTENT: BELOW THE IMAGE -->
+      <div class="hero-content">
+        <p class="eyebrow">FACET ARCHITECTURE · NEW BUILDS</p>
+
+        <h1>Architecture for Exceptional New Builds</h1>
+
+        <p class="hero-copy">
+          Thoughtful architecture for ambitious residential and commercial
+          projects — designed around the people who will use the space and
+          the possibilities of the site.
+        </p>
+
+        <p class="budget-line">
+          For new-build projects with budgets of R2.5 million and above.
+        </p>
+
+        <a class="button button-primary" href="#start-a-conversation">
+          Discuss Your Project
+          <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- POSITIONING -->
+    <section class="intro section-wrap">
+      <div class="section-kicker">
+        <span class="kicker-number">01</span>
+        <span>THE OPPORTUNITY</span>
+      </div>
+
+      <div class="intro-content">
+        <h2>
+          A significant investment deserves
+            <span class="accent-text"> considered design. </span>
+        </h2>
+
+        <div class="intro-copy">
+          <p>
+            A new building is more than a structure. It is an opportunity
+            to shape how people live, work and experience a space for years
+            to come.
+          </p>
+
+          <p>
+            Facet Architecture approaches each new-build project with
+            attention to its purpose, context and architectural character.
+            The aim is to develop a considered design response that brings
+            your brief and the potential of your site together.
+          </p>
+
+          <p>
+            Whether you are planning a distinctive private residence or a
+            commercial development, the process begins with understanding
+            what you want to achieve.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECT TYPES -->
+    <section class="project-types section-wrap">
+      <div class="section-kicker">
+        <span class="kicker-number">02</span>
+        <span>WHAT WE FOCUS ON</span>
+      </div>
+
+      <div class="project-grid">
+        <article class="project-card">
+          <div class="project-card-image">
+            <Image
+              src={resCopperleaf}
+              alt="Copperleaf residential architectural project by Facet Architecture"
+              width={900}
+              quality={100}
+              format="avif"
+              loading="lazy"
+            />
+          </div>
+
+          <div class="project-card-body">
+            <span class="card-index">01 / RESIDENTIAL</span>
+            <h3>Residential New Builds</h3>
+            <p>
+              New homes shaped around your lifestyle, the character of the
+              site and the experience you want to create.
+            </p>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="project-card-image">
+            <Image
+              src={commRiviera}
+              alt="Riviera Shopping Centre commercial architecture project by Facet Architecture"
+              width={900}
+              quality={100}
+              format="avif"
+              loading="lazy"
+            />
+          </div>
+
+          <div class="project-card-body">
+            <span class="card-index">02 / COMMERCIAL</span>
+            <h3>Commercial New Builds</h3>
+            <p>
+              Purpose-led new-build environments developed around the
+              requirements of the project, its users and its setting.
+            </p>
+          </div>
+        </article>
+      </div>
+
+      <p class="qualification-note">
+        Facet Architecture focuses on new-build projects with a minimum
+        project budget of R2.5 million. Alterations and small renovation
+        projects are outside this offering.
+      </p>
+    </section>
+
+    <!-- APPROACH -->
+    <section class="approach">
+      <div class="section-wrap approach-inner">
+        <div class="section-kicker">
+          <span class="kicker-number">03</span>
+          <span>THE DESIGN APPROACH</span>
+        </div>
+
+        <div class="approach-content">
+          <h2>
+            Start with the brief.
+            <br />
+            Design with <span class="accent-text">purpose.</span>
+          </h2>
+
+          <p>
+            Every project begins with a different set of ambitions,
+            practical requirements and opportunities. Establishing a clear
+            understanding of those priorities creates a stronger foundation
+            for architectural decisions.
+          </p>
+
+          <p>
+            Facet Architecture brings these considerations into the design
+            process to develop a response that is coherent, purposeful and
+            appropriate to the project.
+          </p>
+
+          <a class="text-link" href="/about">
+            Discover Facet Architecture
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SELECTED WORK -->
+    <section class="selected-work section-wrap">
+      <div class="work-heading">
+        <div class="section-kicker">
+          <span class="kicker-number">04</span>
+          <span>SELECTED WORK</span>
+        </div>
+
+        <h2>Explore the possibilities.</h2>
+
+        <p>
+          See more of the projects that reflect Facet Architecture’s
+          architectural work and design sensibility.
+        </p>
+      </div>
+
+      <div class="work-image">
+        <Image
+          src={resEoa1597}
+          alt="EOA architectural project by Facet Architecture"
+          width={1600}
+          quality={100}
+          format="avif"
+          loading="lazy"
+        />
+
+        <div class="work-image-caption">
+          <span>SELECTED PROJECT</span>
+          <span>FACET ARCHITECTURE</span>
+        </div>
+      </div>
+
+      <a class="text-link portfolio-link" href="/portfolio">
+        View the Portfolio
+        <span aria-hidden="true">↗</span>
+      </a>
+    </section>
+
+    <!-- FINAL CALL TO ACTION -->
+    <section id="start-a-conversation" class="contact-section">
+      <div class="contact-inner">
+        <p class="eyebrow">YOUR NEXT PROJECT STARTS HERE</p>
+
+        <h2>
+          Planning a new build
+          <span class="accent-text"> of substance?</span>
+        </h2>
+
+        <p class="contact-copy">
+          If you are planning a new residential or commercial build with a
+          project budget of R2.5 million or more, start a conversation with
+          Facet Architecture about your brief.
+        </p>
+
+        <a class="button button-primary" href="/contact">
+          Tell Us About Your Project
+          <span aria-hidden="true">↗</span>
+        </a>
+
+        <p class="contact-footnote">
+          New builds only · Minimum project budget R2.5 million
+        </p>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .new-build-page {
+    --page-bg: #3A3F47;
+    --surface-bg: #30353c;
+    --text-main: #F5F5F5;
+    --text-muted: #c8cbd0;
+    --heading-grey: #D9DCE0;
+    --accent: #00ffc8;
+
+    background: var(--page-bg);
+    color: var(--text-main);
+    font-family: 'Nesobrite', sans-serif;
+    overflow: hidden;
+  }
+
+  .new-build-page *,
+  .new-build-page *::before,
+  .new-build-page *::after {
+    box-sizing: border-box;
+  }
+
+  /* Typography: explicit colours override inherited/global heading styles */
+  .new-build-page h1,
+  .new-build-page h2,
+  .new-build-page h3 {
+    font-family: 'Bank Gothic', sans-serif;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--heading-grey) !important;
+    margin-top: 0;
+  }
+
+  .new-build-page p {
+    line-height: 1.8;
+  }
+
+  /* HERO */
+  .new-build-page .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+    min-height: 0;
+    position: relative;
+    background: var(--page-bg);
+    isolation: auto;
+  }
+
+  .hero-image-wrap {
+  width: 100%;
+  height: clamp(690px, calc(88vh + 130px), 1180px);
+  margin: 0;
+  overflow: hidden;
+ }
+
+  .hero-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center;
+ }
+
+  .new-build-page .hero-content {
+    width: min(calc(100% - 48px), 1200px);
+    margin: 0 auto;
+    padding: 64px 0 78px;
+  }
+
+  .new-build-page .eyebrow,
+  .new-build-page .section-kicker,
+  .new-build-page .card-index,
+  .new-build-page .work-image-caption,
+  .new-build-page .contact-footnote {
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .new-build-page .eyebrow {
+    color: var(--accent);
+    margin: 0 0 24px;
+  }
+
+  .new-build-page .hero h1 {
+    max-width: 950px;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    letter-spacing: 0;
+    line-height: 1.25;
+    margin-bottom: 24px;
+  }
+
+  .new-build-page .hero-copy {
+    max-width: 760px;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin: 0 0 18px;
+  }
+
+  .new-build-page .budget-line {
+    color: var(--heading-grey);
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 28px;
+  }
+
+  /* BUTTONS */
+  .new-build-page .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    min-height: 54px;
+    padding: 16px 22px;
+    text-decoration: none;
+    font-family: 'Nesobrite', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: transform 180ms ease, background 180ms ease;
+  }
+
+  .new-build-page .button:hover {
+    transform: translateY(-2px);
+  }
+
+  .new-build-page .button-primary {
+    color: #101713;
+    background: var(--accent);
+  }
+
+  .new-build-page .button-primary:hover {
+    background: #67ffdc;
+  }
+
+  /* CONTENT SECTIONS */
+  .new-build-page .section-wrap {
+    width: min(calc(100% - 48px), 1200px);
+    margin-inline: auto;
+  }
+
+  .new-build-page .section-kicker {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+
+  .new-build-page .kicker-number {
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .new-build-page .intro {
+    display: grid;
+    grid-template-columns: 0.7fr 1.6fr;
+    gap: 50px;
+    padding-top: 120px;
+    padding-bottom: 125px;
+  }
+
+  .new-build-page .intro h2,
+  .new-build-page .approach h2,
+  .new-build-page .work-heading h2,
+  .new-build-page .contact-section h2 {
+    font-size: clamp(2rem, 4vw, 3.6rem);
+    margin-bottom: 30px;
+  }
+
+  /* Accent words inherit exactly the surrounding heading's typography */
+  .new-build-page .accent-text {
+    color: var(--accent) !important;
+    font-family: 'Bank Gothic', sans-serif !important;
+    font-size: 1em !important;
+    font-weight: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+  }
+  .new-build-page .intro-copy {
+    max-width: 730px;
+    color: var(--text-muted);
+    font-size: 1.08rem;
+  }
+
+  .new-build-page .intro-copy p:first-child {
+    margin-top: 0;
+  }
+
+  .new-build-page .intro-copy p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* PROJECT TYPES */
+  .new-build-page .project-types {
+    padding-bottom: 120px;
+  }
+
+  .new-build-page .project-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+    margin-top: 46px;
+  }
+
+  .new-build-page .project-card {
+    background: rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    min-width: 0;
+  }
+
+  .new-build-page .project-card-image {
+    height: 330px;
+    overflow: hidden;
+    background: #292d33;
+  }
+
+  .new-build-page .project-card-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform 450ms ease;
+  }
+
+  .new-build-page .project-card:hover .project-card-image img {
+    transform: scale(1.035);
+  }
+
+  .new-build-page .project-card-body {
+    padding: 30px;
+  }
+
+  .new-build-page .card-index {
+    color: var(--accent);
+    font-size: 0.7rem;
+  }
+
+  .new-build-page .project-card h3 {
+    font-size: clamp(1.35rem, 2.5vw, 2rem);
+    margin: 22px 0 14px;
+  }
+
+  .new-build-page .project-card p {
+    color: var(--text-muted);
+    margin-bottom: 0;
+  }
+
+  .new-build-page .qualification-note {
+    border-left: 2px solid var(--accent);
+    padding: 4px 0 4px 20px;
+    margin: 30px 0 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  /* APPROACH */
+  .new-build-page .approach {
+    background: var(--surface-bg);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .new-build-page .approach-inner {
+    display: grid;
+    grid-template-columns: 0.7fr 1.6fr;
+    gap: 50px;
+    padding-top: 115px;
+    padding-bottom: 120px;
+  }
+
+  .new-build-page .approach-content {
+    max-width: 750px;
+  }
+
+  .new-build-page .approach-content p {
+    color: var(--text-muted);
+    font-size: 1.08rem;
+  }
+
+  /* TEXT LINKS */
+  .new-build-page .text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    margin-top: 24px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--accent);
+    color: var(--text-main);
+    text-decoration: none;
+    font-weight: 700;
+  }
+
+  .new-build-page .text-link span {
+    color: var(--accent);
+  }
+
+  .new-build-page .text-link:hover {
+    color: var(--accent);
+  }
+
+  /* SELECTED WORK */
+  .new-build-page .selected-work {
+    padding-top: 120px;
+    padding-bottom: 125px;
+  }
+
+  .new-build-page .work-heading {
+    max-width: 740px;
+    margin-bottom: 42px;
+  }
+
+  .new-build-page .work-heading h2 {
+    margin-top: 32px;
+    margin-bottom: 20px;
+  }
+
+  .new-build-page .work-heading > p {
+    color: var(--text-muted);
+    max-width: 650px;
+    font-size: 1.05rem;
+  }
+
+  .new-build-page .work-image {
+    position: relative;
+    height: clamp(300px, 48vw, 590px);
+    background: #292d33;
+    overflow: hidden;
+  }
+
+  .new-build-page .work-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .new-build-page .work-image-caption {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 26px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    color: white;
+    font-size: 0.72rem;
+  }
+
+  .new-build-page .portfolio-link {
+    margin-top: 28px;
+  }
+
+  /* FINAL CALL TO ACTION */
+  .new-build-page .contact-section {
+    background: #292e35;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    padding: 105px 24px 100px;
+  }
+
+  .new-build-page .contact-inner {
+    max-width: 850px;
+    margin: 0 auto;
+  }
+
+  .new-build-page .contact-section .eyebrow {
+    margin-bottom: 25px;
+  }
+
+  .new-build-page .contact-section h2 {
+    margin-bottom: 25px;
+  }
+
+  .new-build-page .contact-copy {
+    max-width: 680px;
+    margin: 0 auto 30px;
+    color: var(--text-muted);
+    font-size: 1.08rem;
+  }
+
+  .new-build-page .contact-footnote {
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    margin: 26px 0 0;
+  }
+
+  /* TABLET */
+  @media (max-width: 768px) {
+    .new-build-page .hero-image-wrap {
+      height: clamp(300px, 58vw, 480px);
+    }
+
+    .new-build-page .hero-content {
+      width: calc(100% - 40px);
+      padding: 48px 0 58px;
+    }
+
+    .new-build-page .hero h1 {
+      font-size: clamp(1.9rem, 7vw, 2.8rem);
+    }
+
+    .new-build-page .section-wrap {
+      width: calc(100% - 40px);
+    }
+
+    .new-build-page .intro,
+    .new-build-page .approach-inner {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      padding-top: 80px;
+      padding-bottom: 85px;
+    }
+
+    .new-build-page .project-types {
+      padding-bottom: 85px;
+    }
+
+    .new-build-page .project-grid {
+      grid-template-columns: 1fr;
+      gap: 22px;
+      margin-top: 32px;
+    }
+
+    .new-build-page .project-card-image {
+      height: 300px;
+    }
+
+    .new-build-page .project-card-body {
+      padding: 24px;
+    }
+
+    .new-build-page .selected-work {
+      padding-top: 85px;
+      padding-bottom: 90px;
+    }
+
+    .new-build-page .contact-section {
+      padding: 80px 20px;
+    }
+  }
+
+  /* MOBILE */
+  @media (max-width: 480px) {
+    .new-build-page .hero-image-wrap {
+      height: 270px;
+    }
+
+    .new-build-page .hero-content {
+      width: calc(100% - 32px);
+      padding: 38px 0 48px;
+    }
+
+    .new-build-page .section-wrap {
+      width: calc(100% - 32px);
+    }
+
+    .new-build-page .project-card-image {
+      height: 240px;
+    }
+
+    .new-build-page .work-image {
+      height: 300px;
+    }
+
+    .new-build-page .work-image-caption {
+      flex-direction: column;
+      gap: 8px;
+      padding: 18px;
+    }
+
+    .new-build-page .button {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .new-build-page *,
+    .new-build-page *::before,
+    .new-build-page *::after {
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
+  }
+</style>
